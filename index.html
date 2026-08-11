@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BBMP Single Plot Layout Plan Generator — B-to-A Khata Conversion</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <h2>🏠 BBMP Single Plot Plan Generator</h2>
+    <p class="subtitle">Official B-to-A Khata Conversion Document System | Prepared for Licensed Architects & Engineers
+    </p>
+
+    <!-- Input Section -->
+    <div class="card">
+      <h3>📋 Property & Site Specification Form</h3>
+
+      <!-- Section 1: Revenue Records & Identifiers -->
+      <div class="form-section">
+        <div class="section-title">
+          <span>🏛️ 1. Revenue Records & Property Identifiers</span>
+          <span class="badge">Mandatory for Sakala e-Khata</span>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label>Owner Name(s) <span class="required">*</span></label>
+            <input id="ownerName" type="text" placeholder="e.g. Ramesh Kumar & Anjali Kumar">
+            <div class="error-msg" id="err-ownerName">⚠ Owner name is required</div>
+          </div>
+          <div class="field">
+            <label>e-Khata EP ID <span class="required">*</span></label>
+            <input id="epId" type="text" placeholder="e.g. EP-2024-789456">
+            <div class="error-msg" id="err-epId">⚠ EP ID is required</div>
+          </div>
+          <div class="field">
+            <label>BBMP PID Number <span class="required">*</span></label>
+            <input id="pidNo" type="text" placeholder="e.g. 108-W0045-12">
+            <div class="error-msg" id="err-pidNo">⚠ BBMP PID Number is required</div>
+          </div>
+          <div class="field">
+            <label>SAS Application / Khata No</label>
+            <input id="sasNo" type="text" placeholder="e.g. SAS-2024-554433">
+          </div>
+          <div class="field">
+            <label>ADLR 11E Survey Sketch No</label>
+            <input id="adlrNo" type="text" placeholder="e.g. ADLR/11E/2024/7891">
+          </div>
+          <div class="field">
+            <label>DC Conversion Order No</label>
+            <input id="dcOrderNo" type="text" placeholder="e.g. ALN(EV)SR/45/2018-19">
+          </div>
+          <div class="field">
+            <label>DC Conversion Date</label>
+            <input id="dcOrderDate" type="date">
+          </div>
+          <div class="field">
+            <label>Conversion Authority</label>
+            <input id="dcAuthority" type="text" placeholder="e.g. DC, Bengaluru Urban">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Location & BBMP Administration -->
+      <div class="form-section">
+        <div class="section-title">
+          <span>📍 2. Location & Administrative Details</span>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label>Survey Number <span class="required">*</span></label>
+            <input id="surveyNo" type="text" placeholder="e.g. 45/2A">
+            <div class="error-msg" id="err-surveyNo">⚠ Survey number is required</div>
+          </div>
+          <div class="field">
+            <label>BBMP Zone <span class="required">*</span></label>
+            <select id="bbmpZone">
+              <option value="" selected>-- Select Zone --</option>
+              <option value="East">East Zone</option>
+              <option value="West">West Zone</option>
+              <option value="South">South Zone</option>
+              <option value="Mahadevapura">Mahadevapura Zone</option>
+              <option value="Yelahanka">Yelahanka Zone</option>
+              <option value="Dasarahalli">Dasarahalli Zone</option>
+              <option value="Bommanahalli">Bommanahalli Zone</option>
+              <option value="Rajarajeshwari Nagar">RR Nagar Zone</option>
+            </select>
+            <div class="error-msg" id="err-bbmpZone">⚠ Select BBMP Zone</div>
+          </div>
+          <div class="field">
+            <label>Ward Number <span class="required">*</span></label>
+            <input id="wardNo" type="text" placeholder="e.g. 45">
+            <div class="error-msg" id="err-wardNo">⚠ Ward number is required</div>
+          </div>
+          <div class="field">
+            <label>Ward Name <span class="required">*</span></label>
+            <input id="wardName" type="text" placeholder="e.g. Malleshwaram">
+            <div class="error-msg" id="err-wardName">⚠ Ward name is required</div>
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <label>Site Address / Location <span class="required">*</span></label>
+            <input id="address" type="text" placeholder="e.g. No. 12, 3rd Cross, Rajajinagar, Bangalore - 560010">
+            <div class="error-msg" id="err-address">⚠ Site address is required</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Plot Measurements & Cardinal Boundaries -->
+      <div class="form-section">
+        <div class="section-title">
+          <span>📐 3. Plot Measurements & Cardinal Boundaries</span>
+        </div>
+
+        <!-- Educational Info Box -->
+        <div class="info-tooltip-box">
+          💡 <strong>What is Abutting Road Width?</strong> "Abutting Road" refers to the public road physically touching
+          your property boundary line. BBMP uses this width (e.g. 30 ft, 40 ft, 60 ft) to calculate permissible building
+          height, Floor Area Ratio (FAR), and required front setbacks.
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label>Plot Area (sq.ft) <span class="required">*</span></label>
+            <input id="plotArea" type="number" placeholder="e.g. 2400" oninput="this.dataset.userEdited='true'">
+            <div class="error-msg" id="err-plotArea">⚠ Plot area is required</div>
+          </div>
+          <div class="field">
+            <label>Primary Abutting Road Width (ft) <span class="required">*</span></label>
+            <input id="roadWidth" type="number" placeholder="e.g. 30">
+            <div class="error-msg" id="err-roadWidth">⚠ Road width is required</div>
+          </div>
+          <div class="field">
+            <label>Primary Road Facing Direction <span class="required">*</span></label>
+            <select id="roadFacing">
+              <option value="" selected>-- Select Direction --</option>
+              <option value="north">North</option>
+              <option value="south">South</option>
+              <option value="east">East</option>
+              <option value="west">West</option>
+            </select>
+            <div class="error-msg" id="err-roadFacing">⚠ Select road facing direction</div>
+          </div>
+          <div class="field">
+            <label>Drawing Scale</label>
+            <select id="scale">
+              <option value="" selected>-- Select Scale --</option>
+              <option value="1:100">1:100</option>
+              <option value="1:200">1:200</option>
+              <option value="1:250">1:250</option>
+              <option value="1:500">1:500</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cardinal Side Dimensions (North, South, East, West) -->
+        <div class="grid" style="margin-top: 14px;">
+          <div class="field">
+            <label>⬆️ North Side Dimension (ft) <span class="required">*</span></label>
+            <input id="sideNorth" type="number" placeholder="e.g. 40" oninput="syncOppositeSides('sideNorth')">
+            <div class="error-msg" id="err-sideNorth">⚠ North side dimension required</div>
+          </div>
+          <div class="field">
+            <label>⬇️ South Side Dimension (ft) <span class="required">*</span></label>
+            <input id="sideSouth" type="number" placeholder="e.g. 40" oninput="syncOppositeSides('sideSouth')">
+            <div class="error-msg" id="err-sideSouth">⚠ South side dimension required</div>
+          </div>
+          <div class="field">
+            <label>➡️ East Side Dimension (ft) <span class="required">*</span></label>
+            <input id="sideEast" type="number" placeholder="e.g. 60" oninput="syncOppositeSides('sideEast')">
+            <div class="error-msg" id="err-sideEast">⚠ East side dimension required</div>
+          </div>
+          <div class="field">
+            <label>⬅️ West Side Dimension (ft) <span class="required">*</span></label>
+            <input id="sideWest" type="number" placeholder="e.g. 60" oninput="syncOppositeSides('sideWest')">
+            <div class="error-msg" id="err-sideWest">⚠ West side dimension required</div>
+          </div>
+        </div>
+
+        <!-- Irregular Site Toggle Checkbox -->
+        <div class="checkbox-box" style="margin-top: 14px;">
+          <label>
+            <input type="checkbox" id="oddSiteCheck" onchange="toggleOddSite()">
+            <span>🔷 Irregular / Odd Shaped Site (4 sides have different measurements)</span>
+          </label>
+          <p id="oddSiteHint">Rectangular Mode (Default): Opposite sides (North/South and East/West) auto-sync
+            automatically as you type. Check this box to unlock independent measurements for irregular plots.</p>
+        </div>
+      </div>
+
+      <!-- Section 4: Structure & Custom Setbacks -->
+      <div class="form-section">
+        <div class="section-title">
+          <span>🧱 4. Structure & Custom Setback Details</span>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label>Number of Floors</label>
+            <select id="floorsCount">
+              <option value="" selected>-- Select Floors / Structure --</option>
+              <option value="Vacant Plot">Vacant Plot</option>
+              <option value="Stilt + Ground">Stilt + Ground</option>
+              <option value="G+1">G + 1 Floor</option>
+              <option value="G+2">G + 2 Floors</option>
+              <option value="G+3">G + 3 Floors</option>
+              <option value="G+4">G + 4 Floors</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Total Built-up Area (sq.ft)</label>
+            <input id="builtUpArea" type="number" placeholder="e.g. 2100">
+          </div>
+          <div class="field">
+            <label>Building Width (ft)</label>
+            <input id="bldgWidth" type="number" placeholder="e.g. 30">
+          </div>
+          <div class="field">
+            <label>Building Length (ft)</label>
+            <input id="bldgLength" type="number" placeholder="e.g. 40">
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top: 12px;">
+          <div class="field">
+            <label>Front Setback (ft)</label>
+            <input id="setbackFront" type="number" placeholder="e.g. 10">
+          </div>
+          <div class="field">
+            <label>Rear Setback (ft)</label>
+            <input id="setbackRear" type="number" placeholder="e.g. 10">
+          </div>
+          <div class="field">
+            <label>Left Setback (ft)</label>
+            <input id="setbackLeft" type="number" placeholder="e.g. 5">
+          </div>
+          <div class="field">
+            <label>Right Setback (ft)</label>
+            <input id="setbackRight" type="number" placeholder="e.g. 5">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Schedule of Property & Boundary Adjacencies (Exhaustive List) -->
+      <div class="form-section">
+        <div class="section-title">
+          <span>🗺️ 5. Schedule of Property & Boundary Adjacencies (Deed DNA)</span>
+        </div>
+
+        <div class="info-tooltip-box">
+          📜 <strong>Deed Schedule Accuracy:</strong> Under Karnataka property law, boundary descriptions prevail over
+          area in court disputes. Select the exact boundary category for each side.
+        </div>
+
+        <div class="grid">
+          <!-- North Boundary Card -->
+          <div class="boundary-card">
+            <h5>⬆️ North Boundary</h5>
+            <div class="field">
+              <label>Abutting Boundary Type <span class="required">*</span></label>
+              <select id="typeNorth" onchange="toggleBoundaryType('North')">
+                <option value="" selected>-- Select Boundary Type --</option>
+                <option value="road">🛣️ Public Road / Street / Highway</option>
+                <option value="plot">🏠 Neighboring Site / Private Plot</option>
+                <option value="drain">🌊 Stormwater Drain / Rajakaluve</option>
+                <option value="lake">🏞️ Lake / Water Body / Buffer</option>
+                <option value="park">🌳 Park / CA Civic Amenity Site</option>
+                <option value="land">🌾 Vacant Survey Land / Agri Plot</option>
+                <option value="passage">🚪 Private Passage / Common Lane</option>
+                <option value="infra">🚂 Railway Track / Metro Line</option>
+                <option value="govt">🏢 Government / Institutional Land</option>
+              </select>
+              <div class="error-msg" id="err-typeNorth">⚠ Select boundary type</div>
+            </div>
+            <div id="roadFieldsNorth" class="grid" style="margin-top: 8px; display: none;">
+              <div class="field">
+                <label>Road Name (Optional)</label>
+                <input id="nameRoadNorth" type="text" placeholder="e.g. 3rd Cross Road">
+              </div>
+              <div class="field">
+                <label>Width (ft)</label>
+                <input id="widthRoadNorth" type="number" placeholder="e.g. 30">
+              </div>
+            </div>
+            <div id="plotFieldsNorth" class="field" style="margin-top: 8px; display: none;">
+              <label>Description / Boundary Label</label>
+              <input id="descPlotNorth" type="text" placeholder="e.g. PLOT NO. 12 / SY NO. 45/2">
+            </div>
+          </div>
+
+          <!-- South Boundary Card -->
+          <div class="boundary-card">
+            <h5>⬇️ South Boundary</h5>
+            <div class="field">
+              <label>Abutting Boundary Type <span class="required">*</span></label>
+              <select id="typeSouth" onchange="toggleBoundaryType('South')">
+                <option value="" selected>-- Select Boundary Type --</option>
+                <option value="plot">🏠 Neighboring Site / Private Plot</option>
+                <option value="road">🛣️ Public Road / Street / Highway</option>
+                <option value="drain">🌊 Stormwater Drain / Rajakaluve</option>
+                <option value="lake">🏞️ Lake / Water Body / Buffer</option>
+                <option value="park">🌳 Park / CA Civic Amenity Site</option>
+                <option value="land">🌾 Vacant Survey Land / Agri Plot</option>
+                <option value="passage">🚪 Private Passage / Common Lane</option>
+                <option value="infra">🚂 Railway Track / Metro Line</option>
+                <option value="govt">🏢 Government / Institutional Land</option>
+              </select>
+              <div class="error-msg" id="err-typeSouth">⚠ Select boundary type</div>
+            </div>
+            <div id="roadFieldsSouth" class="grid" style="margin-top: 8px; display: none;">
+              <div class="field">
+                <label>Road Name (Optional)</label>
+                <input id="nameRoadSouth" type="text" placeholder="e.g. 4th Cross Road">
+              </div>
+              <div class="field">
+                <label>Width (ft)</label>
+                <input id="widthRoadSouth" type="number" placeholder="e.g. 30">
+              </div>
+            </div>
+            <div id="plotFieldsSouth" class="field" style="margin-top: 8px; display: none;">
+              <label>Description / Boundary Label</label>
+              <input id="descPlotSouth" type="text" placeholder="e.g. PLOT NO. 46">
+            </div>
+          </div>
+
+          <!-- East Boundary Card -->
+          <div class="boundary-card">
+            <h5>➡️ East Boundary</h5>
+            <div class="field">
+              <label>Abutting Boundary Type <span class="required">*</span></label>
+              <select id="typeEast" onchange="toggleBoundaryType('East')">
+                <option value="" selected>-- Select Boundary Type --</option>
+                <option value="plot">🏠 Neighboring Site / Private Plot</option>
+                <option value="road">🛣️ Public Road / Street / Highway</option>
+                <option value="drain">🌊 Stormwater Drain / Rajakaluve</option>
+                <option value="lake">🏞️ Lake / Water Body / Buffer</option>
+                <option value="park">🌳 Park / CA Civic Amenity Site</option>
+                <option value="land">🌾 Vacant Survey Land / Agri Plot</option>
+                <option value="passage">🚪 Private Passage / Common Lane</option>
+                <option value="infra">🚂 Railway Track / Metro Line</option>
+                <option value="govt">🏢 Government / Institutional Land</option>
+              </select>
+              <div class="error-msg" id="err-typeEast">⚠ Select boundary type</div>
+            </div>
+            <div id="roadFieldsEast" class="grid" style="margin-top: 8px; display: none;">
+              <div class="field">
+                <label>Road Name (Optional)</label>
+                <input id="nameRoadEast" type="text" placeholder="e.g. 100ft Main Road">
+              </div>
+              <div class="field">
+                <label>Width (ft)</label>
+                <input id="widthRoadEast" type="number" placeholder="e.g. 60">
+              </div>
+            </div>
+            <div id="plotFieldsEast" class="field" style="margin-top: 8px; display: none;">
+              <label>Description / Boundary Label</label>
+              <input id="descPlotEast" type="text" placeholder="e.g. PLOT NO. 13">
+            </div>
+          </div>
+
+          <!-- West Boundary Card -->
+          <div class="boundary-card">
+            <h5>⬅️ West Boundary</h5>
+            <div class="field">
+              <label>Abutting Boundary Type <span class="required">*</span></label>
+              <select id="typeWest" onchange="toggleBoundaryType('West')">
+                <option value="" selected>-- Select Boundary Type --</option>
+                <option value="plot">🏠 Neighboring Site / Private Plot</option>
+                <option value="road">🛣️ Public Road / Street / Highway</option>
+                <option value="drain">🌊 Stormwater Drain / Rajakaluve</option>
+                <option value="lake">🏞️ Lake / Water Body / Buffer</option>
+                <option value="park">🌳 Park / CA Civic Amenity Site</option>
+                <option value="land">🌾 Vacant Survey Land / Agri Plot</option>
+                <option value="passage">🚪 Private Passage / Common Lane</option>
+                <option value="infra">🚂 Railway Track / Metro Line</option>
+                <option value="govt">🏢 Government / Institutional Land</option>
+              </select>
+              <div class="error-msg" id="err-typeWest">⚠ Select boundary type</div>
+            </div>
+            <div id="roadFieldsWest" class="grid" style="margin-top: 8px; display: none;">
+              <div class="field">
+                <label>Road Name (Optional)</label>
+                <input id="nameRoadWest" type="text" placeholder="e.g. West Service Road">
+              </div>
+              <div class="field">
+                <label>Width (ft)</label>
+                <input id="widthRoadWest" type="number" placeholder="e.g. 40">
+              </div>
+            </div>
+            <div id="plotFieldsWest" class="field" style="margin-top: 8px; display: none;">
+              <label>Description / Boundary Label</label>
+              <input id="descPlotWest" type="text" placeholder="e.g. PLOT NO. 11">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Road Widening & Buffer Zone Constraints -->
+      <div class="form-section">
+        <div class="section-title">
+          <span>🚧 6. Master Plan Road Widening & Buffer Constraints</span>
+        </div>
+
+        <!-- Road Widening Checkbox -->
+        <div class="checkbox-box">
+          <label>
+            <input type="checkbox" id="roadWideningCheck" onchange="toggleRoadWidening()">
+            <span>🚗 Site is subject to RMP-2015 Master Plan Road Widening</span>
+          </label>
+          <p>Check this if your site has a proposed road widening reservation under BDA RMP-2015.</p>
+        </div>
+
+        <div class="conditional-panel" id="roadWideningControls" style="display: none;">
+          <div class="grid">
+            <div class="field">
+              <label>Proposed Road Width in RMP-2015 (ft/m) <span class="required">*</span></label>
+              <input id="proposedRoadWidth" type="number" placeholder="e.g. 60">
+              <div class="error-msg" id="err-proposedRoadWidth">⚠ Proposed road width is required</div>
+            </div>
+            <div class="field">
+              <label>Road Widening Strip Width (ft/m) <span class="required">*</span></label>
+              <input id="roadWideningStripWidth" type="number" placeholder="e.g. 10">
+              <div class="error-msg" id="err-roadWideningStripWidth">⚠ Road widening strip width is required</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Buffer Zone Checkbox -->
+        <div class="checkbox-box" style="margin-top: 12px;">
+          <label>
+            <input type="checkbox" id="bufferCheck" onchange="toggleBufferZone()">
+            <span>🌊 Site has a Stormwater Drain / Nala / Lake Buffer Zone</span>
+          </label>
+          <p>Check this if your plot abuts a Rajakaluve (primary/secondary storm water drain) or lake buffer area.</p>
+        </div>
+
+        <div class="conditional-panel" id="bufferControls" style="display: none;">
+          <div class="grid">
+            <div class="field">
+              <label>Buffer Zone Type <span class="required">*</span></label>
+              <select id="bufferType">
+                <option value="" selected>-- Select Buffer Type --</option>
+                <option value="Primary Drain Buffer (50m)">Primary Drain Buffer (50m)</option>
+                <option value="Secondary Drain Buffer (25m)">Secondary Drain Buffer (25m)</option>
+                <option value="Tertiary Drain Buffer (15m)">Tertiary Drain Buffer (15m)</option>
+                <option value="Lake Buffer Area (30m)">Lake Buffer Area (30m)</option>
+              </select>
+              <div class="error-msg" id="err-bufferType">⚠ Select buffer type</div>
+            </div>
+            <div class="field">
+              <label>Buffer Zone Width (ft/m) <span class="required">*</span></label>
+              <input id="bufferWidth" type="number" placeholder="e.g. 7.0">
+              <div class="error-msg" id="err-bufferWidth">⚠ Buffer width is required</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: Document & Submission Options -->
+      <div class="form-section">
+        <div class="section-title">
+          <span>📄 7. Document Options & Fee Details</span>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label>Remitted Fee Amount (₹)</label>
+            <input id="challanFee" type="number" placeholder="e.g. 48000">
+          </div>
+          <div class="field">
+            <label>Challan Number</label>
+            <input id="challanNo" type="text" placeholder="e.g. CH-2024-99881">
+          </div>
+          <div class="field">
+            <label>Challan Date</label>
+            <input id="challanDate" type="date">
+          </div>
+        </div>
+
+        <div class="checkbox-box" style="margin-top: 12px;">
+          <label>
+            <input type="checkbox" id="includeLegendPage" checked>
+            <span>📑 Include BBMP Line & Colour Specifications Sheet (Page 2) in Merged PDF Export</span>
+          </label>
+          <p>Generates a complete 2-page BBMP submission package (Page 1 = Layout Plan, Page 2 = Legend Specifications
+            Sheet).</p>
+        </div>
+      </div>
+
+      <!-- Validation Summary -->
+      <div class="validation-summary" id="validationSummary">
+        <strong>❌ Please fix the following errors before generating:</strong>
+        <ul id="validationList"></ul>
+      </div>
+
+      <button class="btn" onclick="generatePlan()">🎨 Generate BBMP Single Plot Plan</button>
+    </div>
+
+    <!-- Output Plan -->
+    <div class="plan-output card" id="planOutput">
+      <div class="plan-sheet">
+        <div class="plan-header">
+          <h2>SINGLE PLOT LAYOUT PLAN</h2>
+          <p>For B-to-A Khata Conversion | BBMP, Bangalore</p>
+        </div>
+
+        <table class="details-table">
+          <tr>
+            <td class="label">Owner Name(s)</td>
+            <td id="outOwner">—</td>
+            <td class="label">e-Khata EP ID</td>
+            <td id="outEpId">—</td>
+          </tr>
+          <tr>
+            <td class="label">Survey No.</td>
+            <td id="outSurvey">—</td>
+            <td class="label">Ward No.</td>
+            <td id="outWard">—</td>
+          </tr>
+          <tr>
+            <td class="label">Site Address</td>
+            <td colspan="3" id="outAddress">—</td>
+          </tr>
+          <tr>
+            <td class="label">Plot Area</td>
+            <td id="outArea">—</td>
+            <td class="label">Plot Size</td>
+            <td id="outSize">—</td>
+          </tr>
+          <tr>
+            <td class="label">Road Facing</td>
+            <td id="outRoadFace">—</td>
+            <td class="label">Road Width</td>
+            <td id="outRoadWidth">—</td>
+          </tr>
+        </table>
+
+        <div class="svg-container">
+          <svg id="plotSvg" width="500" height="420" viewBox="0 0 500 420">
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"
+                markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#1e3a5f" />
+              </marker>
+            </defs>
+
+            <rect id="plotRect" x="80" y="60" width="340" height="260" fill="none" stroke="#1e3a5f" stroke-width="2" />
+            <polygon id="plotPoly" points="80,60 420,60 420,320 80,320" fill="none" stroke="#1e3a5f" stroke-width="2"
+              style="display:none;" />
+
+            <rect id="bldgRect" x="110" y="90" width="200" height="160" fill="#bfdbfe" stroke="#2563eb"
+              stroke-width="1.5" stroke-dasharray="4,2" />
+
+            <line id="dimWLine" x1="80" y1="340" x2="420" y2="340" stroke="#64748b" stroke-width="1"
+              marker-end="url(#arrow)" marker-start="url(#arrow)" />
+            <text id="dimWidth" x="250" y="358" text-anchor="middle" font-size="11" fill="#334155">40'-0"</text>
+
+            <line id="dimLLine" x1="440" y1="60" x2="440" y2="320" stroke="#64748b" stroke-width="1"
+              marker-end="url(#arrow)" marker-start="url(#arrow)" />
+            <text id="dimLength" x="458" y="195" text-anchor="middle" font-size="11" fill="#334155"
+              transform="rotate(90, 458, 195)">60'-0"</text>
+
+            <text id="labelSideN" x="250" y="52" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+              style="display:none;">N: 42'-0"</text>
+            <text id="labelSideS" x="250" y="335" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+              style="display:none;">S: 38'-0"</text>
+            <text id="labelSideE" x="430" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+              transform="rotate(90, 430, 195)" style="display:none;">E: 62'-0"</text>
+            <text id="labelSideW" x="70" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+              transform="rotate(90, 70, 195)" style="display:none;">W: 58'-0"</text>
+
+            <line id="bldgDimWLine" x1="110" y1="270" x2="310" y2="270" stroke="#2563eb" stroke-width="0.8"
+              stroke-dasharray="3,2" />
+            <text id="bldgDimW" x="210" y="285" text-anchor="middle" font-size="10" fill="#2563eb">30'-0"</text>
+
+            <line id="bldgDimLLine" x1="330" y1="90" x2="330" y2="250" stroke="#2563eb" stroke-width="0.8"
+              stroke-dasharray="3,2" />
+            <text id="bldgDimL" x="345" y="170" text-anchor="middle" font-size="10" fill="#2563eb"
+              transform="rotate(90, 345, 170)">40'-0"</text>
+
+            <text id="setbackN" x="250" y="78" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
+            <text id="setbackS" x="250" y="315" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
+            <text id="setbackE" x="400" y="170" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
+            <text id="setbackW" x="95" y="170" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
+
+            <g transform="translate(450, 380)">
+              <polygon points="0,-15 -8,10 0,5 8,10" fill="#dc2626" />
+              <text x="0" y="22" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">N</text>
+            </g>
+
+            <text id="scaleText" x="20" y="410" font-size="10" fill="#64748b">Scale: 1:100</text>
+
+            <text id="labelN" x="250" y="55" text-anchor="middle" font-size="10" fill="#1e3a5f"
+              font-weight="600">NORTH</text>
+            <text id="labelS" x="250" y="335" text-anchor="middle" font-size="10" fill="#1e3a5f"
+              font-weight="600">SOUTH</text>
+            <text id="labelE" x="410" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+              transform="rotate(90, 410, 195)">EAST</text>
+            <text id="labelW" x="50" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+              transform="rotate(90, 50, 195)">WEST</text>
+
+            <text id="adjN" x="250" y="12" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Public
+              Road</text>
+            <text id="adjS" x="250" y="405" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Neighbor's
+              Plot</text>
+            <text id="adjE" x="470" y="195" text-anchor="middle" font-size="9" fill="#94a3b8"
+              transform="rotate(90, 470, 195)">Adjacent: Plot No. 46</text>
+            <text id="adjW" x="10" y="195" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Plot No.
+              44</text>
+          </svg>
+        </div>
+
+        <div class="legend">
+          <h4>🗺️ LEGEND</h4>
+          <div class="legend-grid">
+            <div><span
+                style="display:inline-block;width:20px;height:12px;border:2px solid #1e3a5f;vertical-align:middle;margin-right:6px;"></span>Plot
+              Boundary</div>
+            <div><span
+                style="display:inline-block;width:20px;height:12px;background:#bfdbfe;border:1px solid #2563eb;vertical-align:middle;margin-right:6px;"></span>Existing
+              Building</div>
+            <div><span
+                style="display:inline-block;width:20px;height:12px;background:#e2e8f0;border:1px solid #94a3b8;vertical-align:middle;margin-right:6px;"></span>Road
+              / Open Space</div>
+            <div><span
+                style="display:inline-block;width:20px;height:12px;border:1px solid #059669;vertical-align:middle;margin-right:6px;"></span>Setback
+              Area</div>
+            <div><span
+                style="display:inline-block;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:12px solid #dc2626;vertical-align:middle;margin-right:6px;"></span>North
+              Direction</div>
+            <div><span
+                style="display:inline-block;width:20px;height:2px;background:#64748b;vertical-align:middle;margin-right:6px;"></span>Dimension
+              Line</div>
+          </div>
+        </div>
+
+        <div class="certification">
+          <h4>✍️ ARCHITECT / ENGINEER CERTIFICATION</h4>
+          <p>I hereby certify that the above Single Plot Layout Plan has been prepared based on the actual site
+            measurements and existing conditions as on date. The plot boundaries, building position, setbacks, and road
+            access shown are true to the best of my knowledge.</p>
+          <div class="cert-grid">
+            <div>
+              <div class="line"></div>
+              <div class="title">Signature & Seal</div>
+              <div class="hint">Registered Architect / Engineer</div>
+            </div>
+            <div>
+              <div class="line"></div>
+              <div class="title">Registration No.</div>
+              <div class="hint">COA / KSCA / IEI Number</div>
+            </div>
+            <div>
+              <div class="line"></div>
+              <div class="title">Date</div>
+              <div class="hint">DD/MM/YYYY</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-note">
+          Note: This is a sample template. The final plan must be prepared, signed, and sealed by a licensed
+          Architect/Engineer registered with BBMP for B-to-A Khata conversion.
+        </div>
+      </div>
+    </div>
+
+    <!-- Sample Buttons -->
+    <div class="card">
+      <h3>📄 Sample Pre-filled Reference Plans</h3>
+      <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Click a preset below to populate test data across all
+        form sections:</p>
+      <div class="sample-btns">
+        <button class="btn btn-secondary" onclick="loadSampleRegular()">👁️ Standard 30x40 Site (1-Road)</button>
+        <button class="btn btn-purple" onclick="loadSampleCornerPlot()">👁️ 2-Side Corner Plot (North & East
+          Road)</button>
+        <button class="btn btn-amber" onclick="loadSampleOdd()">👁️ Irregular / Odd Site</button>
+        <button class="btn btn-indigo" onclick="loadSampleRoadWidening()">👁️ Road Widening Site (RMP-2015)</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/ui.js"></script>
+  <script src="js/validator.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/samples.js"></script>
+</body>
+
+</html>
