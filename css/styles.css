@@ -57,7 +57,6 @@
 [data-theme="dark"] .price-card,
 [data-theme="dark"] .wizard-stepper-header,
 [data-theme="dark"] .stepper-header,
-[data-theme="dark"] .wizard-footer-bar,
 [data-theme="dark"] .boundary-card,
 [data-theme="dark"] .checkbox-box,
 [data-theme="dark"] .conditional-panel,
@@ -937,19 +936,21 @@ button:disabled {
   .wizard-footer-bar {
     display: flex !important;
     gap: 12px !important;
-    padding: 12px 14px !important;
-    background: #ffffff !important;
+    padding: 16px 0 0 0 !important;
+    margin-top: 20px !important;
+    background: transparent !important;
+    box-shadow: none !important;
     border-top: 1px solid var(--apple-border) !important;
-    border-radius: 0 0 16px 16px !important;
+    border-radius: 0 !important;
   }
 
   .wizard-footer-bar button {
     flex: 1 !important;
-    height: 48px !important;
-    font-size: 15px !important;
+    height: 46px !important;
+    font-size: 14.5px !important;
     font-weight: 700 !important;
-    border-radius: 12px !important;
-    display: flex !important;
+    border-radius: 980px !important;
+    display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
   }
@@ -1260,8 +1261,11 @@ select:focus {
   justify-content: space-between;
   align-items: center;
   margin-top: 24px;
-  padding-top: 16px;
+  padding-top: 18px;
   border-top: 1px solid var(--apple-border);
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
 }
 
 .apple-btn-secondary {
