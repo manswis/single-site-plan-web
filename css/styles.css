@@ -2057,33 +2057,87 @@ select:focus {
     margin-bottom: 1px !important;
   }
 
-  /* Explicit High-Contrast Architectural Print & Export Styling */
+  /* ABSOLUTE FORCE HIGH-CONTRAST LIGHT MODE STYLING FOR PDF EXPORT FRAME */
+  body.pdf-export-active #planOutput,
+  body.pdf-export-active #planOutput *,
+  body.pdf-export-active #legendSheetOutput,
+  body.pdf-export-active #legendSheetOutput *,
   #planOutput,
+  #planOutput *,
   #legendSheetOutput,
-  .plan-sheet-frame,
-  .plan-sheet-frame * {
+  #legendSheetOutput * {
     color: #0f172a !important;
+    text-shadow: none !important;
   }
 
-  #planOutput .details-table td,
-  #planOutput .landuse-table td,
-  #planOutput .title-block-table td,
-  #legendSheetOutput table td,
-  #legendSheetOutput table th {
+  body.pdf-export-active #planOutput h1, body.pdf-export-active #planOutput h2, body.pdf-export-active #planOutput h3, body.pdf-export-active #planOutput h4, body.pdf-export-active #planOutput h5, body.pdf-export-active #planOutput h6,
+  body.pdf-export-active #planOutput p, body.pdf-export-active #planOutput span, body.pdf-export-active #planOutput div, body.pdf-export-active #planOutput td, body.pdf-export-active #planOutput th, body.pdf-export-active #planOutput li, body.pdf-export-active #planOutput strong, body.pdf-export-active #planOutput b, body.pdf-export-active #planOutput label,
+  body.pdf-export-active #legendSheetOutput h1, body.pdf-export-active #legendSheetOutput h2, body.pdf-export-active #legendSheetOutput h3, body.pdf-export-active #legendSheetOutput h4, body.pdf-export-active #legendSheetOutput h5, body.pdf-export-active #legendSheetOutput h6,
+  body.pdf-export-active #legendSheetOutput p, body.pdf-export-active #legendSheetOutput span, body.pdf-export-active #legendSheetOutput div, body.pdf-export-active #legendSheetOutput td, body.pdf-export-active #legendSheetOutput th, body.pdf-export-active #legendSheetOutput li, body.pdf-export-active #legendSheetOutput strong, body.pdf-export-active #legendSheetOutput b, body.pdf-export-active #legendSheetOutput label,
+  #planOutput h1, #planOutput h2, #planOutput h3, #planOutput h4, #planOutput h5, #planOutput h6,
+  #planOutput p, #planOutput span, #planOutput div, #planOutput td, #planOutput th, #planOutput li, #planOutput strong, #planOutput b, #planOutput label,
+  #legendSheetOutput h1, #legendSheetOutput h2, #legendSheetOutput h3, #legendSheetOutput h4, #legendSheetOutput h5, #legendSheetOutput h6,
+  #legendSheetOutput p, #legendSheetOutput span, #legendSheetOutput div, #legendSheetOutput td, #legendSheetOutput th, #legendSheetOutput li, #legendSheetOutput strong, #legendSheetOutput b, #legendSheetOutput label {
     color: #0f172a !important;
-    border-color: #334155 !important;
+    opacity: 1 !important;
   }
 
-  #planOutput .details-table .label,
-  #planOutput .landuse-table th,
-  #planOutput .title-block-table .tb-label,
-  #planOutput .sidebar-panel-header,
-  #legendSheetOutput table th,
-  #legendSheetOutput h4 {
+  body.pdf-export-active .details-table,
+  body.pdf-export-active .landuse-table,
+  body.pdf-export-active .title-block-table,
+  body.pdf-export-active .legend-spec-table,
+  body.pdf-export-active .setback-matrix-table,
+  .details-table,
+  .landuse-table,
+  .title-block-table,
+  .legend-spec-table,
+  .setback-matrix-table {
+    background-color: #ffffff !important;
+  }
+
+  body.pdf-export-active .details-table td,
+  body.pdf-export-active .landuse-table td,
+  body.pdf-export-active .title-block-table td,
+  body.pdf-export-active .legend-spec-table td,
+  body.pdf-export-active .setback-matrix-table td,
+  .details-table td,
+  .landuse-table td,
+  .title-block-table td,
+  .legend-spec-table td,
+  .setback-matrix-table td {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #475569 !important;
+  }
+
+  body.pdf-export-active .details-table .label,
+  body.pdf-export-active .landuse-table th,
+  body.pdf-export-active .title-block-table .tb-label,
+  body.pdf-export-active .sidebar-panel-header,
+  body.pdf-export-active .legend-spec-table th,
+  body.pdf-export-active .setback-matrix-table th,
+  body.pdf-export-active .legend-section h4,
+  .details-table .label,
+  .landuse-table th,
+  .title-block-table .tb-label,
+  .sidebar-panel-header,
+  .legend-spec-table th,
+  .setback-matrix-table th,
+  .legend-section h4 {
     background-color: #f1f5f9 !important;
     color: #0f172a !important;
     font-weight: 700 !important;
-    border-color: #334155 !important;
+    border-color: #475569 !important;
+  }
+
+  body.pdf-export-active .sidebar-panel,
+  body.pdf-export-active .legend-section,
+  body.pdf-export-active .checklist-card,
+  .sidebar-panel,
+  .legend-section,
+  .checklist-card {
+    background-color: #ffffff !important;
+    border-color: #cbd5e1 !important;
   }
 
   .landuse-table,

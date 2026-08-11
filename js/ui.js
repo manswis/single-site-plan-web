@@ -614,6 +614,8 @@ async function downloadPDFPackage() {
     const survey = document.getElementById('surveyNo') ? document.getElementById('surveyNo').value.trim().replace(/[/\\?%*:|"<>]/g, '-') : '';
     const fileName = `BBMP_Single_Plot_Plan_${pid || survey || 'Sakala'}.pdf`;
 
+    document.body.classList.add('pdf-export-active');
+
     if (typeof generatePlan === 'function') generatePlan();
     toggleLegendSheetPage();
 
@@ -670,6 +672,7 @@ async function downloadPDFPackage() {
     console.error('Direct PDF Export Failed:', err);
     printPlanPackage();
   } finally {
+    document.body.classList.remove('pdf-export-active');
     if (downloadBtn) {
       downloadBtn.innerHTML = originalBtnText;
       downloadBtn.disabled = false;
