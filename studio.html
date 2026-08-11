@@ -26,7 +26,8 @@
   <header class="apple-navbar">
     <div class="apple-navbar-content">
       <a href="index.html" class="apple-brand">
-        <span>🏛️ BBMP e-Plan Studio</span>
+        <span class="brand-text-desktop">🏛️ BBMP e-Plan Studio</span>
+        <span class="brand-text-mobile">🏛️ e-Plan Studio</span>
         <span class="apple-pill-badge">B-to-A Khata Ready</span>
       </a>
       <nav class="apple-nav-links desktop-nav-bar">
@@ -76,8 +77,28 @@
 
   <div class="container" style="max-width: 960px;">
 
+    <!-- Line 2: Horizontal Sliding Control Navigation Bar for Mobile Pages -->
+    <div class="mobile-nav-slider">
+      <a href="index.html" class="mobile-nav-item">Home</a>
+      <a href="studio.html" class="mobile-nav-item active">Workbench</a>
+      <a href="pricing.html" class="mobile-nav-item">Pricing</a>
+      <a href="legal.html" class="mobile-nav-item">Legal</a>
+      <a href="faq.html" class="mobile-nav-item">FAQ</a>
+    </div>
+
+    <!-- Compact Mobile Active Step Indicator (Visible ONLY on Mobile screens <= 768px) -->
+    <div class="mobile-step-card">
+      <div class="mobile-step-card-header">
+        <span id="mobileStepBadge" class="mobile-step-badge">Step 1 of 7</span>
+        <span id="mobileStepTitle" class="mobile-step-title">🏛️ Revenue Records</span>
+      </div>
+      <div class="mobile-step-progress-track">
+        <div id="mobileStepProgressFill" class="mobile-step-progress-fill"></div>
+      </div>
+    </div>
+
     <!-- STEPS 1 TO 6: Centered Full-Width Guided Setup Wizard Container -->
-    <div id="wizardCard" class="apple-card" style="margin-top: 24px;">
+    <div id="wizardCard" class="apple-card" style="margin-top: 16px;">
 
       <!-- Stepper Progress Header -->
       <div class="stepper-header">

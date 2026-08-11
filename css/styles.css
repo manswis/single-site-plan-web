@@ -301,28 +301,100 @@ body {
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Mobile Media Query Rules */
+.brand-text-mobile {
+  display: none;
+}
+
+/* Mobile Media Query Rules (max-width: 768px) */
 @media (max-width: 768px) {
-  .mobile-nav-slider {
-    display: flex;
+
+  /* Line 1 Header: Left-aligned '🏛️ e-Plan Studio' with icon */
+  .apple-navbar-content {
+    justify-content: flex-start !important;
+    padding-left: 16px !important;
+    height: 46px !important;
   }
 
-  /* In Wizard mode on mobile (studio.html), hide page nav slider so mobile users get 100% focused wizard workspace */
-  body.wizard-mode .mobile-nav-slider,
-  body.wizard-mode .desktop-nav-bar {
+  .apple-brand {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+  }
+
+  .brand-text-desktop {
     display: none !important;
   }
 
-  /* Hide multi-column desktop wizard tab stepper on mobile and show compact mobile step indicator */
+  .brand-text-mobile {
+    display: inline-block !important;
+  }
+
+  /* Hide desktop nav links & pill badge in Line 1 Header on mobile */
+  .apple-nav-links,
+  .apple-pill-badge {
+    display: none !important;
+  }
+
+  /* Line 2 Header: Horizontal sliding control navigation bar with all options */
+  .mobile-nav-slider {
+    display: flex !important;
+    margin: 10px auto 16px auto !important;
+  }
+
+  /* Stepper Tabs: Hide desktop multi-tab stepper header on mobile */
+  .stepper-header,
+  .stepper-tabs,
   .wizard-stepper-header {
     display: none !important;
   }
 
+  /* Compact Mobile Active Step Indicator Card */
   .mobile-step-card {
     display: block !important;
   }
 
-  /* Prevent iOS Safari auto-zoom on form inputs by ensuring font-size is at least 16px on mobile */
+  /* Hide duplicate inner <h4> title inside wizard card on mobile */
+  .wizard-header-banner h4 {
+    display: none !important;
+  }
+
+  /* Remove box background, border, and padding on wizard-header-banner on mobile */
+  .wizard-header-banner {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 0 12px 0 !important;
+    margin-bottom: 12px !important;
+    box-shadow: none !important;
+  }
+
+  .wizard-header-banner p {
+    font-size: 13px !important;
+    color: var(--apple-text-secondary) !important;
+    margin: 0 !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Mobile Optimized Previous & Continue Buttons in Wizard Footer Bar */
+  .wizard-footer-bar {
+    display: flex !important;
+    gap: 12px !important;
+    padding: 12px 14px !important;
+    background: #ffffff !important;
+    border-top: 1px solid var(--apple-border) !important;
+    border-radius: 0 0 16px 16px !important;
+  }
+
+  .wizard-footer-bar button {
+    flex: 1 !important;
+    height: 48px !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Prevent iOS Safari auto-zoom on form inputs */
   input[type="text"],
   input[type="number"],
   input[type="date"],
