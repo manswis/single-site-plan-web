@@ -382,7 +382,7 @@ function showStep(stepNum, shouldSave = true) {
 
   if (nextBtn) {
     if (stepNum === 6) {
-      nextBtn.textContent = 'Review & Generate →';
+      nextBtn.textContent = 'Review →';
       nextBtn.style.display = 'inline-flex';
     } else if (stepNum === 7) {
       nextBtn.style.display = 'none';
