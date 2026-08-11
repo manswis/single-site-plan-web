@@ -63,6 +63,10 @@ function goToStep(stepNum) {
 function nextStep() {
   if (currentStep < TOTAL_STEPS) {
     goToStep(currentStep + 1);
+  } else if (currentStep === TOTAL_STEPS) {
+    if (typeof downloadPDFPackage === 'function') {
+      downloadPDFPackage();
+    }
   }
 }
 
@@ -117,12 +121,22 @@ function showStep(stepNum) {
   if (stepTitle && meta) stepTitle.textContent = `${meta.icon} ${meta.title}`;
   if (stepDesc && meta) stepDesc.textContent = meta.desc;
 
-  updateProgressBar();
+  // Toggle Full-Width Export Viewport Section (Visible ONLY on Step 7)
+  const exportSection = document.getElementById('exportViewportSection');
+  const nextBtn = document.getElementById('nextBtn');
 
-  // Scroll step panel into smooth view
-  const wizardCard = document.getElementById('wizardCard');
-  if (wizardCard) {
-    wizardCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  if (exportSection) {
+    exportSection.style.display = (stepNum === 7) ? 'block' : 'none';
+  }
+
+  if (nextBtn) {
+    if (stepNum === 6) {
+      nextBtn.textContent = 'Preview & Export →';
+    } else if (stepNum === 7) {
+      nextBtn.textContent = '📥 Download PDF Package';
+    } else {
+      nextBtn.textContent = 'Continue →';
+    }
   }
 
   // Auto-render live preview on Step 7
