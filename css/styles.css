@@ -2500,6 +2500,32 @@ select:focus {
   text-decoration: underline;
 }
 
+/* Field Help Icon Button */
+.field-help-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--apple-accent);
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(0, 102, 204, 0.25);
+  cursor: pointer;
+  margin-left: 6px;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.field-help-btn:hover {
+  background: var(--apple-accent);
+  color: #ffffff;
+  transform: scale(1.15);
+}
+
 @media (max-width: 768px) {
   .help-step-card {
     padding: 16px 14px !important;

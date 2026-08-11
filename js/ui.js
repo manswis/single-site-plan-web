@@ -1003,3 +1003,163 @@ function onGeneratePlanClick() {
   }
 }
 
+/**
+ * Central dictionary containing beginner-friendly field explanations,
+ * document retrieval instructions, sample snippets, and official portal links.
+ */
+const FIELD_HELP_DATA = {
+  epId: {
+    title: "eKhata Property ID (ePID)",
+    what: "Your plot's 10-digit official digital ID number issued by BBMP.",
+    where: "Look at the top-right corner of your draft or final e-Khata document.",
+    sample: "Property ID (ePID): 1509988776",
+    link: "https://bbmpekhata.karnataka.gov.in/",
+    linkText: "Visit Karnataka e-Khata Portal ↗"
+  },
+  pidNo: {
+    title: "BBMP Property Tax PID Number",
+    what: "The Property Identification Number used when paying your yearly BBMP property tax.",
+    where: "Printed near the top of your annual SAS Property Tax receipt or tax khata record.",
+    sample: "PID Number: 108-W0045-12",
+    link: "https://bbmptax.karnataka.gov.in/",
+    linkText: "Visit BBMP Property Tax Portal ↗"
+  },
+  adlrNo: {
+    title: "ADLR 11E Survey Sketch Number",
+    what: "Pre-mutation survey sketch reference issued by the Assistant Director of Land Records (ADLR).",
+    where: "Printed on your official Mojini 11E survey sketch map.",
+    sample: "Sketch Ref: ADLR/11E/KR-7891/2023-24",
+    link: "https://bhoomi.karnataka.gov.in/mojini/",
+    linkText: "Visit Bhoomi Mojini Portal ↗"
+  },
+  dcOrderNo: {
+    title: "DC Conversion Order Number & Date",
+    what: "Official government order converting agricultural land for non-agricultural residential use under KLR Act Sec 95.",
+    where: "Printed on your official DC Conversion Order issued by the Deputy Commissioner, Bengaluru Urban District.",
+    sample: "Order No: ALN(E)SR.97/07-08 (Dated: 12-04-2008)"
+  },
+  zoneName: {
+    title: "BBMP Administrative Zone",
+    what: "The BBMP zone governing your property location in Bengaluru (e.g. East, West, South, Mahadevapura, Bommanahalli).",
+    where: "Found on your property tax receipt or e-Khata document."
+  },
+  wardNo: {
+    title: "BBMP Ward Number & Name",
+    what: "The municipal ward number and neighborhood name where your plot is situated.",
+    where: "Printed on your BBMP SAS Tax Receipt (e.g., Ward 45 - Malleshwaram)."
+  },
+  siteAddress: {
+    title: "Complete Property Address",
+    what: "The full physical street address of your property.",
+    where: "Type the address exactly as written under the Schedule of Property in your registered Sale Deed."
+  },
+  surveyNo: {
+    title: "Survey Number / Sy No",
+    what: "The official revenue survey number or site/house number of your plot.",
+    where: "Found in your Sale Deed Schedule or 11E Survey Sketch (e.g. Sy No 42/1)."
+  },
+  isOdd: {
+    title: "Regular vs Irregular Plot Shape",
+    what: "Choose Regular for simple rectangular/square plots (2 dimensions), or Irregular if your plot has 4 unequal or slanted sides.",
+    where: "Check your 11E Survey Sketch or Sale Deed boundary measurements."
+  },
+  plotDimensions: {
+    title: "Plot Boundary Measurements",
+    what: "The exact physical length of your plot boundaries in feet and inches.",
+    where: "Found under the 'Schedule of Property' section of your Sale Deed or Mojini 11E Sketch."
+  },
+  roadFacing: {
+    title: "Front Main Road Direction",
+    what: "The cardinal direction (North, South, East, or West) where your primary entrance/abutting road faces.",
+    where: "Check your plot layout sketch or deed schedule."
+  },
+  roadWidth: {
+    title: "Abutting Road Width",
+    what: "The width of the public or private road in front of your plot (in feet and inches).",
+    where: "Road width determines minimum setback requirements under BBMP RMP-2015 bye-laws."
+  },
+  bldgType: {
+    title: "Proposed Building Structure & Floor Count",
+    what: "Choose whether your site is a vacant plot or has a building structure (e.g. Stilt+Ground, G+1 to G+4).",
+    where: "Determines the total built-up area and mandatory setback clearances."
+  },
+  bldgOrientation: {
+    title: "Building Footprint Alignment",
+    what: "Controls whether the building long side runs horizontally or vertically to fit cleanly within plot setbacks.",
+    where: "Select ✨ Auto-Fit or adjust alignment to prevent footprint boundary overflow."
+  },
+  setbacks: {
+    title: "Building Setback Clearances (RMP-2015)",
+    what: "Mandatory open space required between your building outer walls and property boundaries.",
+    where: "Auto-calculated according to BBMP RMP-2015 bye-laws based on plot depth and road width."
+  },
+  boundaries: {
+    title: "Deed DNA Boundary Schedule",
+    what: "Details of what abuts each side of your plot (Public Road, Private Property, Government Land, or Stormwater Drain).",
+    where: "Copy directly from the 'Schedule of Property' section in your registered Sale Deed."
+  },
+  roadWidening: {
+    title: "Master Plan Road Widening Strip",
+    what: "Government reserved strip of land along public roads under BDA Master Plan (RMP-2015).",
+    where: "If your road is slated for widening, check this box to render the hatched widening strip overlay on your plan."
+  },
+  bufferZone: {
+    title: "Stormwater Drain / Lake Buffer Zone",
+    what: "Mandatory buffer zone required next to Rajakaluve (Stormwater Drains) or Lakes under KTCP Act Sec 17.",
+    where: "If your site is adjacent to a drain or water body, check this to render the sky-blue buffer zone overlay."
+  }
+};
+
+/**
+ * Opens an Apple-style Frosted Glass Field Help Modal.
+ * 
+ * @function showFieldHelp
+ * @param {string} key - Key matching FIELD_HELP_DATA entry.
+ * @returns {void}
+ */
+function showFieldHelp(key) {
+  const data = FIELD_HELP_DATA[key];
+  if (!data) return;
+
+  const modal = document.getElementById('fieldHelpModal');
+  const titleEl = document.getElementById('helpModalTitle');
+  const bodyEl = document.getElementById('helpModalBody');
+
+  if (!modal || !titleEl || !bodyEl) return;
+
+  titleEl.textContent = data.title;
+
+  let html = `
+    <div style="font-size: 13.5px; line-height: 1.5; color: var(--apple-text-secondary);">
+      <p style="margin: 0 0 10px 0;"><strong>What it is:</strong> ${data.what}</p>
+      <p style="margin: 0 0 10px 0;"><strong>Where to find it:</strong> ${data.where}</p>
+  `;
+
+  if (data.sample) {
+    html += `
+      <div class="sample-snippet-box" style="margin: 10px 0;">
+        <div class="snippet-tag">Sample Document Text</div>
+        <div class="snippet-content"><strong>${data.sample}</strong></div>
+      </div>
+    `;
+  }
+
+  if (data.link) {
+    html += `
+      <a href="${data.link}" target="_blank" rel="noopener" class="doc-link-btn" style="margin-top: 6px;">
+        ${data.linkText || 'Visit Official Portal ↗'}
+      </a>
+    `;
+  }
+
+  html += `</div>`;
+
+  bodyEl.innerHTML = html;
+  modal.style.display = 'flex';
+}
+
+function closeFieldHelp() {
+  const modal = document.getElementById('fieldHelpModal');
+  if (modal) modal.style.display = 'none';
+}
+
