@@ -503,8 +503,8 @@
         <div class="drawing-canvas-column">
           <!-- ADLR Sketch Reference Bar -->
           <div class="adlr-header-bar">
-            <span>📌 ADLR 11E SKETCH NO: <span id="outAdlrNo">ADLR/11E/2024/7891</span></span>
-            <span>SURVEY NO: <span id="outHeaderSurvey">45/2A</span></span>
+            <span>📌 ADLR 11E SKETCH NO: <span id="outAdlrNo">—</span></span>
+            <span>SURVEY NO: <span id="outHeaderSurvey">—</span></span>
           </div>
 
           <div class="plan-header">
@@ -553,12 +553,14 @@
                 </marker>
 
                 <!-- 2. Cobalt Blue 45-degree Diagonal Building Footprint Hatch Pattern -->
-                <pattern id="bldgHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                <pattern id="bldgHatch" width="8" height="8" patternTransform="rotate(45 0 0)"
+                  patternUnits="userSpaceOnUse">
                   <line x1="0" y1="0" x2="0" y2="8" stroke="#2563eb" stroke-width="1.5" />
                 </pattern>
 
                 <!-- 3. Grey 45-degree Diagonal Road Widening Hatch Pattern -->
-                <pattern id="roadWideningHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                <pattern id="roadWideningHatch" width="8" height="8" patternTransform="rotate(45 0 0)"
+                  patternUnits="userSpaceOnUse">
                   <line x1="0" y1="0" x2="0" y2="8" stroke="#64748b" stroke-width="1.5" />
                 </pattern>
 
@@ -569,22 +571,30 @@
               </defs>
 
               <!-- Plot Boundary (Official BBMP Dash-Dot-Dot Black Stroke: stroke-dasharray="12,3,3,3,3,3") -->
-              <rect id="plotRect" x="80" y="60" width="340" height="260" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="12,3,3,3,3,3" />
-              <polygon id="plotPoly" points="80,60 420,60 420,320 80,320" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="12,3,3,3,3,3" style="display:none;" />
+              <rect id="plotRect" x="80" y="60" width="340" height="260" fill="none" stroke="#000000" stroke-width="2"
+                stroke-dasharray="12,3,3,3,3,3" />
+              <polygon id="plotPoly" points="80,60 420,60 420,320 80,320" fill="none" stroke="#000000" stroke-width="2"
+                stroke-dasharray="12,3,3,3,3,3" style="display:none;" />
 
               <!-- Corner Splay Polygon (Chamfered Cut Corner for Corner Plots) -->
-              <polygon id="splayPoly" points="" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,2" style="display:none;" />
+              <polygon id="splayPoly" points="" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,2"
+                style="display:none;" />
 
               <!-- Master Plan Road Widening Area Strip (Hatched) -->
-              <rect id="roadWideningRect" x="0" y="0" width="0" height="0" fill="url(#roadWideningHatch)" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2" style="display:none;" />
-              <text id="roadWideningText" x="0" y="0" text-anchor="middle" font-size="9" fill="#475569" font-weight="600" style="display:none;">ROAD WIDENING STRIP</text>
+              <rect id="roadWideningRect" x="0" y="0" width="0" height="0" fill="url(#roadWideningHatch)"
+                stroke="#64748b" stroke-width="1" stroke-dasharray="4,2" style="display:none;" />
+              <text id="roadWideningText" x="0" y="0" text-anchor="middle" font-size="9" fill="#475569"
+                font-weight="600" style="display:none;">ROAD WIDENING STRIP</text>
 
               <!-- Drain / Lake Buffer Zone Overlay -->
-              <rect id="bufferRect" x="0" y="0" width="0" height="0" fill="url(#bufferHatch)" stroke="#0284c7" stroke-width="1" stroke-dasharray="4,2" style="display:none;" />
-              <text id="bufferText" x="0" y="0" text-anchor="middle" font-size="9" fill="#0284c7" font-weight="600" style="display:none;">BUFFER ZONE</text>
+              <rect id="bufferRect" x="0" y="0" width="0" height="0" fill="url(#bufferHatch)" stroke="#0284c7"
+                stroke-width="1" stroke-dasharray="4,2" style="display:none;" />
+              <text id="bufferText" x="0" y="0" text-anchor="middle" font-size="9" fill="#0284c7" font-weight="600"
+                style="display:none;">BUFFER ZONE</text>
 
               <!-- Building Footprint (Cobalt Blue + 45-deg Diagonal Hatch Fill) -->
-              <rect id="bldgRect" x="110" y="90" width="200" height="160" fill="url(#bldgHatch)" stroke="#1d4ed8" stroke-width="2" />
+              <rect id="bldgRect" x="110" y="90" width="200" height="160" fill="url(#bldgHatch)" stroke="#1d4ed8"
+                stroke-width="2" />
 
               <!-- Dimension Lines -->
               <line id="dimWLine" x1="80" y1="340" x2="420" y2="340" stroke="#64748b" stroke-width="1"
@@ -615,10 +625,14 @@
                 transform="rotate(90, 345, 170)">40'-0"</text>
 
               <!-- Setbacks -->
-              <text id="setbackN" x="250" y="78" text-anchor="middle" font-size="9" fill="#059669">Front Setback: 10'-0"</text>
-              <text id="setbackS" x="250" y="315" text-anchor="middle" font-size="9" fill="#059669">Rear Setback: 10'-0"</text>
-              <text id="setbackE" x="400" y="170" text-anchor="middle" font-size="9" fill="#059669">Right Setback: 5'-0"</text>
-              <text id="setbackW" x="95" y="170" text-anchor="middle" font-size="9" fill="#059669">Left Setback: 5'-0"</text>
+              <text id="setbackN" x="250" y="78" text-anchor="middle" font-size="9" fill="#059669">Front Setback:
+                —</text>
+              <text id="setbackS" x="250" y="315" text-anchor="middle" font-size="9" fill="#059669">Rear Setback:
+                —</text>
+              <text id="setbackE" x="400" y="170" text-anchor="middle" font-size="9" fill="#059669">Right Setback:
+                —</text>
+              <text id="setbackW" x="95" y="170" text-anchor="middle" font-size="9" fill="#059669">Left Setback:
+                —</text>
 
               <!-- Compass Rosette -->
               <g transform="translate(450, 380)">
@@ -648,19 +662,17 @@
               <text id="labelW" x="50" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
                 transform="rotate(90, 50, 195)">WEST</text>
 
-              <text id="adjN" x="250" y="12" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Public
-                Road</text>
-              <text id="adjS" x="250" y="405" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Neighbor's
-                Plot</text>
+              <text id="adjN" x="250" y="12" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: —</text>
+              <text id="adjS" x="250" y="405" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: —</text>
               <text id="adjE" x="470" y="195" text-anchor="middle" font-size="9" fill="#94a3b8"
-                transform="rotate(90, 470, 195)">Adjacent: Plot No. 46</text>
-              <text id="adjW" x="10" y="195" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Plot No.
-                44</text>
+                transform="rotate(90, 470, 195)">Adjacent: —</text>
+              <text id="adjW" x="10" y="195" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: —</text>
             </svg>
           </div>
 
           <div class="footer-note">
-            Note: This layout plan has been prepared as per BBMP Sakala B-to-A Khata conversion standards. Final plan must be signed & sealed by a licensed Architect/Engineer registered with BBMP.
+            Note: This layout plan has been prepared as per BBMP Sakala B-to-A Khata conversion standards. Final plan
+            must be signed & sealed by a licensed Architect/Engineer registered with BBMP.
           </div>
         </div> <!-- End Left Column -->
 
@@ -671,8 +683,8 @@
           <div class="sidebar-panel">
             <div class="sidebar-panel-header">1. ADLR 11E SURVEY SKETCH</div>
             <div class="sidebar-panel-body">
-              <strong>Sketch No:</strong> <span id="sbAdlrNo">ADLR/11E/2024/7891</span><br>
-              <strong>Bhoomi Mojini Ref:</strong> <span id="sbMojiniRef">MJN-2024-889</span>
+              <strong>Sketch No:</strong> <span id="sbAdlrNo">—</span><br>
+              <strong>Bhoomi Mojini Ref:</strong> <span id="sbMojiniRef">—</span>
             </div>
           </div>
 
@@ -695,9 +707,9 @@
           <div class="sidebar-panel">
             <div class="sidebar-panel-header">3. DC CONVERSION ORDER</div>
             <div class="sidebar-panel-body">
-              <strong>Order No:</strong> <span id="sbDcOrderNo">ALN(EV)SR/45/2018-19</span><br>
-              <strong>Order Date:</strong> <span id="sbDcOrderDate">15/04/2019</span><br>
-              <strong>Authority:</strong> <span id="sbDcAuthority">DC, Bengaluru Urban</span>
+              <strong>Order No:</strong> <span id="sbDcOrderNo">—</span><br>
+              <strong>Order Date:</strong> <span id="sbDcOrderDate">—</span><br>
+              <strong>Authority:</strong> <span id="sbDcAuthority">—</span>
             </div>
           </div>
 
@@ -740,22 +752,22 @@
                 <tbody>
                   <tr>
                     <td>Residential Plot Area</td>
-                    <td id="luResArea">222.96</td>
+                    <td id="luResArea">—</td>
                     <td id="luResPct">100.00%</td>
                   </tr>
                   <tr id="luRowRoad" style="display:none;">
                     <td>Road Widening Area</td>
-                    <td id="luRoadArea">0.00</td>
-                    <td id="luRoadPct">0.00%</td>
+                    <td id="luRoadArea">—</td>
+                    <td id="luRoadPct">—</td>
                   </tr>
                   <tr id="luRowBuffer" style="display:none;">
                     <td>Drain / Lake Buffer Area</td>
-                    <td id="luBufferArea">0.00</td>
-                    <td id="luBufferPct">0.00%</td>
+                    <td id="luBufferArea">—</td>
+                    <td id="luBufferPct">—</td>
                   </tr>
                   <tr style="font-weight:bold;background:#f1f5f9;">
                     <td>TOTAL SITE AREA</td>
-                    <td id="luTotalArea">222.96</td>
+                    <td id="luTotalArea">—</td>
                     <td>100.00%</td>
                   </tr>
                 </tbody>
