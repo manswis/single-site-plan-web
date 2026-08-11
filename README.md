@@ -53,8 +53,7 @@ BBMPBToAKhata/
 ├── js/
 │   ├── ui.js                             # DOM Interaction & Auto-Sync Logic
 │   ├── validator.js                      # Sakala Data Validation Engine
-│   ├── renderer.js                       # SVG Vector Graphics Generator
-│   └── samples.js                        # Reference Test Preset Loaders
+│   └── renderer.js                       # SVG Vector Graphics Generator
 ├── improvement.md                        # Master Roadmap & Technical Checklist
 ├── README.md                             # Comprehensive Documentation (This File)
 ├── SINGLE PLOT LAYOUT PLAN - LEGEND.pdf  # BBMP Official Colour Specifications
@@ -93,13 +92,6 @@ Organized into 7 semantic form sections:
 * Computes vector vertices for regular rectangles and irregular quad polygons.
 * **Multi-Road SVG Renderer:** Dynamically draws public roads on 1, 2 (Corner Plot), 3, or 4 sides with custom road names and widths.
 * Renders dimension lines, setback callouts, cardinal boundary labels (`N: 30'-0"`, etc.), North rosette, scale bar, and output summary table.
-
-#### 🧪 `js/samples.js`
-Contains pre-filled reference test presets:
-* `loadSampleRegular()` — Standard $30' \times 40'$ site with 1 public road.
-* `loadSampleCornerPlot()` — $40' \times 60'$ 2-side Corner Plot (North $30'$ road & East $60'$ main road).
-* `loadSampleOdd()` — Irregular trapezoid quadrilateral site.
-* `loadSampleRoadWidening()` — Site subject to RMP-2015 road widening.
 
 ---
 
