@@ -659,9 +659,15 @@ function scrollFirstErrorIntoView(stepNum) {
   const stepPanel = document.getElementById(`wizardStep${stepNum}`);
   if (!stepPanel) return;
 
-  const firstErr = stepPanel.querySelector('.error-msg[style*="display: block"]') || stepPanel.querySelector('.field.error');
-  if (firstErr) {
-    firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const errorContainer = stepPanel.querySelector('.field.error') || stepPanel.querySelector('.error-msg[style*="display: block"]');
+  if (errorContainer) {
+    errorContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const input = errorContainer.querySelector('input:not([type="hidden"]), select, textarea');
+    if (input && typeof input.focus === 'function') {
+      setTimeout(() => {
+        try { input.focus(); } catch (e) {}
+      }, 150);
+    }
   }
 }
 
