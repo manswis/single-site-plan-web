@@ -154,7 +154,7 @@ function onFtInInput(fieldId) {
     autoCalculateSetbacks(false);
     validateBuildingSetbackFeasibility();
   } else if (fieldId.startsWith('setback')) {
-    hiddenEl.dataset.autoCalc = 'false';
+    if (hiddenEl) hiddenEl.dataset.manualEdit = 'true';
     validateBuildingSetbackFeasibility();
   }
 
@@ -198,12 +198,13 @@ function calculateBuiltUpArea() {
 }
 
 /**
- * Auto-calculates Front, Rear, Left, and Right setbacks based on Step 3 Plot Dimensions
- * and Step 4 Building Proposal (Width & Length).
- * Fills setback feet-inches inputs while leaving them fully editable for manual overrides.
+ * Auto-calculates Front, Rear, Left, and Right setbacks dynamically based on Step 3 Plot Spans
+ * and Step 4 Building Footprint (Width & Length).
+ * Automatically selects the optimal building orientation to prevent dimension mismatches.
+ * Preserves explicit manual overrides on individual setback fields.
  * 
  * @function autoCalculateSetbacks
- * @param {boolean} [force=false] - Whether to overwrite existing user values.
+ * @param {boolean} [force=false] - Whether to force recalculation of auto fields.
  * @returns {void}
  */
 function autoCalculateSetbacks(force = false) {
@@ -212,7 +213,7 @@ function autoCalculateSetbacks(force = false) {
 
   if (widthVal <= 0 && lengthVal <= 0) return;
 
-  // Retrieve Step 3 Site Dimensions
+  // Retrieve Step 3 Site Spans
   const isOdd = document.getElementById('oddSiteCheck')?.checked;
   let north = 0, south = 0, east = 0, west = 0;
 
@@ -231,17 +232,35 @@ function autoCalculateSetbacks(force = false) {
 
   if (spanNS <= 0 && spanEW <= 0) return;
 
-  // Determine orientation alignment: Standard vs Perpendicular
+  // Evaluate both alignment orientations to pick the optimal fit
+  // Alignment 1: Width on N/S span, Length on E/W span
+  const fitA_Width = spanNS - widthVal;
+  const fitA_Length = spanEW - lengthVal;
+  const isFitA = fitA_Width >= 0 && fitA_Length >= 0;
+
+  // Alignment 2: Length on N/S span, Width on E/W span
+  const fitB_Width = spanEW - widthVal;
+  const fitB_Length = spanNS - lengthVal;
+  const isFitB = fitB_Width >= 0 && fitB_Length >= 0;
+
   let widthSpan = spanNS;
   let lengthSpan = spanEW;
 
-  // If length is greater than East/West span but fits North/South span, flip orientation!
-  if ((lengthVal > spanEW || widthVal > spanNS) && lengthVal <= spanNS && widthVal <= spanEW) {
+  if (isFitB && !isFitA) {
+    // Alignment 2 is valid! Flip spans: Width goes along E/W, Length goes along N/S
     widthSpan = spanEW;
     lengthSpan = spanNS;
+  } else if (!isFitA && !isFitB) {
+    // If neither fits perfectly, pick whichever orientation yields smaller deficit
+    const deficitA = Math.min(0, fitA_Width) + Math.min(0, fitA_Length);
+    const deficitB = Math.min(0, fitB_Width) + Math.min(0, fitB_Length);
+    if (deficitB > deficitA) {
+      widthSpan = spanEW;
+      lengthSpan = spanNS;
+    }
   }
 
-  // Calculate remaining clearance along width and length axes
+  // Calculate remaining clearance along selected width and length spans
   const remainWidth = Math.max(0, widthSpan - widthVal);
   const remainLength = Math.max(0, lengthSpan - lengthVal);
 
@@ -251,7 +270,7 @@ function autoCalculateSetbacks(force = false) {
   const calcFront = Math.round((remainLength / 2) * 10) / 10;
   const calcRear = Math.round((remainLength / 2) * 10) / 10;
 
-  // Helper to set feet-inches inputs
+  // Populate setback input fields (unless manually locked by user)
   const populateField = (fieldId, totalFeet) => {
     const ftEl = document.getElementById(fieldId + '_ft');
     const inEl = document.getElementById(fieldId + '_in');
@@ -259,16 +278,15 @@ function autoCalculateSetbacks(force = false) {
 
     if (!ftEl || !hiddenEl) return;
 
-    // Auto populate if empty, force = true, or marked as autoCalc
-    const isAuto = hiddenEl.dataset.autoCalc === 'true' || ftEl.value === '' || ftEl.value === '0';
+    // Is manually edited by user?
+    const isManual = hiddenEl.dataset.manualEdit === 'true';
 
-    if (force || isAuto) {
+    if (force || !isManual || ftEl.value === '' || ftEl.value === '0') {
       const ft = Math.floor(totalFeet);
       const inches = Math.round((totalFeet - ft) * 12);
-      ftEl.value = ft > 0 ? ft : '';
+      ftEl.value = ft > 0 ? ft : (inches > 0 ? '0' : '');
       if (inEl) inEl.value = inches > 0 ? inches : '';
       hiddenEl.value = Math.round(totalFeet * 100) / 100;
-      hiddenEl.dataset.autoCalc = 'true';
     }
   };
 
