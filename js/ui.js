@@ -151,7 +151,7 @@ function onFtInInput(fieldId) {
     calculatePlotAreaFromSides();
   } else if (fieldId === 'bldgWidth' || fieldId === 'bldgLength') {
     calculateBuiltUpArea();
-    autoCalculateSetbacks(false);
+    autoCalculateSetbacks(true);
     validateBuildingSetbackFeasibility();
   } else if (fieldId.startsWith('setback')) {
     if (hiddenEl) hiddenEl.dataset.manualEdit = 'true';
