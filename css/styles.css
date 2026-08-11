@@ -54,6 +54,7 @@
 [data-theme="dark"] .apple-card,
 [data-theme="dark"] .how-it-works-card,
 [data-theme="dark"] .pricing-card,
+[data-theme="dark"] .price-card,
 [data-theme="dark"] .wizard-stepper-header,
 [data-theme="dark"] .stepper-header,
 [data-theme="dark"] .wizard-footer-bar,
@@ -62,11 +63,40 @@
 [data-theme="dark"] .conditional-panel,
 [data-theme="dark"] .mobile-step-card,
 [data-theme="dark"] .action-bar,
-[data-theme="dark"] .apple-modal-card {
+[data-theme="dark"] .apple-modal-card,
+[data-theme="dark"] [style*="background: #ffffff"],
+[data-theme="dark"] [style*="background:#ffffff"],
+[data-theme="dark"] [style*="background: #f8fafc"],
+[data-theme="dark"] [style*="background:#f8fafc"] {
   background: #1c1c1e !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
   color: var(--apple-text-primary) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] [style*="background: #eff6ff"],
+[data-theme="dark"] [style*="background:#eff6ff"] {
+  background: rgba(41, 151, 255, 0.15) !important;
+  border-color: rgba(41, 151, 255, 0.4) !important;
+  color: #90caf9 !important;
+}
+
+[data-theme="dark"] [style*="background: #f0fdf4"],
+[data-theme="dark"] [style*="background:#f0fdf4"] {
+  background: rgba(52, 199, 89, 0.15) !important;
+  border-color: rgba(52, 199, 89, 0.4) !important;
+  color: #a5d6a7 !important;
+}
+
+[data-theme="dark"] [style*="background: #fef2f2"],
+[data-theme="dark"] [style*="background:#fef2f2"] {
+  background: rgba(255, 59, 48, 0.15) !important;
+  border-color: rgba(255, 59, 48, 0.4) !important;
+  color: #ef9a9a !important;
+}
+
+[data-theme="dark"] .price-features {
+  color: #a1a1a6 !important;
 }
 
 [data-theme="dark"] .info-tooltip-box {
@@ -134,11 +164,11 @@
   color: #64b5f6 !important;
 }
 
-[data-theme="dark"] h1, 
-[data-theme="dark"] h2, 
-[data-theme="dark"] h3, 
-[data-theme="dark"] h4, 
-[data-theme="dark"] h5, 
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
 [data-theme="dark"] h6,
 [data-theme="dark"] strong {
   color: #ffffff !important;

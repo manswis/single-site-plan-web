@@ -14,7 +14,6 @@
    - add that user aggree to all terms and condition (add hyperlink to legal discliamer page or terms page)
    - Generate plan, export, print will be only enabled when user accepts terms and condition
    - if user checkout delete generated plan and disable Generate plan, export, print
-10. add dark and light mode (default will be browser's default setting)
 11. add kannada translation
 12. do we need "BBMP PID Number" or make it optional?
 13. for each field add ? help icon when user taps show help where to get that
