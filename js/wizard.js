@@ -192,7 +192,7 @@ function restoreDraft(hideModal = true) {
     }
 
     const targetStep = draft.currentStep || 1;
-    showStep(targetStep);
+    showStep(targetStep, false);
 
     if (typeof generatePlan === 'function') {
       generatePlan();
@@ -313,7 +313,7 @@ function prevStep() {
  * @param {number} stepNum - Step number to activate.
  * @returns {void}
  */
-function showStep(stepNum) {
+function showStep(stepNum, shouldSave = true) {
   currentStep = stepNum;
 
   // Clear any residual error messages on the target step when landing
@@ -368,6 +368,11 @@ function showStep(stepNum) {
   }
 
   updateProgressBar();
+
+  // Save active step index and form state to localStorage
+  if (shouldSave) {
+    saveDraft();
+  }
 
   // Scroll step panel smoothly into view
   const wizardCard = document.getElementById('wizardCard');
