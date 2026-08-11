@@ -1,13 +1,14 @@
 /**
  * @file renderer.js
  * @description Computes plot scale ratios, calculates vertex coordinates, setback placement, and renders vector SVG graphics.
+ * Handles dynamic population of the 70:30 Split Architectural Sheet Frame and 8 Right Sidebar Panels.
  * Supports multi-road plots and exhaustive 9 boundary types under Karnataka property law.
  * @author Senior Systems Architect
  */
 
 /**
  * Main plan generator controller. Validates input form state, computes plot geometry,
- * populates details summary tables, and renders vector graphics onto SVG canvas.
+ * populates details summary tables and 8 sidebar panels, and renders vector graphics onto SVG canvas.
  * 
  * @function generatePlan
  * @returns {void}
@@ -18,15 +19,24 @@ function generatePlan() {
   const isOdd = document.getElementById('oddSiteCheck') ? document.getElementById('oddSiteCheck').checked : false;
   const owner = document.getElementById('ownerName').value.trim();
   const epId = document.getElementById('epId').value.trim();
+  const pidNo = document.getElementById('pidNo').value.trim();
   const survey = document.getElementById('surveyNo').value.trim();
-  const ward = document.getElementById('wardNo').value.trim();
+  const zone = document.getElementById('bbmpZone').value;
+  const wardNo = document.getElementById('wardNo').value.trim();
+  const wardName = document.getElementById('wardName').value.trim();
   const address = document.getElementById('address').value.trim();
-  const area = document.getElementById('plotArea').value;
+  const areaSqFt = parseFloat(document.getElementById('plotArea').value) || 0;
   const roadW = document.getElementById('roadWidth').value;
   const roadFace = document.getElementById('roadFacing').value;
   const bldgW = parseFloat(document.getElementById('bldgWidth').value) || 0;
   const bldgL = parseFloat(document.getElementById('bldgLength').value) || 0;
-  const scale = document.getElementById('scale').value;
+  const scale = document.getElementById('scale').value || '1:100';
+
+  // Metadata & Document Details
+  const adlrNo = document.getElementById('adlrNo').value.trim() || 'N/A';
+  const dcOrderNo = document.getElementById('dcOrderNo').value.trim() || 'N/A';
+  const dcOrderDate = document.getElementById('dcOrderDate').value || 'N/A';
+  const dcAuthority = document.getElementById('dcAuthority').value.trim() || 'DC, Bengaluru Urban';
 
   // Primary Universal 4-Side Cardinal Measurements
   const sideN = parseFloat(document.getElementById('sideNorth').value) || 0;
@@ -47,8 +57,8 @@ function generatePlan() {
 
   /**
    * Helper function to extract boundary metadata.
-   * @param {string} dir - Direction key.
-   * @returns {Object}
+   * @param {string} dir - Direction key ('North', 'South', 'East', 'West').
+   * @returns {Object} Boundary information object.
    */
   function getBoundaryInfo(dir) {
     const typeEl = document.getElementById(`type${dir}`);
@@ -69,7 +79,7 @@ function generatePlan() {
   /**
    * Returns fallback descriptions for non-road boundary types.
    * @param {string} type - Boundary type key.
-   * @returns {string}
+   * @returns {string} Human-readable fallback label.
    */
   function getDefaultLabel(type) {
     switch (type) {
@@ -84,17 +94,83 @@ function generatePlan() {
     }
   }
 
-  // Populate Summary Details Table
+  // 1. Populate Summary Details Table (70% Left Column Header)
+  const areaSqM = (areaSqFt * 0.092903).toFixed(2);
   document.getElementById('outOwner').textContent = owner;
   document.getElementById('outEpId').textContent = epId;
   document.getElementById('outSurvey').textContent = survey;
-  document.getElementById('outWard').textContent = ward;
+  document.getElementById('outWard').textContent = `Ward ${wardNo} — ${wardName}`;
   document.getElementById('outAddress').textContent = address;
-  document.getElementById('outArea').textContent = area + ' sq.ft (' + (parseFloat(area) * 0.0929).toFixed(2) + ' sq.m)';
+  document.getElementById('outArea').textContent = `${areaSqFt} sq.ft (${areaSqM} sq.m)`;
   document.getElementById('outSize').textContent = `N:${sideN}' × S:${sideS}' × E:${sideE}' × W:${sideW}'` + (isOdd ? ' (Irregular)' : ' (Regular)');
   document.getElementById('outRoadFace').textContent = roadFace.charAt(0).toUpperCase() + roadFace.slice(1);
   document.getElementById('outRoadWidth').textContent = roadW + "' Wide";
 
+  // 2. Populate ADLR 11E Header Bar
+  document.getElementById('outAdlrNo').textContent = adlrNo;
+  document.getElementById('outHeaderSurvey').textContent = survey;
+
+  // 3. Populate Sidebar Panel 1: ADLR 11E
+  document.getElementById('sbAdlrNo').textContent = adlrNo;
+  document.getElementById('sbMojiniRef').textContent = adlrNo !== 'N/A' ? 'MOJINI-' + adlrNo : 'N/A';
+
+  // 4. Populate Sidebar Panel 3: DC Conversion Details
+  document.getElementById('sbDcOrderNo').textContent = dcOrderNo;
+  document.getElementById('sbDcOrderDate').textContent = dcOrderDate;
+  document.getElementById('sbDcAuthority').textContent = dcAuthority;
+
+  // 5. Compute Land Use Analysis Table Math (Panel 5)
+  const isRoadWidening = document.getElementById('roadWideningCheck') && document.getElementById('roadWideningCheck').checked;
+  const isBuffer = document.getElementById('bufferCheck') && document.getElementById('bufferCheck').checked;
+
+  let roadAreaSqFt = 0;
+  if (isRoadWidening) {
+    const stripW = parseFloat(document.getElementById('roadWideningStripWidth').value) || 0;
+    roadAreaSqFt = width * stripW;
+  }
+
+  let bufferAreaSqFt = 0;
+  if (isBuffer) {
+    const bufW = parseFloat(document.getElementById('bufferWidth').value) || 0;
+    bufferAreaSqFt = width * bufW;
+  }
+
+  const resAreaSqFt = Math.max(0, areaSqFt - roadAreaSqFt - bufferAreaSqFt);
+  const totalAreaSqM = parseFloat(areaSqM);
+  const resAreaSqM = (resAreaSqFt * 0.092903).toFixed(2);
+  const roadAreaSqM = (roadAreaSqFt * 0.092903).toFixed(2);
+  const bufferAreaSqM = (bufferAreaSqFt * 0.092903).toFixed(2);
+
+  const resPct = ((resAreaSqFt / areaSqFt) * 100).toFixed(2);
+  const roadPct = ((roadAreaSqFt / areaSqFt) * 100).toFixed(2);
+  const bufferPct = ((bufferAreaSqFt / areaSqFt) * 100).toFixed(2);
+
+  document.getElementById('luResArea').textContent = resAreaSqM;
+  document.getElementById('luResPct').textContent = `${resPct}%`;
+
+  const rowRoad = document.getElementById('luRowRoad');
+  if (rowRoad) {
+    rowRoad.style.display = isRoadWidening ? 'table-row' : 'none';
+    document.getElementById('luRoadArea').textContent = roadAreaSqM;
+    document.getElementById('luRoadPct').textContent = `${roadPct}%`;
+  }
+
+  const rowBuffer = document.getElementById('luRowBuffer');
+  if (rowBuffer) {
+    rowBuffer.style.display = isBuffer ? 'table-row' : 'none';
+    document.getElementById('luBufferArea').textContent = bufferAreaSqM;
+    document.getElementById('luBufferPct').textContent = `${bufferPct}%`;
+  }
+
+  document.getElementById('luTotalArea').textContent = totalAreaSqM.toFixed(2);
+
+  // 6. Populate Sidebar Panel 8: Title Block
+  document.getElementById('tbPidNo').textContent = pidNo;
+  document.getElementById('tbWard').textContent = `Ward ${wardNo} (${wardName})`;
+  document.getElementById('tbZone').textContent = `${zone} Zone`;
+  document.getElementById('tbScale').textContent = scale;
+
+  // 7. Render Plot Vector SVG Canvas
   const plotRect = document.getElementById('plotRect');
   const plotPoly = document.getElementById('plotPoly');
   const bldgRect = document.getElementById('bldgRect');

@@ -495,173 +495,303 @@
       <button class="btn" onclick="generatePlan()">🎨 Generate BBMP Single Plot Plan</button>
     </div>
 
-    <!-- Output Plan -->
+    <!-- Output Plan (Architectural 70:30 Split Frame) -->
     <div class="plan-output card" id="planOutput">
-      <div class="plan-sheet">
-        <div class="plan-header">
-          <h2>SINGLE PLOT LAYOUT PLAN</h2>
-          <p>For B-to-A Khata Conversion | BBMP, Bangalore</p>
-        </div>
+      <div class="plan-sheet-frame">
 
-        <table class="details-table">
-          <tr>
-            <td class="label">Owner Name(s)</td>
-            <td id="outOwner">—</td>
-            <td class="label">e-Khata EP ID</td>
-            <td id="outEpId">—</td>
-          </tr>
-          <tr>
-            <td class="label">Survey No.</td>
-            <td id="outSurvey">—</td>
-            <td class="label">Ward No.</td>
-            <td id="outWard">—</td>
-          </tr>
-          <tr>
-            <td class="label">Site Address</td>
-            <td colspan="3" id="outAddress">—</td>
-          </tr>
-          <tr>
-            <td class="label">Plot Area</td>
-            <td id="outArea">—</td>
-            <td class="label">Plot Size</td>
-            <td id="outSize">—</td>
-          </tr>
-          <tr>
-            <td class="label">Road Facing</td>
-            <td id="outRoadFace">—</td>
-            <td class="label">Road Width</td>
-            <td id="outRoadWidth">—</td>
-          </tr>
-        </table>
-
-        <div class="svg-container">
-          <svg id="plotSvg" width="500" height="420" viewBox="0 0 500 420">
-            <defs>
-              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"
-                markerUnits="strokeWidth">
-                <path d="M0,0 L0,6 L9,3 z" fill="#1e3a5f" />
-              </marker>
-            </defs>
-
-            <rect id="plotRect" x="80" y="60" width="340" height="260" fill="none" stroke="#1e3a5f" stroke-width="2" />
-            <polygon id="plotPoly" points="80,60 420,60 420,320 80,320" fill="none" stroke="#1e3a5f" stroke-width="2"
-              style="display:none;" />
-
-            <rect id="bldgRect" x="110" y="90" width="200" height="160" fill="#bfdbfe" stroke="#2563eb"
-              stroke-width="1.5" stroke-dasharray="4,2" />
-
-            <line id="dimWLine" x1="80" y1="340" x2="420" y2="340" stroke="#64748b" stroke-width="1"
-              marker-end="url(#arrow)" marker-start="url(#arrow)" />
-            <text id="dimWidth" x="250" y="358" text-anchor="middle" font-size="11" fill="#334155">40'-0"</text>
-
-            <line id="dimLLine" x1="440" y1="60" x2="440" y2="320" stroke="#64748b" stroke-width="1"
-              marker-end="url(#arrow)" marker-start="url(#arrow)" />
-            <text id="dimLength" x="458" y="195" text-anchor="middle" font-size="11" fill="#334155"
-              transform="rotate(90, 458, 195)">60'-0"</text>
-
-            <text id="labelSideN" x="250" y="52" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-              style="display:none;">N: 42'-0"</text>
-            <text id="labelSideS" x="250" y="335" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-              style="display:none;">S: 38'-0"</text>
-            <text id="labelSideE" x="430" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-              transform="rotate(90, 430, 195)" style="display:none;">E: 62'-0"</text>
-            <text id="labelSideW" x="70" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-              transform="rotate(90, 70, 195)" style="display:none;">W: 58'-0"</text>
-
-            <line id="bldgDimWLine" x1="110" y1="270" x2="310" y2="270" stroke="#2563eb" stroke-width="0.8"
-              stroke-dasharray="3,2" />
-            <text id="bldgDimW" x="210" y="285" text-anchor="middle" font-size="10" fill="#2563eb">30'-0"</text>
-
-            <line id="bldgDimLLine" x1="330" y1="90" x2="330" y2="250" stroke="#2563eb" stroke-width="0.8"
-              stroke-dasharray="3,2" />
-            <text id="bldgDimL" x="345" y="170" text-anchor="middle" font-size="10" fill="#2563eb"
-              transform="rotate(90, 345, 170)">40'-0"</text>
-
-            <text id="setbackN" x="250" y="78" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
-            <text id="setbackS" x="250" y="315" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
-            <text id="setbackE" x="400" y="170" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
-            <text id="setbackW" x="95" y="170" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
-
-            <g transform="translate(450, 380)">
-              <polygon points="0,-15 -8,10 0,5 8,10" fill="#dc2626" />
-              <text x="0" y="22" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">N</text>
-            </g>
-
-            <text id="scaleText" x="20" y="410" font-size="10" fill="#64748b">Scale: 1:100</text>
-
-            <text id="labelN" x="250" y="55" text-anchor="middle" font-size="10" fill="#1e3a5f"
-              font-weight="600">NORTH</text>
-            <text id="labelS" x="250" y="335" text-anchor="middle" font-size="10" fill="#1e3a5f"
-              font-weight="600">SOUTH</text>
-            <text id="labelE" x="410" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-              transform="rotate(90, 410, 195)">EAST</text>
-            <text id="labelW" x="50" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-              transform="rotate(90, 50, 195)">WEST</text>
-
-            <text id="adjN" x="250" y="12" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Public
-              Road</text>
-            <text id="adjS" x="250" y="405" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Neighbor's
-              Plot</text>
-            <text id="adjE" x="470" y="195" text-anchor="middle" font-size="9" fill="#94a3b8"
-              transform="rotate(90, 470, 195)">Adjacent: Plot No. 46</text>
-            <text id="adjW" x="10" y="195" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Plot No.
-              44</text>
-          </svg>
-        </div>
-
-        <div class="legend">
-          <h4>🗺️ LEGEND</h4>
-          <div class="legend-grid">
-            <div><span
-                style="display:inline-block;width:20px;height:12px;border:2px solid #1e3a5f;vertical-align:middle;margin-right:6px;"></span>Plot
-              Boundary</div>
-            <div><span
-                style="display:inline-block;width:20px;height:12px;background:#bfdbfe;border:1px solid #2563eb;vertical-align:middle;margin-right:6px;"></span>Existing
-              Building</div>
-            <div><span
-                style="display:inline-block;width:20px;height:12px;background:#e2e8f0;border:1px solid #94a3b8;vertical-align:middle;margin-right:6px;"></span>Road
-              / Open Space</div>
-            <div><span
-                style="display:inline-block;width:20px;height:12px;border:1px solid #059669;vertical-align:middle;margin-right:6px;"></span>Setback
-              Area</div>
-            <div><span
-                style="display:inline-block;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:12px solid #dc2626;vertical-align:middle;margin-right:6px;"></span>North
-              Direction</div>
-            <div><span
-                style="display:inline-block;width:20px;height:2px;background:#64748b;vertical-align:middle;margin-right:6px;"></span>Dimension
-              Line</div>
+        <!-- LEFT COLUMN (70% Drawing Canvas Area) -->
+        <div class="drawing-canvas-column">
+          <!-- ADLR Sketch Reference Bar -->
+          <div class="adlr-header-bar">
+            <span>📌 ADLR 11E SKETCH NO: <span id="outAdlrNo">ADLR/11E/2024/7891</span></span>
+            <span>SURVEY NO: <span id="outHeaderSurvey">45/2A</span></span>
           </div>
-        </div>
 
-        <div class="certification">
-          <h4>✍️ ARCHITECT / ENGINEER CERTIFICATION</h4>
-          <p>I hereby certify that the above Single Plot Layout Plan has been prepared based on the actual site
-            measurements and existing conditions as on date. The plot boundaries, building position, setbacks, and road
-            access shown are true to the best of my knowledge.</p>
-          <div class="cert-grid">
-            <div>
-              <div class="line"></div>
-              <div class="title">Signature & Seal</div>
-              <div class="hint">Registered Architect / Engineer</div>
-            </div>
-            <div>
-              <div class="line"></div>
-              <div class="title">Registration No.</div>
-              <div class="hint">COA / KSCA / IEI Number</div>
-            </div>
-            <div>
-              <div class="line"></div>
-              <div class="title">Date</div>
-              <div class="hint">DD/MM/YYYY</div>
+          <div class="plan-header">
+            <h2>SINGLE PLOT LAYOUT PLAN</h2>
+            <p>For B-to-A Khata Conversion | BBMP, Bangalore</p>
+          </div>
+
+          <table class="details-table">
+            <tr>
+              <td class="label">Owner Name(s)</td>
+              <td id="outOwner">—</td>
+              <td class="label">e-Khata EP ID</td>
+              <td id="outEpId">—</td>
+            </tr>
+            <tr>
+              <td class="label">Survey No.</td>
+              <td id="outSurvey">—</td>
+              <td class="label">Ward No. & Name</td>
+              <td id="outWard">—</td>
+            </tr>
+            <tr>
+              <td class="label">Site Address</td>
+              <td colspan="3" id="outAddress">—</td>
+            </tr>
+            <tr>
+              <td class="label">Plot Area</td>
+              <td id="outArea">—</td>
+              <td class="label">Plot Size</td>
+              <td id="outSize">—</td>
+            </tr>
+            <tr>
+              <td class="label">Road Facing</td>
+              <td id="outRoadFace">—</td>
+              <td class="label">Road Width</td>
+              <td id="outRoadWidth">—</td>
+            </tr>
+          </table>
+
+          <div class="svg-container">
+            <svg id="plotSvg" width="500" height="420" viewBox="0 0 500 420">
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"
+                  markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#1e3a5f" />
+                </marker>
+              </defs>
+
+              <rect id="plotRect" x="80" y="60" width="340" height="260" fill="none" stroke="#1e3a5f" stroke-width="2" />
+              <polygon id="plotPoly" points="80,60 420,60 420,320 80,320" fill="none" stroke="#1e3a5f" stroke-width="2"
+                style="display:none;" />
+
+              <rect id="bldgRect" x="110" y="90" width="200" height="160" fill="#bfdbfe" stroke="#2563eb"
+                stroke-width="1.5" stroke-dasharray="4,2" />
+
+              <line id="dimWLine" x1="80" y1="340" x2="420" y2="340" stroke="#64748b" stroke-width="1"
+                marker-end="url(#arrow)" marker-start="url(#arrow)" />
+              <text id="dimWidth" x="250" y="358" text-anchor="middle" font-size="11" fill="#334155">40'-0"</text>
+
+              <line id="dimLLine" x1="440" y1="60" x2="440" y2="320" stroke="#64748b" stroke-width="1"
+                marker-end="url(#arrow)" marker-start="url(#arrow)" />
+              <text id="dimLength" x="458" y="195" text-anchor="middle" font-size="11" fill="#334155"
+                transform="rotate(90, 458, 195)">60'-0"</text>
+
+              <text id="labelSideN" x="250" y="52" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+                style="display:none;">N: 42'-0"</text>
+              <text id="labelSideS" x="250" y="335" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+                style="display:none;">S: 38'-0"</text>
+              <text id="labelSideE" x="430" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+                transform="rotate(90, 430, 195)" style="display:none;">E: 62'-0"</text>
+              <text id="labelSideW" x="70" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+                transform="rotate(90, 70, 195)" style="display:none;">W: 58'-0"</text>
+
+              <line id="bldgDimWLine" x1="110" y1="270" x2="310" y2="270" stroke="#2563eb" stroke-width="0.8"
+                stroke-dasharray="3,2" />
+              <text id="bldgDimW" x="210" y="285" text-anchor="middle" font-size="10" fill="#2563eb">30'-0"</text>
+
+              <line id="bldgDimLLine" x1="330" y1="90" x2="330" y2="250" stroke="#2563eb" stroke-width="0.8"
+                stroke-dasharray="3,2" />
+              <text id="bldgDimL" x="345" y="170" text-anchor="middle" font-size="10" fill="#2563eb"
+                transform="rotate(90, 345, 170)">40'-0"</text>
+
+              <text id="setbackN" x="250" y="78" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
+              <text id="setbackS" x="250" y="315" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
+              <text id="setbackE" x="400" y="170" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
+              <text id="setbackW" x="95" y="170" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
+
+              <g transform="translate(450, 380)">
+                <polygon points="0,-15 -8,10 0,5 8,10" fill="#dc2626" />
+                <text x="0" y="22" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">N</text>
+              </g>
+
+              <text id="scaleText" x="20" y="410" font-size="10" fill="#64748b">Scale: 1:100</text>
+
+              <text id="labelN" x="250" y="55" text-anchor="middle" font-size="10" fill="#1e3a5f"
+                font-weight="600">NORTH</text>
+              <text id="labelS" x="250" y="335" text-anchor="middle" font-size="10" fill="#1e3a5f"
+                font-weight="600">SOUTH</text>
+              <text id="labelE" x="410" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+                transform="rotate(90, 410, 195)">EAST</text>
+              <text id="labelW" x="50" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
+                transform="rotate(90, 50, 195)">WEST</text>
+
+              <text id="adjN" x="250" y="12" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Public
+                Road</text>
+              <text id="adjS" x="250" y="405" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Neighbor's
+                Plot</text>
+              <text id="adjE" x="470" y="195" text-anchor="middle" font-size="9" fill="#94a3b8"
+                transform="rotate(90, 470, 195)">Adjacent: Plot No. 46</text>
+              <text id="adjW" x="10" y="195" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: Plot No.
+                44</text>
+            </svg>
+          </div>
+
+          <div class="footer-note">
+            Note: This layout plan has been prepared as per BBMP Sakala B-to-A Khata conversion standards. Final plan must be signed & sealed by a licensed Architect/Engineer registered with BBMP.
+          </div>
+        </div> <!-- End Left Column -->
+
+        <!-- RIGHT COLUMN (30% Structured Sidebar Panels) -->
+        <div class="sidebar-panels-column">
+
+          <!-- Panel 1: ADLR 11E Reference Bar -->
+          <div class="sidebar-panel">
+            <div class="sidebar-panel-header">1. ADLR 11E SURVEY SKETCH</div>
+            <div class="sidebar-panel-body">
+              <strong>Sketch No:</strong> <span id="sbAdlrNo">ADLR/11E/2024/7891</span><br>
+              <strong>Bhoomi Mojini Ref:</strong> <span id="sbMojiniRef">MJN-2024-889</span>
             </div>
           </div>
-        </div>
 
-        <div class="footer-note">
-          Note: This is a sample template. The final plan must be prepared, signed, and sealed by a licensed
-          Architect/Engineer registered with BBMP for B-to-A Khata conversion.
-        </div>
-      </div>
+          <!-- Panel 2: Key Plan (Locational Thumbnail) -->
+          <div class="sidebar-panel">
+            <div class="sidebar-panel-header">2. KEY PLAN (LOCATIONAL SKETCH)</div>
+            <div class="sidebar-panel-body key-plan-box">
+              <svg width="180" height="90" viewBox="0 0 180 90">
+                <rect x="5" y="5" width="170" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+                <line x1="15" y1="45" x2="165" y2="45" stroke="#94a3b8" stroke-width="6" />
+                <line x1="90" y1="10" x2="90" y2="80" stroke="#94a3b8" stroke-width="6" />
+                <rect x="95" y="12" width="28" height="28" fill="#bfdbfe" stroke="#2563eb" stroke-width="1.5" />
+                <text x="109" y="29" text-anchor="middle" font-size="8" fill="#1e3a5f" font-weight="bold">SITE</text>
+                <text x="90" y="42" text-anchor="middle" font-size="7" fill="#475569">MAIN ROAD</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Panel 3: DC Conversion Order Details -->
+          <div class="sidebar-panel">
+            <div class="sidebar-panel-header">3. DC CONVERSION ORDER</div>
+            <div class="sidebar-panel-body">
+              <strong>Order No:</strong> <span id="sbDcOrderNo">ALN(EV)SR/45/2018-19</span><br>
+              <strong>Order Date:</strong> <span id="sbDcOrderDate">15/04/2019</span><br>
+              <strong>Authority:</strong> <span id="sbDcAuthority">DC, Bengaluru Urban</span>
+            </div>
+          </div>
+
+          <!-- Panel 4: 15 Mandatory General Conditions -->
+          <div class="sidebar-panel">
+            <div class="sidebar-panel-header">4. GENERAL CONDITIONS OF APPROVAL</div>
+            <div class="sidebar-panel-body">
+              <ol class="conditions-list">
+                <li>Approved based on ADLR survey sketch.</li>
+                <li>Building construction requires separate plan sanction.</li>
+                <li>Maximum FAR subject to abutting road width.</li>
+                <li>Owner shall implement Rainwater Harvesting system.</li>
+                <li>Approval does not confer legal title to property.</li>
+                <li>Government or encroached land revokes plan.</li>
+                <li>False documents invalidate approval automatically.</li>
+                <li>Subject to GBA/BBMP fee rules.</li>
+                <li>Solid waste segregation (wet/dry) mandatory.</li>
+                <li>NOC from competent authorities required.</li>
+                <li>Sewage reuse mandatory for gardening/cleaning.</li>
+                <li>Multi-plot layout requires GBA approval.</li>
+                <li>1 tree per 240 sq.m total floor area required.</li>
+                <li>Prior permission needed for drain culverts.</li>
+                <li>Owner bound by GBA/BBMP periodic orders.</li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Panel 5: Land Use Analysis Table -->
+          <div class="sidebar-panel">
+            <div class="sidebar-panel-header">5. LAND USE ANALYSIS TABLE</div>
+            <div class="sidebar-panel-body">
+              <table class="landuse-table">
+                <thead>
+                  <tr>
+                    <th>PARTICULARS</th>
+                    <th>AREA (Sqm)</th>
+                    <th>%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Residential Plot Area</td>
+                    <td id="luResArea">222.96</td>
+                    <td id="luResPct">100.00%</td>
+                  </tr>
+                  <tr id="luRowRoad" style="display:none;">
+                    <td>Road Widening Area</td>
+                    <td id="luRoadArea">0.00</td>
+                    <td id="luRoadPct">0.00%</td>
+                  </tr>
+                  <tr id="luRowBuffer" style="display:none;">
+                    <td>Drain / Lake Buffer Area</td>
+                    <td id="luBufferArea">0.00</td>
+                    <td id="luBufferPct">0.00%</td>
+                  </tr>
+                  <tr style="font-weight:bold;background:#f1f5f9;">
+                    <td>TOTAL SITE AREA</td>
+                    <td id="luTotalArea">222.96</td>
+                    <td>100.00%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Panel 6: BBMP Official Legend Box -->
+          <div class="sidebar-panel">
+            <div class="sidebar-panel-header">6. BBMP LEGEND SYMBOLS</div>
+            <div class="sidebar-panel-body">
+              <div class="legend-grid">
+                <div><span
+                    style="display:inline-block;width:14px;height:9px;border:1.5px solid #1e3a5f;vertical-align:middle;margin-right:3px;"></span>Plot
+                  Boundary</div>
+                <div><span
+                    style="display:inline-block;width:14px;height:9px;background:#bfdbfe;border:1px solid #2563eb;vertical-align:middle;margin-right:3px;"></span>Building
+                  Footprint</div>
+                <div><span
+                    style="display:inline-block;width:14px;height:9px;background:#e2e8f0;border:1px solid #94a3b8;vertical-align:middle;margin-right:3px;"></span>Public
+                  Road</div>
+                <div><span
+                    style="display:inline-block;width:14px;height:9px;border:1px solid #059669;vertical-align:middle;margin-right:3px;"></span>Setback
+                  Area</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 7: Signatures & Seal Block -->
+          <div class="sidebar-panel">
+            <div class="sidebar-panel-header">7. SIGNATURES & SEALS</div>
+            <div class="sidebar-panel-body">
+              <div class="cert-grid" style="grid-template-columns:1fr 1fr;">
+                <div>
+                  <div class="line"></div>
+                  <div class="title">Owner Signature</div>
+                </div>
+                <div>
+                  <div class="line"></div>
+                  <div class="title">Architect Seal</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 8: Title Block -->
+          <div class="sidebar-panel">
+            <div class="sidebar-panel-header">8. TITLE BLOCK</div>
+            <div class="sidebar-panel-body">
+              <table class="title-block-table">
+                <tr>
+                  <td class="tb-label">Plan Title</td>
+                  <td>Single Plot Layout Plan</td>
+                </tr>
+                <tr>
+                  <td class="tb-label">PID No</td>
+                  <td id="tbPidNo">—</td>
+                </tr>
+                <tr>
+                  <td class="tb-label">Ward</td>
+                  <td id="tbWard">—</td>
+                </tr>
+                <tr>
+                  <td class="tb-label">Zone</td>
+                  <td id="tbZone">—</td>
+                </tr>
+                <tr>
+                  <td class="tb-label">Scale</td>
+                  <td id="tbScale">1:100</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+        </div> <!-- End Sidebar Column -->
+
+      </div> <!-- End Plan Sheet Frame -->
     </div>
 
     <!-- Sample Buttons -->

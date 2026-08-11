@@ -238,17 +238,17 @@ The plan sheet sidebar includes the 15 standard BBMP legal conditions:
   - [x] Buffer Width (`#bufferWidth`, e.g., *7.0 m*)
 - [x] Add **"Include BBMP Line & Colour Legend Sheet (Page 2)"** checkbox (`#includeLegendPage`).
 
-### Phase 2: Sheet Layout Re-engineering (70:30 Split Frame)
-- [ ] Redesign `.plan-sheet` layout to 2-column grid ($70\% : 30\%$).
-- [ ] Implement Right Sidebar containing all 8 BBMP mandatory panels:
-  - [ ] Panel 1: ADLR 11E Sketch Reference Header.
-  - [ ] Panel 2: SVG Key Plan (Locational Sketch thumbnail).
-  - [ ] Panel 3: DC Conversion Order Details Box.
-  - [ ] Panel 4: 15 General Conditions of Approval Box.
-  - [ ] Panel 5: Land Use Analysis Table (Sqm & % breakdown).
-  - [ ] Panel 6: BBMP Official Legend Box.
-  - [ ] Panel 7: Signatures & Seal Block (Owner, Architect with COA No, Sanction Authority).
-  - [ ] Panel 8: Title Block (Sy No, Village, Taluk, PID, Ward, North Arrow, Scale, Challan Note).
+### Phase 2: Sheet Layout Re-engineering (70:30 Split Frame) (COMPLETED)
+- [x] Redesign `.plan-sheet` layout to 2-column grid ($70\% : 30\%$).
+- [x] Implement Right Sidebar containing all 8 BBMP mandatory panels:
+  - [x] Panel 1: ADLR 11E Sketch Reference Header.
+  - [x] Panel 2: SVG Key Plan (Locational Sketch thumbnail).
+  - [x] Panel 3: DC Conversion Order Details Box.
+  - [x] Panel 4: 15 General Conditions of Approval Box.
+  - [x] Panel 5: Land Use Analysis Table (Sqm & % breakdown).
+  - [x] Panel 6: BBMP Official Legend Box.
+  - [x] Panel 7: Signatures & Seal Block (Owner, Architect with COA No, Sanction Authority).
+  - [x] Panel 8: Title Block (Sy No, Village, Taluk, PID, Ward, North Arrow, Scale, Challan Note).
 
 ### Phase 3: Official BBMP SVG Graphics Engine & Feet-Inches Formatter (`LEGEND.pdf`)
 - [ ] Implement `formatFeetInches(decimalFeet)` helper function (`40'-0"`, `40'-6"`, `12'-3"`) for all dimensions.
