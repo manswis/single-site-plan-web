@@ -196,6 +196,22 @@ function calculateBuiltUpArea() {
 }
 
 /**
+ * Helper to format decimal feet into a clean feet-inches string (e.g. 40'-1").
+ * 
+ * @function formatFeetInches
+ * @param {number} val - Decimal feet.
+ * @returns {string}
+ */
+function formatFeetInches(val) {
+  if (!val || isNaN(val) || val <= 0) return "0'";
+  const ft = Math.floor(val);
+  const inches = Math.round((val - ft) * 12);
+  if (inches === 12) return `${ft + 1}'`;
+  if (inches === 0) return `${ft}'`;
+  return `${ft}'-${inches}"`;
+}
+
+/**
  * Validates whether proposed Building Width and Length fit within plot dimensions & setbacks from Step 3.
  * Returns true if valid or if fields are left empty.
  * 
@@ -252,39 +268,49 @@ function validateBuildingSetbackFeasibility() {
 
   if (siteWidth > 0 && widthVal > siteWidth) {
     isFeasible = false;
-    errorMsgs.push(`Building width (${widthVal} ft) exceeds total plot width (${siteWidth} ft).`);
+    const msg = `Building width (${formatFeetInches(widthVal)}) exceeds total plot width (${formatFeetInches(siteWidth)}).`;
+    errorMsgs.push(msg);
     if (errWidth) {
-      errWidth.textContent = `⚠ Building width (${widthVal} ft) exceeds total plot width (${siteWidth} ft).`;
+      errWidth.textContent = `⚠ ${msg}`;
       errWidth.style.display = 'block';
     }
   } else if (siteWidth > 0 && maxAllowedWidth > 0 && widthVal > maxAllowedWidth) {
     isFeasible = false;
-    errorMsgs.push(`Building width (${widthVal} ft) exceeds available width (${maxAllowedWidth.toFixed(1)} ft) after Left & Right setbacks.`);
+    const msg = `Building width (${formatFeetInches(widthVal)}) exceeds max available width (${formatFeetInches(maxAllowedWidth)}) after Left (${formatFeetInches(leftSetback)}) & Right (${formatFeetInches(rightSetback)}) setbacks.`;
+    errorMsgs.push(msg);
     if (errWidth) {
-      errWidth.textContent = `⚠ Exceeds available width (${maxAllowedWidth.toFixed(1)} ft) after left & right setbacks.`;
+      errWidth.textContent = `⚠ Exceeds available width (${formatFeetInches(maxAllowedWidth)}) after setbacks.`;
       errWidth.style.display = 'block';
     }
   }
 
   if (siteLength > 0 && lengthVal > siteLength) {
     isFeasible = false;
-    errorMsgs.push(`Building length (${lengthVal} ft) exceeds total plot length (${siteLength} ft).`);
+    const msg = `Building length (${formatFeetInches(lengthVal)}) exceeds total plot length (${formatFeetInches(siteLength)}).`;
+    errorMsgs.push(msg);
     if (errLength) {
-      errLength.textContent = `⚠ Building length (${lengthVal} ft) exceeds total plot length (${siteLength} ft).`;
+      errLength.textContent = `⚠ ${msg}`;
       errLength.style.display = 'block';
     }
   } else if (siteLength > 0 && maxAllowedLength > 0 && lengthVal > maxAllowedLength) {
     isFeasible = false;
-    errorMsgs.push(`Building length (${lengthVal} ft) exceeds available length (${maxAllowedLength.toFixed(1)} ft) after Front & Rear setbacks.`);
+    const msg = `Building length (${formatFeetInches(lengthVal)}) exceeds max available length (${formatFeetInches(maxAllowedLength)}) after Front (${formatFeetInches(frontSetback)}) & Rear (${formatFeetInches(rearSetback)}) setbacks.`;
+    errorMsgs.push(msg);
     if (errLength) {
-      errLength.textContent = `⚠ Exceeds available length (${maxAllowedLength.toFixed(1)} ft) after front & rear setbacks.`;
+      errLength.textContent = `⚠ Exceeds available length (${formatFeetInches(maxAllowedLength)}) after setbacks.`;
       errLength.style.display = 'block';
     }
   }
 
+  // Check if swapping width and length fits the plot space!
+  let swapHint = "";
+  if (!isFeasible && lengthVal > siteLength && lengthVal <= siteWidth && widthVal <= siteLength) {
+    swapHint = `<br>💡 <strong>Smart Tip:</strong> Did you swap Width and Length? Your plot is <strong>${formatFeetInches(siteWidth)} wide × ${formatFeetInches(siteLength)} long</strong>. Try setting Building Width = <strong>${formatFeetInches(lengthVal)}</strong> and Building Length = <strong>${formatFeetInches(widthVal)}</strong>.`;
+  }
+
   if (!isFeasible) {
     if (warningBanner && warningText) {
-      warningText.textContent = errorMsgs.join(' ');
+      warningText.innerHTML = errorMsgs.join('<br>') + swapHint + `<br><span style="display:inline-block; margin-top:6px; color: var(--apple-text-secondary);">Max available building footprint after setbacks: <strong>${formatFeetInches(maxAllowedWidth)} Width × ${formatFeetInches(maxAllowedLength)} Length</strong>.</span>`;
       warningBanner.style.display = 'block';
     }
   }
