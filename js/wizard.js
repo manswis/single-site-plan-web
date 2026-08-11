@@ -366,7 +366,7 @@ function showStep(stepNum, shouldSave = true) {
 
   if (nextBtn) {
     if (stepNum === 6) {
-      nextBtn.textContent = 'Preview & Export →';
+      nextBtn.textContent = 'Preview →';
     } else if (stepNum === 7) {
       nextBtn.textContent = '📥 Download PDF Package';
     } else {

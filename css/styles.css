@@ -413,6 +413,27 @@ body {
     -webkit-overflow-scrolling: touch;
     border-radius: 12px;
   }
+
+  /* Mobile responsive container for Page 2 Legend Specifications Sheet */
+  .legend-sheet-output {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    max-width: 100% !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
+  }
+
+  .legend-sheet-output .plan-sheet-frame {
+    min-width: 680px;
+  }
+
+  .color-spec-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .checklist-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* Mobile Segmented Control Tab Switcher */
