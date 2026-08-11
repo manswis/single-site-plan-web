@@ -385,9 +385,30 @@ function generatePlan() {
     labelW = `Right Setback: ${formatFeetInches(setbackRt)}`;
   }
 
+  // Determine building rendering dimensions (width vs height) based on footprint orientation selection
+  const bldgOrient = document.getElementById('bldgOrientation')?.value || 'auto';
+  let bldgRenderW = bldgW;
+  let bldgRenderH = bldgL;
+
+  if (bldgOrient === 'horizontal') {
+    bldgRenderW = Math.max(bldgW, bldgL);
+    bldgRenderH = Math.min(bldgW, bldgL);
+  } else if (bldgOrient === 'vertical') {
+    bldgRenderW = Math.min(bldgW, bldgL);
+    bldgRenderH = Math.max(bldgW, bldgL);
+  } else {
+    // Auto-fit: If bldgL is larger than East-West height span, orient long side horizontally
+    const maxNS = Math.max(sideN, sideS);
+    const maxEW = Math.max(sideE, sideW);
+    if (bldgL > maxEW && bldgL <= maxNS) {
+      bldgRenderW = Math.max(bldgW, bldgL);
+      bldgRenderH = Math.min(bldgW, bldgL);
+    }
+  }
+
   // Setback Text Labels Positioned Centered Inside Setback Zones
-  const bldgDrawW = Math.max(15, (bldgW > 0 ? bldgW : (width - sbLeft - sbRight)) * ratio);
-  const bldgDrawH = Math.max(15, (bldgL > 0 ? bldgL : (length - sbTop - sbBottom)) * ratio);
+  const bldgDrawW = Math.max(15, bldgRenderW * ratio);
+  const bldgDrawH = Math.max(15, bldgRenderH * ratio);
   const bldgX = offsetX + (sbLeft * ratio);
   const bldgY = offsetY + (sbTop * ratio);
 
@@ -428,7 +449,7 @@ function generatePlan() {
     bldgTitle.setAttribute('y', bldgY + bldgDrawH / 2 - 6);
     bldgDimText.setAttribute('x', bldgX + bldgDrawW / 2);
     bldgDimText.setAttribute('y', bldgY + bldgDrawH / 2 + 10);
-    bldgDimText.textContent = `${formatFeetInches(bldgW)} × ${formatFeetInches(bldgL)}`;
+    bldgDimText.textContent = `${formatFeetInches(bldgRenderW)} × ${formatFeetInches(bldgRenderH)}`;
   }
 
   // 9. Render Corner Splay for 2-side Corner Plots (e.g. North & East Road access)

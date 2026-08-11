@@ -439,6 +439,19 @@
           </div>
         </div>
 
+        <!-- Building Alignment Direction Select -->
+        <div class="field" style="margin-top: 14px;">
+          <label>Building Footprint Alignment <span
+              style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Long side
+              direction)</span></label>
+          <select id="bldgOrientation"
+            onchange="autoCalculateSetbacks(true); validateBuildingSetbackFeasibility(); generatePlan();">
+            <option value="auto" selected>✨ Auto-Fit (Best alignment for plot spans)</option>
+            <option value="horizontal">↔ Horizontal (Long side along North-South span)</option>
+            <option value="vertical">↕ Vertical (Long side along East-West span)</option>
+          </select>
+        </div>
+
         <!-- Building Width & Building Length side-by-side in one line on web -->
         <div class="grid" style="margin-top: 14px;">
           <div class="field">
@@ -496,7 +509,10 @@
 
         <!-- Building Setbacks Section Header -->
         <div style="margin-top: 20px; margin-bottom: 8px;">
-          <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--apple-text-primary);">Building Setbacks <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Auto-calculated)</span></h4>
+          <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--apple-text-primary);">Building Setbacks
+            <span
+              style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Auto-calculated)</span>
+          </h4>
         </div>
 
         <div class="grid" style="margin-top: 8px;">

@@ -232,13 +232,14 @@ function autoCalculateSetbacks(force = false) {
 
   if (spanNS <= 0 && spanEW <= 0) return;
 
-  // Evaluate both alignment orientations to pick the optimal fit
-  // Alignment 1: Width on N/S span, Length on E/W span
+  const bldgOrient = document.getElementById('bldgOrientation')?.value || 'auto';
+
+  // Alignment 1 (Vertical): Width on N/S span, Length on E/W span
   const fitA_Width = spanNS - widthVal;
   const fitA_Length = spanEW - lengthVal;
   const isFitA = fitA_Width >= 0 && fitA_Length >= 0;
 
-  // Alignment 2: Length on N/S span, Width on E/W span
+  // Alignment 2 (Horizontal): Length on N/S span, Width on E/W span
   const fitB_Width = spanEW - widthVal;
   const fitB_Length = spanNS - lengthVal;
   const isFitB = fitB_Width >= 0 && fitB_Length >= 0;
@@ -246,17 +247,24 @@ function autoCalculateSetbacks(force = false) {
   let widthSpan = spanNS;
   let lengthSpan = spanEW;
 
-  if (isFitB && !isFitA) {
-    // Alignment 2 is valid! Flip spans: Width goes along E/W, Length goes along N/S
+  if (bldgOrient === 'horizontal') {
     widthSpan = spanEW;
     lengthSpan = spanNS;
-  } else if (!isFitA && !isFitB) {
-    // If neither fits perfectly, pick whichever orientation yields smaller deficit
-    const deficitA = Math.min(0, fitA_Width) + Math.min(0, fitA_Length);
-    const deficitB = Math.min(0, fitB_Width) + Math.min(0, fitB_Length);
-    if (deficitB > deficitA) {
+  } else if (bldgOrient === 'vertical') {
+    widthSpan = spanNS;
+    lengthSpan = spanEW;
+  } else {
+    // Auto-fit selection
+    if (isFitB && !isFitA) {
       widthSpan = spanEW;
       lengthSpan = spanNS;
+    } else if (!isFitA && !isFitB) {
+      const deficitA = Math.min(0, fitA_Width) + Math.min(0, fitA_Length);
+      const deficitB = Math.min(0, fitB_Width) + Math.min(0, fitB_Length);
+      if (deficitB > deficitA) {
+        widthSpan = spanEW;
+        lengthSpan = spanNS;
+      }
     }
   }
 
