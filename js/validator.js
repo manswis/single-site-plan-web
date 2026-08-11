@@ -108,7 +108,6 @@ function validate() {
   // 1. Core Property Metadata (Mandatory BBMP Sakala e-Khata Requirements)
   checkRequired('ownerName', 'Owner Name');
   checkRequired('epId', 'eKhata ID (ePID)');
-  checkRequired('pidNo', 'BBMP PID Number');
 
   // 2. Location & Administrative Details
   checkRequired('surveyNo', 'Survey Number');

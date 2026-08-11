@@ -43,45 +43,57 @@ function formatFeetInches(decimalFeet) {
  * @returns {void}
  */
 function generatePlan() {
-  if (!validate()) return;
-
   const isOdd = document.getElementById('oddSiteCheck') ? document.getElementById('oddSiteCheck').checked : false;
-  const owner = document.getElementById('ownerName').value.trim();
-  const epId = document.getElementById('epId').value.trim();
-  const pidNo = document.getElementById('pidNo').value.trim();
-  const survey = document.getElementById('surveyNo').value.trim();
-  const zone = document.getElementById('bbmpZone').value;
-  const wardNo = document.getElementById('wardNo').value.trim();
-  const wardName = document.getElementById('wardName').value.trim();
-  const address = document.getElementById('address').value.trim();
-  const areaSqFt = parseFloat(document.getElementById('plotArea').value) || 0;
-  const roadW = parseFloat(document.getElementById('roadWidth').value) || 0;
-  const roadFace = document.getElementById('roadFacing').value;
-  const scale = document.getElementById('scale').value || '1:100';
+  const owner = (document.getElementById('ownerName')?.value || '').trim() || '—';
+  const epId = (document.getElementById('epId')?.value || '').trim() || '—';
+  const pidNo = (document.getElementById('pidNo')?.value || '').trim() || '—';
+  const survey = (document.getElementById('surveyNo')?.value || '').trim() || '—';
+  const zone = (document.getElementById('bbmpZone')?.value || '').trim() || 'East';
+  const wardNo = (document.getElementById('wardNo')?.value || '').trim() || '—';
+  const wardName = (document.getElementById('wardName')?.value || '').trim() || '—';
+  const address = (document.getElementById('address')?.value || '').trim() || '—';
 
-  // Read Custom Building Setback Values (ft)
-  const setbackF = parseFloat(document.getElementById('setbackFront').value) || 0;
-  const setbackR = parseFloat(document.getElementById('setbackRear').value) || 0;
-  const setbackL = parseFloat(document.getElementById('setbackLeft').value) || 0;
-  const setbackRt = parseFloat(document.getElementById('setbackRight').value) || 0;
+  // Primary Universal 4-Side Cardinal Measurements with Fallbacks
+  let sideN = parseFloat(document.getElementById('sideNorth')?.value) || 0;
+  let sideS = parseFloat(document.getElementById('sideSouth')?.value) || 0;
+  let sideE = parseFloat(document.getElementById('sideEast')?.value) || 0;
+  let sideW = parseFloat(document.getElementById('sideWest')?.value) || 0;
 
-  let bldgW = parseFloat(document.getElementById('bldgWidth').value) || 0;
-  let bldgL = parseFloat(document.getElementById('bldgLength').value) || 0;
-
-  // Metadata & Document Details
-  const adlrNo = document.getElementById('adlrNo').value.trim() || 'N/A';
-  const dcOrderNo = document.getElementById('dcOrderNo').value.trim() || 'N/A';
-  const dcOrderDate = document.getElementById('dcOrderDate').value || 'N/A';
-  const dcAuthority = document.getElementById('dcAuthority').value.trim() || 'DC, Bengaluru Urban';
-
-  // Primary Universal 4-Side Cardinal Measurements
-  const sideN = parseFloat(document.getElementById('sideNorth').value) || 0;
-  const sideS = parseFloat(document.getElementById('sideSouth').value) || 0;
-  const sideE = parseFloat(document.getElementById('sideEast').value) || 0;
-  const sideW = parseFloat(document.getElementById('sideWest').value) || 0;
+  if (!isOdd) {
+    const regNS = parseFloat(document.getElementById('regNorthSouth')?.value) || 30;
+    const regEW = parseFloat(document.getElementById('regEastWest')?.value) || 40;
+    if (sideN <= 0) sideN = regNS;
+    if (sideS <= 0) sideS = regNS;
+    if (sideE <= 0) sideE = regEW;
+    if (sideW <= 0) sideW = regEW;
+  } else {
+    if (sideN <= 0) sideN = 30;
+    if (sideS <= 0) sideS = 30;
+    if (sideE <= 0) sideE = 40;
+    if (sideW <= 0) sideW = 40;
+  }
 
   const width = (sideN + sideS) / 2;
   const length = (sideE + sideW) / 2;
+  const areaSqFt = parseFloat(document.getElementById('plotArea')?.value) || Math.round(width * length);
+  const roadW = parseFloat(document.getElementById('roadWidth')?.value) || 30;
+  const roadFace = (document.getElementById('roadFacing')?.value || '').trim() || 'north';
+  const scale = document.getElementById('scale')?.value || '1:100';
+
+  // Read Custom Building Setback Values (ft)
+  const setbackF = parseFloat(document.getElementById('setbackFront')?.value) || 0;
+  const setbackR = parseFloat(document.getElementById('setbackRear')?.value) || 0;
+  const setbackL = parseFloat(document.getElementById('setbackLeft')?.value) || 0;
+  const setbackRt = parseFloat(document.getElementById('setbackRight')?.value) || 0;
+
+  let bldgW = parseFloat(document.getElementById('bldgWidth')?.value) || 0;
+  let bldgL = parseFloat(document.getElementById('bldgLength')?.value) || 0;
+
+  // Metadata & Document Details
+  const adlrNo = (document.getElementById('adlrNo')?.value || '').trim() || 'N/A';
+  const dcOrderNo = (document.getElementById('dcOrderNo')?.value || '').trim() || 'N/A';
+  const dcOrderDate = document.getElementById('dcOrderDate')?.value || 'N/A';
+  const dcAuthority = (document.getElementById('dcAuthority')?.value || '').trim() || 'DC, Bengaluru Urban';
 
   // Derive building dimensions if empty from setbacks
   if (bldgW <= 0) bldgW = Math.max(0, width - setbackL - setbackRt);
