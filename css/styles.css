@@ -537,26 +537,28 @@ select:focus {
 .legend-spec-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 10.5px;
+  font-size: 10px;
+  table-layout: fixed;
 }
 
 .legend-spec-table th,
 .legend-spec-table td {
   border: 1px solid var(--border-color);
-  padding: 5px 8px;
+  padding: 5px 6px;
   text-align: left;
+  word-wrap: break-word;
 }
 
 .legend-spec-table th {
   background: var(--primary);
   color: #ffffff;
   font-weight: 600;
-  font-size: 10px;
+  font-size: 9.5px;
 }
 
 .line-sample {
   display: inline-block;
-  width: 60px;
+  width: 50px;
   height: 2px;
   vertical-align: middle;
 }
@@ -588,7 +590,7 @@ select:focus {
 
 .color-spec-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
 }
 
@@ -630,7 +632,7 @@ select:focus {
 
 .checklist-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 6px;
   margin: 0;
   padding: 0;
@@ -703,12 +705,33 @@ select:focus {
     break-inside: avoid !important;
   }
 
-  .plan-sheet-frame {
+  .plan-output .plan-sheet-frame {
     border: 2px solid #1e3a5f !important;
     box-shadow: none !important;
     padding: 8px !important;
     gap: 10px !important;
     grid-template-columns: 67% 33% !important;
+  }
+
+  .legend-sheet-output {
+    display: block !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    page-break-before: always !important;
+    break-before: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .legend-sheet-output .plan-sheet-frame {
+    border: 2px solid #1e3a5f !important;
+    box-shadow: none !important;
+    padding: 12px !important;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .drawing-canvas-column {
@@ -728,17 +751,5 @@ select:focus {
   .svg-container svg {
     max-height: 430px !important;
     width: 100% !important;
-  }
-
-  .legend-sheet-output {
-    display: block !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    page-break-before: always !important;
-    break-before: page !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
   }
 }
