@@ -2500,30 +2500,44 @@ select:focus {
   text-decoration: underline;
 }
 
-/* Field Help Icon Button */
+/* Field Help Icon Button (Right-Aligned Material Help Outline) */
+.field>label,
+.checkbox-box label {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100%;
+}
+
 .field-help-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
   border-radius: 50%;
-  background: rgba(0, 102, 204, 0.1);
+  background: transparent;
   color: var(--apple-accent);
-  font-size: 11px;
-  font-weight: 700;
-  border: 1px solid rgba(0, 102, 204, 0.25);
+  border: none;
   cursor: pointer;
-  margin-left: 6px;
-  vertical-align: middle;
+  margin-left: auto;
   transition: all 0.2s ease;
-  line-height: 1;
+  opacity: 0.8;
 }
 
 .field-help-btn:hover {
-  background: var(--apple-accent);
-  color: #ffffff;
+  opacity: 1;
+  color: #004499;
   transform: scale(1.15);
+  background: rgba(0, 102, 204, 0.1);
+}
+
+.field-help-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {
