@@ -28,9 +28,10 @@
         <span class="apple-pill-badge">Sakala B-to-A Khata Ready</span>
       </a>
       <nav class="apple-nav-links">
-        <a href="#workbench">Studio Workbench</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#faq">Sakala FAQ</a>
+        <a href="index.html" style="color: var(--apple-text-primary); font-weight: 700;">Studio Workbench</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="legal.html">Legal Disclaimer</a>
+        <a href="faq.html">FAQ</a>
         <a href="#workbench" class="apple-nav-btn">Start Free Plan</a>
       </nav>
     </div>
@@ -42,11 +43,17 @@
     <section class="apple-hero">
       <h1>Official BBMP Layout Plans. Effortless.</h1>
       <p class="subtitle">Generate Sakala-compliant B-to-A Khata conversion PDF drawings in 60 seconds with automated setback math and official line specs.</p>
+      
+      <!-- Privacy Guarantee Banner -->
+      <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 980px; padding: 6px 16px; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: #166534; font-weight: 600; margin-bottom: 14px;">
+        <span>🔒 100% Client-Side Private: No personal data or property records are ever sent to any external server. All processing runs locally in your browser.</span>
+      </div>
+
       <div class="apple-stats-bar">
         <span>⚡ Instant PDF Download</span> • 
         <span>📏 RMP-2015 Auto Math</span> • 
-        <span>🛡️ 100% Deed Schedule Accuracy</span> • 
-        <span>⭐ 99.4% Sakala Acceptance</span>
+        <span>🛡️ 100% Local Privacy</span> • 
+        <span>🎉 Limited Introductory Free Offer</span>
       </div>
     </section>
 
@@ -526,10 +533,10 @@
           </div>
         </div>
 
-        <!-- STEP 7: Instant Review & PDF Download -->
+        <!-- STEP 7: Instant Review, Mandatory Legal Consent & PDF Download -->
         <div id="wizardStep7" class="wizard-step-content" style="display:none;">
           <div class="info-tooltip-box" style="background: #f0fdf4; border-color: #34c759; color: #166534;">
-            🎉 <strong>All Details Verified!</strong> Your layout plan drawing is rendered on the right. You can now download your official Sakala-compliant PDF package.
+            🎉 <strong>All Details Verified!</strong> Your layout plan drawing is rendered on the right. Please read and accept the terms of service below to unlock export.
           </div>
 
           <!-- Precautionary Watermark Checkbox -->
@@ -539,6 +546,18 @@
               <span style="font-weight: 600; color: #d46b08;">⚠️ Display Diagonal "SAMPLE ONLY" Watermark</span>
             </label>
             <p style="margin-top: 4px; font-size: 11px; color: #8c8c8c;">Default: Unchecked. Auto-checks when sample presets are loaded to prevent accidental official submission.</p>
+          </div>
+
+          <!-- Mandatory Pre-Generation Legal Consent Checkbox -->
+          <div class="checkbox-box" style="margin-bottom: 16px; background: #eff6ff; border: 1.5px solid #3b82f6;">
+            <label style="cursor: pointer;">
+              <input type="checkbox" id="legalConsentCheck" onchange="toggleLegalConsent()">
+              <span style="font-weight: 700; color: #1e40af;">⚖️ I Agree to the Terms of Service, Privacy Policy & Zero Liability Disclaimer <span class="required">*</span></span>
+            </label>
+            <p style="margin-top: 6px; font-size: 11px; color: #1e3a5f; line-height: 1.4;">
+              By checking this box, I confirm that: (1) All data processing occurs 100% locally in my browser without external server transmission, (2) This tool provides automated preliminary drafts; final plans must be signed/sealed by a registered COA architect, and (3) I hold the software author and developer completely harmless and waive any right to litigate or claim damages for municipal rejection or non-compliance.
+            </p>
+            <div class="error-msg" id="err-legalConsent" style="margin-top: 6px; font-weight: 600;">⚠ You must agree to the Terms & Zero Liability Disclaimer to download or print.</div>
           </div>
 
           <!-- Quick Preset Buttons -->
@@ -589,15 +608,15 @@
                 <button id="downloadPdfBtn" class="apple-btn-primary" style="background: #15803d; height: 44px; font-size: 14px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 4px rgba(21,128,61,0.2);" onclick="downloadPDFPackage()">
                   <span>📥 Save / Download PDF</span>
                 </button>
-                <span style="font-size: 10.5px; color: #166534; text-align: center;">Saves file to your Downloads folder.</span>
+                <span id="downloadHintText" style="font-size: 10.5px; color: #166534; text-align: center;">Saves file to your Downloads folder.</span>
               </div>
 
               <!-- Button 2: Print Layout Plan -->
               <div style="flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 4px;">
-                <button class="apple-btn-secondary" style="background: #1e3a5f; color:#fff; height: 44px; font-size: 14px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="printPlanPackage()">
+                <button id="printBtn" class="apple-btn-secondary" style="background: #1e3a5f; color:#fff; height: 44px; font-size: 14px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="printPlanPackage()">
                   <span>🖨️ Send to Printer</span>
                 </button>
-                <span style="font-size: 10.5px; color: #475569; text-align: center;">Sends drawing directly to printer.</span>
+                <span id="printHintText" style="font-size: 10.5px; color: #475569; text-align: center;">Sends drawing directly to printer.</span>
               </div>
 
             </div>
@@ -1134,10 +1153,13 @@
 
     </div> <!-- End Workbench Grid -->
 
-    <!-- Apple Pricing Cards Section -->
+    <!-- Pricing Section (Introductory Launch Offer: 100% Free) -->
     <section class="pricing-section" id="pricing">
+      <div style="background: #eff6ff; border: 1.5px solid #3b82f6; border-radius: 12px; padding: 12px 20px; display: inline-block; margin-bottom: 20px;">
+        <span style="font-size: 14px; font-weight: 700; color: #1e40af;">🎉 INTRODUCTORY LAUNCH OFFER — 100% FREE FOR ALL USERS</span>
+      </div>
       <h2>Simple, Transparent Service Pricing</h2>
-      <p>Choose the plan that fits your Sakala submission requirements.</p>
+      <p>All Pro features are currently free during our public launch. <em>*Pricing subject to change without prior notice.</em></p>
 
       <div class="pricing-grid">
         <div class="price-card">
@@ -1148,39 +1170,66 @@
               <li>✅ Live Vector Drawing Workbench</li>
               <li>✅ Auto Setback Math Calculations</li>
               <li>✅ Sample Watermarked PDF Download</li>
-              <li>❌ Unwatermarked Official Sakala PDF</li>
+              <li>✅ 100% Client-Side Private Storage</li>
             </ul>
           </div>
           <button class="apple-btn-secondary" style="width:100%;" onclick="goToStep(1)">Try Free Workbench</button>
         </div>
 
         <div class="price-card featured">
-          <span class="featured-badge">Most Popular</span>
+          <span class="featured-badge" style="background:#059669;">Launch Offer: Free</span>
           <div>
             <h3>Pro Official Sakala PDF</h3>
-            <div class="price">₹499 <span>/ plan</span></div>
+            <div class="price"><span style="text-decoration: line-through; color: #94a3b8; font-size: 22px; margin-right: 8px;">₹499</span> ₹0 <span>/ plan</span></div>
             <ul class="price-features">
               <li>✅ High-Resolution Unwatermarked PDF</li>
               <li>✅ Page 1 Layout Plan + Page 2 Legend Sheet</li>
               <li>✅ ADLR Survey & Deed DNA Verification</li>
-              <li>✅ 100% Sakala Acceptance Guarantee</li>
+              <li>✅ 100% Client-Side Local Privacy</li>
             </ul>
           </div>
-          <button class="apple-btn-primary" style="width:100%;" onclick="goToStep(1)">Generate Sakala PDF</button>
+          <button class="apple-btn-primary" style="width:100%; background:#059669;" onclick="goToStep(1)">Generate Free Sakala PDF</button>
         </div>
 
         <div class="price-card">
           <div>
             <h3>Architect Enterprise</h3>
-            <div class="price">₹2,499 <span>/ month</span></div>
+            <div class="price"><span style="text-decoration: line-through; color: #94a3b8; font-size: 22px; margin-right: 8px;">₹2,499</span> ₹0 <span>/ month</span></div>
             <ul class="price-features">
               <li>✅ Unlimited Plan Generations</li>
               <li>✅ Digital COA Stamp & Signature Overlay</li>
               <li>✅ Multi-Client Batch Property Export</li>
-              <li>✅ Priority Phone & WhatsApp Support</li>
+              <li>✅ Zero Data Upload Privacy Guarantee</li>
             </ul>
           </div>
-          <button class="apple-btn-secondary" style="width:100%;" onclick="goToStep(1)">Subscribe Enterprise</button>
+          <button class="apple-btn-secondary" style="width:100%;" onclick="goToStep(1)">Start Free Enterprise</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ironclad Legal Disclaimer & Zero Liability Section -->
+    <section class="faq-section" id="legal" style="margin-top: 60px;">
+      <div style="background: #ffffff; border: 1.5px solid #dc2626; border-radius: 16px; padding: 24px; box-shadow: var(--apple-shadow);">
+        <h2 style="font-size: 22px; color: #dc2626; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+          <span>⚖️</span> Official Legal Terms, Privacy Policy & Zero Liability Shield
+        </h2>
+        
+        <div style="font-size: 12px; color: #334155; line-height: 1.6; display: flex; flex-direction: column; gap: 12px;">
+          <p>
+            <strong>1. Absolute Limitation of Liability & Hold Harmless:</strong> This web application ("BBMP e-Plan Studio") provides automated preliminary layout plan drafting software based solely on unverified user-supplied input data. The software developer, author, and platform owners shall bear <strong>ZERO LIABILITY</strong> under any circumstances for plan rejection by BBMP/Sakala, municipal scrutiny delays, survey discrepancies, boundary disputes, regulatory fines, or financial losses incurred by the user or third parties.
+          </p>
+
+          <p>
+            <strong>2. User Waiver of Litigation & Litigation-Free Covenant:</strong> By accessing, generating, downloading, or printing layout plans from this application, the user explicitly covenants and agrees to <strong>WAIVE ALL RIGHTS TO LITIGATE</strong>, institute legal claims, file complaints, or initiate arbitration against the software developer, author, or platform provider in any court of law or tribunal.
+          </p>
+
+          <p>
+            <strong>3. Strict Client-Side Privacy Guarantee (Zero Server Storage):</strong> We respect your fundamental right to data privacy. <strong>No personal identifiers, property survey numbers, EP IDs, address records, or drawings are transmitted to or stored on any remote cloud server.</strong> 100% of data calculations, SVG vector rendering, and PDF exports are performed entirely within your client web browser memory.
+          </p>
+
+          <p>
+            <strong>4. Mandatory Independent Professional Verification:</strong> Plans generated by this software serve as educational and preliminary reference drafts. Final submission packages must be independently audited, signed, and stamped by a Council of Architecture (COA) registered architect or BBMP licensed engineer prior to official municipal submission.
+          </p>
         </div>
       </div>
     </section>
@@ -1219,6 +1268,17 @@
         </div>
       </div>
     </section>
+
+    <!-- Page Footer -->
+    <footer style="margin-top: 80px; padding-top: 30px; border-top: 1px solid var(--apple-border); text-align: center; font-size: 12px; color: var(--apple-text-secondary);">
+      <p style="margin-bottom: 12px;">
+        <a href="index.html" style="color: var(--apple-text-primary); text-decoration: none; font-weight: 700; margin: 0 10px;">Studio Workbench</a> • 
+        <a href="pricing.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Pricing</a> • 
+        <a href="legal.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Legal Terms & Privacy</a> • 
+        <a href="faq.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">FAQ</a>
+      </p>
+      <p>© 2026 BBMP e-Plan Studio. All processing performed 100% locally on client browser.</p>
+    </footer>
 
   </div> <!-- End Container -->
 

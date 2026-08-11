@@ -235,6 +235,20 @@ function switchMobileTab(tabName) {
 }
 
 /**
+ * Toggles legal consent acceptance state and updates Action Bar buttons.
+ * 
+ * @function toggleLegalConsent
+ * @returns {void}
+ */
+function toggleLegalConsent() {
+  const isChecked = document.getElementById('legalConsentCheck') ? document.getElementById('legalConsentCheck').checked : false;
+  const errLegal = document.getElementById('err-legalConsent');
+  if (errLegal) {
+    errLegal.style.display = isChecked ? 'none' : 'block';
+  }
+}
+
+/**
  * Direct client-side PDF file download using jsPDF + html2canvas.
  * Downloads multi-page A4 PDF file directly into user's Downloads folder WITHOUT opening print UI.
  * 
@@ -242,6 +256,15 @@ function switchMobileTab(tabName) {
  * @returns {Promise<void>}
  */
 async function downloadPDFPackage() {
+  const legalCheck = document.getElementById('legalConsentCheck');
+  if (legalCheck && !legalCheck.checked) {
+    if (typeof goToStep === 'function') goToStep(7);
+    const errLegal = document.getElementById('err-legalConsent');
+    if (errLegal) errLegal.style.display = 'block';
+    alert('⚖️ Legal Consent Required:\n\nPlease check the "I Agree to Terms of Service, Privacy Policy & Zero Liability Disclaimer" checkbox in Step 7 before downloading your PDF package.');
+    return;
+  }
+
   const downloadBtn = document.getElementById('downloadPdfBtn');
   const originalBtnText = downloadBtn ? downloadBtn.innerHTML : '';
   if (downloadBtn) {
@@ -325,6 +348,15 @@ async function downloadPDFPackage() {
  * @returns {void}
  */
 function printPlanPackage() {
+  const legalCheck = document.getElementById('legalConsentCheck');
+  if (legalCheck && !legalCheck.checked) {
+    if (typeof goToStep === 'function') goToStep(7);
+    const errLegal = document.getElementById('err-legalConsent');
+    if (errLegal) errLegal.style.display = 'block';
+    alert('⚖️ Legal Consent Required:\n\nPlease check the "I Agree to Terms of Service, Privacy Policy & Zero Liability Disclaimer" checkbox in Step 7 before printing your plan package.');
+    return;
+  }
+
   if (typeof generatePlan === 'function') generatePlan();
   toggleLegendSheetPage();
   window.print();

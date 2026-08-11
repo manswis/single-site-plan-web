@@ -196,6 +196,16 @@ function validateStep(stepNum) {
         isValid = checkRequired('bufferWidth', 'err-bufferWidth') && isValid;
       }
       break;
+    case 7:
+      const legalCheck = document.getElementById('legalConsentCheck');
+      const errLegal = document.getElementById('err-legalConsent');
+      if (legalCheck && !legalCheck.checked) {
+        if (errLegal) errLegal.style.display = 'block';
+        isValid = false;
+      } else {
+        if (errLegal) errLegal.style.display = 'none';
+      }
+      break;
   }
 
   // Trigger live plan update on valid step edit
