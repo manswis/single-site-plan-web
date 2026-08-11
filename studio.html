@@ -195,6 +195,15 @@
           💡 <strong>Rectangular vs Irregular Sites:</strong> For regular sites, opposite sides auto-sync automatically.
           Check 'Irregular Site' below for odd-shaped quadrilateral plots.
         </div>
+
+        <div class="checkbox-box" style="margin-bottom: 18px; background: #f0f9ff; border: 1.5px solid #0284c7;">
+          <label style="cursor: pointer;">
+            <input type="checkbox" id="oddSiteCheck" onchange="toggleOddSite()">
+            <span style="font-weight: 700; color: #0369a1;">🔷 Irregular / Odd Shaped Site (4 sides have different measurements)</span>
+          </label>
+          <p id="oddSiteHint" style="margin-top: 4px; font-size: 11px; color: #0284c7;">Rectangular Mode (Default): Opposite sides auto-sync as you type. Check this box for irregular sites.</p>
+        </div>
+
         <div class="grid">
           <div class="field">
             <label>Plot Area (sq.ft) <span class="required">*</span></label>
@@ -255,15 +264,6 @@
               oninput="syncOppositeSides('sideWest'); clearFieldError('sideWest', 'err-sideWest')">
             <div class="error-msg" id="err-sideWest">⚠ West dimension required</div>
           </div>
-        </div>
-
-        <div class="checkbox-box" style="margin-top: 14px;">
-          <label>
-            <input type="checkbox" id="oddSiteCheck" onchange="toggleOddSite()">
-            <span>🔷 Irregular / Odd Shaped Site (4 sides have different measurements)</span>
-          </label>
-          <p id="oddSiteHint">Rectangular Mode (Default): Opposite sides auto-sync as you type. Check this box for
-            irregular sites.</p>
         </div>
       </div>
 
