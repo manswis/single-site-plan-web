@@ -86,9 +86,12 @@ function checkAndRestoreDraft() {
     const hasUserData = Object.values(draft.formData).some(val => val !== '' && val !== false && val !== null && val !== undefined);
     if (!hasUserData) return false;
 
-    // Display Apple Frosted Glass Restore Prompt Modal whenever saved draft exists!
+    // Hide wizard card until user taps "Start Fresh" or "Restore Session"
+    const wizardCard = document.getElementById('wizardCard');
+    if (wizardCard) wizardCard.style.display = 'none';
+
+    // Display Alert Modal Dialog
     showDraftRestoreModal(draft);
-    showStep(1, false); // Display Step 1 in background until user chooses action
     return true;
   } catch (e) {
     console.error('Failed to parse saved draft:', e);
@@ -98,7 +101,7 @@ function checkAndRestoreDraft() {
 }
 
 /**
- * Displays the Apple Frosted Glass Restore Modal with draft summary metadata.
+ * Displays the Apple Alert Modal with draft summary metadata.
  * 
  * @function showDraftRestoreModal
  * @param {Object} draft - Draft object.
@@ -202,7 +205,10 @@ function restoreDraft(hideModal = true) {
       if (modal) modal.style.display = 'none';
     }
 
-    // Always start on Step 1 while keeping all cached data pre-filled
+    // Reveal wizard card and land on Step 1
+    const wizardCard = document.getElementById('wizardCard');
+    if (wizardCard) wizardCard.style.display = 'block';
+
     showStep(1, false);
 
     if (typeof generatePlan === 'function') {
@@ -241,6 +247,10 @@ function discardDraft() {
 
   const modal = document.getElementById('draftRestoreModal');
   if (modal) modal.style.display = 'none';
+
+  // Reveal wizard card and start fresh on Step 1
+  const wizardCard = document.getElementById('wizardCard');
+  if (wizardCard) wizardCard.style.display = 'block';
 
   showStep(1, false);
 }

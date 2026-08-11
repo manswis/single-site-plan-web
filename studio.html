@@ -12,7 +12,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
@@ -40,42 +41,39 @@
           <a href="legal.html">Legal Disclaimer</a>
           <a href="faq.html">FAQ</a>
         </nav>
-        <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+        <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme"
+          title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Apple Frosted Glass Draft Restore Modal (Triggers on Fresh Page Open if draft exists) -->
+  <!-- Clean Alert Modal Dialog (Triggers on Fresh Page Open if draft exists) -->
   <div id="draftRestoreModal" class="apple-modal-overlay" style="display: none;">
-    <div class="apple-modal-card">
-      <div class="apple-modal-header">
-        <span style="font-size: 32px;">📁</span>
-        <div>
-          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Previous Draft
-            Found</h3>
-          <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);">We detected a saved
-            single plot plan draft in your browser.</p>
-        </div>
-      </div>
-
-      <div class="apple-modal-body"
-        style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin: 18px 0; font-size: 13px; color: var(--apple-text-primary);">
-        <p style="margin: 0 0 6px 0;"><strong>Owner:</strong> <span id="modalDraftOwner">Ramesh Kumar</span></p>
-        <p style="margin: 0 0 6px 0;"><strong>Saved Step:</strong> <span id="modalDraftStep">Step 3 of 7 (Plot
-            Measurements)</span></p>
-        <p style="margin: 0;"><strong>Last Modified:</strong> <span id="modalDraftTime">Just now</span></p>
-      </div>
-
-      <p style="font-size: 13px; color: var(--apple-text-secondary); margin-bottom: 20px;">
-        Would you like to restore your saved data and continue where you left off, or discard it and start fresh?
+    <div class="apple-modal-card alert-modal-card"
+      style="max-width: 420px; text-align: center; padding: 28px 24px; border-radius: 20px;">
+      <h3 style="margin: 0 0 8px 0; font-size: 19px; font-weight: 700; color: var(--apple-text-primary);">Previous
+        Session Found</h3>
+      <p style="margin: 0 0 16px 0; font-size: 13px; color: var(--apple-text-secondary); line-height: 1.5;">
+        A saved single plot plan draft was detected in your browser memory.
       </p>
 
-      <div style="display: flex; gap: 12px; justify-content: flex-end;">
-        <button class="apple-btn-secondary" onclick="discardDraft()" style="color: #dc2626;">🗑️ Discard & Start
+      <div class="apple-modal-body"
+        style="background: var(--apple-card-bg); border: 1px solid var(--apple-border); border-radius: 12px; padding: 14px; margin-bottom: 20px; text-align: left; font-size: 13px;">
+        <p style="margin: 0 0 6px 0; color: var(--apple-text-primary);"><strong>Owner:</strong> <span
+            id="modalDraftOwner">Ramesh Kumar</span></p>
+        <p style="margin: 0 0 6px 0; color: var(--apple-text-primary);"><strong>Saved Step:</strong> <span
+            id="modalDraftStep">Step 3 of 7</span></p>
+        <p style="margin: 0; color: var(--apple-text-primary);"><strong>Last Saved:</strong> <span
+            id="modalDraftTime">Just now</span></p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <button class="apple-btn-secondary" onclick="discardDraft()" style="height: 44px; font-weight: 700;">Start
           Fresh</button>
-        <button class="apple-btn-primary" onclick="restoreDraft(true)">🚀 Restore Saved Draft</button>
+        <button class="apple-btn-primary" onclick="restoreDraft(true)" style="height: 44px; font-weight: 700;">Restore
+          Session</button>
       </div>
     </div>
   </div>
@@ -91,7 +89,8 @@
         <a href="legal.html" class="mobile-nav-item">Legal</a>
         <a href="faq.html" class="mobile-nav-item">FAQ</a>
       </div>
-      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
+        title="Toggle Light/Dark Mode">
         <span class="material-symbols-outlined">dark_mode</span>
       </button>
     </div>
@@ -154,7 +153,8 @@
             <div class="error-msg" id="err-epId">⚠ eKhata ID (ePID) is required</div>
           </div>
           <div class="field">
-            <label>BBMP PID Number <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
+            <label>BBMP PID Number <span
+                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
             <input id="pidNo" type="text" placeholder="e.g. 108-W0045-12 (Optional)">
           </div>
           <div class="field">
@@ -776,49 +776,68 @@
 
         <!-- Formatted User Property Summary Cards with Pencil Icons -->
         <div style="margin-bottom: 24px;">
-          <h4 style="margin: 0 0 14px 0; font-size: 16px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 8px;">
+          <h4
+            style="margin: 0 0 14px 0; font-size: 16px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 8px;">
             <span>📋 Property Settings & Dimensions Summary</span>
-            <span style="font-size: 12px; font-weight: 500; color: var(--apple-text-secondary);">(Tap ✏️ to edit any field)</span>
+            <span style="font-size: 12px; font-weight: 500; color: var(--apple-text-secondary);">(Tap ✏️ to edit any
+              field)</span>
           </h4>
           <div id="reviewSummaryContainer"></div>
         </div>
 
         <!-- Package Card containing the 3 Action Buttons Hub (Placed Below Summary) -->
-        <div class="apple-card package-header-card" style="margin-bottom: 24px; padding: 22px 24px; background: rgba(0, 102, 204, 0.03); border: 1.5px solid rgba(0, 102, 204, 0.2);">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--apple-border); padding-bottom: 14px; margin-bottom: 16px;">
+        <div class="apple-card package-header-card"
+          style="margin-bottom: 24px; padding: 22px 24px; background: rgba(0, 102, 204, 0.03); border: 1.5px solid rgba(0, 102, 204, 0.2);">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--apple-border); padding-bottom: 14px; margin-bottom: 16px;">
             <div style="display: flex; align-items: center; gap: 10px;">
               <span style="font-size: 26px;">🏛️</span>
               <div>
-                <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Single Plot Plan Package Generator</h3>
-                <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);">Sakala B-to-A Khata Compliant Architectural Drawing Engine</p>
+                <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Single Plot
+                  Plan Package Generator</h3>
+                <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);">Sakala B-to-A Khata
+                  Compliant Architectural Drawing Engine</p>
               </div>
             </div>
-            <span class="apple-pill-badge" style="background: rgba(52, 199, 89, 0.12); color: #166534; font-weight: 700; font-size: 11px;">100% Private & Sakala Ready</span>
+            <span class="apple-pill-badge"
+              style="background: rgba(52, 199, 89, 0.12); color: #166534; font-weight: 700; font-size: 11px;">100%
+              Private & Sakala Ready</span>
           </div>
 
           <!-- Mandatory Pre-Generation Legal Terms & Conditions Consent Checkbox -->
-          <div class="checkbox-box" style="margin-bottom: 18px; background: var(--apple-card-bg); border: 1.5px solid var(--apple-border); border-radius: 12px; padding: 14px 16px;">
+          <div class="checkbox-box"
+            style="margin-bottom: 18px; background: var(--apple-card-bg); border: 1.5px solid var(--apple-border); border-radius: 12px; padding: 14px 16px;">
             <label style="cursor: pointer; display: flex; align-items: flex-start; gap: 10px;">
-              <input type="checkbox" id="legalConsentCheck" onchange="toggleLegalConsent()" style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
+              <input type="checkbox" id="legalConsentCheck" onchange="toggleLegalConsent()"
+                style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
               <span style="font-weight: 600; font-size: 13px; color: var(--apple-text-primary); line-height: 1.45;">
-                I Agree to the <a href="legal.html" target="_blank" style="color: #0066cc; text-decoration: underline; font-weight: 700;">Terms of Service, Privacy Policy & Zero Liability Disclaimer</a> <span class="required">*</span>
+                I Agree to the <a href="legal.html" target="_blank"
+                  style="color: #0066cc; text-decoration: underline; font-weight: 700;">Terms of Service, Privacy Policy
+                  & Zero Liability Disclaimer</a> <span class="required">*</span>
               </span>
             </label>
             <p style="margin: 6px 0 0 28px; font-size: 11.5px; color: var(--apple-text-secondary); line-height: 1.4;">
-              All mathematical calculations run 100% locally in your web browser. Plans serve as preliminary draft documentation for B-to-A Khata submission.
+              All mathematical calculations run 100% locally in your web browser. Plans serve as preliminary draft
+              documentation for B-to-A Khata submission.
             </p>
-            <div class="error-msg" id="err-legalConsent" style="margin-top: 8px; font-weight: 600; display: none;">⚠ You must check and agree to the Terms & Zero Liability Disclaimer to generate, export, or print your plan.</div>
+            <div class="error-msg" id="err-legalConsent" style="margin-top: 8px; font-weight: 600; display: none;">⚠ You
+              must check and agree to the Terms & Zero Liability Disclaimer to generate, export, or print your plan.
+            </div>
           </div>
 
           <!-- The 3 Core Action Buttons Hub (Icons Removed) -->
-          <div class="package-action-buttons-hub" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-            <button id="generatePlanBtn" class="apple-btn-primary" disabled onclick="onGeneratePlanClick()" style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+          <div class="package-action-buttons-hub"
+            style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            <button id="generatePlanBtn" class="apple-btn-primary" disabled onclick="onGeneratePlanClick()"
+              style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
               <span>Generate Plan</span>
             </button>
-            <button id="downloadPdfBtn" class="apple-btn-secondary" disabled onclick="downloadPDFPackage()" style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+            <button id="downloadPdfBtn" class="apple-btn-secondary" disabled onclick="downloadPDFPackage()"
+              style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
               <span>Export PDF</span>
             </button>
-            <button id="printBtn" class="apple-btn-secondary" disabled onclick="printPlanPackage()" style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+            <button id="printBtn" class="apple-btn-secondary" disabled onclick="printPlanPackage()"
+              style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
               <span>Print Drawing</span>
             </button>
           </div>
