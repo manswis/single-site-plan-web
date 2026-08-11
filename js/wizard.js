@@ -1,7 +1,7 @@
 /**
  * @file wizard.js
  * @description Apple-style 7-Step Guided Setup Wizard Controller for BBMP e-Plan Studio.
- * Manages step state, step validation checks, progress pill indicators, and smooth step transitions.
+ * Manages step state, lazy on-action validation, progress pill indicators, and smooth step transitions.
  * @author Senior Systems Architect
  */
 
@@ -34,28 +34,39 @@ function initWizard() {
 }
 
 /**
- * Navigates to a specific step index after validating current step input.
+ * Navigates to a specific step index with smart lazy validation.
+ * - Going Backward (targetStep < currentStep): Instant jump without showing errors.
+ * - Going Forward (targetStep > currentStep): Validates all preceding steps. Shows errors on first incomplete step.
  * 
  * @function goToStep
- * @param {number} stepNum - Target step number (1 to 7).
+ * @param {number} targetStep - Target step number (1 to 7).
  * @returns {boolean} True if step transition succeeded.
  */
-function goToStep(stepNum) {
-  if (stepNum < 1 || stepNum > TOTAL_STEPS) return false;
+function goToStep(targetStep) {
+  if (targetStep < 1 || targetStep > TOTAL_STEPS) return false;
 
-  // If advancing forward, validate current step fields first
-  if (stepNum > currentStep) {
-    if (!validateStep(currentStep)) {
+  // 1. Instant Backward Navigation (no validation errors)
+  if (targetStep < currentStep) {
+    showStep(targetStep);
+    return true;
+  }
+
+  // 2. Forward Navigation: Validate all preceding steps
+  for (let s = 1; s < targetStep; s++) {
+    if (!validateStep(s, true)) {
+      // Jump to the first incomplete step and display its errors
+      showStep(s);
+      scrollFirstErrorIntoView(s);
       return false;
     }
   }
 
-  showStep(stepNum);
+  showStep(targetStep);
   return true;
 }
 
 /**
- * Advances to the next step.
+ * Advances to the next step when clicking "Continue →".
  * 
  * @function nextStep
  * @returns {void}
@@ -83,7 +94,7 @@ function prevStep() {
 }
 
 /**
- * Displays the target step tab and updates UI state.
+ * Displays the target step panel and updates progress UI.
  * 
  * @function showStep
  * @param {number} stepNum - Step number to activate.
@@ -102,6 +113,7 @@ function showStep(stepNum) {
     if (tabEl) {
       if (i === stepNum) {
         tabEl.classList.add('active');
+        tabEl.classList.remove('completed');
       } else if (i < stepNum) {
         tabEl.classList.add('completed');
         tabEl.classList.remove('active');
@@ -139,6 +151,14 @@ function showStep(stepNum) {
     }
   }
 
+  updateProgressBar();
+
+  // Scroll step panel smoothly into view
+  const wizardCard = document.getElementById('wizardCard');
+  if (wizardCard) {
+    wizardCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
   // Auto-render live preview on Step 7
   if (stepNum === 7 && typeof generatePlan === 'function') {
     generatePlan();
@@ -160,61 +180,61 @@ function updateProgressBar() {
 }
 
 /**
- * Validates mandatory fields for a specific step before allowing forward progression.
+ * Validates mandatory fields for a specific step.
  * 
  * @function validateStep
  * @param {number} stepNum - Step index to validate.
+ * @param {boolean} [showErrors=true] - Whether to display red error messages.
  * @returns {boolean} True if step inputs are valid.
  */
-function validateStep(stepNum) {
+function validateStep(stepNum, showErrors = true) {
   let isValid = true;
-  clearStepErrors(stepNum);
 
   switch (stepNum) {
     case 1:
-      isValid = checkRequired('ownerName', 'err-ownerName') && isValid;
-      isValid = checkRequired('epId', 'err-epId') && isValid;
-      isValid = checkRequired('pidNo', 'err-pidNo') && isValid;
+      isValid = checkRequired('ownerName', 'err-ownerName', showErrors) && isValid;
+      isValid = checkRequired('epId', 'err-epId', showErrors) && isValid;
+      isValid = checkRequired('pidNo', 'err-pidNo', showErrors) && isValid;
       break;
     case 2:
-      isValid = checkRequired('surveyNo', 'err-surveyNo') && isValid;
-      isValid = checkRequired('bbmpZone', 'err-bbmpZone') && isValid;
-      isValid = checkRequired('wardNo', 'err-wardNo') && isValid;
-      isValid = checkRequired('wardName', 'err-wardName') && isValid;
-      isValid = checkRequired('address', 'err-address') && isValid;
+      isValid = checkRequired('surveyNo', 'err-surveyNo', showErrors) && isValid;
+      isValid = checkRequired('bbmpZone', 'err-bbmpZone', showErrors) && isValid;
+      isValid = checkRequired('wardNo', 'err-wardNo', showErrors) && isValid;
+      isValid = checkRequired('wardName', 'err-wardName', showErrors) && isValid;
+      isValid = checkRequired('address', 'err-address', showErrors) && isValid;
       break;
     case 3:
-      isValid = checkRequired('plotArea', 'err-plotArea') && isValid;
-      isValid = checkRequired('roadWidth', 'err-roadWidth') && isValid;
-      isValid = checkRequired('roadFacing', 'err-roadFacing') && isValid;
-      isValid = checkRequired('sideNorth', 'err-sideNorth') && isValid;
-      isValid = checkRequired('sideSouth', 'err-sideSouth') && isValid;
-      isValid = checkRequired('sideEast', 'err-sideEast') && isValid;
-      isValid = checkRequired('sideWest', 'err-sideWest') && isValid;
+      isValid = checkRequired('plotArea', 'err-plotArea', showErrors) && isValid;
+      isValid = checkRequired('roadWidth', 'err-roadWidth', showErrors) && isValid;
+      isValid = checkRequired('roadFacing', 'err-roadFacing', showErrors) && isValid;
+      isValid = checkRequired('sideNorth', 'err-sideNorth', showErrors) && isValid;
+      isValid = checkRequired('sideSouth', 'err-sideSouth', showErrors) && isValid;
+      isValid = checkRequired('sideEast', 'err-sideEast', showErrors) && isValid;
+      isValid = checkRequired('sideWest', 'err-sideWest', showErrors) && isValid;
       break;
     case 5:
-      isValid = checkRequired('typeNorth', 'err-typeNorth') && isValid;
-      isValid = checkRequired('typeSouth', 'err-typeSouth') && isValid;
-      isValid = checkRequired('typeEast', 'err-typeEast') && isValid;
-      isValid = checkRequired('typeWest', 'err-typeWest') && isValid;
+      isValid = checkRequired('typeNorth', 'err-typeNorth', showErrors) && isValid;
+      isValid = checkRequired('typeSouth', 'err-typeSouth', showErrors) && isValid;
+      isValid = checkRequired('typeEast', 'err-typeEast', showErrors) && isValid;
+      isValid = checkRequired('typeWest', 'err-typeWest', showErrors) && isValid;
       break;
     case 6:
       const rwCheck = document.getElementById('roadWideningCheck');
       if (rwCheck && rwCheck.checked) {
-        isValid = checkRequired('proposedRoadWidth', 'err-proposedRoadWidth') && isValid;
-        isValid = checkRequired('roadWideningStripWidth', 'err-roadWideningStripWidth') && isValid;
+        isValid = checkRequired('proposedRoadWidth', 'err-proposedRoadWidth', showErrors) && isValid;
+        isValid = checkRequired('roadWideningStripWidth', 'err-roadWideningStripWidth', showErrors) && isValid;
       }
       const bCheck = document.getElementById('bufferCheck');
       if (bCheck && bCheck.checked) {
-        isValid = checkRequired('bufferType', 'err-bufferType') && isValid;
-        isValid = checkRequired('bufferWidth', 'err-bufferWidth') && isValid;
+        isValid = checkRequired('bufferType', 'err-bufferType', showErrors) && isValid;
+        isValid = checkRequired('bufferWidth', 'err-bufferWidth', showErrors) && isValid;
       }
       break;
     case 7:
       const legalCheck = document.getElementById('legalConsentCheck');
       const errLegal = document.getElementById('err-legalConsent');
       if (legalCheck && !legalCheck.checked) {
-        if (errLegal) errLegal.style.display = 'block';
+        if (showErrors && errLegal) errLegal.style.display = 'block';
         isValid = false;
       } else {
         if (errLegal) errLegal.style.display = 'none';
@@ -236,22 +256,47 @@ function validateStep(stepNum) {
  * @function checkRequired
  * @param {string} fieldId - ID of input element.
  * @param {string} errId - ID of error message element.
+ * @param {boolean} [showErrors=true] - Whether to display red error UI.
  * @returns {boolean} True if field is non-empty.
  */
-function checkRequired(fieldId, errId) {
+function checkRequired(fieldId, errId, showErrors = true) {
   const field = document.getElementById(fieldId);
   const err = document.getElementById(errId);
   if (!field) return true;
 
   const val = field.value ? field.value.trim() : '';
   if (!val) {
-    if (field.parentElement) field.parentElement.classList.add('error');
-    if (err) err.style.display = 'block';
+    if (showErrors) {
+      if (field.parentElement) field.parentElement.classList.add('error');
+      if (err) err.style.display = 'block';
+    }
     return false;
   } else {
     if (field.parentElement) field.parentElement.classList.remove('error');
     if (err) err.style.display = 'none';
     return true;
+  }
+}
+
+/**
+ * Clears error highlight for a single input field on user typing/selection.
+ * 
+ * @function clearFieldError
+ * @param {string} fieldId - Field element ID.
+ * @param {string} errId - Error message element ID.
+ * @returns {void}
+ */
+function clearFieldError(fieldId, errId) {
+  const field = document.getElementById(fieldId);
+  const err = document.getElementById(errId);
+
+  if (field && field.value.trim() !== '') {
+    if (field.parentElement) field.parentElement.classList.remove('error');
+    if (err) err.style.display = 'none';
+  }
+
+  if (typeof generatePlan === 'function') {
+    generatePlan();
   }
 }
 
@@ -271,6 +316,23 @@ function clearStepErrors(stepNum) {
 
   const errorMsgs = stepPanel.querySelectorAll('.error-msg');
   errorMsgs.forEach(m => m.style.display = 'none');
+}
+
+/**
+ * Scrolls the first visible error message into view.
+ * 
+ * @function scrollFirstErrorIntoView
+ * @param {number} stepNum - Step number to check.
+ * @returns {void}
+ */
+function scrollFirstErrorIntoView(stepNum) {
+  const stepPanel = document.getElementById(`wizardStep${stepNum}`);
+  if (!stepPanel) return;
+
+  const firstErr = stepPanel.querySelector('.error-msg[style*="display: block"]');
+  if (firstErr) {
+    firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 }
 
 // Initialize wizard on DOM Content Loaded
