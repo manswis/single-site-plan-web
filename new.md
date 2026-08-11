@@ -2,11 +2,8 @@
   - shuld if given setbacks are possible or not etc
   - we should imprve thsi for irregular site (if invalid we should not allow user to next step, if user removed all data then cannavigate to next), basically if data is there it should be valid
   - setbacks and not calculated properly in final drawing
-1. remove "Start Free Plan" from header
 2. add change FAQ to "FAQ & Help" and add detailed section how to use this in same page as FAQ (explain each field with sample image (html) and how to get that
  - also improve FAQ's and add more points, and make it more user friendly
-3. rename "🚀 Start Plan Generator" to "Start Now" remove the icons
-   - when user hit "Start now", it shoul always starts step 1 (all other data prefield for all steps)
 4. show a popup with sample water mark may be in poupup add 4 option, dont take user to wizard's 7th step
 5. remove "Start Creating Your Plan Now →" from home bottom,
 6. improve "How It Works in 3 Simple Steps" to better explain and UI and allignment of each 3 steps

@@ -208,8 +208,8 @@ function restoreDraft(hideModal = true) {
       if (modal) modal.style.display = 'none';
     }
 
-    const targetStep = draft.currentStep || 1;
-    showStep(targetStep, false);
+    // Always start on Step 1 while keeping all cached data pre-filled
+    showStep(1, false);
 
     if (typeof generatePlan === 'function') {
       generatePlan();
