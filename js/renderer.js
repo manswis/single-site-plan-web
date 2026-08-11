@@ -211,13 +211,14 @@ function generatePlan() {
   document.getElementById('tbZone').textContent = `${zone} Zone`;
   document.getElementById('tbScale').textContent = scale;
 
-  // 7. Render Plot Vector SVG Canvas
+  // 7. Render Plot Vector SVG Canvas with Precision Coordinate Layout
   const plotRect = document.getElementById('plotRect');
   const plotPoly = document.getElementById('plotPoly');
   const bldgRect = document.getElementById('bldgRect');
 
-  const maxDrawW = 340;
-  const maxDrawH = 260;
+  // Reserved Drawing Bounds inside 540 x 440 ViewBox
+  const maxDrawW = 280;
+  const maxDrawH = 200;
   const ratio = Math.min(maxDrawW / Math.max(sideE, sideW, 1), maxDrawH / Math.max(sideN, sideS, 1));
 
   let offsetX, offsetY, drawW, drawH, nW, sW, eH, wH;
@@ -232,19 +233,21 @@ function generatePlan() {
     eH = sideE * ratio;
     wH = sideW * ratio;
 
-    offsetX = 80 + (maxDrawW - Math.max(nW, sW)) / 2;
-    offsetY = 60 + (maxDrawH - Math.max(eH, wH)) / 2;
+    offsetX = 120 + (maxDrawW - Math.max(nW, sW)) / 2;
+    offsetY = 75 + (maxDrawH - Math.max(eH, wH)) / 2;
 
     topLeft = { x: offsetX + (maxDrawW - nW) / 2, y: offsetY };
     topRight = { x: offsetX + (maxDrawW + nW) / 2, y: offsetY };
     botRight = { x: offsetX + (maxDrawW + sW) / 2, y: offsetY + Math.max(eH, wH) };
     botLeft = { x: offsetX + (maxDrawW - sW) / 2, y: offsetY + Math.max(eH, wH) };
 
+    drawW = Math.max(nW, sW);
+    drawH = Math.max(eH, wH);
+
     plotPoly.setAttribute('points', `${topLeft.x},${topLeft.y} ${topRight.x},${topRight.y} ${botRight.x},${botRight.y} ${botLeft.x},${botLeft.y}`);
 
-    // Footprint positioning using custom setbacks
-    const bldgDrawW = Math.max(10, Math.min(bldgW * ratio, nW * 0.8));
-    const bldgDrawH = Math.max(10, Math.min(bldgL * ratio, eH * 0.8));
+    const bldgDrawW = Math.max(10, Math.min(bldgW * ratio, nW * 0.75));
+    const bldgDrawH = Math.max(10, Math.min(bldgL * ratio, eH * 0.75));
     const bldgX = topLeft.x + (setbackL * ratio);
     const bldgY = topLeft.y + (setbackF * ratio);
 
@@ -259,8 +262,8 @@ function generatePlan() {
 
     drawW = (roadFace === 'north' || roadFace === 'south') ? sideN * ratio : sideE * ratio;
     drawH = (roadFace === 'north' || roadFace === 'south') ? sideE * ratio : sideN * ratio;
-    offsetX = 80 + (maxDrawW - drawW) / 2;
-    offsetY = 60 + (maxDrawH - drawH) / 2;
+    offsetX = 120 + (maxDrawW - drawW) / 2;
+    offsetY = 75 + (maxDrawH - drawH) / 2;
 
     plotRect.setAttribute('x', offsetX);
     plotRect.setAttribute('y', offsetY);
@@ -283,32 +286,105 @@ function generatePlan() {
     bldgRect.setAttribute('width', bldgDrawW);
     bldgRect.setAttribute('height', bldgDrawH);
 
-    // Dimension lines in Feet-Inches notation
-    const dimY = offsetY + drawH + 20;
+    // Dimension lines in Feet-Inches notation (Positioned Below Plot Box)
+    const dimY = offsetY + drawH + 28;
     document.getElementById('dimWLine').setAttribute('x1', offsetX);
     document.getElementById('dimWLine').setAttribute('y1', dimY);
     document.getElementById('dimWLine').setAttribute('x2', offsetX + drawW);
     document.getElementById('dimWLine').setAttribute('y2', dimY);
     document.getElementById('dimWidth').setAttribute('x', offsetX + drawW / 2);
-    document.getElementById('dimWidth').setAttribute('y', dimY + 18);
+    document.getElementById('dimWidth').setAttribute('y', dimY + 15);
     document.getElementById('dimWidth').textContent = formatFeetInches(width);
 
-    const dimX = offsetX + drawW + 20;
+    const dimX = offsetX + drawW + 28;
     document.getElementById('dimLLine').setAttribute('x1', dimX);
     document.getElementById('dimLLine').setAttribute('y1', offsetY);
     document.getElementById('dimLLine').setAttribute('x2', dimX);
     document.getElementById('dimLLine').setAttribute('y2', offsetY + drawH);
-    document.getElementById('dimLength').setAttribute('x', dimX + 18);
+    document.getElementById('dimLength').setAttribute('x', dimX + 16);
     document.getElementById('dimLength').setAttribute('y', offsetY + drawH / 2);
-    document.getElementById('dimLength').setAttribute('transform', 'rotate(90, ' + (dimX + 18) + ', ' + (offsetY + drawH / 2) + ')');
+    document.getElementById('dimLength').setAttribute('transform', 'rotate(90, ' + (dimX + 16) + ', ' + (offsetY + drawH / 2) + ')');
     document.getElementById('dimLength').textContent = formatFeetInches(length);
   }
 
-  // 8. Render Corner Splay for 2-side Corner Plots (e.g. North & East Road access)
+  // 8. Clean Non-Overlapping Side Callout Labels (NORTH: 40'-0", SOUTH: 40'-0", etc.)
+  document.getElementById('labelSideN').style.display = 'block';
+  document.getElementById('labelSideS').style.display = 'block';
+  document.getElementById('labelSideE').style.display = 'block';
+  document.getElementById('labelSideW').style.display = 'block';
+
+  document.getElementById('labelSideN').setAttribute('x', offsetX + drawW / 2);
+  document.getElementById('labelSideN').setAttribute('y', offsetY - 10);
+  document.getElementById('labelSideN').textContent = 'NORTH: ' + formatFeetInches(sideN);
+
+  document.getElementById('labelSideS').setAttribute('x', offsetX + drawW / 2);
+  document.getElementById('labelSideS').setAttribute('y', offsetY + drawH + 14);
+  document.getElementById('labelSideS').textContent = 'SOUTH: ' + formatFeetInches(sideS);
+
+  document.getElementById('labelSideE').setAttribute('x', offsetX + drawW + 12);
+  document.getElementById('labelSideE').setAttribute('y', offsetY + drawH / 2);
+  document.getElementById('labelSideE').setAttribute('transform', `rotate(90, ${offsetX + drawW + 12}, ${offsetY + drawH / 2})`);
+  document.getElementById('labelSideE').textContent = 'EAST: ' + formatFeetInches(sideE);
+
+  document.getElementById('labelSideW').setAttribute('x', offsetX - 12);
+  document.getElementById('labelSideW').setAttribute('y', offsetY + drawH / 2);
+  document.getElementById('labelSideW').setAttribute('transform', `rotate(90, ${offsetX - 12}, ${offsetY + drawH / 2})`);
+  document.getElementById('labelSideW').textContent = 'WEST: ' + formatFeetInches(sideW);
+
+  // Setback Text Labels Positioned Dynamically Relative to Building Footprint
+  const bldgDrawW = Math.max(10, (bldgW > 0 ? bldgW : (width - setbackL - setbackRt)) * ratio);
+  const bldgDrawH = Math.max(10, (bldgL > 0 ? bldgL : (length - setbackF - setbackR)) * ratio);
+  const bldgX = offsetX + (setbackL * ratio);
+  const bldgY = offsetY + (setbackF * ratio);
+
+  document.getElementById('setbackN').setAttribute('x', bldgX + bldgDrawW / 2);
+  document.getElementById('setbackN').setAttribute('y', Math.max(offsetY + 12, bldgY - 6));
+  document.getElementById('setbackN').textContent = "Front Setback: " + formatFeetInches(setbackF > 0 ? setbackF : (sideN - bldgW) / 2);
+
+  document.getElementById('setbackS').setAttribute('x', bldgX + bldgDrawW / 2);
+  document.getElementById('setbackS').setAttribute('y', Math.min(offsetY + drawH - 6, bldgY + bldgDrawH + 14));
+  document.getElementById('setbackS').textContent = "Rear Setback: " + formatFeetInches(setbackR > 0 ? setbackR : (sideS - bldgW) / 2);
+
+  document.getElementById('setbackE').setAttribute('x', Math.min(offsetX + drawW - 25, bldgX + bldgDrawW + (offsetX + drawW - (bldgX + bldgDrawW)) / 2));
+  document.getElementById('setbackE').setAttribute('y', bldgY + bldgDrawH / 2);
+  document.getElementById('setbackE').textContent = "Right Setback: " + formatFeetInches(setbackRt > 0 ? setbackRt : (sideE - bldgL) / 2);
+
+  document.getElementById('setbackW').setAttribute('x', Math.max(offsetX + 25, offsetX + (bldgX - offsetX) / 2));
+  document.getElementById('setbackW').setAttribute('y', bldgY + bldgDrawH / 2);
+  document.getElementById('setbackW').textContent = "Left Setback: " + formatFeetInches(setbackL > 0 ? setbackL : (sideW - bldgL) / 2);
+
+  // Interior Building Dimension Lines
+  const bldgWLine = document.getElementById('bldgDimWLine');
+  const bldgWText = document.getElementById('bldgDimW');
+  const bldgLLine = document.getElementById('bldgDimLLine');
+  const bldgLText = document.getElementById('bldgDimL');
+
+  if (bldgWLine && bldgWText) {
+    bldgWLine.setAttribute('x1', bldgX);
+    bldgWLine.setAttribute('y1', bldgY + bldgDrawH - 12);
+    bldgWLine.setAttribute('x2', bldgX + bldgDrawW);
+    bldgWLine.setAttribute('y2', bldgY + bldgDrawH - 12);
+    bldgWText.setAttribute('x', bldgX + bldgDrawW / 2);
+    bldgWText.setAttribute('y', bldgY + bldgDrawH - 2);
+    bldgWText.textContent = formatFeetInches(bldgW);
+  }
+
+  if (bldgLLine && bldgLText) {
+    bldgLLine.setAttribute('x1', bldgX + bldgDrawW - 12);
+    bldgLLine.setAttribute('y1', bldgY);
+    bldgLLine.setAttribute('x2', bldgX + bldgDrawW - 12);
+    bldgLLine.setAttribute('y2', bldgY + bldgDrawH);
+    bldgLText.setAttribute('x', bldgX + bldgDrawW - 3);
+    bldgLText.setAttribute('y', bldgY + bldgDrawH / 2);
+    bldgLText.setAttribute('transform', `rotate(90, ${bldgX + bldgDrawW - 3}, ${bldgY + bldgDrawH / 2})`);
+    bldgLText.textContent = formatFeetInches(bldgL);
+  }
+
+  // 9. Render Corner Splay for 2-side Corner Plots (e.g. North & East Road access)
   const isCorner = boundaries.North.type === 'road' && boundaries.East.type === 'road';
   const splayPoly = document.getElementById('splayPoly');
   if (isCorner && splayPoly) {
-    const splaySize = 5 * ratio; // 5ft corner splay chamfer
+    const splaySize = 5 * ratio; // 5ft corner splay
     const p1 = `${topRight.x - splaySize},${topRight.y}`;
     const p2 = `${topRight.x},${topRight.y + splaySize}`;
     splayPoly.setAttribute('points', `${p1} ${topRight.x},${topRight.y} ${p2}`);
@@ -317,7 +393,7 @@ function generatePlan() {
     splayPoly.style.display = 'none';
   }
 
-  // 9. Render RMP-2015 Road Widening Strip Overlay
+  // 10. Render RMP-2015 Road Widening Strip Overlay
   const roadWideningRect = document.getElementById('roadWideningRect');
   const roadWideningText = document.getElementById('roadWideningText');
   if (isRoadWidening && stripW > 0 && roadWideningRect && roadWideningText) {
@@ -346,7 +422,7 @@ function generatePlan() {
     roadWideningText.style.display = 'none';
   }
 
-  // 10. Render Drain / Lake Buffer Zone Overlay
+  // 11. Render Drain / Lake Buffer Zone Overlay
   const bufferRect = document.getElementById('bufferRect');
   const bufferText = document.getElementById('bufferText');
   if (isBuffer && bufW > 0 && bufferRect && bufferText) {
@@ -367,16 +443,16 @@ function generatePlan() {
     bufferText.style.display = 'none';
   }
 
-  // Multi-Road Render Handling (North, South, East, West)
-  renderRoadOrLabel('North', boundaries.North, topLeft.x, topLeft.y - 35, (topRight.x - topLeft.x), 35, 'top');
-  renderRoadOrLabel('South', boundaries.South, botLeft.x, botLeft.y + 5, (botRight.x - botLeft.x), 35, 'bottom');
-  renderRoadOrLabel('East', boundaries.East, topRight.x + 5, topRight.y, 35, (botRight.y - topRight.y), 'right');
-  renderRoadOrLabel('West', boundaries.West, topLeft.x - 40, topLeft.y, 35, (botLeft.y - topLeft.y), 'left');
+  // 12. Multi-Road Render Handling (North, South, East, West with Non-Overlapping Offsets)
+  renderRoadOrLabel('North', boundaries.North, topLeft.x, topLeft.y - 42, (topRight.x - topLeft.x), 32, 'top', offsetX + drawW / 2, offsetY - 48);
+  renderRoadOrLabel('South', boundaries.South, botLeft.x, botLeft.y + 48, (botRight.x - botLeft.x), 32, 'bottom', offsetX + drawW / 2, botLeft.y + 92);
+  renderRoadOrLabel('East', boundaries.East, topRight.x + 48, topRight.y, 32, (botRight.y - topRight.y), 'right', topRight.x + 92, offsetY + drawH / 2);
+  renderRoadOrLabel('West', boundaries.West, topLeft.x - 48, topLeft.y, 32, (botLeft.y - topLeft.y), 'left', topLeft.x - 55, offsetY + drawH / 2);
 
   /**
-   * Dynamically renders road rectangle or adjacency label with Center Line (C/L OF ROAD).
+   * Dynamically renders road rectangle or adjacency label with precise non-overlapping coordinates.
    */
-  function renderRoadOrLabel(dir, info, x, y, w, h, position) {
+  function renderRoadOrLabel(dir, info, x, y, w, h, position, labelX, labelY) {
     const roadEl = document.getElementById(`roadRect${dir}`) || createRoadRect(dir);
     const labelEl = document.getElementById(`adj${dir.charAt(0)}`);
 
@@ -388,11 +464,25 @@ function generatePlan() {
       roadEl.setAttribute('height', Math.max(h, 20));
 
       if (labelEl) {
+        labelEl.setAttribute('x', labelX);
+        labelEl.setAttribute('y', labelY);
+        if (position === 'left' || position === 'right') {
+          labelEl.setAttribute('transform', `rotate(90, ${labelX}, ${labelY})`);
+        } else {
+          labelEl.removeAttribute('transform');
+        }
         labelEl.textContent = info.text;
       }
     } else {
       roadEl.style.display = 'none';
       if (labelEl) {
+        labelEl.setAttribute('x', labelX);
+        labelEl.setAttribute('y', labelY);
+        if (position === 'left' || position === 'right') {
+          labelEl.setAttribute('transform', `rotate(90, ${labelX}, ${labelY})`);
+        } else {
+          labelEl.removeAttribute('transform');
+        }
         labelEl.textContent = info.text;
       }
     }
@@ -408,23 +498,6 @@ function generatePlan() {
     svg.appendChild(rect);
     return rect;
   }
-
-  // Side Labels in Feet-Inches notation
-  document.getElementById('labelSideN').style.display = 'block';
-  document.getElementById('labelSideS').style.display = 'block';
-  document.getElementById('labelSideE').style.display = 'block';
-  document.getElementById('labelSideW').style.display = 'block';
-
-  document.getElementById('labelSideN').textContent = 'N: ' + formatFeetInches(sideN);
-  document.getElementById('labelSideS').textContent = 'S: ' + formatFeetInches(sideS);
-  document.getElementById('labelSideE').textContent = 'E: ' + formatFeetInches(sideE);
-  document.getElementById('labelSideW').textContent = 'W: ' + formatFeetInches(sideW);
-
-  // Setback Labels in Feet-Inches notation
-  document.getElementById('setbackN').textContent = "Front Setback: " + formatFeetInches(setbackF > 0 ? setbackF : (sideN - bldgW) / 2);
-  document.getElementById('setbackS').textContent = "Rear Setback: " + formatFeetInches(setbackR > 0 ? setbackR : (sideS - bldgW) / 2);
-  document.getElementById('setbackE').textContent = "Right Setback: " + formatFeetInches(setbackRt > 0 ? setbackRt : (sideE - bldgL) / 2);
-  document.getElementById('setbackW').textContent = "Left Setback: " + formatFeetInches(setbackL > 0 ? setbackL : (sideW - bldgL) / 2);
 
   document.getElementById('scaleText').textContent = "Scale: " + scale;
 

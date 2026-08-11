@@ -544,7 +544,7 @@
           </table>
 
           <div class="svg-container">
-            <svg id="plotSvg" width="500" height="420" viewBox="0 0 500 420">
+            <svg id="plotSvg" width="540" height="440" viewBox="0 0 540 440">
               <defs>
                 <!-- 1. Dimension Line Arrowhead Marker -->
                 <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"
@@ -571,9 +571,9 @@
               </defs>
 
               <!-- Plot Boundary (Official BBMP Dash-Dot-Dot Black Stroke: stroke-dasharray="12,3,3,3,3,3") -->
-              <rect id="plotRect" x="80" y="60" width="340" height="260" fill="none" stroke="#000000" stroke-width="2"
+              <rect id="plotRect" x="120" y="75" width="280" height="210" fill="none" stroke="#000000" stroke-width="2"
                 stroke-dasharray="12,3,3,3,3,3" />
-              <polygon id="plotPoly" points="80,60 420,60 420,320 80,320" fill="none" stroke="#000000" stroke-width="2"
+              <polygon id="plotPoly" points="120,75 400,75 400,285 120,285" fill="none" stroke="#000000" stroke-width="2"
                 stroke-dasharray="12,3,3,3,3,3" style="display:none;" />
 
               <!-- Corner Splay Polygon (Chamfered Cut Corner for Corner Plots) -->
@@ -593,55 +593,53 @@
                 style="display:none;">BUFFER ZONE</text>
 
               <!-- Building Footprint (Cobalt Blue + 45-deg Diagonal Hatch Fill) -->
-              <rect id="bldgRect" x="110" y="90" width="200" height="160" fill="url(#bldgHatch)" stroke="#1d4ed8"
+              <rect id="bldgRect" x="150" y="105" width="180" height="130" fill="url(#bldgHatch)" stroke="#1d4ed8"
                 stroke-width="2" />
 
               <!-- Dimension Lines -->
-              <line id="dimWLine" x1="80" y1="340" x2="420" y2="340" stroke="#64748b" stroke-width="1"
+              <line id="dimWLine" x1="120" y1="315" x2="400" y2="315" stroke="#64748b" stroke-width="1"
                 marker-end="url(#arrow)" marker-start="url(#arrow)" />
-              <text id="dimWidth" x="250" y="358" text-anchor="middle" font-size="11" fill="#334155">40'-0"</text>
+              <text id="dimWidth" x="260" y="330" text-anchor="middle" font-size="11" fill="#334155">40'-0"</text>
 
-              <line id="dimLLine" x1="440" y1="60" x2="440" y2="320" stroke="#64748b" stroke-width="1"
+              <line id="dimLLine" x1="428" y1="75" x2="428" y2="285" stroke="#64748b" stroke-width="1"
                 marker-end="url(#arrow)" marker-start="url(#arrow)" />
-              <text id="dimLength" x="458" y="195" text-anchor="middle" font-size="11" fill="#334155"
-                transform="rotate(90, 458, 195)">60'-0"</text>
+              <text id="dimLength" x="444" y="180" text-anchor="middle" font-size="11" fill="#334155"
+                transform="rotate(90, 444, 180)">60'-0"</text>
 
-              <text id="labelSideN" x="250" y="52" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-                style="display:none;">N: 42'-0"</text>
-              <text id="labelSideS" x="250" y="335" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-                style="display:none;">S: 38'-0"</text>
-              <text id="labelSideE" x="430" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-                transform="rotate(90, 430, 195)" style="display:none;">E: 62'-0"</text>
-              <text id="labelSideW" x="70" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-                transform="rotate(90, 70, 195)" style="display:none;">W: 58'-0"</text>
+              <!-- Clean Single Side Callout Labels (NORTH: 40'-0", SOUTH: 40'-0", etc.) -->
+              <text id="labelSideN" x="260" y="65" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700"
+                style="display:none;">NORTH: 40'-0"</text>
+              <text id="labelSideS" x="260" y="300" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700"
+                style="display:none;">SOUTH: 40'-0"</text>
+              <text id="labelSideE" x="412" y="180" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700"
+                transform="rotate(90, 412, 180)" style="display:none;">EAST: 60'-0"</text>
+              <text id="labelSideW" x="108" y="180" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700"
+                transform="rotate(90, 108, 180)" style="display:none;">WEST: 60'-0"</text>
 
-              <line id="bldgDimWLine" x1="110" y1="270" x2="310" y2="270" stroke="#2563eb" stroke-width="0.8"
+              <!-- Building Interior Footprint Dimension Lines -->
+              <line id="bldgDimWLine" x1="150" y1="210" x2="330" y2="210" stroke="#2563eb" stroke-width="0.8"
                 stroke-dasharray="3,2" />
-              <text id="bldgDimW" x="210" y="285" text-anchor="middle" font-size="10" fill="#2563eb">30'-0"</text>
+              <text id="bldgDimW" x="240" y="224" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600">30'-0"</text>
 
-              <line id="bldgDimLLine" x1="330" y1="90" x2="330" y2="250" stroke="#2563eb" stroke-width="0.8"
+              <line id="bldgDimLLine" x1="310" y1="105" x2="310" y2="235" stroke="#2563eb" stroke-width="0.8"
                 stroke-dasharray="3,2" />
-              <text id="bldgDimL" x="345" y="170" text-anchor="middle" font-size="10" fill="#2563eb"
-                transform="rotate(90, 345, 170)">40'-0"</text>
+              <text id="bldgDimL" x="324" y="170" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600"
+                transform="rotate(90, 324, 170)">40'-0"</text>
 
               <!-- Setbacks -->
-              <text id="setbackN" x="250" y="78" text-anchor="middle" font-size="9" fill="#059669">Front Setback:
-                —</text>
-              <text id="setbackS" x="250" y="315" text-anchor="middle" font-size="9" fill="#059669">Rear Setback:
-                —</text>
-              <text id="setbackE" x="400" y="170" text-anchor="middle" font-size="9" fill="#059669">Right Setback:
-                —</text>
-              <text id="setbackW" x="95" y="170" text-anchor="middle" font-size="9" fill="#059669">Left Setback:
-                —</text>
+              <text id="setbackN" x="260" y="96" text-anchor="middle" font-size="9" fill="#059669">Front Setback: —</text>
+              <text id="setbackS" x="260" y="260" text-anchor="middle" font-size="9" fill="#059669">Rear Setback: —</text>
+              <text id="setbackE" x="365" y="170" text-anchor="middle" font-size="9" fill="#059669">Right Setback: —</text>
+              <text id="setbackW" x="135" y="170" text-anchor="middle" font-size="9" fill="#059669">Left Setback: —</text>
 
               <!-- Compass Rosette -->
-              <g transform="translate(450, 380)">
+              <g transform="translate(490, 395)">
                 <polygon points="0,-15 -8,10 0,5 8,10" fill="#dc2626" />
                 <text x="0" y="22" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">N</text>
               </g>
 
               <!-- Graphical Linear Scale Bar (0m - 5m - 10m) -->
-              <g transform="translate(20, 395)">
+              <g transform="translate(20, 410)">
                 <rect x="0" y="0" width="80" height="4" fill="#1e3a5f" />
                 <rect x="40" y="0" width="40" height="4" fill="#64748b" />
                 <line x1="0" y1="-2" x2="0" y2="6" stroke="#1e3a5f" stroke-width="1" />
@@ -653,26 +651,18 @@
                 <text id="scaleText" x="40" y="15" font-size="9" fill="#64748b" text-anchor="middle">Scale: 1:100</text>
               </g>
 
-              <text id="labelN" x="250" y="55" text-anchor="middle" font-size="10" fill="#1e3a5f"
-                font-weight="600">NORTH</text>
-              <text id="labelS" x="250" y="335" text-anchor="middle" font-size="10" fill="#1e3a5f"
-                font-weight="600">SOUTH</text>
-              <text id="labelE" x="410" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-                transform="rotate(90, 410, 195)">EAST</text>
-              <text id="labelW" x="50" y="195" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="600"
-                transform="rotate(90, 50, 195)">WEST</text>
-
-              <text id="adjN" x="250" y="12" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: —</text>
-              <text id="adjS" x="250" y="405" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: —</text>
-              <text id="adjE" x="470" y="195" text-anchor="middle" font-size="9" fill="#94a3b8"
-                transform="rotate(90, 470, 195)">Adjacent: —</text>
-              <text id="adjW" x="10" y="195" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: —</text>
+              <!-- Clean Outer Abutting Road / Property Labels (No Collisions) -->
+              <text id="adjN" x="260" y="20" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: —</text>
+              <text id="adjS" x="260" y="425" text-anchor="middle" font-size="9" fill="#94a3b8">Adjacent: —</text>
+              <text id="adjE" x="525" y="180" text-anchor="middle" font-size="9" fill="#94a3b8"
+                transform="rotate(90, 525, 180)">Adjacent: —</text>
+              <text id="adjW" x="25" y="180" text-anchor="middle" font-size="9" fill="#94a3b8"
+                transform="rotate(90, 25, 180)">Adjacent: —</text>
             </svg>
           </div>
 
           <div class="footer-note">
-            Note: This layout plan has been prepared as per BBMP Sakala B-to-A Khata conversion standards. Final plan
-            must be signed & sealed by a licensed Architect/Engineer registered with BBMP.
+            Note: This layout plan has been prepared as per BBMP Sakala B-to-A Khata conversion standards. Final plan must be signed & sealed by a licensed Architect/Engineer registered with BBMP.
           </div>
         </div> <!-- End Left Column -->
 
