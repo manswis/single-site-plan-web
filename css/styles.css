@@ -662,7 +662,7 @@ select:focus {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 5mm;
+    margin: 4mm;
   }
 
   body {
@@ -679,8 +679,8 @@ select:focus {
     margin: 0 !important;
   }
 
-  .container > h2,
-  .container > .subtitle,
+  .container>h2,
+  .container>.subtitle,
   .card:not(.plan-output):not(.legend-sheet-output) {
     display: none !important;
   }
@@ -693,12 +693,14 @@ select:focus {
     display: none !important;
   }
 
+  /* Page 1 Split Frame Layout */
   .plan-output {
     display: block !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    page-break-before: avoid !important;
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;
@@ -708,11 +710,97 @@ select:focus {
   .plan-output .plan-sheet-frame {
     border: 2px solid #1e3a5f !important;
     box-shadow: none !important;
-    padding: 8px !important;
-    gap: 10px !important;
-    grid-template-columns: 67% 33% !important;
+    padding: 6px !important;
+    gap: 6px !important;
+    grid-template-columns: 65% 35% !important;
+    box-sizing: border-box !important;
   }
 
+  .drawing-canvas-column {
+    padding-right: 6px !important;
+  }
+
+  .sidebar-panels-column {
+    gap: 4px !important;
+  }
+
+  .sidebar-panel {
+    font-size: 10px !important;
+  }
+
+  .sidebar-panel-header {
+    font-size: 9.5px !important;
+    padding: 2px 5px !important;
+  }
+
+  .sidebar-panel-body {
+    padding: 3px 5px !important;
+  }
+
+  .key-plan-box svg {
+    height: 70px !important;
+    width: 100% !important;
+  }
+
+  .conditions-list {
+    max-height: none !important;
+    font-size: 7.5px !important;
+    line-height: 1.15 !important;
+    padding-left: 10px !important;
+  }
+
+  .conditions-list li {
+    margin-bottom: 1px !important;
+  }
+
+  .landuse-table,
+  .title-block-table {
+    font-size: 9px !important;
+  }
+
+  .landuse-table th,
+  .landuse-table td,
+  .title-block-table td {
+    padding: 2px 4px !important;
+  }
+
+  .cert-grid .line {
+    height: 16px !important;
+  }
+
+  .plan-header {
+    margin-bottom: 6px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .plan-header h2 {
+    font-size: 14px !important;
+  }
+
+  .details-table {
+    font-size: 10px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .details-table td {
+    padding: 3px 5px !important;
+  }
+
+  .svg-container {
+    margin-bottom: 6px !important;
+  }
+
+  .svg-container svg {
+    max-height: 380px !important;
+    width: 100% !important;
+  }
+
+  .footer-note {
+    margin-top: 4px !important;
+    font-size: 8.5px !important;
+  }
+
+  /* Page 2 Full Width Legend Specifications Sheet */
   .legend-sheet-output {
     display: block !important;
     border: none !important;
@@ -728,28 +816,9 @@ select:focus {
   .legend-sheet-output .plan-sheet-frame {
     border: 2px solid #1e3a5f !important;
     box-shadow: none !important;
-    padding: 12px !important;
+    padding: 10px !important;
     display: block !important;
     width: 100% !important;
     box-sizing: border-box !important;
-  }
-
-  .drawing-canvas-column {
-    padding-right: 10px !important;
-  }
-
-  .sidebar-panel-body {
-    padding: 4px 6px !important;
-  }
-
-  .conditions-list {
-    max-height: none !important;
-    font-size: 8px !important;
-    line-height: 1.2 !important;
-  }
-
-  .svg-container svg {
-    max-height: 430px !important;
-    width: 100% !important;
   }
 }
