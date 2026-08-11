@@ -245,9 +245,20 @@
             <div class="error-msg" id="err-plotArea">⚠ Plot area is required</div>
           </div>
           <div class="field">
-            <label>Primary Abutting Road Width (ft) <span class="required">*</span></label>
-            <input id="roadWidth" type="number" placeholder="e.g. 30"
-              oninput="clearFieldError('roadWidth', 'err-roadWidth')">
+            <label>Primary Abutting Road Width <span class="required">*</span></label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="roadWidth_ft" type="number" min="0" placeholder="30" class="ft-num-input"
+                  oninput="onFtInInput('roadWidth')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="roadWidth_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('roadWidth')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="roadWidth" type="hidden">
+            </div>
             <div class="error-msg" id="err-roadWidth">⚠ Road width is required</div>
           </div>
           <div class="field">
@@ -276,15 +287,39 @@
         <!-- Regular Site Mode: 2 Clean Fields (North/South & East/West) -->
         <div id="regularSiteControls" class="grid" style="margin-top: 16px;">
           <div class="field">
-            <label>↔️ North & South Side (Width in ft) <span class="required">*</span></label>
-            <input id="regNorthSouth" type="number" placeholder="e.g. 30" oninput="onRegularDimensionInput()">
+            <label>↔️ North & South Side (Width) <span class="required">*</span></label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="regNorthSouth_ft" type="number" min="0" placeholder="30" class="ft-num-input"
+                  oninput="onFtInInput('regNorthSouth')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="regNorthSouth_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('regNorthSouth')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="regNorthSouth" type="hidden">
+            </div>
             <div class="error-msg" id="err-regNorthSouth">⚠ North & South side measurement is required</div>
             <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both
               North & South boundaries (2-side regular plot).</p>
           </div>
           <div class="field">
-            <label>↕️ East & West Side (Length in ft) <span class="required">*</span></label>
-            <input id="regEastWest" type="number" placeholder="e.g. 60" oninput="onRegularDimensionInput()">
+            <label>↕️ East & West Side (Length) <span class="required">*</span></label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="regEastWest_ft" type="number" min="0" placeholder="40" class="ft-num-input"
+                  oninput="onFtInInput('regEastWest')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="regEastWest_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('regEastWest')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="regEastWest" type="hidden">
+            </div>
             <div class="error-msg" id="err-regEastWest">⚠ East & West side measurement is required</div>
             <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both
               East & West boundaries (2-side regular plot).</p>
@@ -294,27 +329,71 @@
         <!-- Irregular Site Mode: 4 Independent Fields -->
         <div id="irregularSiteControls" class="grid" style="margin-top: 16px; display: none;">
           <div class="field">
-            <label>⬆️ North Side (ft) <span class="required">*</span></label>
-            <input id="sideNorth" type="number" placeholder="e.g. 40"
-              oninput="clearFieldError('sideNorth', 'err-sideNorth')">
+            <label>⬆️ North Side <span class="required">*</span></label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="sideNorth_ft" type="number" min="0" placeholder="40" class="ft-num-input"
+                  oninput="onFtInInput('sideNorth')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="sideNorth_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('sideNorth')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="sideNorth" type="hidden">
+            </div>
             <div class="error-msg" id="err-sideNorth">⚠ North side dimension required</div>
           </div>
           <div class="field">
-            <label>⬇️ South Side (ft) <span class="required">*</span></label>
-            <input id="sideSouth" type="number" placeholder="e.g. 40"
-              oninput="clearFieldError('sideSouth', 'err-sideSouth')">
+            <label>⬇️ South Side <span class="required">*</span></label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="sideSouth_ft" type="number" min="0" placeholder="40" class="ft-num-input"
+                  oninput="onFtInInput('sideSouth')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="sideSouth_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('sideSouth')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="sideSouth" type="hidden">
+            </div>
             <div class="error-msg" id="err-sideSouth">⚠ South side dimension required</div>
           </div>
           <div class="field">
-            <label>➡️ East Side (ft) <span class="required">*</span></label>
-            <input id="sideEast" type="number" placeholder="e.g. 60"
-              oninput="clearFieldError('sideEast', 'err-sideEast')">
+            <label>➡️ East Side <span class="required">*</span></label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="sideEast_ft" type="number" min="0" placeholder="60" class="ft-num-input"
+                  oninput="onFtInInput('sideEast')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="sideEast_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('sideEast')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="sideEast" type="hidden">
+            </div>
             <div class="error-msg" id="err-sideEast">⚠ East side dimension required</div>
           </div>
           <div class="field">
-            <label>⬅️ West Side (ft) <span class="required">*</span></label>
-            <input id="sideWest" type="number" placeholder="e.g. 60"
-              oninput="clearFieldError('sideWest', 'err-sideWest')">
+            <label>⬅️ West Side <span class="required">*</span></label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="sideWest_ft" type="number" min="0" placeholder="60" class="ft-num-input"
+                  oninput="onFtInInput('sideWest')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="sideWest_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('sideWest')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="sideWest" type="hidden">
+            </div>
             <div class="error-msg" id="err-sideWest">⚠ West side dimension required</div>
           </div>
         </div>
@@ -344,31 +423,103 @@
             <input id="builtUpArea" type="number" placeholder="e.g. 2100">
           </div>
           <div class="field">
-            <label>Building Width (ft)</label>
-            <input id="bldgWidth" type="number" placeholder="e.g. 30">
+            <label>Building Width</label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="bldgWidth_ft" type="number" min="0" placeholder="30" class="ft-num-input"
+                  oninput="onFtInInput('bldgWidth')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="bldgWidth_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('bldgWidth')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="bldgWidth" type="hidden">
+            </div>
           </div>
           <div class="field">
-            <label>Building Length (ft)</label>
-            <input id="bldgLength" type="number" placeholder="e.g. 40">
+            <label>Building Length</label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="bldgLength_ft" type="number" min="0" placeholder="40" class="ft-num-input"
+                  oninput="onFtInInput('bldgLength')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="bldgLength_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('bldgLength')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="bldgLength" type="hidden">
+            </div>
           </div>
         </div>
 
         <div class="grid" style="margin-top: 12px;">
           <div class="field">
-            <label>Front Setback (ft)</label>
-            <input id="setbackFront" type="number" placeholder="e.g. 10">
+            <label>Front Setback</label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="setbackFront_ft" type="number" min="0" placeholder="10" class="ft-num-input"
+                  oninput="onFtInInput('setbackFront')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="setbackFront_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('setbackFront')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="setbackFront" type="hidden">
+            </div>
           </div>
           <div class="field">
-            <label>Rear Setback (ft)</label>
-            <input id="setbackRear" type="number" placeholder="e.g. 10">
+            <label>Rear Setback</label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="setbackRear_ft" type="number" min="0" placeholder="10" class="ft-num-input"
+                  oninput="onFtInInput('setbackRear')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="setbackRear_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('setbackRear')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="setbackRear" type="hidden">
+            </div>
           </div>
           <div class="field">
-            <label>Left Setback (ft)</label>
-            <input id="setbackLeft" type="number" placeholder="e.g. 5">
+            <label>Left Setback</label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="setbackLeft_ft" type="number" min="0" placeholder="5" class="ft-num-input"
+                  oninput="onFtInInput('setbackLeft')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="setbackLeft_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('setbackLeft')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="setbackLeft" type="hidden">
+            </div>
           </div>
           <div class="field">
-            <label>Right Setback (ft)</label>
-            <input id="setbackRight" type="number" placeholder="e.g. 5">
+            <label>Right Setback</label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="setbackRight_ft" type="number" min="0" placeholder="5" class="ft-num-input"
+                  oninput="onFtInInput('setbackRight')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="setbackRight_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('setbackRight')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="setbackRight" type="hidden">
+            </div>
           </div>
         </div>
       </div>

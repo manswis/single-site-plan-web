@@ -117,6 +117,47 @@ function calculatePlotAreaFromSides() {
     }
   }
 }
+/**
+ * Handles live input changes inside custom Feet & Inches input controls (.ft-in-wrapper).
+ * Calculates decimal feet ($ft + in/12$) and updates underlying hidden input value.
+ * 
+ * @function onFtInInput
+ * @param {string} fieldId - Target base field ID (e.g. 'roadWidth', 'regNorthSouth').
+ * @returns {void}
+ */
+function onFtInInput(fieldId) {
+  const ftEl = document.getElementById(fieldId + '_ft');
+  const inEl = document.getElementById(fieldId + '_in');
+  const hiddenEl = document.getElementById(fieldId);
+
+  if (!ftEl || !hiddenEl) return;
+
+  const ftRaw = ftEl.value.trim();
+  const inRaw = inEl ? inEl.value.trim() : '';
+
+  if (ftRaw === '' && inRaw === '') {
+    hiddenEl.value = '';
+  } else {
+    const ftVal = parseFloat(ftRaw) || 0;
+    const inVal = parseFloat(inRaw) || 0;
+    const decimalVal = ftVal + (inVal / 12);
+    hiddenEl.value = Math.round(decimalVal * 10000) / 10000;
+  }
+
+  // Trigger auto-sync callbacks for regular and irregular side measurements
+  if (fieldId === 'regNorthSouth' || fieldId === 'regEastWest') {
+    onRegularDimensionInput();
+  } else if (fieldId.startsWith('side')) {
+    calculatePlotAreaFromSides();
+  }
+
+  if (typeof clearFieldError === 'function') {
+    clearFieldError(fieldId, 'err-' + fieldId);
+  }
+
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+}
 
 /**
  * Toggles boundary input fields depending on whether boundary is a Public Road or Neighboring Property.

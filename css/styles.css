@@ -214,6 +214,76 @@ body {
   box-shadow: var(--apple-shadow-lg);
 }
 
+/* Custom Feet & Inches Single Textbox Divided Unit Control (.ft-in-wrapper) */
+.ft-in-wrapper {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid var(--apple-border);
+  border-radius: 10px;
+  padding: 0;
+  height: 42px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.ft-in-wrapper:focus-within {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+}
+
+.ft-segment,
+.in-segment {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  width: 50%;
+  height: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.ft-segment {
+  position: relative;
+  background: rgba(0, 0, 0, 0.01);
+}
+
+.ft-segment::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 7px;
+  bottom: 7px;
+  width: 1.5px;
+  background-color: #cbd5e1;
+  border-radius: 980px;
+}
+
+.ft-num-input,
+.in-num-input {
+  flex: 1;
+  width: 100%;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  color: var(--apple-text-primary) !important;
+  padding: 0 4px !important;
+  height: 100% !important;
+  box-shadow: none !important;
+  text-align: right;
+}
+
+.unit-symbol {
+  font-weight: 700;
+  font-size: 12px;
+  color: #0066cc;
+  margin-left: 4px;
+  user-select: none;
+}
+
 /* Horizontal Sliding Control Navigation Bar for Mobile Pages */
 .mobile-nav-slider {
   display: none;

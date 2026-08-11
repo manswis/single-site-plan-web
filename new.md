@@ -1,15 +1,3 @@
-0. Mobile UI looks super weird, we need to change layOUT FOR mobile
-    - BBMP e-Plan Studio should be on top (with icon)
-    - Home, Studio Workbench, Pricing , Legal Disclaimer, FAQ should be matching sliding control
-    - remove "BBMP e-Plan Studio" from body
-    - improve how it works for mobile UI layout etc
-    - improve wizard fto adapt mobile UI (steps looks bad now), may be only name visible for active step (or if you habve better idea)
-    - improve "step x of y" layout to better fit mobile layout
-    - for mobile only in wizard we dont need to show Home, Studio Workbench, Pricing , Legal Disclaimer, FAQ sliding control, it should be wizard only
-    - rearrange the svg design, but export same PDF as desktop version (only svg layout will be different for better fit mobile)
-0. in Boundary add one more item Private Property
-0. In step 3 and step 4 add way to accept ft in format 40' 3"
-0. for each field add ? help icon when user taps show help where to get that
 0. sep 4 can we auto calculate "Total Built-up Area (sq.ft)" based other parameter
   - shuld if given setbacks are possible or not etc
   - we should imprve thsi for irregular site (if invalid we should not allow user to next step, if user removed all data then cannavigate to next), basically if data is there it should be valid
@@ -34,3 +22,4 @@
 10. add dark and light mode (default will be browser's default setting)
 11. add kannada translation
 12. do we need "BBMP PID Number" or make it optional?
+13. for each field add ? help icon when user taps show help where to get that

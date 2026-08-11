@@ -160,11 +160,27 @@ function restoreDraft(hideModal = true) {
     const draft = JSON.parse(draftRaw);
     const data = draft.formData || {};
 
-    // Restore text, number, and select fields
+    // Restore text, number, select fields, and custom feet-inches controls
     DRAFT_FIELD_IDS.forEach(id => {
       const el = document.getElementById(id);
       if (el && data[id] !== undefined) {
         el.value = data[id];
+
+        const ftEl = document.getElementById(id + '_ft');
+        const inEl = document.getElementById(id + '_in');
+        if (ftEl) {
+          const val = data[id];
+          if (val !== undefined && val !== null && val !== '') {
+            const num = parseFloat(val);
+            if (!isNaN(num) && num >= 0) {
+              const ft = Math.floor(num);
+              const inchesDecimal = (num - ft) * 12;
+              const inches = Math.round(inchesDecimal);
+              ftEl.value = ft;
+              if (inEl) inEl.value = inches > 0 ? inches : '';
+            }
+          }
+        }
       }
     });
 
