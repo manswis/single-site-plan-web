@@ -154,6 +154,7 @@ function onFtInInput(fieldId) {
     autoCalculateSetbacks(false);
     validateBuildingSetbackFeasibility();
   } else if (fieldId.startsWith('setback')) {
+    hiddenEl.dataset.autoCalc = 'false';
     validateBuildingSetbackFeasibility();
   }
 
@@ -230,11 +231,12 @@ function autoCalculateSetbacks(force = false) {
 
   if (spanNS <= 0 && spanEW <= 0) return;
 
-  // Determine alignment: Does Building Width align with N/S or E/W?
+  // Determine orientation alignment: Standard vs Perpendicular
   let widthSpan = spanNS;
   let lengthSpan = spanEW;
 
-  if (lengthVal > spanEW && lengthVal <= spanNS && widthVal <= spanEW) {
+  // If length is greater than East/West span but fits North/South span, flip orientation!
+  if ((lengthVal > spanEW || widthVal > spanNS) && lengthVal <= spanNS && widthVal <= spanEW) {
     widthSpan = spanEW;
     lengthSpan = spanNS;
   }
@@ -257,13 +259,16 @@ function autoCalculateSetbacks(force = false) {
 
     if (!ftEl || !hiddenEl) return;
 
-    // Only populate if empty OR force is true (don't overwrite manual edits)
-    if (force || ftEl.value === '' || ftEl.value === '0') {
+    // Auto populate if empty, force = true, or marked as autoCalc
+    const isAuto = hiddenEl.dataset.autoCalc === 'true' || ftEl.value === '' || ftEl.value === '0';
+
+    if (force || isAuto) {
       const ft = Math.floor(totalFeet);
       const inches = Math.round((totalFeet - ft) * 12);
       ftEl.value = ft > 0 ? ft : '';
       if (inEl) inEl.value = inches > 0 ? inches : '';
       hiddenEl.value = Math.round(totalFeet * 100) / 100;
+      hiddenEl.dataset.autoCalc = 'true';
     }
   };
 
