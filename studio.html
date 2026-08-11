@@ -32,16 +32,18 @@
         <span class="brand-text-mobile">🏛️ e-Plan Studio</span>
         <span class="apple-pill-badge">B-to-A Khata Ready</span>
       </a>
-      <nav class="apple-nav-links desktop-nav-bar">
-        <a href="index.html">Home</a>
-        <a href="studio.html" class="active">Studio Workbench</a>
-        <a href="pricing.html">Pricing</a>
-        <a href="legal.html">Legal Disclaimer</a>
-        <a href="faq.html">FAQ</a>
-        <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+      <div style="display: flex; align-items: center;">
+        <nav class="apple-nav-links desktop-nav-bar">
+          <a href="index.html">Home</a>
+          <a href="studio.html" class="active">Studio Workbench</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="legal.html">Legal Disclaimer</a>
+          <a href="faq.html">FAQ</a>
+        </nav>
+        <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
         </button>
-      </nav>
+      </div>
     </div>
   </header>
 
@@ -81,13 +83,15 @@
   <div class="container" style="max-width: 960px;">
 
     <!-- Line 2: Horizontal Sliding Control Navigation Bar for Mobile Pages -->
-    <div class="mobile-nav-slider">
-      <a href="index.html" class="mobile-nav-item">Home</a>
-      <a href="studio.html" class="mobile-nav-item active">Workbench</a>
-      <a href="pricing.html" class="mobile-nav-item">Pricing</a>
-      <a href="legal.html" class="mobile-nav-item">Legal</a>
-      <a href="faq.html" class="mobile-nav-item">FAQ</a>
-      <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+      <div class="mobile-nav-slider" style="margin-bottom: 0; flex: 1;">
+        <a href="index.html" class="mobile-nav-item">Home</a>
+        <a href="studio.html" class="mobile-nav-item active">Workbench</a>
+        <a href="pricing.html" class="mobile-nav-item">Pricing</a>
+        <a href="legal.html" class="mobile-nav-item">Legal</a>
+        <a href="faq.html" class="mobile-nav-item">FAQ</a>
+      </div>
+      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
         <span class="material-symbols-outlined">dark_mode</span>
       </button>
     </div>
