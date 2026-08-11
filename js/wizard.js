@@ -28,10 +28,11 @@ const STEP_METADATA = {
  * List of all form element IDs to persist in draft state.
  */
 const DRAFT_FIELD_IDS = [
-  'ownerName', 'epId', 'pidNo', 'sasNo', 'adlrNo',
+  'ownerName', 'epId', 'pidNo', 'adlrNo',
   'dcOrderNo', 'dcOrderDate', 'dcAuthority',
   'surveyNo', 'bbmpZone', 'wardNo', 'wardName', 'address',
-  'plotArea', 'roadWidth', 'roadFacing', 'scale', 'floorsCount',
+  'plotArea', 'roadWidth', 'roadFacing', 'scale',
+  'bldgType', 'noOfFloors', 'bldgOrientation',
   'regNorthSouth', 'regEastWest',
   'sideNorth', 'sideSouth', 'sideEast', 'sideWest',
   'typeNorth', 'typeSouth', 'typeEast', 'typeWest',
@@ -203,13 +204,16 @@ function restoreDraft(hideModal = true) {
       }
     });
 
-    // Re-trigger dynamic UI toggles
+    // Re-trigger dynamic UI toggles and calculations
     if (typeof toggleOddSite === 'function') toggleOddSite();
     if (typeof toggleRoadWidening === 'function') toggleRoadWidening();
     if (typeof toggleBufferZone === 'function') toggleBufferZone();
     if (typeof toggleBoundaryType === 'function') {
       ['North', 'South', 'East', 'West'].forEach(dir => toggleBoundaryType(dir));
     }
+    if (typeof calculateBuiltUpArea === 'function') calculateBuiltUpArea();
+    if (typeof autoCalculateSetbacks === 'function') autoCalculateSetbacks(false);
+    if (typeof validateBuildingSetbackFeasibility === 'function') validateBuildingSetbackFeasibility();
 
     // Mark active session flag
     sessionStorage.setItem(SESSION_FLAG_KEY, 'true');
