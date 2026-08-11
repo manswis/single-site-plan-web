@@ -546,19 +546,47 @@
           <div class="svg-container">
             <svg id="plotSvg" width="500" height="420" viewBox="0 0 500 420">
               <defs>
+                <!-- 1. Dimension Line Arrowhead Marker -->
                 <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"
                   markerUnits="strokeWidth">
                   <path d="M0,0 L0,6 L9,3 z" fill="#1e3a5f" />
                 </marker>
+
+                <!-- 2. Cobalt Blue 45-degree Diagonal Building Footprint Hatch Pattern -->
+                <pattern id="bldgHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                  <line x1="0" y1="0" x2="0" y2="8" stroke="#2563eb" stroke-width="1.5" />
+                </pattern>
+
+                <!-- 3. Grey 45-degree Diagonal Road Widening Hatch Pattern -->
+                <pattern id="roadWideningHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                  <line x1="0" y1="0" x2="0" y2="8" stroke="#64748b" stroke-width="1.5" />
+                </pattern>
+
+                <!-- 4. Stormwater Drain / Lake Buffer Zone Dot Pattern -->
+                <pattern id="bufferHatch" width="6" height="6" patternUnits="userSpaceOnUse">
+                  <circle cx="3" cy="3" r="1.2" fill="#0284c7" />
+                </pattern>
               </defs>
 
-              <rect id="plotRect" x="80" y="60" width="340" height="260" fill="none" stroke="#1e3a5f" stroke-width="2" />
-              <polygon id="plotPoly" points="80,60 420,60 420,320 80,320" fill="none" stroke="#1e3a5f" stroke-width="2"
-                style="display:none;" />
+              <!-- Plot Boundary (Official BBMP Dash-Dot-Dot Black Stroke: stroke-dasharray="12,3,3,3,3,3") -->
+              <rect id="plotRect" x="80" y="60" width="340" height="260" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="12,3,3,3,3,3" />
+              <polygon id="plotPoly" points="80,60 420,60 420,320 80,320" fill="none" stroke="#000000" stroke-width="2" stroke-dasharray="12,3,3,3,3,3" style="display:none;" />
 
-              <rect id="bldgRect" x="110" y="90" width="200" height="160" fill="#bfdbfe" stroke="#2563eb"
-                stroke-width="1.5" stroke-dasharray="4,2" />
+              <!-- Corner Splay Polygon (Chamfered Cut Corner for Corner Plots) -->
+              <polygon id="splayPoly" points="" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,2" style="display:none;" />
 
+              <!-- Master Plan Road Widening Area Strip (Hatched) -->
+              <rect id="roadWideningRect" x="0" y="0" width="0" height="0" fill="url(#roadWideningHatch)" stroke="#64748b" stroke-width="1" stroke-dasharray="4,2" style="display:none;" />
+              <text id="roadWideningText" x="0" y="0" text-anchor="middle" font-size="9" fill="#475569" font-weight="600" style="display:none;">ROAD WIDENING STRIP</text>
+
+              <!-- Drain / Lake Buffer Zone Overlay -->
+              <rect id="bufferRect" x="0" y="0" width="0" height="0" fill="url(#bufferHatch)" stroke="#0284c7" stroke-width="1" stroke-dasharray="4,2" style="display:none;" />
+              <text id="bufferText" x="0" y="0" text-anchor="middle" font-size="9" fill="#0284c7" font-weight="600" style="display:none;">BUFFER ZONE</text>
+
+              <!-- Building Footprint (Cobalt Blue + 45-deg Diagonal Hatch Fill) -->
+              <rect id="bldgRect" x="110" y="90" width="200" height="160" fill="url(#bldgHatch)" stroke="#1d4ed8" stroke-width="2" />
+
+              <!-- Dimension Lines -->
               <line id="dimWLine" x1="80" y1="340" x2="420" y2="340" stroke="#64748b" stroke-width="1"
                 marker-end="url(#arrow)" marker-start="url(#arrow)" />
               <text id="dimWidth" x="250" y="358" text-anchor="middle" font-size="11" fill="#334155">40'-0"</text>
@@ -586,17 +614,30 @@
               <text id="bldgDimL" x="345" y="170" text-anchor="middle" font-size="10" fill="#2563eb"
                 transform="rotate(90, 345, 170)">40'-0"</text>
 
-              <text id="setbackN" x="250" y="78" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
-              <text id="setbackS" x="250" y="315" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
-              <text id="setbackE" x="400" y="170" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
-              <text id="setbackW" x="95" y="170" text-anchor="middle" font-size="9" fill="#059669">Setback: 10'</text>
+              <!-- Setbacks -->
+              <text id="setbackN" x="250" y="78" text-anchor="middle" font-size="9" fill="#059669">Front Setback: 10'-0"</text>
+              <text id="setbackS" x="250" y="315" text-anchor="middle" font-size="9" fill="#059669">Rear Setback: 10'-0"</text>
+              <text id="setbackE" x="400" y="170" text-anchor="middle" font-size="9" fill="#059669">Right Setback: 5'-0"</text>
+              <text id="setbackW" x="95" y="170" text-anchor="middle" font-size="9" fill="#059669">Left Setback: 5'-0"</text>
 
+              <!-- Compass Rosette -->
               <g transform="translate(450, 380)">
                 <polygon points="0,-15 -8,10 0,5 8,10" fill="#dc2626" />
                 <text x="0" y="22" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">N</text>
               </g>
 
-              <text id="scaleText" x="20" y="410" font-size="10" fill="#64748b">Scale: 1:100</text>
+              <!-- Graphical Linear Scale Bar (0m - 5m - 10m) -->
+              <g transform="translate(20, 395)">
+                <rect x="0" y="0" width="80" height="4" fill="#1e3a5f" />
+                <rect x="40" y="0" width="40" height="4" fill="#64748b" />
+                <line x1="0" y1="-2" x2="0" y2="6" stroke="#1e3a5f" stroke-width="1" />
+                <line x1="40" y1="-2" x2="40" y2="6" stroke="#1e3a5f" stroke-width="1" />
+                <line x1="80" y1="-2" x2="80" y2="6" stroke="#1e3a5f" stroke-width="1" />
+                <text x="0" y="-4" font-size="7" fill="#334155" text-anchor="middle">0m</text>
+                <text x="40" y="-4" font-size="7" fill="#334155" text-anchor="middle">5m</text>
+                <text x="80" y="-4" font-size="7" fill="#334155" text-anchor="middle">10m</text>
+                <text id="scaleText" x="40" y="15" font-size="9" fill="#64748b" text-anchor="middle">Scale: 1:100</text>
+              </g>
 
               <text id="labelN" x="250" y="55" text-anchor="middle" font-size="10" fill="#1e3a5f"
                 font-weight="600">NORTH</text>
@@ -643,7 +684,7 @@
                 <rect x="5" y="5" width="170" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
                 <line x1="15" y1="45" x2="165" y2="45" stroke="#94a3b8" stroke-width="6" />
                 <line x1="90" y1="10" x2="90" y2="80" stroke="#94a3b8" stroke-width="6" />
-                <rect x="95" y="12" width="28" height="28" fill="#bfdbfe" stroke="#2563eb" stroke-width="1.5" />
+                <rect x="95" y="12" width="28" height="28" fill="url(#bldgHatch)" stroke="#2563eb" stroke-width="1.5" />
                 <text x="109" y="29" text-anchor="middle" font-size="8" fill="#1e3a5f" font-weight="bold">SITE</text>
                 <text x="90" y="42" text-anchor="middle" font-size="7" fill="#475569">MAIN ROAD</text>
               </svg>
@@ -728,10 +769,10 @@
             <div class="sidebar-panel-body">
               <div class="legend-grid">
                 <div><span
-                    style="display:inline-block;width:14px;height:9px;border:1.5px solid #1e3a5f;vertical-align:middle;margin-right:3px;"></span>Plot
+                    style="display:inline-block;width:14px;height:9px;border:1.5px dashed #000000;vertical-align:middle;margin-right:3px;"></span>Plot
                   Boundary</div>
                 <div><span
-                    style="display:inline-block;width:14px;height:9px;background:#bfdbfe;border:1px solid #2563eb;vertical-align:middle;margin-right:3px;"></span>Building
+                    style="display:inline-block;width:14px;height:9px;background:url(#bldgHatch);border:1px solid #2563eb;vertical-align:middle;margin-right:3px;"></span>Building
                   Footprint</div>
                 <div><span
                     style="display:inline-block;width:14px;height:9px;background:#e2e8f0;border:1px solid #94a3b8;vertical-align:middle;margin-right:3px;"></span>Public
@@ -739,6 +780,12 @@
                 <div><span
                     style="display:inline-block;width:14px;height:9px;border:1px solid #059669;vertical-align:middle;margin-right:3px;"></span>Setback
                   Area</div>
+                <div><span
+                    style="display:inline-block;width:14px;height:9px;background:url(#roadWideningHatch);border:1px solid #64748b;vertical-align:middle;margin-right:3px;"></span>Road
+                  Widening</div>
+                <div><span
+                    style="display:inline-block;width:14px;height:9px;background:url(#bufferHatch);border:1px solid #0284c7;vertical-align:middle;margin-right:3px;"></span>Buffer
+                  Zone</div>
               </div>
             </div>
           </div>

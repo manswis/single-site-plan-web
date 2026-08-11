@@ -250,17 +250,17 @@ The plan sheet sidebar includes the 15 standard BBMP legal conditions:
   - [x] Panel 7: Signatures & Seal Block (Owner, Architect with COA No, Sanction Authority).
   - [x] Panel 8: Title Block (Sy No, Village, Taluk, PID, Ward, North Arrow, Scale, Challan Note).
 
-### Phase 3: Official BBMP SVG Graphics Engine & Feet-Inches Formatter (`LEGEND.pdf`)
-- [ ] Implement `formatFeetInches(decimalFeet)` helper function (`40'-0"`, `40'-6"`, `12'-3"`) for all dimensions.
-- [ ] Implement Dash-Dot-Dot SVG line style for plot boundary (`- . . - . . -`).
-- [ ] Implement Cobalt Blue $45^\circ$ diagonal hatch pattern for building footprint.
-- [ ] Implement Grey diagonal hatch pattern for Road Widening Area.
-- [ ] Implement Center Line of Road (`C/L OF ROAD`) dash pattern and callout arrow.
-- [ ] Render explicit adjacent site text labels (`SITE NO. A`, `SITE NO. B`, `SITE NO. C`).
-- [ ] Render Drain / Nala Wavy lines and Buffer zone dots if enabled.
-- [ ] Implement dynamic building placement based on custom setback inputs.
-- [ ] Implement Corner Splay (cut corner) geometry renderer in SVG.
-- [ ] Implement dynamic Land Use Analysis math ($A_{\text{residential}}$, $A_{\text{road\_widening}}$, $A_{\text{buffer}}$, $A_{\text{total}}$).
+### Phase 3: Official BBMP SVG Graphics Engine & Feet-Inches Formatter (`LEGEND.pdf`) (COMPLETED)
+- [x] Implement `formatFeetInches(decimalFeet)` helper function (`40'-0"`, `40'-6"`, `12'-3"`) for all dimensions.
+- [x] Implement Dash-Dot-Dot SVG line style for plot boundary (`- . . - . . -`).
+- [x] Implement Cobalt Blue $45^\circ$ diagonal hatch pattern for building footprint.
+- [x] Implement Grey diagonal hatch pattern for Road Widening Area.
+- [x] Implement Center Line of Road (`C/L OF ROAD`) dash pattern and callout arrow.
+- [x] Render explicit adjacent site text labels (`SITE NO. A`, `SITE NO. B`, `SITE NO. C`).
+- [x] Render Drain / Nala Wavy lines and Buffer zone dots if enabled.
+- [x] Implement dynamic building placement based on custom setback inputs.
+- [x] Implement Corner Splay (cut corner) geometry renderer in SVG.
+- [x] Implement dynamic Land Use Analysis math ($A_{\text{residential}}$, $A_{\text{road\_widening}}$, $A_{\text{buffer}}$, $A_{\text{total}}$).
 
 ### Phase 4: A3 / A4 PDF Export & Multi-Page Merged Export
 - [ ] Add explicit **"📥 Download PDF / Print Plan"** button.
