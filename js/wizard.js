@@ -399,8 +399,18 @@ function showStep(stepNum, shouldSave = true) {
     saveDraft();
   }
 
-  // Populate formatted review summary grid & sync consent state on Step 7
+  // Populate formatted review summary grid & reset consent/plan state on Step 7
   if (stepNum === 7) {
+    const consent = document.getElementById('legalConsentCheck');
+    if (consent) consent.checked = false;
+
+    if (typeof isPlanGenerated !== 'undefined') {
+      isPlanGenerated = false;
+    }
+
+    const viewport = document.getElementById('exportViewportSection');
+    if (viewport) viewport.style.display = 'none';
+
     if (typeof buildReviewSummary === 'function') {
       buildReviewSummary();
     }
