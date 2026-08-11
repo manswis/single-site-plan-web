@@ -192,8 +192,12 @@ body {
   transition: var(--apple-transition);
 }
 
-.wizard-step-content {
+.wizard-step-content:not(#wizardStep7) {
   min-height: 440px;
+}
+
+#wizardStep7 {
+  min-height: auto;
 }
 
 @media (max-width: 768px) {
