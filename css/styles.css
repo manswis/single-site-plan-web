@@ -353,6 +353,28 @@ body {
   }
 }
 
+/* Premium Privacy Guarantee Badge */
+.privacy-guarantee-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(52, 199, 89, 0.08);
+  border: 1px solid rgba(52, 199, 89, 0.25);
+  border-radius: 980px;
+  padding: 8px 22px;
+  font-size: 13px;
+  color: #14532d;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(52, 199, 89, 0.08);
+}
+
+.privacy-guarantee-badge strong {
+  font-weight: 700;
+  color: #052e16;
+}
+
 /* Horizontal Sliding Control Navigation Bar for Mobile Pages */
 .mobile-nav-slider {
   display: none;
