@@ -350,5 +350,6 @@ function loadSampleRoadWidening() {
   setVal('challanFee', '72000');
   setVal('challanDate', '2024-07-05');
 
+  if (typeof goToStep === 'function') goToStep(7);
   if (typeof generatePlan === 'function') generatePlan();
 }

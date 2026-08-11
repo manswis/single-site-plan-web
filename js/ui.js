@@ -1,7 +1,7 @@
 /**
  * @file ui.js
- * @description Handles dynamic DOM interaction logic, visibility toggles, cardinal side dimension auto-syncing,
- * legend page visibility, direct client-side PDF file downloads (jsPDF + html2canvas), and browser print trigger logic.
+ * @description Dynamic UI interaction logic, real-time live preview event wiring,
+ * mobile segmented tab switching, Sakala FAQ accordion toggling, and PDF export engines.
  * @author Senior Systems Architect
  */
 
@@ -19,13 +19,15 @@ function toggleOddSite() {
   if (hintEl) {
     hintEl.textContent = isOdd
       ? '🔷 Irregular Site Mode: Enter exact independent measurements for all 4 sides.'
-      : '🔷 Rectangular Site Mode: Opposite sides (North/South and East/West) auto-sync automatically.';
+      : '🔷 Rectangular Site Mode: Opposite sides auto-sync automatically.';
   }
 
   if (!isOdd) {
     syncOppositeSides('sideNorth');
     syncOppositeSides('sideEast');
   }
+
+  if (typeof generatePlan === 'function') generatePlan();
 }
 
 /**
@@ -58,6 +60,7 @@ function syncOppositeSides(changedId) {
   }
 
   calculatePlotAreaFromSides();
+  if (typeof generatePlan === 'function') generatePlan();
 }
 
 /**
@@ -85,7 +88,6 @@ function calculatePlotAreaFromSides() {
 
 /**
  * Toggles boundary input fields depending on whether boundary is a Public Road or Neighboring Property.
- * Supports 1-side, 2-side (corner plots), 3-side, and 4-side (island plots) road access.
  * 
  * @function toggleBoundaryType
  * @param {string} dir - Direction key ('North', 'South', 'East', 'West').
@@ -103,7 +105,6 @@ function toggleBoundaryType(dir) {
     if (roadPanel) roadPanel.style.display = 'grid';
     if (plotPanel) plotPanel.style.display = 'none';
 
-    // Automatically sync primary Road Width field if North road width is entered
     if (dir === 'North') {
       const rWidth = document.getElementById('widthRoadNorth');
       const primaryW = document.getElementById('roadWidth');
@@ -118,6 +119,8 @@ function toggleBoundaryType(dir) {
     if (roadPanel) roadPanel.style.display = 'none';
     if (plotPanel) plotPanel.style.display = 'none';
   }
+
+  if (typeof generatePlan === 'function') generatePlan();
 }
 
 /**
@@ -132,6 +135,7 @@ function toggleRoadWidening() {
   if (panel) {
     panel.style.display = isEnabled ? 'block' : 'none';
   }
+  if (typeof generatePlan === 'function') generatePlan();
 }
 
 /**
@@ -146,6 +150,7 @@ function toggleBufferZone() {
   if (panel) {
     panel.style.display = isEnabled ? 'block' : 'none';
   }
+  if (typeof generatePlan === 'function') generatePlan();
 }
 
 /**
@@ -163,8 +168,7 @@ function toggleSampleWatermark() {
 }
 
 /**
- * Toggles visibility of Page 2 (BBMP Official Line & Colour Specifications Sheet)
- * and dynamically updates the Action Bar PDF package content status hint.
+ * Toggles visibility of Page 2 (BBMP Official Line & Colour Specifications Sheet).
  * 
  * @function toggleLegendSheetPage
  * @returns {void}
@@ -181,7 +185,52 @@ function toggleLegendSheetPage() {
   if (statusHint) {
     statusHint.innerHTML = isChecked
       ? '📄 <strong>Document Content:</strong> 2-Page Consolidated Package (Page 1: Single Plot Layout Plan + Page 2: BBMP Line & Colour Specifications Sheet).'
-      : '📄 <strong>Document Content:</strong> 1-Page Layout Plan (Page 2 Legend Specifications Sheet disabled in Section 7).';
+      : '📄 <strong>Document Content:</strong> 1-Page Layout Plan (Page 2 Legend Specifications Sheet disabled).';
+  }
+}
+
+/**
+ * Toggles expanding Sakala FAQ accordion items.
+ * 
+ * @function toggleFaq
+ * @param {HTMLElement} el - Question header element clicked.
+ * @returns {void}
+ */
+function toggleFaq(el) {
+  const answer = el.nextElementSibling;
+  const icon = el.querySelector('span:last-child');
+  if (!answer) return;
+
+  const isOpen = answer.style.display === 'block';
+  answer.style.display = isOpen ? 'none' : 'block';
+  if (icon) icon.textContent = isOpen ? '+' : '−';
+}
+
+/**
+ * Switches view tab on mobile (< 1024px) between Setup Form and Live Preview.
+ * 
+ * @function switchMobileTab
+ * @param {string} tabName - 'wizard' or 'preview'.
+ * @returns {void}
+ */
+function switchMobileTab(tabName) {
+  const wizardCol = document.getElementById('wizardCol');
+  const previewCol = document.getElementById('previewCol');
+  const tabW = document.getElementById('mobileTabWizard');
+  const tabP = document.getElementById('mobileTabPreview');
+
+  if (tabName === 'wizard') {
+    if (wizardCol) wizardCol.style.display = 'block';
+    if (previewCol) previewCol.style.display = 'none';
+    if (tabW) tabW.classList.add('active');
+    if (tabP) tabP.classList.remove('active');
+  } else {
+    if (wizardCol) wizardCol.style.display = 'none';
+    if (previewCol) previewCol.style.display = 'block';
+    if (tabW) tabW.classList.remove('active');
+    if (tabP) tabP.classList.add('active');
+
+    if (typeof generatePlan === 'function') generatePlan();
   }
 }
 
@@ -196,7 +245,7 @@ async function downloadPDFPackage() {
   const downloadBtn = document.getElementById('downloadPdfBtn');
   const originalBtnText = downloadBtn ? downloadBtn.innerHTML : '';
   if (downloadBtn) {
-    downloadBtn.innerHTML = '<span>⏳ Generating PDF File...</span>';
+    downloadBtn.innerHTML = '<span>⏳ Generating PDF...</span>';
     downloadBtn.disabled = true;
   }
 
@@ -205,11 +254,7 @@ async function downloadPDFPackage() {
     const survey = document.getElementById('surveyNo') ? document.getElementById('surveyNo').value.trim().replace(/[/\\?%*:|"<>]/g, '-') : '';
     const fileName = `BBMP_Single_Plot_Plan_${pid || survey || 'Sakala'}.pdf`;
 
-    const planOutput = document.getElementById('planOutput');
-    if (!planOutput || planOutput.style.display === 'none') {
-      if (typeof validate === 'function' && !validate()) return;
-      if (typeof generatePlan === 'function') generatePlan();
-    }
+    if (typeof generatePlan === 'function') generatePlan();
     toggleLegendSheetPage();
 
     if (!window.jspdf || !window.html2canvas) {
@@ -263,7 +308,6 @@ async function downloadPDFPackage() {
 
   } catch (err) {
     console.error('Direct PDF Export Failed:', err);
-    // Fallback to window.print() if canvas rendering fails
     printPlanPackage();
   } finally {
     if (downloadBtn) {
@@ -281,12 +325,22 @@ async function downloadPDFPackage() {
  * @returns {void}
  */
 function printPlanPackage() {
-  const planOutput = document.getElementById('planOutput');
-  if (!planOutput || planOutput.style.display === 'none') {
-    if (typeof validate === 'function' && !validate()) return;
-    if (typeof generatePlan === 'function') generatePlan();
-  }
-
+  if (typeof generatePlan === 'function') generatePlan();
   toggleLegendSheetPage();
   window.print();
 }
+
+/**
+ * Attaches real-time live preview re-render event listeners across all form inputs.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  const allInputs = document.querySelectorAll('input, select');
+  allInputs.forEach(input => {
+    input.addEventListener('input', () => {
+      if (typeof generatePlan === 'function') generatePlan();
+    });
+    input.addEventListener('change', () => {
+      if (typeof generatePlan === 'function') generatePlan();
+    });
+  });
+});
