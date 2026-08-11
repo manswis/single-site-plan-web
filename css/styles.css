@@ -399,6 +399,18 @@ body {
     justify-content: center !important;
   }
 
+  /* Stack all input text boxes in a single column on mobile */
+  .grid,
+  .wizard-step-content .grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .field,
+  .wizard-step-content .field {
+    grid-column: span 1 !important;
+  }
+
   /* Prevent iOS Safari auto-zoom on form inputs */
   input[type="text"],
   input[type="number"],
