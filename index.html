@@ -6,8 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BBMP Single Plot Layout Plan Generator — B-to-A Khata Conversion</title>
   <link rel="stylesheet" href="css/styles.css">
-  <!-- html2pdf.js for Direct Client-Side PDF File Export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- html2canvas and jsPDF for Direct Client-Side PDF File Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -497,7 +498,7 @@
       <button class="btn" onclick="generatePlan()">🎨 Generate BBMP Single Plot Plan</button>
     </div>
 
-    <!-- Action Bar for PDF Export & Direct Printing -->
+    <!-- Action Bar for Direct File Export & Direct Printing -->
     <div class="card action-bar" id="actionBar" style="display:none; background: #f0fdf4; border: 1.5px solid #86efac; padding: 18px 22px;">
       <div style="display: flex; flex-direction: column; gap: 14px;">
         
@@ -514,15 +515,15 @@
           📄 <strong>Document Content:</strong> 2-Page Consolidated Package (Page 1: Single Plot Layout Plan + Page 2: BBMP Line & Colour Specifications Sheet).
         </p>
 
-        <!-- Two Clear Action Buttons: Export PDF & Print -->
+        <!-- Two Clear Action Buttons: Export PDF File & Print Layout Plan -->
         <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 4px;">
           
-          <!-- Button 1: Save / Download as PDF -->
+          <!-- Button 1: Save / Download PDF File -->
           <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 4px;">
             <button id="downloadPdfBtn" class="btn" style="background: #15803d; height: 44px; font-size: 14px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 4px rgba(21,128,61,0.2);" onclick="downloadPDFPackage()">
               <span>📥 Save / Download as PDF File</span>
             </button>
-            <span style="font-size: 10.5px; color: #166534; text-align: center;">💡 Instantly generates and downloads PDF document to your device.</span>
+            <span style="font-size: 10.5px; color: #166534; text-align: center;">💡 Saves PDF file directly to your Downloads folder.</span>
           </div>
 
           <!-- Button 2: Print Layout Plan -->

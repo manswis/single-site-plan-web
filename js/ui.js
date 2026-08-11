@@ -1,7 +1,7 @@
 /**
  * @file ui.js
  * @description Handles dynamic DOM interaction logic, visibility toggles, cardinal side dimension auto-syncing,
- * legend page visibility, and native high-resolution vector PDF export trigger logic.
+ * legend page visibility, direct client-side PDF file downloads (jsPDF + html2canvas), and browser print trigger logic.
  * @author Senior Systems Architect
  */
 
@@ -186,32 +186,96 @@ function toggleLegendSheetPage() {
 }
 
 /**
- * Triggers native high-resolution vector PDF export dialog by setting the document title
- * to an official BBMP property file name convention before launching print engine.
+ * Direct client-side PDF file download using jsPDF + html2canvas.
+ * Downloads multi-page A4 PDF file directly into user's Downloads folder WITHOUT opening print UI.
  * 
  * @function downloadPDFPackage
- * @returns {void}
+ * @returns {Promise<void>}
  */
-function downloadPDFPackage() {
-  const pid = document.getElementById('pidNo') ? document.getElementById('pidNo').value.trim() : '';
-  const survey = document.getElementById('surveyNo') ? document.getElementById('surveyNo').value.trim().replace(/[/\\?%*:|"<>]/g, '-') : '';
+async function downloadPDFPackage() {
+  const downloadBtn = document.getElementById('downloadPdfBtn');
+  const originalBtnText = downloadBtn ? downloadBtn.innerHTML : '';
+  if (downloadBtn) {
+    downloadBtn.innerHTML = '<span>⏳ Generating PDF File...</span>';
+    downloadBtn.disabled = true;
+  }
 
-  const originalTitle = document.title;
-  const customFileName = `BBMP_Single_Plot_Plan_${pid || survey || 'Sakala'}`;
+  try {
+    const pid = document.getElementById('pidNo') ? document.getElementById('pidNo').value.trim() : '';
+    const survey = document.getElementById('surveyNo') ? document.getElementById('surveyNo').value.trim().replace(/[/\\?%*:|"<>]/g, '-') : '';
+    const fileName = `BBMP_Single_Plot_Plan_${pid || survey || 'Sakala'}.pdf`;
 
-  document.title = customFileName;
+    const planOutput = document.getElementById('planOutput');
+    if (!planOutput || planOutput.style.display === 'none') {
+      if (typeof validate === 'function' && !validate()) return;
+      if (typeof generatePlan === 'function') generatePlan();
+    }
+    toggleLegendSheetPage();
 
-  printPlanPackage();
+    if (!window.jspdf || !window.html2canvas) {
+      throw new Error('PDF Export libraries unavailable');
+    }
 
-  // Restore original window title after short delay
-  setTimeout(() => {
-    document.title = originalTitle;
-  }, 2000);
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    // Render Page 1 (Layout Plan Sheet) directly from visible DOM
+    const page1Frame = document.querySelector('#planOutput .plan-sheet-frame');
+    const canvas1 = await html2canvas(page1Frame, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false
+    });
+
+    const imgData1 = canvas1.toDataURL('image/jpeg', 0.98);
+    const imgProps1 = pdf.getImageProperties(imgData1);
+    const renderHeight1 = (imgProps1.height * (pdfWidth - 10)) / imgProps1.width;
+
+    pdf.addImage(imgData1, 'JPEG', 5, 5, pdfWidth - 10, Math.min(renderHeight1, pdfHeight - 10));
+
+    // Render Page 2 (Legend Sheet) if enabled
+    const includeLegend = document.getElementById('includeLegendPage') ? document.getElementById('includeLegendPage').checked : true;
+    const legendSheet = document.getElementById('legendSheetOutput');
+
+    if (includeLegend && legendSheet) {
+      legendSheet.style.display = 'block';
+      const page2Frame = document.querySelector('#legendSheetOutput .plan-sheet-frame');
+      const canvas2 = await html2canvas(page2Frame, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false
+      });
+
+      const imgData2 = canvas2.toDataURL('image/jpeg', 0.98);
+      const imgProps2 = pdf.getImageProperties(imgData2);
+      const renderHeight2 = (imgProps2.height * (pdfWidth - 10)) / imgProps2.width;
+
+      pdf.addPage();
+      pdf.addImage(imgData2, 'JPEG', 5, 5, pdfWidth - 10, Math.min(renderHeight2, pdfHeight - 10));
+    }
+
+    // Trigger instant browser file download directly into Downloads folder
+    pdf.save(fileName);
+
+  } catch (err) {
+    console.error('Direct PDF Export Failed:', err);
+    // Fallback to window.print() if canvas rendering fails
+    printPlanPackage();
+  } finally {
+    if (downloadBtn) {
+      downloadBtn.innerHTML = originalBtnText;
+      downloadBtn.disabled = false;
+    }
+  }
 }
 
 /**
  * Pre-configures page breaks and multi-page visibility before invoking window.print().
- * Opens native browser printer popup for high-definition vector printing.
+ * Opens native browser printer popup for physical paper printing.
  * 
  * @function printPlanPackage
  * @returns {void}
