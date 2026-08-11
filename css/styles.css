@@ -36,25 +36,72 @@
   --apple-accent: #2997ff;
   --apple-accent-hover: #0077ed;
   --apple-border: rgba(255, 255, 255, 0.14);
-  --apple-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  --apple-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+  --apple-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --apple-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.7);
 }
 
 [data-theme="dark"] body {
-  background-color: var(--apple-bg);
-  color: var(--apple-text-primary);
+  background-color: var(--apple-bg) !important;
+  color: var(--apple-text-primary) !important;
 }
 
 [data-theme="dark"] .apple-navbar {
-  background: rgba(28, 28, 30, 0.85);
-  border-bottom-color: rgba(255, 255, 255, 0.12);
+  background: rgba(28, 28, 30, 0.85) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.12) !important;
 }
 
+/* All Cards, Workbench Steps, Pricing, Legal & Tooltip Containers */
 [data-theme="dark"] .apple-card,
 [data-theme="dark"] .how-it-works-card,
-[data-theme="dark"] .pricing-card {
-  background: #1c1c1e;
-  border-color: rgba(255, 255, 255, 0.12);
+[data-theme="dark"] .pricing-card,
+[data-theme="dark"] .wizard-stepper-header,
+[data-theme="dark"] .stepper-header,
+[data-theme="dark"] .wizard-footer-bar,
+[data-theme="dark"] .boundary-card,
+[data-theme="dark"] .checkbox-box,
+[data-theme="dark"] .conditional-panel,
+[data-theme="dark"] .mobile-step-card,
+[data-theme="dark"] .action-bar,
+[data-theme="dark"] .apple-modal-card {
+  background: #1c1c1e !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: var(--apple-text-primary) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .info-tooltip-box {
+  background: rgba(41, 151, 255, 0.1) !important;
+  border-color: rgba(41, 151, 255, 0.3) !important;
+  color: #90caf9 !important;
+}
+
+[data-theme="dark"] .stepper-tab {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #98989d !important;
+}
+
+[data-theme="dark"] .stepper-tab.active {
+  background: #2997ff !important;
+  color: #ffffff !important;
+  border-color: #2997ff !important;
+  box-shadow: 0 4px 12px rgba(41, 151, 255, 0.3) !important;
+}
+
+[data-theme="dark"] .stepper-tab.completed {
+  background: rgba(52, 199, 89, 0.15) !important;
+  color: #34c759 !important;
+  border-color: rgba(52, 199, 89, 0.3) !important;
+}
+
+[data-theme="dark"] .apple-btn-secondary {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #f5f5f7 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="dark"] .apple-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
 }
 
 [data-theme="dark"] input,
@@ -85,6 +132,32 @@
 
 [data-theme="dark"] .unit-symbol {
   color: #64b5f6 !important;
+}
+
+[data-theme="dark"] h1, 
+[data-theme="dark"] h2, 
+[data-theme="dark"] h3, 
+[data-theme="dark"] h4, 
+[data-theme="dark"] h5, 
+[data-theme="dark"] h6,
+[data-theme="dark"] strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] p,
+[data-theme="dark"] label,
+[data-theme="dark"] span {
+  color: var(--apple-text-secondary);
+}
+
+[data-theme="dark"] .privacy-guarantee-badge {
+  background: rgba(52, 199, 89, 0.12) !important;
+  border-color: rgba(52, 199, 89, 0.3) !important;
+  color: #81c784 !important;
+}
+
+[data-theme="dark"] .privacy-guarantee-badge strong {
+  color: #a5d6a7 !important;
 }
 
 [data-theme="dark"] .apple-nav-links,
