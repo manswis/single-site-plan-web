@@ -390,6 +390,10 @@ function generatePlan() {
   let bldgRenderW = bldgW;
   let bldgRenderH = bldgL;
 
+  // For irregular plots, bound available drawing space by the shorter plot side
+  const availSpanW = isOdd ? Math.min(sideN, sideS) : Math.max(sideN, sideS);
+  const availSpanH = isOdd ? Math.min(sideE, sideW) : Math.max(sideE, sideW);
+
   if (bldgOrient === 'horizontal') {
     bldgRenderW = Math.max(bldgW, bldgL);
     bldgRenderH = Math.min(bldgW, bldgL);
@@ -397,18 +401,19 @@ function generatePlan() {
     bldgRenderW = Math.min(bldgW, bldgL);
     bldgRenderH = Math.max(bldgW, bldgL);
   } else {
-    // Auto-fit: If bldgL is larger than East-West height span, orient long side horizontally
-    const maxNS = Math.max(sideN, sideS);
-    const maxEW = Math.max(sideE, sideW);
-    if (bldgL > maxEW && bldgL <= maxNS) {
+    // Auto-fit: If bldgL is larger than available height span, orient long side horizontally
+    if (bldgL > availSpanH && bldgL <= availSpanW) {
       bldgRenderW = Math.max(bldgW, bldgL);
       bldgRenderH = Math.min(bldgW, bldgL);
     }
   }
 
-  // Setback Text Labels Positioned Centered Inside Setback Zones
-  const bldgDrawW = Math.max(15, bldgRenderW * ratio);
-  const bldgDrawH = Math.max(15, bldgRenderH * ratio);
+  // Bound building drawing size so it never exceeds available space inside shortest plot side
+  const maxAllowedDrawH = Math.max(15, (availSpanH - sbTop - sbBottom) * ratio);
+  const maxAllowedDrawW = Math.max(15, (availSpanW - sbLeft - sbRight) * ratio);
+
+  const bldgDrawW = Math.max(15, Math.min(bldgRenderW * ratio, maxAllowedDrawW));
+  const bldgDrawH = Math.max(15, Math.min(bldgRenderH * ratio, maxAllowedDrawH));
   const bldgX = offsetX + (sbLeft * ratio);
   const bldgY = offsetY + (sbTop * ratio);
 

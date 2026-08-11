@@ -227,8 +227,9 @@ function autoCalculateSetbacks(force = false) {
     east = west = parseFloat(document.getElementById('regEastWest')?.value) || 0;
   }
 
-  const spanNS = Math.max(north, south);
-  const spanEW = Math.max(east, west);
+  // For irregular plots, use the shorter side measurement to bound setback clearance
+  const spanNS = isOdd ? Math.min(north, south) : Math.max(north, south);
+  const spanEW = isOdd ? Math.min(east, west) : Math.max(east, west);
 
   if (spanNS <= 0 && spanEW <= 0) return;
 
@@ -370,8 +371,8 @@ function validateBuildingSetbackFeasibility() {
     east = west = parseFloat(document.getElementById('regEastWest')?.value) || 0;
   }
 
-  const spanNS = Math.max(north, south);
-  const spanEW = Math.max(east, west);
+  const spanNS = isOdd ? Math.min(north, south) : Math.max(north, south);
+  const spanEW = isOdd ? Math.min(east, west) : Math.max(east, west);
 
   const maxPlotSpan = Math.max(spanNS, spanEW);
 
@@ -385,13 +386,13 @@ function validateBuildingSetbackFeasibility() {
   const availWidthA = Math.max(0, spanNS - leftSetback - rightSetback);
   const availLengthA = Math.max(0, spanEW - frontSetback - rearSetback);
   const isOptionAValid = (spanNS > 0 && widthVal <= spanNS && widthVal <= (availWidthA || spanNS)) &&
-                         (spanEW > 0 && lengthVal <= spanEW && lengthVal <= (availLengthA || spanEW));
+    (spanEW > 0 && lengthVal <= spanEW && lengthVal <= (availLengthA || spanEW));
 
   // Alignment Option B: Length along North/South (spanNS), Width along East/West (spanEW)
   const availLengthB = Math.max(0, spanNS - frontSetback - rearSetback);
   const availWidthB = Math.max(0, spanEW - leftSetback - rightSetback);
   const isOptionBValid = (spanNS > 0 && lengthVal <= spanNS && lengthVal <= (availLengthB || spanNS)) &&
-                         (spanEW > 0 && widthVal <= spanEW && widthVal <= (availWidthB || spanEW));
+    (spanEW > 0 && widthVal <= spanEW && widthVal <= (availWidthB || spanEW));
 
   // If EITHER orientation fits the plot boundaries after setbacks, the proposal IS FEASIBLE!
   if (isOptionAValid || isOptionBValid) {
