@@ -2501,11 +2501,18 @@ select:focus {
 }
 
 /* Field Help Icon Button (Right-Aligned Material Help Outline) */
-.field>label,
-.checkbox-box label {
+.field > label {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
+  width: 100%;
+}
+
+.checkbox-box label {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
   width: 100%;
 }
 

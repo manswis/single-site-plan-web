@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Rounded Apple Dark Card Background -->
+  <rect width="64" height="64" rx="16" fill="#0f172a"/>
+  
+  <!-- Subtle Blueprint Grid -->
+  <path d="M12 16h40M12 24h40M12 32h40M12 40h40M12 48h40" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <path d="M16 12v40M24 12v40M32 12v40M40 12v40M48 12v40" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  
+  <!-- Outer Plot Boundary (Sky Blue Dashed) -->
+  <rect x="14" y="14" width="36" height="36" rx="4" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="6,3"/>
+  
+  <!-- Proposed Building Footprint (Gold) -->
+  <rect x="22" y="22" width="20" height="20" rx="2" fill="rgba(245, 158, 11, 0.25)" stroke="#f59e0b" stroke-width="2"/>
+  
+  <!-- North Arrow Indicator -->
+  <polygon points="46,10 49,16 43,16" fill="#ef4444"/>
+  <text x="46" y="22" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="6" font-weight="900" fill="#ef4444" text-anchor="middle">N</text>
+
+  <!-- Plot Corner Points -->
+  <circle cx="14" cy="14" r="2" fill="#38bdf8"/>
+  <circle cx="50" cy="14" r="2" fill="#38bdf8"/>
+  <circle cx="50" cy="50" r="2" fill="#38bdf8"/>
+  <circle cx="14" cy="50" r="2" fill="#38bdf8"/>
+</svg>
