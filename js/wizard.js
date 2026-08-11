@@ -382,11 +382,13 @@ function showStep(stepNum, shouldSave = true) {
 
   if (nextBtn) {
     if (stepNum === 6) {
-      nextBtn.textContent = 'Preview →';
+      nextBtn.textContent = 'Review & Generate →';
+      nextBtn.style.display = 'inline-flex';
     } else if (stepNum === 7) {
-      nextBtn.textContent = '📥 Download PDF Package';
+      nextBtn.style.display = 'none';
     } else {
       nextBtn.textContent = 'Continue →';
+      nextBtn.style.display = 'inline-flex';
     }
   }
 
@@ -397,15 +399,20 @@ function showStep(stepNum, shouldSave = true) {
     saveDraft();
   }
 
+  // Populate formatted review summary grid & sync consent state on Step 7
+  if (stepNum === 7) {
+    if (typeof buildReviewSummary === 'function') {
+      buildReviewSummary();
+    }
+    if (typeof toggleLegalConsent === 'function') {
+      toggleLegalConsent();
+    }
+  }
+
   // Scroll step panel smoothly into view
   const wizardCard = document.getElementById('wizardCard');
   if (wizardCard) {
     wizardCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  // Auto-render live preview on Step 7
-  if (stepNum === 7 && typeof generatePlan === 'function') {
-    generatePlan();
   }
 }
 

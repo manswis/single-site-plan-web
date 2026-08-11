@@ -435,17 +435,233 @@ function printPlanPackage() {
   window.print();
 }
 
+
 /**
- * Attaches real-time live preview re-render event listeners across all form inputs.
+ * Global Plan Generation State Flag
  */
-document.addEventListener('DOMContentLoaded', () => {
-  const allInputs = document.querySelectorAll('input, select');
-  allInputs.forEach(input => {
-    input.addEventListener('input', () => {
-      if (typeof generatePlan === 'function') generatePlan();
+let isPlanGenerated = false;
+
+/**
+ * Dynamically builds the formatted property data summary grid with pencil icons for Step 7.
+ * 
+ * @function buildReviewSummary
+ * @returns {void}
+ */
+function buildReviewSummary() {
+  const container = document.getElementById('reviewSummaryContainer');
+  if (!container) return;
+
+  const sections = [
+    {
+      title: '🏛️ Revenue & Property Records',
+      step: 1,
+      fields: [
+        { id: 'ownerName', label: 'Owner Name(s)', step: 1 },
+        { id: 'surveyNo', label: 'Survey / Sy No', step: 1 },
+        { id: 'epId', label: 'eKhata ID (ePID)', step: 1 },
+        { id: 'pidNo', label: 'BBMP PID', step: 1 },
+        { id: 'wardNo', label: 'Ward No', step: 1 },
+        { id: 'dcOrderNo', label: 'DC Order', step: 1 }
+      ]
+    },
+    {
+      title: '📍 Location & Address',
+      step: 2,
+      fields: [
+        { id: 'address', label: 'Address', step: 2 },
+        { id: 'wardName', label: 'Ward / Area', step: 2 }
+      ]
+    },
+    {
+      title: '📐 Plot Measurements',
+      step: 3,
+      fields: [
+        { id: 'plotArea', label: 'Plot Area (sq.ft)', step: 3 },
+        { id: 'roadWidth', label: 'Road Width', step: 3, isFtIn: true },
+        { id: 'roadFacing', label: 'Road Facing', step: 3 },
+        { id: 'regNorthSouth', label: 'North-South Dimension', step: 3, isFtIn: true },
+        { id: 'regEastWest', label: 'East-West Dimension', step: 3, isFtIn: true }
+      ]
+    },
+    {
+      title: '🏗️ Building & Setbacks',
+      step: 4,
+      fields: [
+        { id: 'floorsCount', label: 'Floors', step: 4 },
+        { id: 'builtUpArea', label: 'Built-up Area (sq.ft)', step: 4 },
+        { id: 'setbackFront', label: 'Front Setback', step: 4, isFtIn: true },
+        { id: 'setbackRear', label: 'Rear Setback', step: 4, isFtIn: true },
+        { id: 'setbackLeft', label: 'Left Setback', step: 4, isFtIn: true },
+        { id: 'setbackRight', label: 'Right Setback', step: 4, isFtIn: true }
+      ]
+    },
+    {
+      title: '📜 Deed DNA Boundaries',
+      step: 5,
+      fields: [
+        { id: 'typeNorth', label: 'North Boundary', step: 5 },
+        { id: 'typeSouth', label: 'South Boundary', step: 5 },
+        { id: 'typeEast', label: 'East Boundary', step: 5 },
+        { id: 'typeWest', label: 'West Boundary', step: 5 }
+      ]
+    },
+    {
+      title: '🚧 Constraints & Fees',
+      step: 6,
+      fields: [
+        { id: 'roadWideningCheck', label: 'Road Widening', step: 6, isCheckbox: true },
+        { id: 'bufferCheck', label: 'Buffer Zone', step: 6, isCheckbox: true },
+        { id: 'challanFee', label: 'Fee Amount (₹)', step: 6 },
+        { id: 'challanNo', label: 'Challan No', step: 6 }
+      ]
+    }
+  ];
+
+  let html = '<div class="review-summary-grid">';
+
+  sections.forEach(sec => {
+    html += `
+      <div class="review-summary-card">
+        <div class="review-summary-header">
+          <h4>${sec.title}</h4>
+          <button type="button" class="review-edit-btn" onclick="goToStep(${sec.step})" title="Edit ${sec.title}">
+            <span class="material-symbols-outlined">edit</span> Edit
+          </button>
+        </div>
+        <div class="review-fields-list">
+    `;
+
+    sec.fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      let val = '—';
+      if (f.isCheckbox) {
+        val = (el && el.checked) ? 'Yes' : 'No';
+      } else if (f.isFtIn) {
+        const ftEl = document.getElementById(f.id + '_ft');
+        const inEl = document.getElementById(f.id + '_in');
+        const ftVal = ftEl ? ftEl.value.trim() : '';
+        const inVal = inEl ? inEl.value.trim() : '';
+        if (ftVal !== '' || inVal !== '') {
+          val = `${ftVal || '0'} ft ${inVal ? inVal + ' in' : ''}`;
+        } else if (el && el.value) {
+          val = `${el.value} ft`;
+        }
+      } else if (el && el.value.trim() !== '') {
+        val = el.value.trim();
+      }
+
+      html += `
+        <div class="review-field-row">
+          <span class="field-label">${f.label}:</span>
+          <span class="field-value">${val}</span>
+          <button type="button" class="review-pencil-icon" onclick="editFieldFromReview(${f.step}, '${f.id}')" title="Edit ${f.label}">
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+        </div>
+      `;
     });
-    input.addEventListener('change', () => {
-      if (typeof generatePlan === 'function') generatePlan();
-    });
+
+    html += `</div></div>`;
   });
-});
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+/**
+ * Navigates directly to target step, focuses field, and flashes highlight glow.
+ * 
+ * @function editFieldFromReview
+ * @param {number} stepNum - Target wizard step number.
+ * @param {string} fieldId - Target input element ID.
+ * @returns {void}
+ */
+function editFieldFromReview(stepNum, fieldId) {
+  if (typeof goToStep === 'function') {
+    goToStep(stepNum);
+  }
+  setTimeout(() => {
+    const target = document.getElementById(fieldId + '_ft') || document.getElementById(fieldId);
+    if (target) {
+      target.focus();
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const parentField = target.closest('.field') || target;
+      parentField.classList.add('field-highlight-flash');
+      setTimeout(() => {
+        parentField.classList.remove('field-highlight-flash');
+      }, 2400);
+    }
+  }, 250);
+}
+
+/**
+ * Manages Legal Consent Checkbox state.
+ * Enables "Generate Plan" when checked, disables Export & Print when unchecked.
+ * 
+ * @function toggleLegalConsent
+ * @returns {void}
+ */
+function toggleLegalConsent() {
+  const consent = document.getElementById('legalConsentCheck');
+  const genBtn = document.getElementById('generatePlanBtn');
+  const exportBtn = document.getElementById('downloadPdfBtn');
+  const printBtn = document.getElementById('printBtn');
+  const errConsent = document.getElementById('err-legalConsent');
+
+  const isChecked = consent && consent.checked;
+
+  if (errConsent) errConsent.style.display = 'none';
+
+  if (!isChecked) {
+    // Unchecked -> Delete generated plan state and disable all 3 buttons!
+    isPlanGenerated = false;
+    if (genBtn) genBtn.disabled = true;
+    if (exportBtn) exportBtn.disabled = true;
+    if (printBtn) printBtn.disabled = true;
+
+    const viewport = document.getElementById('exportViewportSection');
+    if (viewport) viewport.style.display = 'none';
+  } else {
+    // Checked -> Enable "Generate Plan", keep Export & Print disabled until plan is generated!
+    if (genBtn) genBtn.disabled = false;
+    if (exportBtn) exportBtn.disabled = !isPlanGenerated;
+    if (printBtn) printBtn.disabled = !isPlanGenerated;
+  }
+}
+
+/**
+ * Generates plan drawing, reveals canvas viewport, and enables Export & Print buttons.
+ * 
+ * @function onGeneratePlanClick
+ * @returns {void}
+ */
+function onGeneratePlanClick() {
+  const consent = document.getElementById('legalConsentCheck');
+  if (!consent || !consent.checked) {
+    const errConsent = document.getElementById('err-legalConsent');
+    if (errConsent) errConsent.style.display = 'block';
+    return;
+  }
+
+  // Generate 2-page architectural drawing
+  if (typeof generatePlan === 'function') {
+    generatePlan();
+  }
+
+  // Mark plan as generated and display viewport
+  isPlanGenerated = true;
+  const viewport = document.getElementById('exportViewportSection');
+  if (viewport) viewport.style.display = 'block';
+
+  // Enable Export PDF and Print buttons
+  const exportBtn = document.getElementById('downloadPdfBtn');
+  const printBtn = document.getElementById('printBtn');
+  if (exportBtn) exportBtn.disabled = false;
+  if (printBtn) printBtn.disabled = false;
+
+  // Scroll to drawing preview smoothly
+  if (viewport) {
+    viewport.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+

@@ -588,6 +588,160 @@ body {
   }
 }
 
+/* Step 7 Property Data Review Summary Cards */
+.review-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.review-summary-card {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.review-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--apple-border);
+}
+
+.review-summary-header h4 {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+.review-edit-btn {
+  background: rgba(0, 102, 204, 0.08);
+  border: none;
+  color: var(--apple-accent);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.review-edit-btn:hover {
+  background: rgba(0, 102, 204, 0.18);
+}
+
+.review-field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.06);
+}
+
+.review-field-row:last-child {
+  border-bottom: none;
+}
+
+.review-field-row .field-label {
+  color: var(--apple-text-secondary);
+  font-weight: 500;
+  flex: 1;
+}
+
+.review-field-row .field-value {
+  color: var(--apple-text-primary);
+  font-weight: 600;
+  margin-right: 8px;
+  text-align: right;
+}
+
+.review-pencil-icon {
+  background: transparent;
+  border: none;
+  color: var(--apple-accent);
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.review-pencil-icon .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.review-pencil-icon:hover {
+  background: rgba(0, 102, 204, 0.14);
+  transform: scale(1.15);
+}
+
+/* Pulsing Field Highlight Animation on Pencil Tap */
+@keyframes fieldPulseHighlight {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 102, 204, 0.6);
+    border-color: #0066cc;
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(0, 102, 204, 0.25);
+    border-color: #0066cc;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 102, 204, 0);
+  }
+}
+
+.field-highlight-flash {
+  animation: fieldPulseHighlight 1.2s ease-in-out 2;
+  border-color: #0066cc !important;
+  border-radius: 10px;
+}
+
+button:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  box-shadow: none !important;
+}
+
+[data-theme="dark"] .review-summary-card {
+  background: #1c1c1e !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] .review-edit-btn {
+  background: rgba(41, 151, 255, 0.15) !important;
+  color: #2997ff !important;
+}
+
+[data-theme="dark"] .review-pencil-icon {
+  color: #2997ff !important;
+}
+
+[data-theme="dark"] .review-field-row {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 768px) {
+  .review-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .package-action-buttons-hub {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Premium Privacy Guarantee Badge */
 .privacy-guarantee-badge {
   display: inline-flex;
