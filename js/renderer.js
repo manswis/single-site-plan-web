@@ -578,6 +578,8 @@ function generatePlan() {
 
   document.getElementById('scaleText').textContent = "Scale: " + scale;
 
+  updateKeyPlan();
+
   if (typeof toggleSampleWatermark === 'function') {
     toggleSampleWatermark();
   }
@@ -593,4 +595,81 @@ function generatePlan() {
 
   document.getElementById('planOutput').style.display = 'block';
   document.getElementById('planOutput').scrollIntoView({ behavior: 'smooth' });
+}
+
+/**
+ * Dynamically renders the Key Plan (Locational Sketch) in Panel 2 based on actual road facing direction,
+ * road name, road width, and ward location.
+ * 
+ * @function updateKeyPlan
+ * @returns {void}
+ */
+function updateKeyPlan() {
+  const svg = document.getElementById('keyPlanSvg');
+  if (!svg) return;
+
+  const roadFace = (document.getElementById('roadFacing')?.value || 'north').toLowerCase();
+  const roadWidthFt = document.getElementById('roadWidth_ft')?.value || '';
+  const roadWidthIn = document.getElementById('roadWidth_in')?.value || '';
+  const wardName = document.getElementById('wardName')?.value || 'Locality';
+  const surveyNo = document.getElementById('surveyNo')?.value || '';
+
+  let roadName = '';
+  const capFace = roadFace.charAt(0).toUpperCase() + roadFace.slice(1);
+  const typeVal = document.getElementById('type' + capFace)?.value;
+  if (typeVal === 'road') {
+    roadName = document.getElementById('nameRoad' + capFace)?.value || '';
+  }
+
+  let widthLabel = '';
+  if (roadWidthFt || roadWidthIn) {
+    widthLabel = ` (${roadWidthFt || 0}'${roadWidthIn ? roadWidthIn + '"' : ''} WIDE)`;
+  }
+  const roadTitle = (roadName ? roadName.toUpperCase() : 'ROAD') + widthLabel;
+
+  let html = `
+    <rect x="2" y="2" width="176" height="86" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
+  `;
+
+  if (roadFace === 'north') {
+    html += `
+      <rect x="10" y="12" width="160" height="14" fill="#94a3b8" rx="2" />
+      <text x="90" y="22" text-anchor="middle" font-size="6.5" fill="#ffffff" font-weight="bold">${roadTitle}</text>
+      <rect x="65" y="32" width="50" height="38" fill="url(#bldgHatch)" stroke="#2563eb" stroke-width="1.5" rx="2" />
+      <text x="90" y="52" text-anchor="middle" font-size="7.5" fill="#1e3a5f" font-weight="bold">SITE</text>
+      <text x="90" y="62" text-anchor="middle" font-size="5.5" fill="#3b82f6">${surveyNo ? 'Sy #' + surveyNo : ''}</text>
+    `;
+  } else if (roadFace === 'east') {
+    html += `
+      <rect x="146" y="10" width="14" height="70" fill="#94a3b8" rx="2" />
+      <text x="153" y="45" text-anchor="middle" font-size="6.5" fill="#ffffff" font-weight="bold" transform="rotate(90, 153, 45)">${roadTitle}</text>
+      <rect x="80" y="25" width="50" height="40" fill="url(#bldgHatch)" stroke="#2563eb" stroke-width="1.5" rx="2" />
+      <text x="105" y="46" text-anchor="middle" font-size="7.5" fill="#1e3a5f" font-weight="bold">SITE</text>
+      <text x="105" y="56" text-anchor="middle" font-size="5.5" fill="#3b82f6">${surveyNo ? 'Sy #' + surveyNo : ''}</text>
+    `;
+  } else if (roadFace === 'south') {
+    html += `
+      <rect x="10" y="64" width="160" height="14" fill="#94a3b8" rx="2" />
+      <text x="90" y="74" text-anchor="middle" font-size="6.5" fill="#ffffff" font-weight="bold">${roadTitle}</text>
+      <rect x="65" y="20" width="50" height="38" fill="url(#bldgHatch)" stroke="#2563eb" stroke-width="1.5" rx="2" />
+      <text x="90" y="40" text-anchor="middle" font-size="7.5" fill="#1e3a5f" font-weight="bold">SITE</text>
+      <text x="90" y="50" text-anchor="middle" font-size="5.5" fill="#3b82f6">${surveyNo ? 'Sy #' + surveyNo : ''}</text>
+    `;
+  } else if (roadFace === 'west') {
+    html += `
+      <rect x="10" y="10" width="14" height="70" fill="#94a3b8" rx="2" />
+      <text x="17" y="45" text-anchor="middle" font-size="6.5" fill="#ffffff" font-weight="bold" transform="rotate(-90, 17, 45)">${roadTitle}</text>
+      <rect x="45" y="25" width="50" height="40" fill="url(#bldgHatch)" stroke="#2563eb" stroke-width="1.5" rx="2" />
+      <text x="70" y="46" text-anchor="middle" font-size="7.5" fill="#1e3a5f" font-weight="bold">SITE</text>
+      <text x="70" y="56" text-anchor="middle" font-size="5.5" fill="#3b82f6">${surveyNo ? 'Sy #' + surveyNo : ''}</text>
+    `;
+  }
+
+  html += `
+    <text x="10" y="82" font-size="5.5" fill="#64748b" font-weight="600">LOC: ${wardName.toUpperCase().slice(0, 24)}</text>
+    <path d="M 165,78 L 168,70 L 171,78 L 168,76 Z" fill="#dc2626" />
+    <text x="168" y="85" text-anchor="middle" font-size="5.5" fill="#dc2626" font-weight="bold">N</text>
+  `;
+
+  svg.innerHTML = html;
 }
