@@ -597,18 +597,14 @@
             presets are loaded to prevent accidental official submission.</p>
         </div>
 
-        <!-- Quick Sample Preset Buttons -->
-        <div style="margin-bottom: 16px;">
-          <label style="margin-bottom: 6px; display: block; font-weight: 600;">📄 Quick Load Reference Sample
-            Presets:</label>
+        <!-- Quick Sample Preset Buttons (Developer Flag: ?sampledata=true) -->
+        <div id="samplePresetButtonsBlock" style="margin-bottom: 16px; display: none; background: #f8fafc; border: 1px dashed #cbd5e1; padding: 12px 16px; border-radius: 12px;">
+          <label style="margin-bottom: 6px; display: block; font-weight: 700; color: #475569; font-size: 12px;">🛠️ Developer Debug Presets (?sampledata=true):</label>
           <div class="sample-btns">
             <button class="apple-btn-secondary" onclick="loadSampleRegular()">Standard 30x40</button>
-            <button class="apple-btn-secondary btn-purple" style="color:#fff;" onclick="loadSampleCornerPlot()">2-Side
-              Corner</button>
-            <button class="apple-btn-secondary btn-amber" style="color:#fff;" onclick="loadSampleOdd()">Irregular
-              Site</button>
-            <button class="apple-btn-secondary btn-indigo" style="color:#fff;" onclick="loadSampleRoadWidening()">Road
-              Widening</button>
+            <button class="apple-btn-secondary btn-purple" style="color:#fff;" onclick="loadSampleCornerPlot()">2-Side Corner</button>
+            <button class="apple-btn-secondary btn-amber" style="color:#fff;" onclick="loadSampleOdd()">Irregular Site</button>
+            <button class="apple-btn-secondary btn-indigo" style="color:#fff;" onclick="loadSampleRoadWidening()">Road Widening</button>
           </div>
         </div>
       </div>

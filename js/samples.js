@@ -33,7 +33,36 @@ function setCheck(id, checked) {
   if (el) {
     el.checked = checked;
   }
+/**
+ * Evaluates URL parameters to detect developer mode (?sampledata=true, ?sample=1, ?dev=1).
+ * Unhides sample preset buttons ONLY when developer flag is present.
+ * 
+ * @function checkDeveloperSampleFlag
+ * @returns {void}
+ */
+function checkDeveloperSampleFlag() {
+  const params = new URLSearchParams(window.location.search);
+  const isDev = params.get('sampledata') === 'true' ||
+                params.get('sample') === '1' ||
+                params.get('demo') === '1' ||
+                params.get('dev') === '1';
+
+  const block = document.getElementById('samplePresetButtonsBlock');
+  if (block) {
+    block.style.display = isDev ? 'block' : 'none';
+  }
+
+  // If sampledata=true or sample=1 is present in URL, auto-load standard 30x40 sample
+  if (params.get('sampledata') === 'true' || params.get('sample') === '1') {
+    if (typeof loadSampleRegular === 'function') {
+      loadSampleRegular();
+    }
+  }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  checkDeveloperSampleFlag();
+});
 
 /**
  * Loads Sample Preset 1: Standard 30x40 Rectangular Residential Plot (1 Road).
