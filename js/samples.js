@@ -1,6 +1,7 @@
 /**
  * @file samples.js
  * @description Sample reference plan presets for instant pre-filling and testing of the BBMP Single Plot Generator.
+ * Enforces population of all mandatory fields across all 4 cardinal boundaries for every preset.
  * @author Senior Systems Architect
  */
 
@@ -90,7 +91,7 @@ function loadSampleRegular() {
   setVal('setbackLeft', '4');
   setVal('setbackRight', '4');
 
-  // Boundary Access (1 Road on North)
+  // Boundary Access (1 Road on North, Neighbor Plots on South, East, West)
   setVal('typeNorth', 'road');
   setVal('nameRoadNorth', '3RD CROSS ROAD');
   setVal('widthRoadNorth', '30');
@@ -167,7 +168,7 @@ function loadSampleCornerPlot() {
   setVal('setbackLeft', '5');
   setVal('setbackRight', '5');
 
-  // Corner Plot Boundaries: Roads on North & East!
+  // Corner Plot Boundaries: Roads on North & East, Neighbor Plots on South & West!
   setVal('typeNorth', 'road');
   setVal('nameRoadNorth', '4TH CROSS ROAD');
   setVal('widthRoadNorth', '30');
@@ -244,10 +245,23 @@ function loadSampleOdd() {
   setVal('setbackLeft', '5');
   setVal('setbackRight', '5');
 
+  // Populate ALL 4 Mandatory Boundaries for Irregular Site
+  setVal('typeNorth', 'plot');
+  setVal('descPlotNorth', 'PLOT NO. 12');
+  if (typeof toggleBoundaryType === 'function') toggleBoundaryType('North');
+
+  setVal('typeSouth', 'plot');
+  setVal('descPlotSouth', 'PLOT NO. 46');
+  if (typeof toggleBoundaryType === 'function') toggleBoundaryType('South');
+
   setVal('typeEast', 'road');
   setVal('nameRoadEast', '5TH MAIN ROAD');
   setVal('widthRoadEast', '40');
   if (typeof toggleBoundaryType === 'function') toggleBoundaryType('East');
+
+  setVal('typeWest', 'plot');
+  setVal('descPlotWest', 'STORMWATER DRAIN (RAJAKALUVE)');
+  if (typeof toggleBoundaryType === 'function') toggleBoundaryType('West');
 
   setVal('challanNo', 'CH-2024-55442');
   setVal('challanFee', '52000');
@@ -310,10 +324,23 @@ function loadSampleRoadWidening() {
   setVal('setbackLeft', '5');
   setVal('setbackRight', '5');
 
+  // Populate ALL 4 Mandatory Boundaries for Road Widening Site
+  setVal('typeNorth', 'plot');
+  setVal('descPlotNorth', 'PLOT NO. 88');
+  if (typeof toggleBoundaryType === 'function') toggleBoundaryType('North');
+
   setVal('typeSouth', 'road');
   setVal('nameRoadSouth', 'KITHAGANUR MAIN ROAD');
   setVal('widthRoadSouth', '40');
   if (typeof toggleBoundaryType === 'function') toggleBoundaryType('South');
+
+  setVal('typeEast', 'plot');
+  setVal('descPlotEast', 'PLOT NO. 15');
+  if (typeof toggleBoundaryType === 'function') toggleBoundaryType('East');
+
+  setVal('typeWest', 'plot');
+  setVal('descPlotWest', 'PLOT NO. 13');
+  if (typeof toggleBoundaryType === 'function') toggleBoundaryType('West');
 
   setVal('challanNo', 'CH-2024-77661');
   setVal('challanFee', '72000');
