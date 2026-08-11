@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BBMP Single Plot Layout Plan Generator — B-to-A Khata Conversion</title>
   <link rel="stylesheet" href="css/styles.css">
+  <!-- html2pdf.js for Direct Client-Side PDF File Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
@@ -517,10 +519,10 @@
           
           <!-- Button 1: Save / Download as PDF -->
           <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 4px;">
-            <button class="btn" style="background: #15803d; height: 44px; font-size: 14px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 4px rgba(21,128,61,0.2);" onclick="downloadPDFPackage()">
+            <button id="downloadPdfBtn" class="btn" style="background: #15803d; height: 44px; font-size: 14px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 4px rgba(21,128,61,0.2);" onclick="downloadPDFPackage()">
               <span>📥 Save / Download as PDF File</span>
             </button>
-            <span style="font-size: 10.5px; color: #166534; text-align: center;">💡 Select "Save as PDF" in the popup window to save file.</span>
+            <span style="font-size: 10.5px; color: #166534; text-align: center;">💡 Instantly generates and downloads PDF document to your device.</span>
           </div>
 
           <!-- Button 2: Print Layout Plan -->
