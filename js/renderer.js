@@ -105,9 +105,20 @@ function generatePlan() {
     const type = typeEl ? typeEl.value : (dir.toLowerCase() === roadFace ? 'road' : 'plot');
     if (type === 'road') {
       const nameEl = document.getElementById(`nameRoad${dir}`);
-      const widthEl = document.getElementById(`widthRoad${dir}`);
-      const name = nameEl && nameEl.value.trim() ? nameEl.value.trim() : 'PUBLIC ROAD';
-      const w = widthEl && widthEl.value ? parseFloat(widthEl.value) : roadW;
+      const ftEl = document.getElementById(`widthRoad${dir}_ft`);
+      const inEl = document.getElementById(`widthRoad${dir}_in`);
+      const hiddenWidthEl = document.getElementById(`widthRoad${dir}`);
+
+      let w = roadW;
+      const ftVal = ftEl ? ftEl.value.trim() : '';
+      const inVal = inEl ? inEl.value.trim() : '';
+      if (ftVal !== '' || inVal !== '') {
+        w = (parseFloat(ftVal) || 0) + ((parseFloat(inVal) || 0) / 12);
+      } else if (hiddenWidthEl && hiddenWidthEl.value) {
+        w = parseFloat(hiddenWidthEl.value) || roadW;
+      }
+
+      const name = nameEl && nameEl.value.trim() ? nameEl.value.trim() : (dir.toLowerCase() === roadFace ? 'PUBLIC ROAD' : 'ABUTTING ROAD');
       return { type: 'road', text: `${name.toUpperCase()} (${formatFeetInches(w)} WIDE)`, roadW: w, name: name };
     } else {
       const descEl = document.getElementById(`descPlot${dir}`);
