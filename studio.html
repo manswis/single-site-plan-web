@@ -9,7 +9,9 @@
   <!-- Google Fonts: Outfit & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
 
@@ -42,7 +44,7 @@
 
     <!-- STEPS 1 TO 6: Centered Full-Width Guided Setup Wizard Container -->
     <div id="wizardCard" class="apple-card" style="margin-top: 24px;">
-      
+
       <!-- Stepper Progress Header -->
       <div class="stepper-header">
         <div class="stepper-progress-track">
@@ -65,13 +67,14 @@
           <span id="stepCounterBadge" class="badge">Step 1 of 7</span>
           <span id="stepTitleText">🏛️ Revenue Records & Identifiers</span>
         </h4>
-        <p id="stepDescText">Enter official owner names, e-Khata EP ID, PID, and DC Conversion details.</p>
+        <p id="stepDescText">Enter official owner names, eKhata ID (ePID), PID, and DC Conversion details.</p>
       </div>
 
       <!-- STEP 1: Revenue Records & Identifiers -->
       <div id="wizardStep1" class="wizard-step-content">
         <div class="info-tooltip-box">
-          💡 <strong>Where to find EP ID?</strong> Your e-Khata EP ID is printed on top of your Sakala e-Khata draft acknowledgement (e.g. EP-2024-789456).
+          💡 <strong>Where to find EP ID?</strong> Your eKhata ID (ePID) is printed on top of your Sakala e-Khata draft
+          acknowledgement (e.g. EP-2024-789456).
         </div>
         <div class="grid">
           <div class="field">
@@ -80,7 +83,7 @@
             <div class="error-msg" id="err-ownerName">⚠ Owner name is required</div>
           </div>
           <div class="field">
-            <label>e-Khata EP ID <span class="required">*</span></label>
+            <label>eKhata ID (ePID) <span class="required">*</span></label>
             <input id="epId" type="text" placeholder="e.g. EP-2024-789456" oninput="validateStep(1)">
             <div class="error-msg" id="err-epId">⚠ EP ID is required</div>
           </div>
@@ -115,7 +118,8 @@
       <!-- STEP 2: Location & BBMP Administration -->
       <div id="wizardStep2" class="wizard-step-content" style="display:none;">
         <div class="info-tooltip-box">
-          💡 <strong>BBMP Jurisdiction:</strong> Select your administrative BBMP zone to align with Sakala zonal engineer inspection codes.
+          💡 <strong>BBMP Jurisdiction:</strong> Select your administrative BBMP zone to align with Sakala zonal
+          engineer inspection codes.
         </div>
         <div class="grid">
           <div class="field">
@@ -150,7 +154,8 @@
           </div>
           <div class="field" style="grid-column: span 2;">
             <label>Site Address / Location <span class="required">*</span></label>
-            <input id="address" type="text" placeholder="e.g. No. 12, 3rd Cross, Rajajinagar, Bangalore - 560010" oninput="validateStep(2)">
+            <input id="address" type="text" placeholder="e.g. No. 12, 3rd Cross, Rajajinagar, Bangalore - 560010"
+              oninput="validateStep(2)">
             <div class="error-msg" id="err-address">⚠ Site address is required</div>
           </div>
         </div>
@@ -159,12 +164,14 @@
       <!-- STEP 3: Plot Measurements & Dimensions -->
       <div id="wizardStep3" class="wizard-step-content" style="display:none;">
         <div class="info-tooltip-box">
-          💡 <strong>Rectangular vs Irregular Sites:</strong> For regular sites, opposite sides auto-sync automatically. Check 'Irregular Site' below for odd-shaped quadrilateral plots.
+          💡 <strong>Rectangular vs Irregular Sites:</strong> For regular sites, opposite sides auto-sync automatically.
+          Check 'Irregular Site' below for odd-shaped quadrilateral plots.
         </div>
         <div class="grid">
           <div class="field">
             <label>Plot Area (sq.ft) <span class="required">*</span></label>
-            <input id="plotArea" type="number" placeholder="e.g. 2400" oninput="this.dataset.userEdited='true'; validateStep(3)">
+            <input id="plotArea" type="number" placeholder="e.g. 2400"
+              oninput="this.dataset.userEdited='true'; validateStep(3)">
             <div class="error-msg" id="err-plotArea">⚠ Plot area is required</div>
           </div>
           <div class="field">
@@ -198,22 +205,26 @@
         <div class="grid" style="margin-top: 14px;">
           <div class="field">
             <label>⬆️ North Side (ft) <span class="required">*</span></label>
-            <input id="sideNorth" type="number" placeholder="e.g. 40" oninput="syncOppositeSides('sideNorth'); validateStep(3)">
+            <input id="sideNorth" type="number" placeholder="e.g. 40"
+              oninput="syncOppositeSides('sideNorth'); validateStep(3)">
             <div class="error-msg" id="err-sideNorth">⚠ North dimension required</div>
           </div>
           <div class="field">
             <label>⬇️ South Side (ft) <span class="required">*</span></label>
-            <input id="sideSouth" type="number" placeholder="e.g. 40" oninput="syncOppositeSides('sideSouth'); validateStep(3)">
+            <input id="sideSouth" type="number" placeholder="e.g. 40"
+              oninput="syncOppositeSides('sideSouth'); validateStep(3)">
             <div class="error-msg" id="err-sideSouth">⚠ South dimension required</div>
           </div>
           <div class="field">
             <label>➡️ East Side (ft) <span class="required">*</span></label>
-            <input id="sideEast" type="number" placeholder="e.g. 60" oninput="syncOppositeSides('sideEast'); validateStep(3)">
+            <input id="sideEast" type="number" placeholder="e.g. 60"
+              oninput="syncOppositeSides('sideEast'); validateStep(3)">
             <div class="error-msg" id="err-sideEast">⚠ East dimension required</div>
           </div>
           <div class="field">
             <label>⬅️ West Side (ft) <span class="required">*</span></label>
-            <input id="sideWest" type="number" placeholder="e.g. 60" oninput="syncOppositeSides('sideWest'); validateStep(3)">
+            <input id="sideWest" type="number" placeholder="e.g. 60"
+              oninput="syncOppositeSides('sideWest'); validateStep(3)">
             <div class="error-msg" id="err-sideWest">⚠ West dimension required</div>
           </div>
         </div>
@@ -223,14 +234,16 @@
             <input type="checkbox" id="oddSiteCheck" onchange="toggleOddSite()">
             <span>🔷 Irregular / Odd Shaped Site (4 sides have different measurements)</span>
           </label>
-          <p id="oddSiteHint">Rectangular Mode (Default): Opposite sides auto-sync as you type. Check this box for irregular sites.</p>
+          <p id="oddSiteHint">Rectangular Mode (Default): Opposite sides auto-sync as you type. Check this box for
+            irregular sites.</p>
         </div>
       </div>
 
       <!-- STEP 4: Structure & Custom Setbacks -->
       <div id="wizardStep4" class="wizard-step-content" style="display:none;">
         <div class="info-tooltip-box">
-          💡 <strong>Building Footprint:</strong> Leave building width and length empty to auto-calculate footprints based on BBMP RMP-2015 minimum setback rules.
+          💡 <strong>Building Footprint:</strong> Leave building width and length empty to auto-calculate footprints
+          based on BBMP RMP-2015 minimum setback rules.
         </div>
         <div class="grid">
           <div class="field">
@@ -282,7 +295,8 @@
       <!-- STEP 5: Schedule of Property & Deed DNA -->
       <div id="wizardStep5" class="wizard-step-content" style="display:none;">
         <div class="info-tooltip-box">
-          📜 <strong>Deed Schedule DNA:</strong> Under Karnataka property law, boundary descriptions prevail over area in legal disputes. Select exact boundary categories.
+          📜 <strong>Deed Schedule DNA:</strong> Under Karnataka property law, boundary descriptions prevail over area
+          in legal disputes. Select exact boundary categories.
         </div>
 
         <div class="grid">
@@ -431,7 +445,8 @@
       <!-- STEP 6: Constraints & Document Options -->
       <div id="wizardStep6" class="wizard-step-content" style="display:none;">
         <div class="info-tooltip-box">
-          🚧 <strong>Master Plan Constraints:</strong> Check road widening or drain buffer if applicable. Enabling Page 2 attaches official BBMP line & colour specifications.
+          🚧 <strong>Master Plan Constraints:</strong> Check road widening or drain buffer if applicable. Enabling Page
+          2 attaches official BBMP line & colour specifications.
         </div>
 
         <div class="checkbox-box">
@@ -510,19 +525,25 @@
       <!-- STEP 7: Instant Review, Mandatory Legal Consent & PDF Download (Final Export Page) -->
       <div id="wizardStep7" class="wizard-step-content" style="display:none;">
         <div class="info-tooltip-box" style="background: #f0fdf4; border-color: #34c759; color: #166534;">
-          🎉 <strong>Plan Generation Complete!</strong> Review your full-width architectural layout plan drawing below and click Export to download your official PDF package.
+          🎉 <strong>Plan Generation Complete!</strong> Review your full-width architectural layout plan drawing below
+          and click Export to download your official PDF package.
         </div>
 
         <!-- Mandatory Pre-Generation Legal Consent Checkbox -->
         <div class="checkbox-box" style="margin-bottom: 16px; background: #eff6ff; border: 1.5px solid #3b82f6;">
           <label style="cursor: pointer;">
             <input type="checkbox" id="legalConsentCheck" onchange="toggleLegalConsent()">
-            <span style="font-weight: 700; color: #1e40af;">⚖️ I Agree to the Terms of Service, Privacy Policy & Zero Liability Disclaimer <span class="required">*</span></span>
+            <span style="font-weight: 700; color: #1e40af;">⚖️ I Agree to the Terms of Service, Privacy Policy & Zero
+              Liability Disclaimer <span class="required">*</span></span>
           </label>
           <p style="margin-top: 6px; font-size: 11px; color: #1e3a5f; line-height: 1.4;">
-            By checking this box, I confirm that: (1) All data processing occurs 100% locally in my browser without external server transmission, (2) This tool provides automated preliminary drafts; final plans must be signed/sealed by a registered COA architect, and (3) I hold the software author and developer completely harmless and waive any right to litigate or claim damages for municipal rejection or non-compliance.
+            By checking this box, I confirm that: (1) All data processing occurs 100% locally in my browser without
+            external server transmission, (2) This tool provides automated preliminary drafts; final plans must be
+            signed/sealed by a registered COA architect, and (3) I hold the software author and developer completely
+            harmless and waive any right to litigate or claim damages for municipal rejection or non-compliance.
           </p>
-          <div class="error-msg" id="err-legalConsent" style="margin-top: 6px; font-weight: 600;">⚠ You must agree to the Terms & Zero Liability Disclaimer to download or print.</div>
+          <div class="error-msg" id="err-legalConsent" style="margin-top: 6px; font-weight: 600;">⚠ You must agree to
+            the Terms & Zero Liability Disclaimer to download or print.</div>
         </div>
 
         <!-- Precautionary Watermark Checkbox -->
@@ -531,17 +552,22 @@
             <input type="checkbox" id="sampleWatermarkCheck" onchange="toggleSampleWatermark()">
             <span style="font-weight: 600; color: #d46b08;">⚠️ Display Diagonal "SAMPLE ONLY" Watermark</span>
           </label>
-          <p style="margin-top: 4px; font-size: 11px; color: #8c8c8c;">Default: Unchecked. Auto-checks when sample presets are loaded to prevent accidental official submission.</p>
+          <p style="margin-top: 4px; font-size: 11px; color: #8c8c8c;">Default: Unchecked. Auto-checks when sample
+            presets are loaded to prevent accidental official submission.</p>
         </div>
 
         <!-- Quick Sample Preset Buttons -->
         <div style="margin-bottom: 16px;">
-          <label style="margin-bottom: 6px; display: block; font-weight: 600;">📄 Quick Load Reference Sample Presets:</label>
+          <label style="margin-bottom: 6px; display: block; font-weight: 600;">📄 Quick Load Reference Sample
+            Presets:</label>
           <div class="sample-btns">
             <button class="apple-btn-secondary" onclick="loadSampleRegular()">Standard 30x40</button>
-            <button class="apple-btn-secondary btn-purple" style="color:#fff;" onclick="loadSampleCornerPlot()">2-Side Corner</button>
-            <button class="apple-btn-secondary btn-amber" style="color:#fff;" onclick="loadSampleOdd()">Irregular Site</button>
-            <button class="apple-btn-secondary btn-indigo" style="color:#fff;" onclick="loadSampleRoadWidening()">Road Widening</button>
+            <button class="apple-btn-secondary btn-purple" style="color:#fff;" onclick="loadSampleCornerPlot()">2-Side
+              Corner</button>
+            <button class="apple-btn-secondary btn-amber" style="color:#fff;" onclick="loadSampleOdd()">Irregular
+              Site</button>
+            <button class="apple-btn-secondary btn-indigo" style="color:#fff;" onclick="loadSampleRoadWidening()">Road
+              Widening</button>
           </div>
         </div>
       </div>
@@ -558,39 +584,50 @@
     <div id="exportViewportSection" style="display: none; margin-top: 24px;">
 
       <!-- High-Impact Action Bar for PDF Export & Direct Printing -->
-      <div class="apple-card action-bar" id="actionBar" style="background: #f0fdf4; border: 1.5px solid #86efac; padding: 22px 26px; margin-bottom: 24px;">
+      <div class="apple-card action-bar" id="actionBar"
+        style="background: #f0fdf4; border: 1.5px solid #86efac; padding: 22px 26px; margin-bottom: 24px;">
         <div style="display: flex; flex-direction: column; gap: 14px;">
-          
+
           <!-- Header & Package Content Summary -->
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 1px dashed #abf7c0; padding-bottom: 12px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 1px dashed #abf7c0; padding-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span style="font-size: 24px;">✅</span>
               <strong style="color: #166534; font-size: 18px;">Official BBMP Single Plot Plan Package Ready</strong>
             </div>
-            <span style="font-size: 11.5px; background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 12px; font-weight: 700;">Sakala e-Khata Ready</span>
+            <span
+              style="font-size: 11.5px; background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 12px; font-weight: 700;">Sakala
+              e-Khata Ready</span>
           </div>
 
           <p id="printPackageStatusHint" style="margin: 0; font-size: 13px; color: #15803d; line-height: 1.5;">
-            📄 <strong>Document Content:</strong> 2-Page Consolidated Package (Page 1: Single Plot Layout Plan + Page 2: BBMP Line & Colour Specifications Sheet).
+            📄 <strong>Document Content:</strong> 2-Page Consolidated Package (Page 1: Single Plot Layout Plan + Page 2:
+            BBMP Line & Colour Specifications Sheet).
           </p>
 
           <!-- Two Clear Action Buttons: Export PDF File & Print Layout Plan -->
           <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px;">
-            
+
             <!-- Button 1: Save / Download PDF File -->
             <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 4px;">
-              <button id="downloadPdfBtn" class="apple-btn-primary" style="background: #15803d; height: 48px; font-size: 15px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(21,128,61,0.25);" onclick="downloadPDFPackage()">
+              <button id="downloadPdfBtn" class="apple-btn-primary"
+                style="background: #15803d; height: 48px; font-size: 15px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(21,128,61,0.25);"
+                onclick="downloadPDFPackage()">
                 <span>📥 Save / Download PDF Package</span>
               </button>
-              <span id="downloadHintText" style="font-size: 11px; color: #166534; text-align: center;">Saves 2-page PDF file directly to your Downloads folder.</span>
+              <span id="downloadHintText" style="font-size: 11px; color: #166534; text-align: center;">Saves 2-page PDF
+                file directly to your Downloads folder.</span>
             </div>
 
             <!-- Button 2: Print Layout Plan -->
             <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 4px;">
-              <button id="printBtn" class="apple-btn-secondary" style="background: #1e3a5f; color:#fff; height: 48px; font-size: 15px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="printPlanPackage()">
+              <button id="printBtn" class="apple-btn-secondary"
+                style="background: #1e3a5f; color:#fff; height: 48px; font-size: 15px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;"
+                onclick="printPlanPackage()">
                 <span>🖨️ Send to Printer</span>
               </button>
-              <span id="printHintText" style="font-size: 11px; color: #475569; text-align: center;">Sends drawing directly to your connected printer.</span>
+              <span id="printHintText" style="font-size: 11px; color: #475569; text-align: center;">Sends drawing
+                directly to your connected printer.</span>
             </div>
 
           </div>
@@ -618,7 +655,7 @@
               <tr>
                 <td class="label">Owner Name(s)</td>
                 <td id="outOwner">—</td>
-                <td class="label">e-Khata EP ID</td>
+                <td class="label">eKhata ID (ePID)</td>
                 <td id="outEpId">—</td>
               </tr>
               <tr>
@@ -673,10 +710,10 @@
                 </defs>
 
                 <!-- Plot Boundary (Official BBMP Dash-Dot-Dot Black Stroke: stroke-dasharray="12,3,3,3,3,3") -->
-                <rect id="plotRect" x="180" y="100" width="340" height="260" fill="none" stroke="#000000" stroke-width="2"
-                  stroke-dasharray="12,3,3,3,3,3" />
-                <polygon id="plotPoly" points="180,100 520,100 520,360 180,360" fill="none" stroke="#000000" stroke-width="2"
-                  stroke-dasharray="12,3,3,3,3,3" style="display:none;" />
+                <rect id="plotRect" x="180" y="100" width="340" height="260" fill="none" stroke="#000000"
+                  stroke-width="2" stroke-dasharray="12,3,3,3,3,3" />
+                <polygon id="plotPoly" points="180,100 520,100 520,360 180,360" fill="none" stroke="#000000"
+                  stroke-width="2" stroke-dasharray="12,3,3,3,3,3" style="display:none;" />
 
                 <!-- Corner Splay Polygon (Chamfered Cut Corner for Corner Plots) -->
                 <polygon id="splayPoly" points="" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,2"
@@ -701,37 +738,46 @@
                 <!-- Dimension Lines -->
                 <line id="dimWLine" x1="180" y1="395" x2="520" y2="395" stroke="#64748b" stroke-width="1"
                   marker-end="url(#arrow)" marker-start="url(#arrow)" />
-                <text id="dimWidth" x="350" y="410" text-anchor="middle" font-size="11" fill="#334155" font-weight="600">40'-0"</text>
+                <text id="dimWidth" x="350" y="410" text-anchor="middle" font-size="11" fill="#334155"
+                  font-weight="600">40'-0"</text>
 
                 <line id="dimLLine" x1="555" y1="100" x2="555" y2="360" stroke="#64748b" stroke-width="1"
                   marker-end="url(#arrow)" marker-start="url(#arrow)" />
-                <text id="dimLength" x="572" y="230" text-anchor="middle" font-size="11" fill="#334155" font-weight="600"
-                  transform="rotate(-90, 572, 230)">60'-0"</text>
+                <text id="dimLength" x="572" y="230" text-anchor="middle" font-size="11" fill="#334155"
+                  font-weight="600" transform="rotate(-90, 572, 230)">60'-0"</text>
 
                 <!-- Clean Radial Layer Side Callout Labels -->
-                <text id="labelSideN" x="350" y="88" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700"
-                  style="display:none;">NORTH: 40'-0"</text>
-                <text id="labelSideS" x="350" y="376" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700"
-                  style="display:none;">SOUTH: 40'-0"</text>
-                <text id="labelSideE" x="536" y="230" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700"
-                  transform="rotate(-90, 536, 230)" style="display:none;">EAST: 60'-0"</text>
-                <text id="labelSideW" x="164" y="230" text-anchor="middle" font-size="10" fill="#1e3a5f" font-weight="700"
-                  transform="rotate(-90, 164, 230)" style="display:none;">WEST: 60'-0"</text>
+                <text id="labelSideN" x="350" y="88" text-anchor="middle" font-size="10" fill="#1e3a5f"
+                  font-weight="700" style="display:none;">NORTH: 40'-0"</text>
+                <text id="labelSideS" x="350" y="376" text-anchor="middle" font-size="10" fill="#1e3a5f"
+                  font-weight="700" style="display:none;">SOUTH: 40'-0"</text>
+                <text id="labelSideE" x="536" y="230" text-anchor="middle" font-size="10" fill="#1e3a5f"
+                  font-weight="700" transform="rotate(-90, 536, 230)" style="display:none;">EAST: 60'-0"</text>
+                <text id="labelSideW" x="164" y="230" text-anchor="middle" font-size="10" fill="#1e3a5f"
+                  font-weight="700" transform="rotate(-90, 164, 230)" style="display:none;">WEST: 60'-0"</text>
 
                 <!-- Building Interior Footprint Text -->
-                <text id="bldgTitle" x="330" y="220" text-anchor="middle" font-size="10" fill="#1d4ed8" font-weight="700">EXISTING BUILDING</text>
-                <text id="bldgDimText" x="330" y="235" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600">30'-0" × 40'-0"</text>
+                <text id="bldgTitle" x="330" y="220" text-anchor="middle" font-size="10" fill="#1d4ed8"
+                  font-weight="700">EXISTING BUILDING</text>
+                <text id="bldgDimText" x="330" y="235" text-anchor="middle" font-size="10" fill="#2563eb"
+                  font-weight="600">30'-0" × 40'-0"</text>
 
                 <!-- Setbacks -->
-                <text id="setbackN" x="350" y="125" text-anchor="middle" font-size="9" fill="#059669" font-weight="600">Front Setback: —</text>
-                <text id="setbackS" x="350" y="335" text-anchor="middle" font-size="9" fill="#059669" font-weight="600">Rear Setback: —</text>
-                <text id="setbackE" x="480" y="230" text-anchor="middle" font-size="9" fill="#059669" font-weight="600" transform="rotate(-90, 480, 230)">Right Setback: —</text>
-                <text id="setbackW" x="200" y="230" text-anchor="middle" font-size="9" fill="#059669" font-weight="600" transform="rotate(-90, 200, 230)">Left Setback: —</text>
+                <text id="setbackN" x="350" y="125" text-anchor="middle" font-size="9" fill="#059669"
+                  font-weight="600">Front Setback: —</text>
+                <text id="setbackS" x="350" y="335" text-anchor="middle" font-size="9" fill="#059669"
+                  font-weight="600">Rear Setback: —</text>
+                <text id="setbackE" x="480" y="230" text-anchor="middle" font-size="9" fill="#059669" font-weight="600"
+                  transform="rotate(-90, 480, 230)">Right Setback: —</text>
+                <text id="setbackW" x="200" y="230" text-anchor="middle" font-size="9" fill="#059669" font-weight="600"
+                  transform="rotate(-90, 200, 230)">Left Setback: —</text>
 
                 <!-- Precautionary Sample Watermark (Diagonal Overlay) -->
                 <g id="watermarkGroup" style="display:none; pointer-events:none;">
-                  <text x="350" y="240" text-anchor="middle" font-size="64" font-weight="900" fill="#dc2626" opacity="0.13" transform="rotate(-35, 350, 240)" letter-spacing="10">SAMPLE ONLY</text>
-                  <text x="350" y="280" text-anchor="middle" font-size="20" font-weight="800" fill="#dc2626" opacity="0.13" transform="rotate(-35, 350, 240)" letter-spacing="4">REFERENCE DRAFT PLAN</text>
+                  <text x="350" y="240" text-anchor="middle" font-size="64" font-weight="900" fill="#dc2626"
+                    opacity="0.13" transform="rotate(-35, 350, 240)" letter-spacing="10">SAMPLE ONLY</text>
+                  <text x="350" y="280" text-anchor="middle" font-size="20" font-weight="800" fill="#dc2626"
+                    opacity="0.13" transform="rotate(-35, 350, 240)" letter-spacing="4">REFERENCE DRAFT PLAN</text>
                 </g>
 
                 <!-- Compass Rosette -->
@@ -750,19 +796,25 @@
                   <text x="0" y="-4" font-size="7" fill="#334155" text-anchor="middle">0m</text>
                   <text x="40" y="-4" font-size="7" fill="#334155" text-anchor="middle">5m</text>
                   <text x="80" y="-4" font-size="7" fill="#334155" text-anchor="middle">10m</text>
-                  <text id="scaleText" x="40" y="15" font-size="9" fill="#64748b" text-anchor="middle">Scale: 1:100</text>
+                  <text id="scaleText" x="40" y="15" font-size="9" fill="#64748b" text-anchor="middle">Scale:
+                    1:100</text>
                 </g>
 
                 <!-- Outer Layer Abutting Road / Property Text -->
-                <text id="adjN" x="350" y="30" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600">Adjacent: —</text>
-                <text id="adjS" x="350" y="495" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600">Adjacent: —</text>
-                <text id="adjE" x="660" y="230" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600" transform="rotate(-90, 660, 230)">Adjacent: —</text>
-                <text id="adjW" x="40" y="230" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600" transform="rotate(-90, 40, 230)">Adjacent: —</text>
+                <text id="adjN" x="350" y="30" text-anchor="middle" font-size="9.5" fill="#475569"
+                  font-weight="600">Adjacent: —</text>
+                <text id="adjS" x="350" y="495" text-anchor="middle" font-size="9.5" fill="#475569"
+                  font-weight="600">Adjacent: —</text>
+                <text id="adjE" x="660" y="230" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600"
+                  transform="rotate(-90, 660, 230)">Adjacent: —</text>
+                <text id="adjW" x="40" y="230" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600"
+                  transform="rotate(-90, 40, 230)">Adjacent: —</text>
               </svg>
             </div>
 
             <div class="footer-note">
-              Note: This layout plan has been prepared as per BBMP Sakala B-to-A Khata conversion standards. Final plan must be signed & sealed by a licensed Architect/Engineer registered with BBMP.
+              Note: This layout plan has been prepared as per BBMP Sakala B-to-A Khata conversion standards. Final plan
+              must be signed & sealed by a licensed Architect/Engineer registered with BBMP.
             </div>
           </div> <!-- End Left Column -->
 
@@ -786,7 +838,8 @@
                   <rect x="5" y="5" width="170" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1" />
                   <line x1="15" y1="45" x2="165" y2="45" stroke="#94a3b8" stroke-width="6" />
                   <line x1="90" y1="10" x2="90" y2="80" stroke="#94a3b8" stroke-width="6" />
-                  <rect x="95" y="12" width="28" height="28" fill="url(#bldgHatch)" stroke="#2563eb" stroke-width="1.5" />
+                  <rect x="95" y="12" width="28" height="28" fill="url(#bldgHatch)" stroke="#2563eb"
+                    stroke-width="1.5" />
                   <text x="109" y="29" text-anchor="middle" font-size="8" fill="#1e3a5f" font-weight="bold">SITE</text>
                   <text x="90" y="42" text-anchor="middle" font-size="7" fill="#475569">MAIN ROAD</text>
                 </svg>
@@ -946,9 +999,12 @@
       <!-- Output Page 2: BBMP Official Line & Colour Specifications Sheet (LEGEND.pdf) -->
       <div class="apple-card legend-sheet-output" id="legendSheetOutput" style="display:none; margin-top: 24px;">
         <!-- Page 2 Screen Header Banner (Hidden during Print) -->
-        <div style="background: #eff6ff; border: 1px dashed #2563eb; padding: 8px 14px; border-radius: 6px; margin-bottom: 12px; font-size: 11px; color: #1e3a5f; font-weight: 600; display: flex; justify-content: space-between; align-items: center;" class="no-print">
+        <div
+          style="background: #eff6ff; border: 1px dashed #2563eb; padding: 8px 14px; border-radius: 6px; margin-bottom: 12px; font-size: 11px; color: #1e3a5f; font-weight: 600; display: flex; justify-content: space-between; align-items: center;"
+          class="no-print">
           <span>📑 PAGE 2: BBMP OFFICIAL LINE & COLOUR SPECIFICATIONS SHEET (LEGEND)</span>
-          <span style="font-size: 10px; color: #64748b;">Included automatically in PDF Export as per Sakala e-Khata submission rules</span>
+          <span style="font-size: 10px; color: #64748b;">Included automatically in PDF Export as per Sakala e-Khata
+            submission rules</span>
         </div>
 
         <div class="plan-sheet-frame" style="grid-template-columns: 1fr;">
@@ -1102,7 +1158,7 @@
               <li>✅ Up-to-date Tax Paid Receipt (SAS App)</li>
               <li>✅ Encumbrance Certificate (EC for 13/30 Yrs)</li>
               <li>✅ Title Deed / Registered Sale Deed</li>
-              <li>✅ e-Khata EP ID (Sakala Portal Ref)</li>
+              <li>✅ eKhata ID (ePID) (Sakala Portal Ref)</li>
             </ul>
           </div>
 
@@ -1126,12 +1182,18 @@
     </div> <!-- End Export Viewport Section -->
 
     <!-- Page Footer -->
-    <footer style="margin-top: 80px; padding-top: 30px; border-top: 1px solid var(--apple-border); text-align: center; font-size: 12px; color: var(--apple-text-secondary);">
+    <footer
+      style="margin-top: 80px; padding-top: 30px; border-top: 1px solid var(--apple-border); text-align: center; font-size: 12px; color: var(--apple-text-secondary);">
       <p style="margin-bottom: 12px;">
-        <a href="index.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Home</a> • 
-        <a href="studio.html" style="color: var(--apple-text-primary); text-decoration: none; font-weight: 700; margin: 0 10px;">Studio Workbench</a> • 
-        <a href="pricing.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Pricing</a> • 
-        <a href="legal.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Legal Terms & Privacy</a> • 
+        <a href="index.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Home</a>
+        •
+        <a href="studio.html"
+          style="color: var(--apple-text-primary); text-decoration: none; font-weight: 700; margin: 0 10px;">Studio
+          Workbench</a> •
+        <a href="pricing.html"
+          style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Pricing</a> •
+        <a href="legal.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Legal
+          Terms & Privacy</a> •
         <a href="faq.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">FAQ</a>
       </p>
       <p>© 2026 BBMP e-Plan Studio. All processing performed 100% locally on client browser.</p>

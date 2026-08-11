@@ -13,7 +13,7 @@ const TOTAL_STEPS = 7;
  * Step titles and descriptions for header guidance.
  */
 const STEP_METADATA = {
-  1: { title: "Revenue Records & Identifiers", icon: "🏛️", desc: "Enter official owner names, e-Khata EP ID, PID, and DC Conversion details." },
+  1: { title: "Revenue Records & Identifiers", icon: "🏛️", desc: "Enter official owner names, eKhata ID (ePID), PID, and DC Conversion details." },
   2: { title: "Property Location & Administration", icon: "📍", desc: "Select your BBMP administrative zone, ward number, and site location address." },
   3: { title: "Plot Measurements & Dimensions", icon: "📐", desc: "Enter plot area, road width, facing direction, and N/S/E/W side measurements." },
   4: { title: "Structure & Building Setbacks", icon: "🧱", desc: "Specify floor counts, built-up area, and custom building setbacks." },
