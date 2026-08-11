@@ -82,20 +82,14 @@ function checkAndRestoreDraft() {
     const draft = JSON.parse(draftRaw);
     if (!draft || !draft.formData) return false;
 
-    // Detect if this is a Page Refresh (F5 / active session) vs Fresh Page Open
-    const isSessionActive = sessionStorage.getItem(SESSION_FLAG_KEY) === 'true';
-    const isNavReload = performance.navigation && performance.navigation.type === 1;
+    // Verify draft has actual non-empty values
+    const hasUserData = Object.values(draft.formData).some(val => val !== '' && val !== false && val !== null && val !== undefined);
+    if (!hasUserData) return false;
 
-    if (isSessionActive || isNavReload) {
-      // PAGE REFRESH: Restore silently and navigate directly to saved step!
-      restoreDraft(false);
-      return true;
-    } else {
-      // FRESH PAGE OPEN: Display Apple Frosted Glass Restore Prompt Modal!
-      showDraftRestoreModal(draft);
-      showStep(1); // Show Step 1 in background until user chooses action
-      return true;
-    }
+    // Display Apple Frosted Glass Restore Prompt Modal whenever saved draft exists!
+    showDraftRestoreModal(draft);
+    showStep(1, false); // Display Step 1 in background until user chooses action
+    return true;
   } catch (e) {
     console.error('Failed to parse saved draft:', e);
     localStorage.removeItem(DRAFT_STORAGE_KEY);
@@ -227,12 +221,28 @@ function restoreDraft(hideModal = true) {
  */
 function discardDraft() {
   localStorage.removeItem(DRAFT_STORAGE_KEY);
-  sessionStorage.setItem(SESSION_FLAG_KEY, 'true');
+  sessionStorage.removeItem(SESSION_FLAG_KEY);
+
+  // Reset text, number, select fields & feet-inches controls
+  DRAFT_FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+    const ftEl = document.getElementById(id + '_ft');
+    const inEl = document.getElementById(id + '_in');
+    if (ftEl) ftEl.value = '';
+    if (inEl) inEl.value = '';
+  });
+
+  // Reset checkboxes
+  DRAFT_CHECKBOX_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = (id === 'includeLegendPage');
+  });
 
   const modal = document.getElementById('draftRestoreModal');
   if (modal) modal.style.display = 'none';
 
-  showStep(1);
+  showStep(1, false);
 }
 
 /**
