@@ -54,15 +54,15 @@ function loadSampleRegular() {
 
   // Primary Info
   setVal('ownerName', 'RAMESH KUMAR & ANJALI KUMAR');
-  setVal('epId', '3879772535');
+  setVal('epId', '1509988776');
   setVal('pidNo', '108-W0045-12');
-  setVal('sasNo', 'SAS-2024-554433');
-  setVal('adlrNo', 'ADLR/11E/2024/7891');
+  setVal('sasNo', '812139278');
+  setVal('adlrNo', 'ADLR/11E/KR-7891/2023-24');
 
   // DC Conversion
-  setVal('dcOrderNo', 'ALN(EV)SR/45/2018-19');
+  setVal('dcOrderNo', 'ALN(E)SR.(Kr.Ho)97/07-08');
   setVal('dcOrderDate', '2019-04-15');
-  setVal('dcAuthority', 'DC, Bengaluru Urban');
+  setVal('dcAuthority', 'DC, Bengaluru Urban District');
 
   // Location
   setVal('surveyNo', '45/2A');
@@ -136,14 +136,14 @@ function loadSampleCornerPlot() {
   if (typeof toggleBufferZone === 'function') toggleBufferZone();
 
   setVal('ownerName', 'VIKRAM SHARMA & DEEPIKA SHARMA');
-  setVal('epId', '3879772536');
+  setVal('epId', '1509988777');
   setVal('pidNo', '102-W0089-05');
-  setVal('sasNo', 'SAS-2024-778899');
-  setVal('adlrNo', 'ADLR/11E/2024/4455');
+  setVal('sasNo', '108927443');
+  setVal('adlrNo', 'ADLR/11E/YEL-4455/2021-22');
 
-  setVal('dcOrderNo', 'ALN(N)SR/78/2021-22');
+  setVal('dcOrderNo', 'ALN(N)SR.(Yel.Ho)78/2021-22');
   setVal('dcOrderDate', '2021-11-05');
-  setVal('dcAuthority', 'DC, Bengaluru Urban');
+  setVal('dcAuthority', 'DC, Bengaluru Urban District');
 
   setVal('surveyNo', '89/1C');
   setVal('bbmpZone', 'Yelahanka');
@@ -214,14 +214,14 @@ function loadSampleOdd() {
   if (typeof toggleBufferZone === 'function') toggleBufferZone();
 
   setVal('ownerName', 'SURESH RAO & LAKSHMI RAO');
-  setVal('epId', '3879772537');
+  setVal('epId', '1509988778');
   setVal('pidNo', '178-W0078-45');
-  setVal('sasNo', 'SAS-2024-887766');
-  setVal('adlrNo', 'ADLR/11E/2024/3321');
+  setVal('sasNo', '902341882');
+  setVal('adlrNo', 'ADLR/11E/BEG-3321/2017-18');
 
-  setVal('dcOrderNo', 'ALN(SE)SR/112/2017-18');
+  setVal('dcOrderNo', 'ALN(S)SR.(Beg.Ho)112/2017-18');
   setVal('dcOrderDate', '2018-09-10');
-  setVal('dcAuthority', 'DC, Bengaluru Urban');
+  setVal('dcAuthority', 'DC, Bengaluru Urban District');
 
   setVal('surveyNo', '78/3B');
   setVal('bbmpZone', 'South');
@@ -291,14 +291,14 @@ function loadSampleRoadWidening() {
   if (typeof toggleBufferZone === 'function') toggleBufferZone();
 
   setVal('ownerName', 'KAVITHA REDDY');
-  setVal('epId', '3879772538');
+  setVal('epId', '1509988779');
   setVal('pidNo', '150-W0150-08');
-  setVal('sasNo', 'SAS-2024-112244');
-  setVal('adlrNo', 'ADLR/11E/2024/9012');
+  setVal('sasNo', '812349901');
+  setVal('adlrNo', 'ADLR/11E/VRT-9012/2020-21');
 
-  setVal('dcOrderNo', 'ALN(E)SR/88/2020-21');
+  setVal('dcOrderNo', 'ALN(E)SR.(Vrt.Ho)88/2020-21');
   setVal('dcOrderDate', '2021-01-20');
-  setVal('dcAuthority', 'DC, Bengaluru Urban');
+  setVal('dcAuthority', 'DC, Bengaluru Urban District');
 
   setVal('surveyNo', '12/4');
   setVal('bbmpZone', 'Mahadevapura');
