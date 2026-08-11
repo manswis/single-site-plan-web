@@ -46,15 +46,20 @@
       <div class="apple-modal-header">
         <span style="font-size: 32px;">📁</span>
         <div>
-          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Previous Draft Found</h3>
-          <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);">We detected a saved single plot plan draft in your browser.</p>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Previous Draft
+            Found</h3>
+          <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);">We detected a saved
+            single plot plan draft in your browser.</p>
         </div>
       </div>
-      
-      <div class="apple-modal-body" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin: 18px 0; font-size: 13px; color: var(--apple-text-primary);">
+
+      <div class="apple-modal-body"
+        style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; margin: 18px 0; font-size: 13px; color: var(--apple-text-primary);">
         <p style="margin: 0 0 6px 0;"><strong>Owner:</strong> <span id="modalDraftOwner">Ramesh Kumar</span></p>
-        <p style="margin: 0 0 6px 0;"><strong>Saved Step:</strong> <span id="modalDraftStep">Step 3 of 7 (Plot Measurements)</span></p>
-        <p style="margin: 0; font-size: 11.5px; color: var(--apple-text-secondary);"><strong>Saved On:</strong> <span id="modalDraftTime">2 minutes ago</span></p>
+        <p style="margin: 0 0 6px 0;"><strong>Saved Step:</strong> <span id="modalDraftStep">Step 3 of 7 (Plot
+            Measurements)</span></p>
+        <p style="margin: 0; font-size: 11.5px; color: var(--apple-text-secondary);"><strong>Saved On:</strong> <span
+            id="modalDraftTime">2 minutes ago</span></p>
       </div>
 
       <p style="font-size: 13px; color: var(--apple-text-secondary); margin-bottom: 20px;">
@@ -62,7 +67,8 @@
       </p>
 
       <div style="display: flex; gap: 12px; justify-content: flex-end;">
-        <button class="apple-btn-secondary" onclick="discardDraft()" style="color: #dc2626;">🗑️ Discard & Start Fresh</button>
+        <button class="apple-btn-secondary" onclick="discardDraft()" style="color: #dc2626;">🗑️ Discard & Start
+          Fresh</button>
         <button class="apple-btn-primary" onclick="restoreDraft(true)">🚀 Restore Saved Draft</button>
       </div>
     </div>
@@ -107,7 +113,8 @@
         <div class="grid">
           <div class="field">
             <label>Owner Name(s) <span class="required">*</span></label>
-            <input id="ownerName" type="text" placeholder="e.g. Ramesh Kumar & Anjali Kumar" oninput="clearFieldError('ownerName', 'err-ownerName')">
+            <input id="ownerName" type="text" placeholder="e.g. Ramesh Kumar & Anjali Kumar"
+              oninput="clearFieldError('ownerName', 'err-ownerName')">
             <div class="error-msg" id="err-ownerName">⚠ Owner name is required</div>
           </div>
           <div class="field">
@@ -117,7 +124,8 @@
           </div>
           <div class="field">
             <label>BBMP PID Number <span class="required">*</span></label>
-            <input id="pidNo" type="text" placeholder="e.g. 108-W0045-12" oninput="clearFieldError('pidNo', 'err-pidNo')">
+            <input id="pidNo" type="text" placeholder="e.g. 108-W0045-12"
+              oninput="clearFieldError('pidNo', 'err-pidNo')">
             <div class="error-msg" id="err-pidNo">⚠ BBMP PID Number is required</div>
           </div>
           <div class="field">
@@ -152,7 +160,8 @@
         <div class="grid">
           <div class="field">
             <label>Survey Number <span class="required">*</span></label>
-            <input id="surveyNo" type="text" placeholder="e.g. 45/2A" oninput="clearFieldError('surveyNo', 'err-surveyNo')">
+            <input id="surveyNo" type="text" placeholder="e.g. 45/2A"
+              oninput="clearFieldError('surveyNo', 'err-surveyNo')">
             <div class="error-msg" id="err-surveyNo">⚠ Survey number is required</div>
           </div>
           <div class="field">
@@ -177,7 +186,8 @@
           </div>
           <div class="field">
             <label>Ward Name <span class="required">*</span></label>
-            <input id="wardName" type="text" placeholder="e.g. Malleshwaram" oninput="clearFieldError('wardName', 'err-wardName')">
+            <input id="wardName" type="text" placeholder="e.g. Malleshwaram"
+              oninput="clearFieldError('wardName', 'err-wardName')">
             <div class="error-msg" id="err-wardName">⚠ Ward name is required</div>
           </div>
           <div class="field" style="grid-column: span 2;">
@@ -199,9 +209,11 @@
         <div class="checkbox-box" style="margin-bottom: 18px; background: #f0f9ff; border: 1.5px solid #0284c7;">
           <label style="cursor: pointer;">
             <input type="checkbox" id="oddSiteCheck" onchange="toggleOddSite()">
-            <span style="font-weight: 700; color: #0369a1;">🔷 Irregular / Odd Shaped Site (4 sides have different measurements)</span>
+            <span style="font-weight: 700; color: #0369a1;">🔷 Irregular / Odd Shaped Site (4 sides have different
+              measurements)</span>
           </label>
-          <p id="oddSiteHint" style="margin-top: 4px; font-size: 11px; color: #0284c7;">Rectangular Mode (Default): Opposite sides auto-sync as you type. Check this box for irregular sites.</p>
+          <p id="oddSiteHint" style="margin-top: 4px; font-size: 11px; color: #0284c7;">Rectangular Mode (Default):
+            Opposite sides auto-sync as you type. Check this box for irregular sites.</p>
         </div>
 
         <div class="grid">
@@ -213,7 +225,8 @@
           </div>
           <div class="field">
             <label>Primary Abutting Road Width (ft) <span class="required">*</span></label>
-            <input id="roadWidth" type="number" placeholder="e.g. 30" oninput="clearFieldError('roadWidth', 'err-roadWidth')">
+            <input id="roadWidth" type="number" placeholder="e.g. 30"
+              oninput="clearFieldError('roadWidth', 'err-roadWidth')">
             <div class="error-msg" id="err-roadWidth">⚠ Road width is required</div>
           </div>
           <div class="field">
@@ -245,13 +258,15 @@
             <label>↔️ North & South Side (Width in ft) <span class="required">*</span></label>
             <input id="regNorthSouth" type="number" placeholder="e.g. 30" oninput="onRegularDimensionInput()">
             <div class="error-msg" id="err-regNorthSouth">⚠ North & South side measurement is required</div>
-            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both North & South boundaries (2-side regular plot).</p>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both
+              North & South boundaries (2-side regular plot).</p>
           </div>
           <div class="field">
             <label>↕️ East & West Side (Length in ft) <span class="required">*</span></label>
             <input id="regEastWest" type="number" placeholder="e.g. 60" oninput="onRegularDimensionInput()">
             <div class="error-msg" id="err-regEastWest">⚠ East & West side measurement is required</div>
-            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both East & West boundaries (2-side regular plot).</p>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both
+              East & West boundaries (2-side regular plot).</p>
           </div>
         </div>
 
@@ -259,22 +274,26 @@
         <div id="irregularSiteControls" class="grid" style="margin-top: 16px; display: none;">
           <div class="field">
             <label>⬆️ North Side (ft) <span class="required">*</span></label>
-            <input id="sideNorth" type="number" placeholder="e.g. 40" oninput="clearFieldError('sideNorth', 'err-sideNorth')">
+            <input id="sideNorth" type="number" placeholder="e.g. 40"
+              oninput="clearFieldError('sideNorth', 'err-sideNorth')">
             <div class="error-msg" id="err-sideNorth">⚠ North side dimension required</div>
           </div>
           <div class="field">
             <label>⬇️ South Side (ft) <span class="required">*</span></label>
-            <input id="sideSouth" type="number" placeholder="e.g. 40" oninput="clearFieldError('sideSouth', 'err-sideSouth')">
+            <input id="sideSouth" type="number" placeholder="e.g. 40"
+              oninput="clearFieldError('sideSouth', 'err-sideSouth')">
             <div class="error-msg" id="err-sideSouth">⚠ South side dimension required</div>
           </div>
           <div class="field">
             <label>➡️ East Side (ft) <span class="required">*</span></label>
-            <input id="sideEast" type="number" placeholder="e.g. 60" oninput="clearFieldError('sideEast', 'err-sideEast')">
+            <input id="sideEast" type="number" placeholder="e.g. 60"
+              oninput="clearFieldError('sideEast', 'err-sideEast')">
             <div class="error-msg" id="err-sideEast">⚠ East side dimension required</div>
           </div>
           <div class="field">
             <label>⬅️ West Side (ft) <span class="required">*</span></label>
-            <input id="sideWest" type="number" placeholder="e.g. 60" oninput="clearFieldError('sideWest', 'err-sideWest')">
+            <input id="sideWest" type="number" placeholder="e.g. 60"
+              oninput="clearFieldError('sideWest', 'err-sideWest')">
             <div class="error-msg" id="err-sideWest">⚠ West side dimension required</div>
           </div>
         </div>
@@ -346,7 +365,8 @@
             <h5>⬆️ North Boundary</h5>
             <div class="field">
               <label>Boundary Type <span class="required">*</span></label>
-              <select id="typeNorth" onchange="toggleBoundaryType('North'); clearFieldError('typeNorth', 'err-typeNorth')">
+              <select id="typeNorth"
+                onchange="toggleBoundaryType('North'); clearFieldError('typeNorth', 'err-typeNorth')">
                 <option value="" selected>-- Select Boundary --</option>
                 <option value="road">🛣️ Public Road / Street</option>
                 <option value="plot">🏠 Neighboring Site / Plot</option>
@@ -357,6 +377,7 @@
                 <option value="passage">🚪 Private Passage / Lane</option>
                 <option value="infra">🚂 Railway / Metro Line</option>
                 <option value="govt">🏢 Government Land</option>
+                <option value="private">🏘️ Private Property</option>
               </select>
               <div class="error-msg" id="err-typeNorth">⚠ Select boundary type</div>
             </div>
@@ -381,7 +402,8 @@
             <h5>⬇️ South Boundary</h5>
             <div class="field">
               <label>Boundary Type <span class="required">*</span></label>
-              <select id="typeSouth" onchange="toggleBoundaryType('South'); clearFieldError('typeSouth', 'err-typeSouth')">
+              <select id="typeSouth"
+                onchange="toggleBoundaryType('South'); clearFieldError('typeSouth', 'err-typeSouth')">
                 <option value="" selected>-- Select Boundary --</option>
                 <option value="plot">🏠 Neighboring Site / Plot</option>
                 <option value="road">🛣️ Public Road / Street</option>
@@ -392,6 +414,7 @@
                 <option value="passage">🚪 Private Passage / Lane</option>
                 <option value="infra">🚂 Railway / Metro Line</option>
                 <option value="govt">🏢 Government Land</option>
+                <option value="private">🏘️ Private Property</option>
               </select>
               <div class="error-msg" id="err-typeSouth">⚠ Select boundary type</div>
             </div>
@@ -427,6 +450,7 @@
                 <option value="passage">🚪 Private Passage / Lane</option>
                 <option value="infra">🚂 Railway / Metro Line</option>
                 <option value="govt">🏢 Government Land</option>
+                <option value="private">🏘️ Private Property</option>
               </select>
               <div class="error-msg" id="err-typeEast">⚠ Select boundary type</div>
             </div>
@@ -462,6 +486,7 @@
                 <option value="passage">🚪 Private Passage / Lane</option>
                 <option value="infra">🚂 Railway / Metro Line</option>
                 <option value="govt">🏢 Government Land</option>
+                <option value="private">🏘️ Private Property</option>
               </select>
               <div class="error-msg" id="err-typeWest">⚠ Select boundary type</div>
             </div>
@@ -501,12 +526,14 @@
           <div class="grid">
             <div class="field">
               <label>Proposed Road Width in RMP-2015 (ft) <span class="required">*</span></label>
-              <input id="proposedRoadWidth" type="number" placeholder="e.g. 60" oninput="clearFieldError('proposedRoadWidth', 'err-proposedRoadWidth')">
+              <input id="proposedRoadWidth" type="number" placeholder="e.g. 60"
+                oninput="clearFieldError('proposedRoadWidth', 'err-proposedRoadWidth')">
               <div class="error-msg" id="err-proposedRoadWidth">⚠ Proposed road width is required</div>
             </div>
             <div class="field">
               <label>Road Widening Strip Width (ft) <span class="required">*</span></label>
-              <input id="roadWideningStripWidth" type="number" placeholder="e.g. 10" oninput="clearFieldError('roadWideningStripWidth', 'err-roadWideningStripWidth')">
+              <input id="roadWideningStripWidth" type="number" placeholder="e.g. 10"
+                oninput="clearFieldError('roadWideningStripWidth', 'err-roadWideningStripWidth')">
               <div class="error-msg" id="err-roadWideningStripWidth">⚠ Widening strip width is required</div>
             </div>
           </div>
@@ -534,7 +561,8 @@
             </div>
             <div class="field">
               <label>Buffer Zone Width (ft) <span class="required">*</span></label>
-              <input id="bufferWidth" type="number" placeholder="e.g. 7.0" oninput="clearFieldError('bufferWidth', 'err-bufferWidth')">
+              <input id="bufferWidth" type="number" placeholder="e.g. 7.0"
+                oninput="clearFieldError('bufferWidth', 'err-bufferWidth')">
               <div class="error-msg" id="err-bufferWidth">⚠ Buffer width is required</div>
             </div>
           </div>
@@ -587,23 +615,30 @@
             the Terms & Zero Liability Disclaimer to download or print.</div>
         </div>
 
-        <!-- Precautionary Watermark Checkbox -->
-        <div class="checkbox-box" style="margin-bottom: 0; background: #fffbe6; border: 1px solid #ffe58f;">
-          <label style="cursor: pointer;">
-            <input type="checkbox" id="sampleWatermarkCheck" onchange="toggleSampleWatermark()">
-            <span style="font-weight: 600; color: #d46b08;">⚠️ Display Diagonal "SAMPLE ONLY" Watermark</span>
-          </label>
-          <p style="margin-top: 4px; font-size: 11px; color: #8c8c8c;">Default: Unchecked. Auto-checks when sample presets are loaded to prevent accidental official submission.</p>
-        </div>
+        <!-- Developer Debug Tools Block (Visible ONLY when ?sampledata=true or ?sample=1) -->
+        <div id="samplePresetButtonsBlock"
+          style="margin-top: 14px; margin-bottom: 0; display: none; background: #f8fafc; border: 1px dashed #cbd5e1; padding: 14px 18px; border-radius: 12px;">
+          <label style="margin-bottom: 8px; display: block; font-weight: 700; color: #475569; font-size: 12px;">🛠️
+            Developer Debug Tools (?sampledata=true):</label>
 
-        <!-- Quick Sample Preset Buttons (Developer Flag: ?sampledata=true) -->
-        <div id="samplePresetButtonsBlock" style="margin-top: 14px; margin-bottom: 0; display: none; background: #f8fafc; border: 1px dashed #cbd5e1; padding: 12px 16px; border-radius: 12px;">
-          <label style="margin-bottom: 6px; display: block; font-weight: 700; color: #475569; font-size: 12px;">🛠️ Developer Debug Presets (?sampledata=true):</label>
+          <!-- Precautionary Watermark Checkbox -->
+          <div class="checkbox-box" style="margin-bottom: 12px; background: #fffbe6; border: 1px solid #ffe58f;">
+            <label style="cursor: pointer;">
+              <input type="checkbox" id="sampleWatermarkCheck" onchange="toggleSampleWatermark()">
+              <span style="font-weight: 600; color: #d46b08;">⚠️ Display Diagonal "SAMPLE ONLY" Watermark</span>
+            </label>
+            <p style="margin-top: 4px; font-size: 11px; color: #8c8c8c;">Default: Unchecked. Auto-checks when sample
+              presets are loaded to prevent accidental official submission.</p>
+          </div>
+
           <div class="sample-btns">
             <button class="apple-btn-secondary" onclick="loadSampleRegular()">Standard 30x40</button>
-            <button class="apple-btn-secondary btn-purple" style="color:#fff;" onclick="loadSampleCornerPlot()">2-Side Corner</button>
-            <button class="apple-btn-secondary btn-amber" style="color:#fff;" onclick="loadSampleOdd()">Irregular Site</button>
-            <button class="apple-btn-secondary btn-indigo" style="color:#fff;" onclick="loadSampleRoadWidening()">Road Widening</button>
+            <button class="apple-btn-secondary btn-purple" style="color:#fff;" onclick="loadSampleCornerPlot()">2-Side
+              Corner</button>
+            <button class="apple-btn-secondary btn-amber" style="color:#fff;" onclick="loadSampleOdd()">Irregular
+              Site</button>
+            <button class="apple-btn-secondary btn-indigo" style="color:#fff;" onclick="loadSampleRoadWidening()">Road
+              Widening</button>
           </div>
         </div>
       </div>

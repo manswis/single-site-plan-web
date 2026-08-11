@@ -130,6 +130,7 @@ function generatePlan() {
       case 'passage': return 'PRIVATE PASSAGE / COMMON LANE';
       case 'infra': return 'RAILWAY / METRO CORRIDOR';
       case 'govt': return 'GOVERNMENT / INSTITUTIONAL LAND';
+      case 'private': return "PRIVATE PROPERTY";
       default: return "NEIGHBOR'S PLOT";
     }
   }
