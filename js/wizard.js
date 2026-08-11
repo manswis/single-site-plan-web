@@ -15,13 +15,13 @@ const SESSION_FLAG_KEY = 'bbmp_session_active';
  * Step titles and descriptions for header guidance.
  */
 const STEP_METADATA = {
-  1: { title: "Revenue Records & Identifiers", icon: "🏛️", desc: "Enter official owner names, eKhata ID (ePID), PID, and DC Conversion details." },
-  2: { title: "Property Location & Administration", icon: "📍", desc: "Select your BBMP administrative zone, ward number, and site location address." },
-  3: { title: "Plot Measurements & Dimensions", icon: "📐", desc: "Enter plot area, road width, facing direction, and N/S/E/W side measurements." },
-  4: { title: "Structure & Building Setbacks", icon: "🧱", desc: "Specify floor counts, built-up area, and custom building setbacks." },
-  5: { title: "Schedule of Property & Deed DNA", icon: "🗺️", desc: "Define abutting boundary categories for all cardinal sides." },
-  6: { title: "Constraints & Submission Options", icon: "🚧", desc: "Configure Master Plan road widening, buffer zones, and Page 2 Legend Sheet." },
-  7: { title: "Instant Review & PDF Package Download", icon: "📥", desc: "Review your generated layout plan and export official Sakala-compliant PDF." }
+  1: { title: "Revenue Records & Identifiers", mobileTitle: "Revenue Records", icon: "🏛️", desc: "Enter official owner names, eKhata ID (ePID), PID, and DC Conversion details." },
+  2: { title: "Property Location & Administration", mobileTitle: "Property Location", icon: "📍", desc: "Select your BBMP administrative zone, ward number, and site location address." },
+  3: { title: "Plot Measurements & Dimensions", mobileTitle: "Plot Measurements", icon: "📐", desc: "Enter plot area, road width, facing direction, and N/S/E/W side measurements." },
+  4: { title: "Structure & Building Setbacks", mobileTitle: "Building Setbacks", icon: "🧱", desc: "Specify floor counts, built-up area, and custom building setbacks." },
+  5: { title: "Schedule of Property & Deed DNA", mobileTitle: "Property Boundaries", icon: "🗺️", desc: "Define abutting boundary categories for all cardinal sides." },
+  6: { title: "Constraints & Submission Options", mobileTitle: "Submission Options", icon: "🚧", desc: "Configure Master Plan road widening, buffer zones, and Page 2 Legend Sheet." },
+  7: { title: "Instant Review & PDF Package Download", mobileTitle: "Review & Export", icon: "📥", desc: "Review your generated layout plan and export official Sakala-compliant PDF." }
 };
 
 /**
@@ -354,7 +354,7 @@ function showStep(stepNum, shouldSave = true) {
   if (stepDesc && meta) stepDesc.textContent = meta.desc;
 
   if (mobileBadge) mobileBadge.textContent = `Step ${stepNum} of ${TOTAL_STEPS}`;
-  if (mobileTitle && meta) mobileTitle.textContent = `${meta.icon} ${meta.title}`;
+  if (mobileTitle && meta) mobileTitle.textContent = `${meta.icon} ${meta.mobileTitle || meta.title}`;
 
   // Toggle Full-Width Export Viewport Section (Visible ONLY on Step 7)
   const exportSection = document.getElementById('exportViewportSection');
