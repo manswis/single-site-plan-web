@@ -164,16 +164,24 @@ function toggleSampleWatermark() {
 
 /**
  * Toggles visibility of Page 2 (BBMP Official Line & Colour Specifications Sheet)
- * based on the state of the includeLegendPage checkbox.
+ * and dynamically updates the Action Bar PDF package content status hint.
  * 
  * @function toggleLegendSheetPage
  * @returns {void}
  */
 function toggleLegendSheetPage() {
   const legendSheet = document.getElementById('legendSheetOutput');
+  const statusHint = document.getElementById('printPackageStatusHint');
   const isChecked = document.getElementById('includeLegendPage') ? document.getElementById('includeLegendPage').checked : true;
+
   if (legendSheet) {
     legendSheet.style.display = isChecked ? 'block' : 'none';
+  }
+
+  if (statusHint) {
+    statusHint.innerHTML = isChecked
+      ? '📄 <strong>PDF Package Content:</strong> 2-Page Official Submission (Page 1: Single Plot Layout Plan + Page 2: BBMP Line & Colour Specifications Sheet).'
+      : '📄 <strong>PDF Package Content:</strong> 1-Page Layout Plan (Page 2 Legend Specifications Sheet disabled in Section 7).';
   }
 }
 

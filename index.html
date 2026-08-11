@@ -495,16 +495,22 @@
       <button class="btn" onclick="generatePlan()">🎨 Generate BBMP Single Plot Plan</button>
     </div>
 
-    <!-- Action Bar for Direct PDF Export / Printing -->
-    <div class="card action-bar" id="actionBar" style="display:none; background: #f0fdf4; border-color: #86efac;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <!-- Action Bar for High-Resolution PDF Download / Printing -->
+    <div class="card action-bar" id="actionBar" style="display:none; background: #f0fdf4; border: 1.5px solid #86efac; padding: 16px 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
         <div>
-          <strong style="color: #166534; font-size: 14px;">✅ BBMP Single Plot Layout Plan Generated Successfully</strong>
-          <p style="margin: 2px 0 0 0; font-size: 11px; color: #15803d;">Click below to trigger high-resolution 2-page merged PDF export or print directly for Sakala e-Khata submission.</p>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px;">✅</span>
+            <strong style="color: #166534; font-size: 15px;">Your Official BBMP Layout Plan is Ready!</strong>
+          </div>
+          <p id="printPackageStatusHint" style="margin: 4px 0 0 26px; font-size: 12px; color: #15803d;">
+            📄 <strong>PDF Package Content:</strong> 2-Page Official Submission (Page 1: Single Plot Layout Plan + Page 2: BBMP Line & Colour Specifications Sheet).
+          </p>
         </div>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <button class="btn" style="background: #15803d;" onclick="printPlanPackage()">📥 Download PDF / Print Plan Package</button>
-          <button class="btn btn-secondary" onclick="toggleLegendSheetPage()">📑 Toggle Page 2 Legend Sheet</button>
+        <div>
+          <button class="btn" style="background: #15803d; height: 44px; padding: 0 24px; font-size: 14px; font-weight: 700; box-shadow: 0 2px 4px rgba(21,128,61,0.2);" onclick="printPlanPackage()">
+            🖨️ Download PDF / Print Official Plan
+          </button>
         </div>
       </div>
     </div>
@@ -857,6 +863,12 @@
 
     <!-- Output Page 2: BBMP Official Line & Colour Specifications Sheet (LEGEND.pdf) -->
     <div class="card legend-sheet-output" id="legendSheetOutput" style="display:none;">
+      <!-- Page 2 Screen Header Banner (Hidden during Print) -->
+      <div style="background: #eff6ff; border: 1px dashed #2563eb; padding: 8px 14px; border-radius: 6px; margin-bottom: 12px; font-size: 11px; color: #1e3a5f; font-weight: 600; display: flex; justify-content: space-between; align-items: center;" class="no-print">
+        <span>📑 PAGE 2: BBMP OFFICIAL LINE & COLOUR SPECIFICATIONS SHEET (LEGEND)</span>
+        <span style="font-size: 10px; color: #64748b;">Included automatically in PDF Export as per Sakala e-Khata submission rules</span>
+      </div>
+
       <div class="plan-sheet-frame" style="grid-template-columns: 1fr;">
         <div class="legend-header-bar">
           <h2>BRUHAT BENGALURU MAHANAGARA PALIKE</h2>
