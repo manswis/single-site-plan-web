@@ -706,7 +706,40 @@ function printPlanPackage() {
 let isPlanGenerated = false;
 
 /**
- * Dynamically builds the formatted property data summary grid with pencil icons for Step 7.
+ * Formats detailed boundary summary description (Road details / Adjacent property info) for Step 7.
+ * 
+ * @function formatBoundarySummary
+ * @param {string} dir - Cardinal direction ('North', 'South', 'East', 'West').
+ * @returns {string} Formatted boundary summary label.
+ */
+function formatBoundarySummary(dir) {
+  const typeEl = document.getElementById('type' + dir);
+  if (!typeEl || !typeEl.value) return '—';
+
+  const type = typeEl.value;
+  if (type === 'road') {
+    const name = document.getElementById('nameRoad' + dir)?.value.trim();
+    const widthFt = document.getElementById('widthRoad' + dir + '_ft')?.value.trim();
+    const widthIn = document.getElementById('widthRoad' + dir + '_in')?.value.trim();
+    let widthStr = '';
+    if (widthFt || widthIn) {
+      widthStr = ` (${widthFt || 0}'${widthIn ? widthIn + '"' : ''} Wide)`;
+    }
+    return `Road Access${name ? ': ' + name : ''}${widthStr}`;
+  } else if (type === 'private') {
+    const desc = document.getElementById('descPlot' + dir)?.value.trim();
+    return `Private Property${desc ? ' (' + desc + ')' : ''}`;
+  } else if (type === 'gov') {
+    const desc = document.getElementById('descPlot' + dir)?.value.trim();
+    return `Government Property${desc ? ' (' + desc + ')' : ''}`;
+  } else if (type === 'drain') {
+    return 'Stormwater Drain / Nala';
+  }
+  return type;
+}
+
+/**
+ * Dynamically builds the formatted property data summary grid for Step 7.
  * 
  * @function buildReviewSummary
  * @returns {void}
@@ -785,10 +818,10 @@ function buildReviewSummary() {
       title: '📜 Deed DNA Boundaries',
       step: 5,
       fields: [
-        { id: 'typeNorth', label: 'North Boundary' },
-        { id: 'typeSouth', label: 'South Boundary' },
-        { id: 'typeEast', label: 'East Boundary' },
-        { id: 'typeWest', label: 'West Boundary' }
+        { id: 'typeNorth', label: 'North Boundary', customVal: formatBoundarySummary('North') },
+        { id: 'typeSouth', label: 'South Boundary', customVal: formatBoundarySummary('South') },
+        { id: 'typeEast', label: 'East Boundary', customVal: formatBoundarySummary('East') },
+        { id: 'typeWest', label: 'West Boundary', customVal: formatBoundarySummary('West') }
       ]
     },
     {
@@ -807,7 +840,9 @@ function buildReviewSummary() {
         ] : []),
         { id: 'challanFee', label: 'Challan Fee Amount (₹)' },
         { id: 'challanNo', label: 'Challan Number' },
-        { id: 'challanDate', label: 'Challan Date' }
+        { id: 'challanDate', label: 'Challan Date' },
+        { id: 'includeLegendPage', label: 'Include Page 2 Legend Sheet', isCheckbox: true },
+        { id: 'sampleWatermarkCheck', label: 'Sample Draft Watermark', isCheckbox: true }
       ]
     }
   ];
