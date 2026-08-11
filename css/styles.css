@@ -1279,6 +1279,11 @@ select:focus {
   border-radius: 980px;
   cursor: pointer;
   transition: var(--apple-transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
 }
 
 .apple-btn-secondary:hover {
@@ -1297,6 +1302,11 @@ select:focus {
   cursor: pointer;
   transition: var(--apple-transition);
   box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
 }
 
 .apple-btn-primary:hover {
