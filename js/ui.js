@@ -6,13 +6,6 @@
  */
 
 /**
- * Toggles visibility between regular rectangular plot mode (auto-syncing opposite sides)
- * and odd/irregular quadrilateral plot mode (independent 4-side inputs).
- * 
- * @function toggleOddSite
- * @returns {void}
- */
-/**
  * Toggles visibility between regular rectangular plot mode (2-field N/S & E/W inputs)
  * and odd/irregular quadrilateral plot mode (independent 4-side inputs).
  * 
@@ -99,11 +92,6 @@ function onRegularDimensionInput() {
   }
 
   if (typeof saveDraft === 'function') saveDraft();
-  if (typeof generatePlan === 'function') generatePlan();
-};
-  }
-
-  calculatePlotAreaFromSides();
   if (typeof generatePlan === 'function') generatePlan();
 }
 
