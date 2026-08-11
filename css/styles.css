@@ -1967,6 +1967,7 @@ select:focus {
     margin: 4mm;
   }
 
+  html,
   body {
     background: #ffffff !important;
     padding: 0 !important;
@@ -1975,7 +1976,20 @@ select:focus {
     print-color-adjust: exact !important;
   }
 
+  /* 1. Hide ALL elements on the page by default */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* 2. Explicitly remove all header/navbar/card containers from print layout flow */
+  header,
+  nav,
+  footer,
   .apple-navbar,
+  .mobile-nav-slider,
+  .mobile-step-card,
+  .mobile-theme-btn,
+  .theme-toggle-btn,
   .apple-hero,
   .mobile-tab-switcher,
   .pricing-section,
@@ -1983,12 +1997,38 @@ select:focus {
   .stepper-header,
   .wizard-header-banner,
   .wizard-footer-bar,
+  #wizardCard,
+  .package-header-card,
+  .package-action-buttons-hub,
+  #reviewSummaryContainer,
+  #draftRestoreModal,
+  #fieldHelpModal,
   .btn,
   .sample-btns,
   .validation-summary,
   .action-bar,
   .no-print {
     display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* 3. Make ONLY #exportViewportSection and its inner children visible */
+  #exportViewportSection,
+  #exportViewportSection * {
+    visibility: visible !important;
+  }
+
+  #exportViewportSection {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
   }
 
   .workbench-grid {
@@ -2501,7 +2541,7 @@ select:focus {
 }
 
 /* Field Help Icon Button (Right-Aligned Material Help Outline) */
-.field > label {
+.field>label {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;

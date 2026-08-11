@@ -699,7 +699,15 @@ function printPlanPackage() {
 
   if (typeof generatePlan === 'function') generatePlan();
   toggleLegendSheetPage();
-  window.print();
+
+  const viewport = document.getElementById('exportViewportSection');
+  if (viewport) {
+    viewport.style.display = 'block';
+  }
+
+  setTimeout(() => {
+    window.print();
+  }, 100);
 }
 
 
