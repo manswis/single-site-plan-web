@@ -726,6 +726,7 @@ function buildReviewSummary() {
         { id: 'ownerName', label: 'Owner Name(s)' },
         { id: 'epId', label: 'eKhata ID (ePID)' },
         { id: 'pidNo', label: 'BBMP PID' },
+        { id: 'sasNo', label: 'SAS Tax Application No' },
         { id: 'surveyNo', label: 'Survey / Sy No' },
         { id: 'wardNo', label: 'Ward No' },
         { id: 'adlrNo', label: 'ADLR 11E Sketch No' },
@@ -751,6 +752,7 @@ function buildReviewSummary() {
         { id: 'plotArea', label: 'Total Plot Area (sq.ft)' },
         { id: 'roadFacing', label: 'Road Facing Direction' },
         { id: 'roadWidth', label: 'Front Road Width', isFtIn: true },
+        { id: 'scale', label: 'Drawing Scale' },
         ...(isOdd ? [
           { id: 'sideNorth', label: 'North Side Dimension', isFtIn: true },
           { id: 'sideSouth', label: 'South Side Dimension', isFtIn: true },
