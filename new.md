@@ -5,8 +5,6 @@
 2. add change FAQ to "FAQ & Help" and add detailed section how to use this in same page as FAQ (explain each field with sample image (html) and how to get that
  - also improve FAQ's and add more points, and make it more user friendly
 4. show a popup with sample water mark may be in poupup add 4 option, dont take user to wizard's 7th step
-5. remove "Start Creating Your Plan Now →" from home bottom,
-6. improve "How It Works in 3 Simple Steps" to better explain and UI and allignment of each 3 steps
 7. improve "Legal Disclaimer" to more point to make it bullete proof, I dont want to be liable in any way, make it more like terms and condition (preserve current points as well)
  - I the developer cannot be liable for any damages including but not limited to rejection of plan, loss of money or any other damages 
 8. when I open new page its not asking custom popup , browser data found want to start fresh or restore data from local storage (browser crash situation)
