@@ -656,15 +656,23 @@ select:focus {
   margin-bottom: 6px;
 }
 
-/* @media print Rules for A4/A3 Multi-Page Merged Export */
+/* Pristine @media print Rules optimized for A4 Multi-Page PDF */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 8mm 8mm 8mm 8mm;
+    margin: 5mm;
   }
 
   body {
     background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .container {
+    max-width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
   }
@@ -678,7 +686,8 @@ select:focus {
   .btn,
   .sample-btns,
   .validation-summary,
-  .action-bar {
+  .action-bar,
+  .no-print {
     display: none !important;
   }
 
@@ -688,13 +697,37 @@ select:focus {
     box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
-    page-break-after: avoid;
-    break-after: avoid;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
   .plan-sheet-frame {
-    border: 2px solid var(--primary) !important;
+    border: 2px solid #1e3a5f !important;
     box-shadow: none !important;
+    padding: 8px !important;
+    gap: 10px !important;
+    grid-template-columns: 67% 33% !important;
+  }
+
+  .drawing-canvas-column {
+    padding-right: 10px !important;
+  }
+
+  .sidebar-panel-body {
+    padding: 4px 6px !important;
+  }
+
+  .conditions-list {
+    max-height: none !important;
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+  }
+
+  .svg-container svg {
+    max-height: 430px !important;
+    width: 100% !important;
   }
 
   .legend-sheet-output {
@@ -705,5 +738,7 @@ select:focus {
     margin: 0 !important;
     page-break-before: always !important;
     break-before: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 }

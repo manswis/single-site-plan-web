@@ -1,7 +1,7 @@
 /**
  * @file ui.js
  * @description Handles dynamic DOM interaction logic, visibility toggles, cardinal side dimension auto-syncing,
- * legend page visibility, direct client-side PDF file downloading (html2pdf.js), and browser print trigger logic.
+ * legend page visibility, and native high-resolution vector PDF export trigger logic.
  * @author Senior Systems Architect
  */
 
@@ -186,8 +186,8 @@ function toggleLegendSheetPage() {
 }
 
 /**
- * Direct client-side PDF file download using html2pdf.js engine.
- * Downloads multi-page A4 PDF directly into user's Downloads folder WITHOUT opening print UI.
+ * Triggers native high-resolution vector PDF export dialog by setting the document title
+ * to an official BBMP property file name convention before launching print engine.
  * 
  * @function downloadPDFPackage
  * @returns {void}
@@ -195,73 +195,23 @@ function toggleLegendSheetPage() {
 function downloadPDFPackage() {
   const pid = document.getElementById('pidNo') ? document.getElementById('pidNo').value.trim() : '';
   const survey = document.getElementById('surveyNo') ? document.getElementById('surveyNo').value.trim().replace(/[/\\?%*:|"<>]/g, '-') : '';
-  const fileName = `BBMP_Single_Plot_Plan_${pid || survey || 'Sakala'}.pdf`;
 
-  const downloadBtn = document.getElementById('downloadPdfBtn');
-  const originalBtnText = downloadBtn ? downloadBtn.innerHTML : '';
-  if (downloadBtn) {
-    downloadBtn.innerHTML = '⏳ Generating PDF File...';
-    downloadBtn.disabled = true;
-  }
+  const originalTitle = document.title;
+  const customFileName = `BBMP_Single_Plot_Plan_${pid || survey || 'Sakala'}`;
 
-  const planOutput = document.getElementById('planOutput');
-  if (!planOutput || planOutput.style.display === 'none') {
-    if (typeof validate === 'function' && !validate()) return;
-    if (typeof generatePlan === 'function') generatePlan();
-  }
-  toggleLegendSheetPage();
+  document.title = customFileName;
 
-  // Create temporary container combining Page 1 (Layout Plan) and Page 2 (Legend Sheet)
-  const element = document.createElement('div');
-  const page1 = document.getElementById('planOutput').cloneNode(true);
-  page1.style.display = 'block';
-  element.appendChild(page1);
+  printPlanPackage();
 
-  const includeLegend = document.getElementById('includeLegendPage') ? document.getElementById('includeLegendPage').checked : true;
-  if (includeLegend) {
-    const page2 = document.getElementById('legendSheetOutput').cloneNode(true);
-    page2.style.display = 'block';
-    page2.style.pageBreakBefore = 'always';
-    element.appendChild(page2);
-  }
-
-  // Fallback to window.print() if html2pdf library is unavailable
-  if (typeof html2pdf === 'undefined') {
-    console.warn('html2pdf library not loaded, falling back to print dialog');
-    if (downloadBtn) {
-      downloadBtn.innerHTML = originalBtnText;
-      downloadBtn.disabled = false;
-    }
-    window.print();
-    return;
-  }
-
-  const opt = {
-    margin: [8, 8, 8, 8],
-    filename: fileName,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).save().then(() => {
-    if (downloadBtn) {
-      downloadBtn.innerHTML = originalBtnText;
-      downloadBtn.disabled = false;
-    }
-  }).catch((err) => {
-    console.error('PDF Generation Error:', err);
-    if (downloadBtn) {
-      downloadBtn.innerHTML = originalBtnText;
-      downloadBtn.disabled = false;
-    }
-    window.print();
-  });
+  // Restore original window title after short delay
+  setTimeout(() => {
+    document.title = originalTitle;
+  }, 2000);
 }
 
 /**
  * Pre-configures page breaks and multi-page visibility before invoking window.print().
- * Opens native browser printer popup for hardcopy printing.
+ * Opens native browser printer popup for high-definition vector printing.
  * 
  * @function printPlanPackage
  * @returns {void}
