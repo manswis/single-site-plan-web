@@ -714,68 +714,97 @@ function buildReviewSummary() {
   const container = document.getElementById('reviewSummaryContainer');
   if (!container) return;
 
+  const isOdd = document.getElementById('oddSiteCheck')?.checked;
+  const isRoadWidening = document.getElementById('roadWideningCheck')?.checked;
+  const isBuffer = document.getElementById('bufferCheck')?.checked;
+
   const sections = [
     {
       title: '🏛️ Revenue & Property Records',
       step: 1,
       fields: [
-        { id: 'ownerName', label: 'Owner Name(s)', step: 1 },
-        { id: 'surveyNo', label: 'Survey / Sy No', step: 1 },
-        { id: 'epId', label: 'eKhata ID (ePID)', step: 1 },
-        { id: 'pidNo', label: 'BBMP PID', step: 1 },
-        { id: 'wardNo', label: 'Ward No', step: 1 },
-        { id: 'dcOrderNo', label: 'DC Order', step: 1 }
+        { id: 'ownerName', label: 'Owner Name(s)' },
+        { id: 'epId', label: 'eKhata ID (ePID)' },
+        { id: 'pidNo', label: 'BBMP PID' },
+        { id: 'surveyNo', label: 'Survey / Sy No' },
+        { id: 'wardNo', label: 'Ward No' },
+        { id: 'adlrNo', label: 'ADLR 11E Sketch No' },
+        { id: 'dcOrderNo', label: 'DC Conversion Order No' },
+        { id: 'dcOrderDate', label: 'DC Order Date' },
+        { id: 'dcAuthority', label: 'Issuing Authority' }
       ]
     },
     {
       title: '📍 Location & Address',
       step: 2,
       fields: [
-        { id: 'address', label: 'Address', step: 2 },
-        { id: 'wardName', label: 'Ward / Area', step: 2 }
+        { id: 'address', label: 'Property Address' },
+        { id: 'wardName', label: 'Ward / Area Name' },
+        { id: 'bbmpZone', label: 'BBMP Zone' }
       ]
     },
     {
-      title: '📐 Plot Measurements',
+      title: '📐 Plot Measurements & Geometry',
       step: 3,
       fields: [
-        { id: 'plotArea', label: 'Plot Area (sq.ft)', step: 3 },
-        { id: 'roadWidth', label: 'Road Width', step: 3, isFtIn: true },
-        { id: 'roadFacing', label: 'Road Facing', step: 3 },
-        { id: 'regNorthSouth', label: 'North-South Dimension', step: 3, isFtIn: true },
-        { id: 'regEastWest', label: 'East-West Dimension', step: 3, isFtIn: true }
+        { id: 'oddSiteCheck', label: 'Plot Type', customVal: isOdd ? 'Irregular (4-Side Measurement)' : 'Regular (Rectangular / Square)' },
+        { id: 'plotArea', label: 'Total Plot Area (sq.ft)' },
+        { id: 'roadFacing', label: 'Road Facing Direction' },
+        { id: 'roadWidth', label: 'Front Road Width', isFtIn: true },
+        ...(isOdd ? [
+          { id: 'sideNorth', label: 'North Side Dimension', isFtIn: true },
+          { id: 'sideSouth', label: 'South Side Dimension', isFtIn: true },
+          { id: 'sideEast', label: 'East Side Dimension', isFtIn: true },
+          { id: 'sideWest', label: 'West Side Dimension', isFtIn: true }
+        ] : [
+          { id: 'regNorthSouth', label: 'North-South Dimension', isFtIn: true },
+          { id: 'regEastWest', label: 'East-West Dimension', isFtIn: true }
+        ])
       ]
     },
     {
-      title: '🏗️ Building & Setbacks',
+      title: '🏗️ Building Footprint & Setbacks',
       step: 4,
       fields: [
-        { id: 'floorsCount', label: 'Floors', step: 4 },
-        { id: 'builtUpArea', label: 'Built-up Area (sq.ft)', step: 4 },
-        { id: 'setbackFront', label: 'Front Setback', step: 4, isFtIn: true },
-        { id: 'setbackRear', label: 'Rear Setback', step: 4, isFtIn: true },
-        { id: 'setbackLeft', label: 'Left Setback', step: 4, isFtIn: true },
-        { id: 'setbackRight', label: 'Right Setback', step: 4, isFtIn: true }
+        { id: 'bldgType', label: 'Building Type' },
+        { id: 'noOfFloors', label: 'Number of Floors' },
+        { id: 'bldgOrientation', label: 'Footprint Alignment' },
+        { id: 'bldgWidth', label: 'Building Width', isFtIn: true },
+        { id: 'bldgLength', label: 'Building Length', isFtIn: true },
+        { id: 'builtUpArea', label: 'Total Built-up Area (sq.ft)' },
+        { id: 'setbackFront', label: 'Front Setback', isFtIn: true },
+        { id: 'setbackRear', label: 'Rear Setback', isFtIn: true },
+        { id: 'setbackLeft', label: 'Left Setback', isFtIn: true },
+        { id: 'setbackRight', label: 'Right Setback', isFtIn: true }
       ]
     },
     {
       title: '📜 Deed DNA Boundaries',
       step: 5,
       fields: [
-        { id: 'typeNorth', label: 'North Boundary', step: 5 },
-        { id: 'typeSouth', label: 'South Boundary', step: 5 },
-        { id: 'typeEast', label: 'East Boundary', step: 5 },
-        { id: 'typeWest', label: 'West Boundary', step: 5 }
+        { id: 'typeNorth', label: 'North Boundary' },
+        { id: 'typeSouth', label: 'South Boundary' },
+        { id: 'typeEast', label: 'East Boundary' },
+        { id: 'typeWest', label: 'West Boundary' }
       ]
     },
     {
       title: '🚧 Constraints & Fees',
       step: 6,
       fields: [
-        { id: 'roadWideningCheck', label: 'Road Widening', step: 6, isCheckbox: true },
-        { id: 'bufferCheck', label: 'Buffer Zone', step: 6, isCheckbox: true },
-        { id: 'challanFee', label: 'Fee Amount (₹)', step: 6 },
-        { id: 'challanNo', label: 'Challan No', step: 6 }
+        { id: 'roadWideningCheck', label: 'Road Widening Affected', isCheckbox: true },
+        ...(isRoadWidening ? [
+          { id: 'proposedRoadWidth', label: 'Proposed Road Width', isFtIn: true },
+          { id: 'roadWideningStripWidth', label: 'Road Widening Strip Width', isFtIn: true }
+        ] : []),
+        { id: 'bufferCheck', label: 'Drain / Buffer Zone Affected', isCheckbox: true },
+        ...(isBuffer ? [
+          { id: 'bufferType', label: 'Buffer Type' },
+          { id: 'bufferWidth', label: 'Buffer Width', isFtIn: true }
+        ] : []),
+        { id: 'challanFee', label: 'Challan Fee Amount (₹)' },
+        { id: 'challanNo', label: 'Challan Number' },
+        { id: 'challanDate', label: 'Challan Date' }
       ]
     }
   ];
@@ -795,9 +824,11 @@ function buildReviewSummary() {
     `;
 
     sec.fields.forEach(f => {
-      const el = document.getElementById(f.id);
       let val = '—';
-      if (f.isCheckbox) {
+      if (f.customVal !== undefined) {
+        val = f.customVal;
+      } else if (f.isCheckbox) {
+        const el = document.getElementById(f.id);
         val = (el && el.checked) ? 'Yes' : 'No';
       } else if (f.isFtIn) {
         const ftEl = document.getElementById(f.id + '_ft');
@@ -806,20 +837,23 @@ function buildReviewSummary() {
         const inVal = inEl ? inEl.value.trim() : '';
         if (ftVal !== '' || inVal !== '') {
           val = `${ftVal || '0'} ft ${inVal ? inVal + ' in' : ''}`;
-        } else if (el && el.value) {
-          val = `${el.value} ft`;
+        } else {
+          const hiddenEl = document.getElementById(f.id);
+          if (hiddenEl && hiddenEl.value) {
+            val = `${hiddenEl.value} ft`;
+          }
         }
-      } else if (el && el.value.trim() !== '') {
-        val = el.value.trim();
+      } else {
+        const el = document.getElementById(f.id);
+        if (el && el.value && el.value.trim() !== '') {
+          val = el.value.trim();
+        }
       }
 
       html += `
         <div class="review-field-row">
           <span class="field-label">${f.label}:</span>
           <span class="field-value">${val}</span>
-          <button type="button" class="review-pencil-icon" onclick="editFieldFromReview(${f.step}, '${f.id}')" title="Edit ${f.label}">
-            <span class="material-symbols-outlined">edit</span>
-          </button>
         </div>
       `;
     });
