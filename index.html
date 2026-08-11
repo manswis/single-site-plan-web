@@ -75,10 +75,31 @@
 
       <!-- Google-Style Action Buttons Hub -->
       <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
-        <a href="studio.html" class="apple-btn-primary"
-          style="display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 32px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.3);">
+        <button type="button" class="apple-btn-primary" onclick="handleStartNowClick()"
+          style="display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 32px; font-size: 15px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.3);">
           <span>Start Now</span>
-        </a>
+        </button>
+      </div>
+
+      <!-- Clean Alert Modal Dialog on Home Page (No Icons) -->
+      <div id="draftRestoreModal" class="apple-modal-overlay" style="display: none;">
+        <div class="apple-modal-card alert-modal-card">
+          <h3 style="margin: 0 0 8px 0; font-size: 19px; font-weight: 700; color: var(--apple-text-primary);">Previous Session Found</h3>
+          <p style="margin: 0 0 16px 0; font-size: 13px; color: var(--apple-text-secondary); line-height: 1.5;">
+            A saved single plot plan draft was detected in your browser memory.
+          </p>
+
+          <div class="apple-modal-body" style="background: var(--apple-card-bg); border: 1px solid var(--apple-border); border-radius: 12px; padding: 14px; margin-bottom: 20px; text-align: left; font-size: 13px;">
+            <p style="margin: 0 0 6px 0; color: var(--apple-text-primary);"><strong>Owner:</strong> <span id="modalDraftOwner">Ramesh Kumar</span></p>
+            <p style="margin: 0 0 6px 0; color: var(--apple-text-primary);"><strong>Saved Step:</strong> <span id="modalDraftStep">Step 3 of 7</span></p>
+            <p style="margin: 0; color: var(--apple-text-primary);"><strong>Last Saved:</strong> <span id="modalDraftTime">Just now</span></p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <button class="apple-btn-secondary" onclick="handleHomeDiscard()" style="height: 44px; font-weight: 700;">Start Fresh</button>
+            <button class="apple-btn-primary" onclick="handleHomeRestore()" style="height: 44px; font-weight: 700;">Restore Session</button>
+          </div>
+        </div>
       </div>
 
       <!-- Local Privacy Guarantee Pill -->
@@ -146,6 +167,58 @@
 
   </div>
 
+  <script>
+    function handleStartNowClick() {
+      const DRAFT_STORAGE_KEY = 'eplan_draft_session_v1';
+      const draftRaw = localStorage.getItem(DRAFT_STORAGE_KEY);
+      if (draftRaw) {
+        try {
+          const draft = JSON.parse(draftRaw);
+          if (draft && draft.formData) {
+            const hasUserData = Object.values(draft.formData).some(val => val !== '' && val !== false && val !== null && val !== undefined);
+            if (hasUserData) {
+              const modal = document.getElementById('draftRestoreModal');
+              const ownerEl = document.getElementById('modalDraftOwner');
+              const stepEl = document.getElementById('modalDraftStep');
+              const timeEl = document.getElementById('modalDraftTime');
+
+              const owner = draft.formData['ownerName'] || 'Unnamed Property';
+              if (ownerEl) ownerEl.textContent = owner;
+              if (stepEl) stepEl.textContent = `Step ${draft.currentStep || 1} of 7`;
+              if (timeEl) timeEl.textContent = 'Saved draft';
+
+              if (modal) {
+                modal.classList.add('active');
+                modal.style.display = 'flex';
+              }
+              return;
+            }
+          }
+        } catch (e) {}
+      }
+      window.location.href = 'studio.html';
+    }
+
+    function handleHomeRestore() {
+      const modal = document.getElementById('draftRestoreModal');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+      }
+      window.location.href = 'studio.html?action=restore';
+    }
+
+    function handleHomeDiscard() {
+      const DRAFT_STORAGE_KEY = 'eplan_draft_session_v1';
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+      const modal = document.getElementById('draftRestoreModal');
+      if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+      }
+      window.location.href = 'studio.html?action=fresh';
+    }
+  </script>
 </body>
 
 </html>

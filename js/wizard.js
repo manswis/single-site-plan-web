@@ -75,6 +75,19 @@ function initWizard() {
  * @returns {boolean} True if draft was restored or modal prompt displayed.
  */
 function checkAndRestoreDraft() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const actionParam = urlParams.get('action');
+
+  if (actionParam === 'fresh') {
+    discardDraft();
+    return true;
+  }
+
+  if (actionParam === 'restore') {
+    restoreDraft(true);
+    return true;
+  }
+
   const draftRaw = localStorage.getItem(DRAFT_STORAGE_KEY);
   if (!draftRaw) return false;
 
@@ -122,6 +135,7 @@ function showDraftRestoreModal(draft) {
   if (stepEl) stepEl.textContent = `Step ${draft.currentStep} of 7 (${stepMeta.title})`;
   if (timeEl) timeEl.textContent = formatDraftTimestamp(draft.timestamp);
 
+  modal.classList.add('active');
   modal.style.display = 'flex';
 }
 
@@ -202,7 +216,10 @@ function restoreDraft(hideModal = true) {
 
     if (hideModal) {
       const modal = document.getElementById('draftRestoreModal');
-      if (modal) modal.style.display = 'none';
+      if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+      }
     }
 
     // Reveal wizard card and land on Step 1
@@ -246,7 +263,10 @@ function discardDraft() {
   });
 
   const modal = document.getElementById('draftRestoreModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
 
   // Reveal wizard card and start fresh on Step 1
   const wizardCard = document.getElementById('wizardCard');

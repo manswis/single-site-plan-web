@@ -73,6 +73,55 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
+/* Modal Overlay & Centered Alert Dialog */
+.apple-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  z-index: 99999 !important;
+  display: none;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+}
+
+.apple-modal-overlay.active {
+  display: flex !important;
+}
+
+.apple-modal-card,
+.alert-modal-card {
+  background: var(--apple-card-bg) !important;
+  border: 1px solid var(--apple-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3) !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  margin: 0 auto !important;
+  padding: 28px 24px !important;
+  position: relative !important;
+  color: var(--apple-text-primary) !important;
+  animation: modalPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 [data-theme="dark"] [style*="background: #eff6ff"],
 [data-theme="dark"] [style*="background:#eff6ff"] {
   background: rgba(41, 151, 255, 0.15) !important;
