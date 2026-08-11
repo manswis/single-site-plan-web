@@ -180,14 +180,37 @@ function toggleLegendSheetPage() {
 
   if (statusHint) {
     statusHint.innerHTML = isChecked
-      ? '📄 <strong>PDF Package Content:</strong> 2-Page Official Submission (Page 1: Single Plot Layout Plan + Page 2: BBMP Line & Colour Specifications Sheet).'
-      : '📄 <strong>PDF Package Content:</strong> 1-Page Layout Plan (Page 2 Legend Specifications Sheet disabled in Section 7).';
+      ? '📄 <strong>Document Content:</strong> 2-Page Consolidated Package (Page 1: Single Plot Layout Plan + Page 2: BBMP Line & Colour Specifications Sheet).'
+      : '📄 <strong>Document Content:</strong> 1-Page Layout Plan (Page 2 Legend Specifications Sheet disabled in Section 7).';
   }
 }
 
 /**
- * Triggers native browser print / PDF export dialog for the generated BBMP plan package.
- * Pre-configures page breaks and multi-page visibility before printing.
+ * Triggers PDF save dialog by temporarily setting the document title
+ * to an official BBMP property file name convention before launching print engine.
+ * 
+ * @function downloadPDFPackage
+ * @returns {void}
+ */
+function downloadPDFPackage() {
+  const pid = document.getElementById('pidNo') ? document.getElementById('pidNo').value.trim() : '';
+  const survey = document.getElementById('surveyNo') ? document.getElementById('surveyNo').value.trim().replace(/[/\\?%*:|"<>]/g, '-') : '';
+
+  const originalTitle = document.title;
+  const customFileName = `BBMP_Single_Plot_Layout_Plan_${pid || survey || 'Sakala'}`;
+
+  document.title = customFileName;
+
+  printPlanPackage();
+
+  // Restore original window title after short delay
+  setTimeout(() => {
+    document.title = originalTitle;
+  }, 2000);
+}
+
+/**
+ * Pre-configures page breaks and multi-page visibility before invoking window.print().
  * 
  * @function printPlanPackage
  * @returns {void}

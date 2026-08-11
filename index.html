@@ -495,22 +495,42 @@
       <button class="btn" onclick="generatePlan()">🎨 Generate BBMP Single Plot Plan</button>
     </div>
 
-    <!-- Action Bar for High-Resolution PDF Download / Printing -->
-    <div class="card action-bar" id="actionBar" style="display:none; background: #f0fdf4; border: 1.5px solid #86efac; padding: 16px 20px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-        <div>
+    <!-- Action Bar for PDF Export & Direct Printing -->
+    <div class="card action-bar" id="actionBar" style="display:none; background: #f0fdf4; border: 1.5px solid #86efac; padding: 18px 22px;">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        
+        <!-- Header & Package Content Summary -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 1px dashed #abf7c0; padding-bottom: 12px;">
           <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 18px;">✅</span>
-            <strong style="color: #166534; font-size: 15px;">Your Official BBMP Layout Plan is Ready!</strong>
+            <span style="font-size: 20px;">✅</span>
+            <strong style="color: #166534; font-size: 16px;">Official BBMP Single Plot Plan Ready for Export</strong>
           </div>
-          <p id="printPackageStatusHint" style="margin: 4px 0 0 26px; font-size: 12px; color: #15803d;">
-            📄 <strong>PDF Package Content:</strong> 2-Page Official Submission (Page 1: Single Plot Layout Plan + Page 2: BBMP Line & Colour Specifications Sheet).
-          </p>
+          <span style="font-size: 11px; background: #dcfce7; color: #166534; padding: 3px 8px; border-radius: 12px; font-weight: 600;">Sakala e-Khata Ready</span>
         </div>
-        <div>
-          <button class="btn" style="background: #15803d; height: 44px; padding: 0 24px; font-size: 14px; font-weight: 700; box-shadow: 0 2px 4px rgba(21,128,61,0.2);" onclick="printPlanPackage()">
-            🖨️ Download PDF / Print Official Plan
-          </button>
+
+        <p id="printPackageStatusHint" style="margin: 0; font-size: 12px; color: #15803d; line-height: 1.5;">
+          📄 <strong>Document Content:</strong> 2-Page Consolidated Package (Page 1: Single Plot Layout Plan + Page 2: BBMP Line & Colour Specifications Sheet).
+        </p>
+
+        <!-- Two Clear Action Buttons: Export PDF & Print -->
+        <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 4px;">
+          
+          <!-- Button 1: Save / Download as PDF -->
+          <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 4px;">
+            <button class="btn" style="background: #15803d; height: 44px; font-size: 14px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 2px 4px rgba(21,128,61,0.2);" onclick="downloadPDFPackage()">
+              <span>📥 Save / Download as PDF File</span>
+            </button>
+            <span style="font-size: 10.5px; color: #166534; text-align: center;">💡 Select "Save as PDF" in the popup window to save file.</span>
+          </div>
+
+          <!-- Button 2: Print Layout Plan -->
+          <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 4px;">
+            <button class="btn btn-secondary" style="background: #1e3a5f; height: 44px; font-size: 14px; font-weight: 700; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="printPlanPackage()">
+              <span>🖨️ Send to Printer</span>
+            </button>
+            <span style="font-size: 10.5px; color: #475569; text-align: center;">💡 Sends layout drawing directly to your connected printer.</span>
+          </div>
+
         </div>
       </div>
     </div>
