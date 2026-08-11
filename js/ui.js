@@ -264,11 +264,20 @@ function autoCalculateSetbacks(force = false) {
   const remainWidth = Math.max(0, widthSpan - widthVal);
   const remainLength = Math.max(0, lengthSpan - lengthVal);
 
-  // Equal split allocation for setbacks
-  const calcLeft = Math.round((remainWidth / 2) * 10) / 10;
-  const calcRight = Math.round((remainWidth / 2) * 10) / 10;
-  const calcFront = Math.round((remainLength / 2) * 10) / 10;
-  const calcRear = Math.round((remainLength / 2) * 10) / 10;
+  // Convert clearance to total whole inches to prevent decimal rounding errors
+  const remainWidthInches = Math.floor(remainWidth * 12 + 0.001);
+  const remainLengthInches = Math.floor(remainLength * 12 + 0.001);
+
+  // Equal split allocation in whole inches
+  const leftInches = Math.floor(remainWidthInches / 2);
+  const rightInches = Math.floor(remainWidthInches / 2);
+  const frontInches = Math.floor(remainLengthInches / 2);
+  const rearInches = Math.floor(remainLengthInches / 2);
+
+  const calcLeft = leftInches / 12;
+  const calcRight = rightInches / 12;
+  const calcFront = frontInches / 12;
+  const calcRear = rearInches / 12;
 
   // Populate setback input fields (unless manually locked by user)
   const populateField = (fieldId, totalFeet) => {
