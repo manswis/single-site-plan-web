@@ -417,6 +417,14 @@ function generatePlan() {
   const bldgX = offsetX + (sbLeft * ratio);
   const bldgY = offsetY + (sbTop * ratio);
 
+  const setbackRect = document.getElementById('setbackRect');
+  if (setbackRect) {
+    setbackRect.setAttribute('x', bldgX);
+    setbackRect.setAttribute('y', bldgY);
+    setbackRect.setAttribute('width', bldgDrawW);
+    setbackRect.setAttribute('height', bldgDrawH);
+  }
+
   bldgRect.setAttribute('x', bldgX);
   bldgRect.setAttribute('y', bldgY);
   bldgRect.setAttribute('width', bldgDrawW);
@@ -531,6 +539,7 @@ function generatePlan() {
    */
   function renderRoadOrLabel(dir, info, x, y, w, h, position, labelX, labelY) {
     const roadEl = document.getElementById(`roadRect${dir}`) || createRoadRect(dir);
+    const clEl = document.getElementById(`roadCL${dir}`) || createRoadCL(dir);
     const labelEl = document.getElementById(`adj${dir.charAt(0)}`);
 
     if (info.type === 'road') {
@@ -539,6 +548,21 @@ function generatePlan() {
       roadEl.setAttribute('y', y);
       roadEl.setAttribute('width', Math.max(w, 20));
       roadEl.setAttribute('height', Math.max(h, 20));
+
+      clEl.style.display = 'block';
+      if (position === 'top' || position === 'bottom') {
+        const midY = y + h / 2;
+        clEl.setAttribute('x1', x);
+        clEl.setAttribute('y1', midY);
+        clEl.setAttribute('x2', x + w);
+        clEl.setAttribute('y2', midY);
+      } else {
+        const midX = x + w / 2;
+        clEl.setAttribute('x1', midX);
+        clEl.setAttribute('y1', y);
+        clEl.setAttribute('x2', midX);
+        clEl.setAttribute('y2', y + h);
+      }
 
       if (labelEl) {
         labelEl.setAttribute('x', labelX);
@@ -552,6 +576,7 @@ function generatePlan() {
       }
     } else {
       roadEl.style.display = 'none';
+      clEl.style.display = 'none';
       if (labelEl) {
         labelEl.setAttribute('x', labelX);
         labelEl.setAttribute('y', labelY);
@@ -574,6 +599,17 @@ function generatePlan() {
     rect.setAttribute('stroke-width', '1');
     svg.appendChild(rect);
     return rect;
+  }
+
+  function createRoadCL(dir) {
+    const svg = document.getElementById('plotSvg');
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('id', `roadCL${dir}`);
+    line.setAttribute('stroke', '#64748b');
+    line.setAttribute('stroke-width', '1');
+    line.setAttribute('stroke-dasharray', '12,3,3,3');
+    svg.appendChild(line);
+    return line;
   }
 
   document.getElementById('scaleText').textContent = "Scale: " + scale;

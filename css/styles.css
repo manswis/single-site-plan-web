@@ -2050,11 +2050,40 @@ select:focus {
     max-height: none !important;
     font-size: 7.5px !important;
     line-height: 1.15 !important;
-    padding-left: 10px !important;
+    padding-left: 20px !important;
   }
 
   .conditions-list li {
     margin-bottom: 1px !important;
+  }
+
+  /* Explicit High-Contrast Architectural Print & Export Styling */
+  #planOutput,
+  #legendSheetOutput,
+  .plan-sheet-frame,
+  .plan-sheet-frame * {
+    color: #0f172a !important;
+  }
+
+  #planOutput .details-table td,
+  #planOutput .landuse-table td,
+  #planOutput .title-block-table td,
+  #legendSheetOutput table td,
+  #legendSheetOutput table th {
+    color: #0f172a !important;
+    border-color: #334155 !important;
+  }
+
+  #planOutput .details-table .label,
+  #planOutput .landuse-table th,
+  #planOutput .title-block-table .tb-label,
+  #planOutput .sidebar-panel-header,
+  #legendSheetOutput table th,
+  #legendSheetOutput h4 {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    border-color: #334155 !important;
   }
 
   .landuse-table,
