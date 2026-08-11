@@ -54,7 +54,7 @@ function loadSampleRegular() {
 
   // Primary Info
   setVal('ownerName', 'RAMESH KUMAR & ANJALI KUMAR');
-  setVal('epId', 'EP-2024-789456');
+  setVal('epId', '3879772535');
   setVal('pidNo', '108-W0045-12');
   setVal('sasNo', 'SAS-2024-554433');
   setVal('adlrNo', 'ADLR/11E/2024/7891');
@@ -136,7 +136,7 @@ function loadSampleCornerPlot() {
   if (typeof toggleBufferZone === 'function') toggleBufferZone();
 
   setVal('ownerName', 'VIKRAM SHARMA & DEEPIKA SHARMA');
-  setVal('epId', 'EP-2024-334455');
+  setVal('epId', '3879772536');
   setVal('pidNo', '102-W0089-05');
   setVal('sasNo', 'SAS-2024-778899');
   setVal('adlrNo', 'ADLR/11E/2024/4455');
@@ -214,7 +214,7 @@ function loadSampleOdd() {
   if (typeof toggleBufferZone === 'function') toggleBufferZone();
 
   setVal('ownerName', 'SURESH RAO & LAKSHMI RAO');
-  setVal('epId', 'EP-2024-112233');
+  setVal('epId', '3879772537');
   setVal('pidNo', '178-W0078-45');
   setVal('sasNo', 'SAS-2024-887766');
   setVal('adlrNo', 'ADLR/11E/2024/3321');
@@ -291,7 +291,7 @@ function loadSampleRoadWidening() {
   if (typeof toggleBufferZone === 'function') toggleBufferZone();
 
   setVal('ownerName', 'KAVITHA REDDY');
-  setVal('epId', 'EP-2024-998877');
+  setVal('epId', '3879772538');
   setVal('pidNo', '150-W0150-08');
   setVal('sasNo', 'SAS-2024-112244');
   setVal('adlrNo', 'ADLR/11E/2024/9012');
