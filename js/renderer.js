@@ -235,16 +235,20 @@ function generatePlan() {
     eH = sideE * ratio;
     wH = sideW * ratio;
 
-    offsetX = 180 + (maxDrawW - Math.max(nW, sW)) / 2;
-    offsetY = 100 + (maxDrawH - Math.max(eH, wH)) / 2;
+    const maxW = Math.max(nW, sW);
+    const maxH = Math.max(eH, wH);
 
-    topLeft = { x: offsetX + (maxDrawW - nW) / 2, y: offsetY };
-    topRight = { x: offsetX + (maxDrawW + nW) / 2, y: offsetY };
-    botRight = { x: offsetX + (maxDrawW + sW) / 2, y: offsetY + Math.max(eH, wH) };
-    botLeft = { x: offsetX + (maxDrawW - sW) / 2, y: offsetY + Math.max(eH, wH) };
+    offsetX = 180 + (maxDrawW - maxW) / 2;
+    offsetY = 100 + (maxDrawH - maxH) / 2;
 
-    drawW = Math.max(nW, sW);
-    drawH = Math.max(eH, wH);
+    // 4 Corner Vertices for Irregular Quadrilateral
+    topLeft = { x: offsetX + (maxW - nW) / 2, y: offsetY };
+    topRight = { x: offsetX + (maxW + nW) / 2, y: offsetY };
+    botRight = { x: offsetX + (maxW + sW) / 2, y: offsetY + eH };
+    botLeft = { x: offsetX + (maxW - sW) / 2, y: offsetY + wH };
+
+    drawW = maxW;
+    drawH = maxH;
 
     plotPoly.setAttribute('points', `${topLeft.x},${topLeft.y} ${topRight.x},${topRight.y} ${botRight.x},${botRight.y} ${botLeft.x},${botLeft.y}`);
 
@@ -257,6 +261,26 @@ function generatePlan() {
     bldgRect.setAttribute('y', bldgY);
     bldgRect.setAttribute('width', bldgDrawW);
     bldgRect.setAttribute('height', bldgDrawH);
+
+    // Dimension lines for Irregular Plot
+    const dimY = offsetY + maxH + 35;
+    document.getElementById('dimWLine').setAttribute('x1', offsetX);
+    document.getElementById('dimWLine').setAttribute('y1', dimY);
+    document.getElementById('dimWLine').setAttribute('x2', offsetX + maxW);
+    document.getElementById('dimWLine').setAttribute('y2', dimY);
+    document.getElementById('dimWidth').setAttribute('x', offsetX + maxW / 2);
+    document.getElementById('dimWidth').setAttribute('y', dimY + 15);
+    document.getElementById('dimWidth').textContent = formatFeetInches(Math.max(sideN, sideS));
+
+    const dimX = offsetX + maxW + 35;
+    document.getElementById('dimLLine').setAttribute('x1', dimX);
+    document.getElementById('dimLLine').setAttribute('y1', offsetY);
+    document.getElementById('dimLLine').setAttribute('x2', dimX);
+    document.getElementById('dimLLine').setAttribute('y2', offsetY + maxH);
+    document.getElementById('dimLength').setAttribute('x', dimX + 16);
+    document.getElementById('dimLength').setAttribute('y', offsetY + maxH / 2);
+    document.getElementById('dimLength').setAttribute('transform', `rotate(-90, ${dimX + 16}, ${offsetY + maxH / 2})`);
+    document.getElementById('dimLength').textContent = formatFeetInches(Math.max(sideE, sideW));
 
   } else {
     plotRect.style.display = 'block';
