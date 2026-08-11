@@ -151,6 +151,7 @@ function onFtInInput(fieldId) {
     calculatePlotAreaFromSides();
   } else if (fieldId === 'bldgWidth' || fieldId === 'bldgLength') {
     calculateBuiltUpArea();
+    autoCalculateSetbacks(false);
     validateBuildingSetbackFeasibility();
   } else if (fieldId.startsWith('setback')) {
     validateBuildingSetbackFeasibility();
@@ -193,6 +194,83 @@ function calculateBuiltUpArea() {
   if (builtEl && totalSqFt >= 0) {
     builtEl.value = totalSqFt;
   }
+}
+
+/**
+ * Auto-calculates Front, Rear, Left, and Right setbacks based on Step 3 Plot Dimensions
+ * and Step 4 Building Proposal (Width & Length).
+ * Fills setback feet-inches inputs while leaving them fully editable for manual overrides.
+ * 
+ * @function autoCalculateSetbacks
+ * @param {boolean} [force=false] - Whether to overwrite existing user values.
+ * @returns {void}
+ */
+function autoCalculateSetbacks(force = false) {
+  const widthVal = parseFloat(document.getElementById('bldgWidth')?.value) || 0;
+  const lengthVal = parseFloat(document.getElementById('bldgLength')?.value) || 0;
+
+  if (widthVal <= 0 && lengthVal <= 0) return;
+
+  // Retrieve Step 3 Site Dimensions
+  const isOdd = document.getElementById('oddSiteCheck')?.checked;
+  let north = 0, south = 0, east = 0, west = 0;
+
+  if (isOdd) {
+    north = parseFloat(document.getElementById('sideNorth')?.value) || 0;
+    south = parseFloat(document.getElementById('sideSouth')?.value) || 0;
+    east = parseFloat(document.getElementById('sideEast')?.value) || 0;
+    west = parseFloat(document.getElementById('sideWest')?.value) || 0;
+  } else {
+    north = south = parseFloat(document.getElementById('regNorthSouth')?.value) || 0;
+    east = west = parseFloat(document.getElementById('regEastWest')?.value) || 0;
+  }
+
+  const spanNS = Math.max(north, south);
+  const spanEW = Math.max(east, west);
+
+  if (spanNS <= 0 && spanEW <= 0) return;
+
+  // Determine alignment: Does Building Width align with N/S or E/W?
+  let widthSpan = spanNS;
+  let lengthSpan = spanEW;
+
+  if (lengthVal > spanEW && lengthVal <= spanNS && widthVal <= spanEW) {
+    widthSpan = spanEW;
+    lengthSpan = spanNS;
+  }
+
+  // Calculate remaining clearance along width and length axes
+  const remainWidth = Math.max(0, widthSpan - widthVal);
+  const remainLength = Math.max(0, lengthSpan - lengthVal);
+
+  // Equal split allocation for setbacks
+  const calcLeft = Math.round((remainWidth / 2) * 10) / 10;
+  const calcRight = Math.round((remainWidth / 2) * 10) / 10;
+  const calcFront = Math.round((remainLength / 2) * 10) / 10;
+  const calcRear = Math.round((remainLength / 2) * 10) / 10;
+
+  // Helper to set feet-inches inputs
+  const populateField = (fieldId, totalFeet) => {
+    const ftEl = document.getElementById(fieldId + '_ft');
+    const inEl = document.getElementById(fieldId + '_in');
+    const hiddenEl = document.getElementById(fieldId);
+
+    if (!ftEl || !hiddenEl) return;
+
+    // Only populate if empty OR force is true (don't overwrite manual edits)
+    if (force || ftEl.value === '' || ftEl.value === '0') {
+      const ft = Math.floor(totalFeet);
+      const inches = Math.round((totalFeet - ft) * 12);
+      ftEl.value = ft > 0 ? ft : '';
+      if (inEl) inEl.value = inches > 0 ? inches : '';
+      hiddenEl.value = Math.round(totalFeet * 100) / 100;
+    }
+  };
+
+  populateField('setbackFront', calcFront);
+  populateField('setbackRear', calcRear);
+  populateField('setbackLeft', calcLeft);
+  populateField('setbackRight', calcRight);
 }
 
 /**
