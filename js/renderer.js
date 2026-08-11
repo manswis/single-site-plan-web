@@ -1,6 +1,7 @@
 /**
  * @file renderer.js
  * @description Official BBMP Vector SVG Graphics Engine & Architectural Feet-Inches Formatter.
+ * Implements strict 4-Layer Radial Coordinate Positioning and architectural text rotation rules.
  * Renders plot boundary dash-dot-dot lines, Cobalt Blue diagonal hatched building footprints,
  * custom setback geometry, RMP-2015 road widening strips, drain buffer zones, and corner splays.
  * Compliant with BBMP Colour & Line Specification Standards (LEGEND.pdf).
@@ -211,14 +212,14 @@ function generatePlan() {
   document.getElementById('tbZone').textContent = `${zone} Zone`;
   document.getElementById('tbScale').textContent = scale;
 
-  // 7. Render Plot Vector SVG Canvas with Precision Coordinate Layout
+  // 7. Render Plot Vector SVG Canvas inside generous 700 x 520 ViewBox
   const plotRect = document.getElementById('plotRect');
   const plotPoly = document.getElementById('plotPoly');
   const bldgRect = document.getElementById('bldgRect');
 
-  // Reserved Drawing Bounds inside 540 x 440 ViewBox
-  const maxDrawW = 280;
-  const maxDrawH = 200;
+  // Reserved Centered Plot Box Canvas: Width 340, Height 260
+  const maxDrawW = 340;
+  const maxDrawH = 260;
   const ratio = Math.min(maxDrawW / Math.max(sideE, sideW, 1), maxDrawH / Math.max(sideN, sideS, 1));
 
   let offsetX, offsetY, drawW, drawH, nW, sW, eH, wH;
@@ -233,8 +234,8 @@ function generatePlan() {
     eH = sideE * ratio;
     wH = sideW * ratio;
 
-    offsetX = 120 + (maxDrawW - Math.max(nW, sW)) / 2;
-    offsetY = 75 + (maxDrawH - Math.max(eH, wH)) / 2;
+    offsetX = 180 + (maxDrawW - Math.max(nW, sW)) / 2;
+    offsetY = 100 + (maxDrawH - Math.max(eH, wH)) / 2;
 
     topLeft = { x: offsetX + (maxDrawW - nW) / 2, y: offsetY };
     topRight = { x: offsetX + (maxDrawW + nW) / 2, y: offsetY };
@@ -262,8 +263,8 @@ function generatePlan() {
 
     drawW = (roadFace === 'north' || roadFace === 'south') ? sideN * ratio : sideE * ratio;
     drawH = (roadFace === 'north' || roadFace === 'south') ? sideE * ratio : sideN * ratio;
-    offsetX = 120 + (maxDrawW - drawW) / 2;
-    offsetY = 75 + (maxDrawH - drawH) / 2;
+    offsetX = 180 + (maxDrawW - drawW) / 2;
+    offsetY = 100 + (maxDrawH - drawH) / 2;
 
     plotRect.setAttribute('x', offsetX);
     plotRect.setAttribute('y', offsetY);
@@ -276,8 +277,8 @@ function generatePlan() {
     botLeft = { x: offsetX, y: offsetY + drawH };
 
     // Dynamic Footprint Placement from Setbacks
-    const bldgDrawW = Math.max(10, (bldgW > 0 ? bldgW : (width - setbackL - setbackRt)) * ratio);
-    const bldgDrawH = Math.max(10, (bldgL > 0 ? bldgL : (length - setbackF - setbackR)) * ratio);
+    const bldgDrawW = Math.max(15, (bldgW > 0 ? bldgW : (width - setbackL - setbackRt)) * ratio);
+    const bldgDrawH = Math.max(15, (bldgL > 0 ? bldgL : (length - setbackF - setbackR)) * ratio);
     const bldgX = offsetX + (setbackL * ratio);
     const bldgY = offsetY + (setbackF * ratio);
 
@@ -286,8 +287,8 @@ function generatePlan() {
     bldgRect.setAttribute('width', bldgDrawW);
     bldgRect.setAttribute('height', bldgDrawH);
 
-    // Dimension lines in Feet-Inches notation (Positioned Below Plot Box)
-    const dimY = offsetY + drawH + 28;
+    // Dimension lines (Positioned cleanly on Layer 3 below & to the right)
+    const dimY = offsetY + drawH + 35;
     document.getElementById('dimWLine').setAttribute('x1', offsetX);
     document.getElementById('dimWLine').setAttribute('y1', dimY);
     document.getElementById('dimWLine').setAttribute('x2', offsetX + drawW);
@@ -296,88 +297,80 @@ function generatePlan() {
     document.getElementById('dimWidth').setAttribute('y', dimY + 15);
     document.getElementById('dimWidth').textContent = formatFeetInches(width);
 
-    const dimX = offsetX + drawW + 28;
+    const dimX = offsetX + drawW + 35;
     document.getElementById('dimLLine').setAttribute('x1', dimX);
     document.getElementById('dimLLine').setAttribute('y1', offsetY);
     document.getElementById('dimLLine').setAttribute('x2', dimX);
     document.getElementById('dimLLine').setAttribute('y2', offsetY + drawH);
     document.getElementById('dimLength').setAttribute('x', dimX + 16);
     document.getElementById('dimLength').setAttribute('y', offsetY + drawH / 2);
-    document.getElementById('dimLength').setAttribute('transform', 'rotate(90, ' + (dimX + 16) + ', ' + (offsetY + drawH / 2) + ')');
+    document.getElementById('dimLength').setAttribute('transform', `rotate(-90, ${dimX + 16}, ${offsetY + drawH / 2})`);
     document.getElementById('dimLength').textContent = formatFeetInches(length);
   }
 
-  // 8. Clean Non-Overlapping Side Callout Labels (NORTH: 40'-0", SOUTH: 40'-0", etc.)
+  // 8. Clean Architectural Layer 2 Callout Labels (NORTH: 40'-0", EAST: 60'-0", etc.)
   document.getElementById('labelSideN').style.display = 'block';
   document.getElementById('labelSideS').style.display = 'block';
   document.getElementById('labelSideE').style.display = 'block';
   document.getElementById('labelSideW').style.display = 'block';
 
   document.getElementById('labelSideN').setAttribute('x', offsetX + drawW / 2);
-  document.getElementById('labelSideN').setAttribute('y', offsetY - 10);
+  document.getElementById('labelSideN').setAttribute('y', offsetY - 12);
   document.getElementById('labelSideN').textContent = 'NORTH: ' + formatFeetInches(sideN);
 
   document.getElementById('labelSideS').setAttribute('x', offsetX + drawW / 2);
-  document.getElementById('labelSideS').setAttribute('y', offsetY + drawH + 14);
+  document.getElementById('labelSideS').setAttribute('y', offsetY + drawH + 16);
   document.getElementById('labelSideS').textContent = 'SOUTH: ' + formatFeetInches(sideS);
 
-  document.getElementById('labelSideE').setAttribute('x', offsetX + drawW + 12);
+  document.getElementById('labelSideE').setAttribute('x', offsetX + drawW + 16);
   document.getElementById('labelSideE').setAttribute('y', offsetY + drawH / 2);
-  document.getElementById('labelSideE').setAttribute('transform', `rotate(90, ${offsetX + drawW + 12}, ${offsetY + drawH / 2})`);
+  document.getElementById('labelSideE').setAttribute('transform', `rotate(-90, ${offsetX + drawW + 16}, ${offsetY + drawH / 2})`);
   document.getElementById('labelSideE').textContent = 'EAST: ' + formatFeetInches(sideE);
 
-  document.getElementById('labelSideW').setAttribute('x', offsetX - 12);
+  document.getElementById('labelSideW').setAttribute('x', offsetX - 16);
   document.getElementById('labelSideW').setAttribute('y', offsetY + drawH / 2);
-  document.getElementById('labelSideW').setAttribute('transform', `rotate(90, ${offsetX - 12}, ${offsetY + drawH / 2})`);
+  document.getElementById('labelSideW').setAttribute('transform', `rotate(-90, ${offsetX - 16}, ${offsetY + drawH / 2})`);
   document.getElementById('labelSideW').textContent = 'WEST: ' + formatFeetInches(sideW);
 
-  // Setback Text Labels Positioned Dynamically Relative to Building Footprint
-  const bldgDrawW = Math.max(10, (bldgW > 0 ? bldgW : (width - setbackL - setbackRt)) * ratio);
-  const bldgDrawH = Math.max(10, (bldgL > 0 ? bldgL : (length - setbackF - setbackR)) * ratio);
+  // Setback Text Labels Positioned Centered Inside Setback Zones
+  const bldgDrawW = Math.max(15, (bldgW > 0 ? bldgW : (width - setbackL - setbackRt)) * ratio);
+  const bldgDrawH = Math.max(15, (bldgL > 0 ? bldgL : (length - setbackF - setbackR)) * ratio);
   const bldgX = offsetX + (setbackL * ratio);
   const bldgY = offsetY + (setbackF * ratio);
 
-  document.getElementById('setbackN').setAttribute('x', bldgX + bldgDrawW / 2);
-  document.getElementById('setbackN').setAttribute('y', Math.max(offsetY + 12, bldgY - 6));
+  // Front Setback (Top)
+  document.getElementById('setbackN').setAttribute('x', offsetX + drawW / 2);
+  document.getElementById('setbackN').setAttribute('y', offsetY + (bldgY - offsetY) / 2 + 4);
   document.getElementById('setbackN').textContent = "Front Setback: " + formatFeetInches(setbackF > 0 ? setbackF : (sideN - bldgW) / 2);
 
-  document.getElementById('setbackS').setAttribute('x', bldgX + bldgDrawW / 2);
-  document.getElementById('setbackS').setAttribute('y', Math.min(offsetY + drawH - 6, bldgY + bldgDrawH + 14));
+  // Rear Setback (Bottom)
+  document.getElementById('setbackS').setAttribute('x', offsetX + drawW / 2);
+  document.getElementById('setbackS').setAttribute('y', (offsetY + drawH) - (offsetY + drawH - (bldgY + bldgDrawH)) / 2 + 4);
   document.getElementById('setbackS').textContent = "Rear Setback: " + formatFeetInches(setbackR > 0 ? setbackR : (sideS - bldgW) / 2);
 
-  document.getElementById('setbackE').setAttribute('x', Math.min(offsetX + drawW - 25, bldgX + bldgDrawW + (offsetX + drawW - (bldgX + bldgDrawW)) / 2));
-  document.getElementById('setbackE').setAttribute('y', bldgY + bldgDrawH / 2);
+  // Right Setback (East Side - Rotated -90 deg cleanly inside right setback band)
+  const sbEastX = (offsetX + drawW) - (offsetX + drawW - (bldgX + bldgDrawW)) / 2;
+  document.getElementById('setbackE').setAttribute('x', sbEastX);
+  document.getElementById('setbackE').setAttribute('y', offsetY + drawH / 2);
+  document.getElementById('setbackE').setAttribute('transform', `rotate(-90, ${sbEastX}, ${offsetY + drawH / 2})`);
   document.getElementById('setbackE').textContent = "Right Setback: " + formatFeetInches(setbackRt > 0 ? setbackRt : (sideE - bldgL) / 2);
 
-  document.getElementById('setbackW').setAttribute('x', Math.max(offsetX + 25, offsetX + (bldgX - offsetX) / 2));
-  document.getElementById('setbackW').setAttribute('y', bldgY + bldgDrawH / 2);
+  // Left Setback (West Side - Rotated -90 deg cleanly inside left setback band)
+  const sbWestX = offsetX + (bldgX - offsetX) / 2;
+  document.getElementById('setbackW').setAttribute('x', sbWestX);
+  document.getElementById('setbackW').setAttribute('y', offsetY + drawH / 2);
+  document.getElementById('setbackW').setAttribute('transform', `rotate(-90, ${sbWestX}, ${offsetY + drawH / 2})`);
   document.getElementById('setbackW').textContent = "Left Setback: " + formatFeetInches(setbackL > 0 ? setbackL : (sideW - bldgL) / 2);
 
-  // Interior Building Dimension Lines
-  const bldgWLine = document.getElementById('bldgDimWLine');
-  const bldgWText = document.getElementById('bldgDimW');
-  const bldgLLine = document.getElementById('bldgDimLLine');
-  const bldgLText = document.getElementById('bldgDimL');
-
-  if (bldgWLine && bldgWText) {
-    bldgWLine.setAttribute('x1', bldgX);
-    bldgWLine.setAttribute('y1', bldgY + bldgDrawH - 12);
-    bldgWLine.setAttribute('x2', bldgX + bldgDrawW);
-    bldgWLine.setAttribute('y2', bldgY + bldgDrawH - 12);
-    bldgWText.setAttribute('x', bldgX + bldgDrawW / 2);
-    bldgWText.setAttribute('y', bldgY + bldgDrawH - 2);
-    bldgWText.textContent = formatFeetInches(bldgW);
-  }
-
-  if (bldgLLine && bldgLText) {
-    bldgLLine.setAttribute('x1', bldgX + bldgDrawW - 12);
-    bldgLLine.setAttribute('y1', bldgY);
-    bldgLLine.setAttribute('x2', bldgX + bldgDrawW - 12);
-    bldgLLine.setAttribute('y2', bldgY + bldgDrawH);
-    bldgLText.setAttribute('x', bldgX + bldgDrawW - 3);
-    bldgLText.setAttribute('y', bldgY + bldgDrawH / 2);
-    bldgLText.setAttribute('transform', `rotate(90, ${bldgX + bldgDrawW - 3}, ${bldgY + bldgDrawH / 2})`);
-    bldgLText.textContent = formatFeetInches(bldgL);
+  // Interior Building Footprint Text
+  const bldgTitle = document.getElementById('bldgTitle');
+  const bldgDimText = document.getElementById('bldgDimText');
+  if (bldgTitle && bldgDimText) {
+    bldgTitle.setAttribute('x', bldgX + bldgDrawW / 2);
+    bldgTitle.setAttribute('y', bldgY + bldgDrawH / 2 - 6);
+    bldgDimText.setAttribute('x', bldgX + bldgDrawW / 2);
+    bldgDimText.setAttribute('y', bldgY + bldgDrawH / 2 + 10);
+    bldgDimText.textContent = `${formatFeetInches(bldgW)} × ${formatFeetInches(bldgL)}`;
   }
 
   // 9. Render Corner Splay for 2-side Corner Plots (e.g. North & East Road access)
@@ -443,11 +436,11 @@ function generatePlan() {
     bufferText.style.display = 'none';
   }
 
-  // 12. Multi-Road Render Handling (North, South, East, West with Non-Overlapping Offsets)
-  renderRoadOrLabel('North', boundaries.North, topLeft.x, topLeft.y - 42, (topRight.x - topLeft.x), 32, 'top', offsetX + drawW / 2, offsetY - 48);
-  renderRoadOrLabel('South', boundaries.South, botLeft.x, botLeft.y + 48, (botRight.x - botLeft.x), 32, 'bottom', offsetX + drawW / 2, botLeft.y + 92);
-  renderRoadOrLabel('East', boundaries.East, topRight.x + 48, topRight.y, 32, (botRight.y - topRight.y), 'right', topRight.x + 92, offsetY + drawH / 2);
-  renderRoadOrLabel('West', boundaries.West, topLeft.x - 48, topLeft.y, 32, (botLeft.y - topLeft.y), 'left', topLeft.x - 55, offsetY + drawH / 2);
+  // 12. Multi-Road Render Handling (Layer 4 Outermost Position)
+  renderRoadOrLabel('North', boundaries.North, topLeft.x, topLeft.y - 60, (topRight.x - topLeft.x), 32, 'top', offsetX + drawW / 2, offsetY - 66);
+  renderRoadOrLabel('South', boundaries.South, botLeft.x, botLeft.y + 58, (botRight.x - botLeft.x), 32, 'bottom', offsetX + drawW / 2, botLeft.y + 102);
+  renderRoadOrLabel('East', boundaries.East, topRight.x + 58, topRight.y, 32, (botRight.y - topRight.y), 'right', topRight.x + 105, offsetY + drawH / 2);
+  renderRoadOrLabel('West', boundaries.West, topLeft.x - 80, topLeft.y, 32, (botLeft.y - topLeft.y), 'left', topLeft.x - 92, offsetY + drawH / 2);
 
   /**
    * Dynamically renders road rectangle or adjacency label with precise non-overlapping coordinates.
@@ -467,7 +460,7 @@ function generatePlan() {
         labelEl.setAttribute('x', labelX);
         labelEl.setAttribute('y', labelY);
         if (position === 'left' || position === 'right') {
-          labelEl.setAttribute('transform', `rotate(90, ${labelX}, ${labelY})`);
+          labelEl.setAttribute('transform', `rotate(-90, ${labelX}, ${labelY})`);
         } else {
           labelEl.removeAttribute('transform');
         }
@@ -479,7 +472,7 @@ function generatePlan() {
         labelEl.setAttribute('x', labelX);
         labelEl.setAttribute('y', labelY);
         if (position === 'left' || position === 'right') {
-          labelEl.setAttribute('transform', `rotate(90, ${labelX}, ${labelY})`);
+          labelEl.setAttribute('transform', `rotate(-90, ${labelX}, ${labelY})`);
         } else {
           labelEl.removeAttribute('transform');
         }
