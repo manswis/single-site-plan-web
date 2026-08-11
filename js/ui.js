@@ -146,3 +146,17 @@ function toggleBufferZone() {
     panel.style.display = isEnabled ? 'block' : 'none';
   }
 }
+
+/**
+ * Toggles visibility of diagonal SAMPLE ONLY watermark on SVG canvas.
+ * 
+ * @function toggleSampleWatermark
+ * @returns {void}
+ */
+function toggleSampleWatermark() {
+  const watermarkGroup = document.getElementById('watermarkGroup');
+  const isChecked = document.getElementById('sampleWatermarkCheck') ? document.getElementById('sampleWatermarkCheck').checked : false;
+  if (watermarkGroup) {
+    watermarkGroup.style.display = isChecked ? 'block' : 'none';
+  }
+}

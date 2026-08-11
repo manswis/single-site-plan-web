@@ -1,7 +1,7 @@
 /**
  * @file samples.js
  * @description Sample reference plan presets for instant pre-filling and testing of the BBMP Single Plot Generator.
- * Enforces population of all mandatory fields across all 4 cardinal boundaries for every preset.
+ * Enforces population of all mandatory fields across all 4 cardinal boundaries and sets precautionary watermark flag.
  * @author Senior Systems Architect
  */
 
@@ -46,6 +46,7 @@ function loadSampleRegular() {
   setCheck('roadWideningCheck', false);
   setCheck('bufferCheck', false);
   setCheck('includeLegendPage', true);
+  setCheck('sampleWatermarkCheck', true);
 
   if (typeof toggleOddSite === 'function') toggleOddSite();
   if (typeof toggleRoadWidening === 'function') toggleRoadWidening();
@@ -128,6 +129,7 @@ function loadSampleCornerPlot() {
   setCheck('roadWideningCheck', false);
   setCheck('bufferCheck', false);
   setCheck('includeLegendPage', true);
+  setCheck('sampleWatermarkCheck', true);
 
   if (typeof toggleOddSite === 'function') toggleOddSite();
   if (typeof toggleRoadWidening === 'function') toggleRoadWidening();
@@ -205,6 +207,7 @@ function loadSampleOdd() {
   setCheck('roadWideningCheck', false);
   setCheck('bufferCheck', false);
   setCheck('includeLegendPage', true);
+  setCheck('sampleWatermarkCheck', true);
 
   if (typeof toggleOddSite === 'function') toggleOddSite();
   if (typeof toggleRoadWidening === 'function') toggleRoadWidening();
@@ -281,6 +284,7 @@ function loadSampleRoadWidening() {
   setCheck('roadWideningCheck', true);
   setCheck('bufferCheck', false);
   setCheck('includeLegendPage', true);
+  setCheck('sampleWatermarkCheck', true);
 
   if (typeof toggleOddSite === 'function') toggleOddSite();
   if (typeof toggleRoadWidening === 'function') toggleRoadWidening();

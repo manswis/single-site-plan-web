@@ -494,6 +494,10 @@ function generatePlan() {
 
   document.getElementById('scaleText').textContent = "Scale: " + scale;
 
+  if (typeof toggleSampleWatermark === 'function') {
+    toggleSampleWatermark();
+  }
+
   document.getElementById('planOutput').style.display = 'block';
   document.getElementById('planOutput').scrollIntoView({ behavior: 'smooth' });
 }

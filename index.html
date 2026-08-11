@@ -573,8 +573,8 @@
               <!-- Plot Boundary (Official BBMP Dash-Dot-Dot Black Stroke: stroke-dasharray="12,3,3,3,3,3") -->
               <rect id="plotRect" x="180" y="100" width="340" height="260" fill="none" stroke="#000000" stroke-width="2"
                 stroke-dasharray="12,3,3,3,3,3" />
-              <polygon id="plotPoly" points="180,100 520,100 520,360 180,360" fill="none" stroke="#000000"
-                stroke-width="2" stroke-dasharray="12,3,3,3,3,3" style="display:none;" />
+              <polygon id="plotPoly" points="180,100 520,100 520,360 180,360" fill="none" stroke="#000000" stroke-width="2"
+                stroke-dasharray="12,3,3,3,3,3" style="display:none;" />
 
               <!-- Corner Splay Polygon (Chamfered Cut Corner for Corner Plots) -->
               <polygon id="splayPoly" points="" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,2"
@@ -599,8 +599,7 @@
               <!-- Dimension Lines -->
               <line id="dimWLine" x1="180" y1="395" x2="520" y2="395" stroke="#64748b" stroke-width="1"
                 marker-end="url(#arrow)" marker-start="url(#arrow)" />
-              <text id="dimWidth" x="350" y="410" text-anchor="middle" font-size="11" fill="#334155"
-                font-weight="600">40'-0"</text>
+              <text id="dimWidth" x="350" y="410" text-anchor="middle" font-size="11" fill="#334155" font-weight="600">40'-0"</text>
 
               <line id="dimLLine" x1="555" y1="100" x2="555" y2="360" stroke="#64748b" stroke-width="1"
                 marker-end="url(#arrow)" marker-start="url(#arrow)" />
@@ -618,20 +617,20 @@
                 transform="rotate(-90, 164, 230)" style="display:none;">WEST: 60'-0"</text>
 
               <!-- Building Interior Footprint Text -->
-              <text id="bldgTitle" x="330" y="220" text-anchor="middle" font-size="10" fill="#1d4ed8"
-                font-weight="700">EXISTING BUILDING</text>
-              <text id="bldgDimText" x="330" y="235" text-anchor="middle" font-size="10" fill="#2563eb"
-                font-weight="600">30'-0" × 40'-0"</text>
+              <text id="bldgTitle" x="330" y="220" text-anchor="middle" font-size="10" fill="#1d4ed8" font-weight="700">EXISTING BUILDING</text>
+              <text id="bldgDimText" x="330" y="235" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600">30'-0" × 40'-0"</text>
 
               <!-- Setbacks -->
-              <text id="setbackN" x="350" y="125" text-anchor="middle" font-size="9" fill="#059669"
-                font-weight="600">Front Setback: —</text>
-              <text id="setbackS" x="350" y="335" text-anchor="middle" font-size="9" fill="#059669"
-                font-weight="600">Rear Setback: —</text>
-              <text id="setbackE" x="480" y="230" text-anchor="middle" font-size="9" fill="#059669" font-weight="600"
-                transform="rotate(-90, 480, 230)">Right Setback: —</text>
-              <text id="setbackW" x="200" y="230" text-anchor="middle" font-size="9" fill="#059669" font-weight="600"
-                transform="rotate(-90, 200, 230)">Left Setback: —</text>
+              <text id="setbackN" x="350" y="125" text-anchor="middle" font-size="9" fill="#059669" font-weight="600">Front Setback: —</text>
+              <text id="setbackS" x="350" y="335" text-anchor="middle" font-size="9" fill="#059669" font-weight="600">Rear Setback: —</text>
+              <text id="setbackE" x="480" y="230" text-anchor="middle" font-size="9" fill="#059669" font-weight="600" transform="rotate(-90, 480, 230)">Right Setback: —</text>
+              <text id="setbackW" x="200" y="230" text-anchor="middle" font-size="9" fill="#059669" font-weight="600" transform="rotate(-90, 200, 230)">Left Setback: —</text>
+
+              <!-- Precautionary Sample Watermark (Diagonal Overlay) -->
+              <g id="watermarkGroup" style="display:none; pointer-events:none;">
+                <text x="350" y="240" text-anchor="middle" font-size="64" font-weight="900" fill="#dc2626" opacity="0.13" transform="rotate(-35, 350, 240)" letter-spacing="10">SAMPLE ONLY</text>
+                <text x="350" y="280" text-anchor="middle" font-size="20" font-weight="800" fill="#dc2626" opacity="0.13" transform="rotate(-35, 350, 240)" letter-spacing="4">REFERENCE DRAFT PLAN</text>
+              </g>
 
               <!-- Compass Rosette -->
               <g transform="translate(650, 470)">
@@ -653,20 +652,15 @@
               </g>
 
               <!-- Outer Layer Abutting Road / Property Text -->
-              <text id="adjN" x="350" y="30" text-anchor="middle" font-size="9.5" fill="#475569"
-                font-weight="600">Adjacent: —</text>
-              <text id="adjS" x="350" y="495" text-anchor="middle" font-size="9.5" fill="#475569"
-                font-weight="600">Adjacent: —</text>
-              <text id="adjE" x="660" y="230" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600"
-                transform="rotate(-90, 660, 230)">Adjacent: —</text>
-              <text id="adjW" x="40" y="230" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600"
-                transform="rotate(-90, 40, 230)">Adjacent: —</text>
+              <text id="adjN" x="350" y="30" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600">Adjacent: —</text>
+              <text id="adjS" x="350" y="495" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600">Adjacent: —</text>
+              <text id="adjE" x="660" y="230" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600" transform="rotate(-90, 660, 230)">Adjacent: —</text>
+              <text id="adjW" x="40" y="230" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="600" transform="rotate(-90, 40, 230)">Adjacent: —</text>
             </svg>
           </div>
 
           <div class="footer-note">
-            Note: This layout plan has been prepared as per BBMP Sakala B-to-A Khata conversion standards. Final plan
-            must be signed & sealed by a licensed Architect/Engineer registered with BBMP.
+            Note: This layout plan has been prepared as per BBMP Sakala B-to-A Khata conversion standards. Final plan must be signed & sealed by a licensed Architect/Engineer registered with BBMP.
           </div>
         </div> <!-- End Left Column -->
 
@@ -847,11 +841,21 @@
       </div> <!-- End Plan Sheet Frame -->
     </div>
 
-    <!-- Sample Buttons -->
+    <!-- Sample Buttons Card with Precautionary Watermark Checkbox -->
     <div class="card">
       <h3>📄 Sample Pre-filled Reference Plans</h3>
       <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Click a preset below to populate test data across all
         form sections:</p>
+
+      <!-- Precautionary Watermark Checkbox -->
+      <div class="checkbox-box" style="margin-bottom: 14px; background: #fffbe6; border: 1px solid #ffe58f;">
+        <label style="cursor: pointer;">
+          <input type="checkbox" id="sampleWatermarkCheck" onchange="toggleSampleWatermark()">
+          <span style="font-weight: 600; color: #d46b08;">⚠️ Display Diagonal "SAMPLE ONLY" Watermark on Generated Plan</span>
+        </label>
+        <p style="margin-top: 4px; font-size: 11px; color: #8c8c8c;">Default: Unchecked for clean custom entries. Automatically checks when you click a sample preset button to prevent accidental official submission. Uncheck anytime to clear the watermark.</p>
+      </div>
+
       <div class="sample-btns">
         <button class="btn btn-secondary" onclick="loadSampleRegular()">👁️ Standard 30x40 Site (1-Road)</button>
         <button class="btn btn-purple" onclick="loadSampleCornerPlot()">👁️ 2-Side Corner Plot (North & East
