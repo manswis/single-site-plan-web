@@ -776,13 +776,22 @@
       <!-- STEP 7: Property Data Review, Terms Agreement & Plan Package Generator -->
       <div id="wizardStep7" class="wizard-step-content" style="display:none;">
 
-        <!-- Header Package Card containing the 3 Action Buttons Hub -->
+        <!-- Formatted User Property Summary Cards with Pencil Icons -->
+        <div style="margin-bottom: 24px;">
+          <h4 style="margin: 0 0 14px 0; font-size: 16px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 8px;">
+            <span>📋 Property Settings & Dimensions Summary</span>
+            <span style="font-size: 12px; font-weight: 500; color: var(--apple-text-secondary);">(Tap ✏️ to edit any field)</span>
+          </h4>
+          <div id="reviewSummaryContainer"></div>
+        </div>
+
+        <!-- Package Card containing the 3 Action Buttons Hub (Placed Below Summary) -->
         <div class="apple-card package-header-card" style="margin-bottom: 24px; padding: 22px 24px; background: rgba(0, 102, 204, 0.03); border: 1.5px solid rgba(0, 102, 204, 0.2);">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--apple-border); padding-bottom: 14px; margin-bottom: 16px;">
             <div style="display: flex; align-items: center; gap: 10px;">
               <span style="font-size: 26px;">🏛️</span>
               <div>
-                <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">BBMP Single Plot Plan Package Generator</h3>
+                <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Single Plot Plan Package Generator</h3>
                 <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);">Sakala B-to-A Khata Compliant Architectural Drawing Engine</p>
               </div>
             </div>
@@ -803,27 +812,18 @@
             <div class="error-msg" id="err-legalConsent" style="margin-top: 8px; font-weight: 600; display: none;">⚠ You must check and agree to the Terms & Zero Liability Disclaimer to generate, export, or print your plan.</div>
           </div>
 
-          <!-- The 3 Core Action Buttons Hub -->
+          <!-- The 3 Core Action Buttons Hub (Icons Removed) -->
           <div class="package-action-buttons-hub" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-            <button id="generatePlanBtn" class="apple-btn-primary" disabled onclick="onGeneratePlanClick()" style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
-              <span>⚡ Generate Plan</span>
+            <button id="generatePlanBtn" class="apple-btn-primary" disabled onclick="onGeneratePlanClick()" style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+              <span>Generate Plan</span>
             </button>
-            <button id="downloadPdfBtn" class="apple-btn-secondary" disabled onclick="downloadPDFPackage()" style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
-              <span>📥 Export PDF</span>
+            <button id="downloadPdfBtn" class="apple-btn-secondary" disabled onclick="downloadPDFPackage()" style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+              <span>Export PDF</span>
             </button>
-            <button id="printBtn" class="apple-btn-secondary" disabled onclick="printPlanPackage()" style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
-              <span>🖨️ Print Drawing</span>
+            <button id="printBtn" class="apple-btn-secondary" disabled onclick="printPlanPackage()" style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+              <span>Print Drawing</span>
             </button>
           </div>
-        </div>
-
-        <!-- Formatted User Property Summary Cards with Pencil Icons -->
-        <div style="margin-bottom: 20px;">
-          <h4 style="margin: 0 0 14px 0; font-size: 16px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 8px;">
-            <span>📋 Property Settings & Dimensions Summary</span>
-            <span style="font-size: 12px; font-weight: 500; color: var(--apple-text-secondary);">(Tap ✏️ to edit any field)</span>
-          </h4>
-          <div id="reviewSummaryContainer"></div>
         </div>
 
       </div>
