@@ -9,7 +9,9 @@
   <!-- Google Fonts: Outfit & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
+    rel="stylesheet">
 
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -23,7 +25,7 @@
         <span>🏛️ BBMP e-Plan Studio</span>
         <span class="apple-pill-badge">B-to-A Khata Ready</span>
       </a>
-      <nav class="apple-nav-links">
+      <nav class="apple-nav-links desktop-nav-bar">
         <a href="index.html" style="color: var(--apple-text-primary); font-weight: 700;">Home</a>
         <a href="studio.html">Studio Workbench</a>
         <a href="pricing.html">Pricing</a>
@@ -36,72 +38,89 @@
 
   <div class="container" style="max-width: 1000px;">
 
-    <!-- Google-Style Ultra-Clean Centered Hero Hub -->
-    <section style="text-align: center; padding: 70px 20px 40px 20px;">
-      
-      <!-- Brand Logo Mark -->
-      <div style="font-size: 56px; font-weight: 800; font-family: 'Outfit', var(--apple-font); color: var(--apple-text-primary); letter-spacing: -0.04em; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 12px;">
-        <span>🏛️</span>
-        <span>BBMP e-Plan Studio</span>
-      </div>
+    <!-- Horizontal Sliding Control Navigation Bar for Mobile Pages -->
+    <div class="mobile-nav-slider">
+      <a href="index.html" class="mobile-nav-item active">Home</a>
+      <a href="studio.html" class="mobile-nav-item">Workbench</a>
+      <a href="pricing.html" class="mobile-nav-item">Pricing</a>
+      <a href="legal.html" class="mobile-nav-item">Legal</a>
+      <a href="faq.html" class="mobile-nav-item">FAQ</a>
+    </div>
 
-      <p style="font-size: 22px; font-weight: 600; color: var(--apple-text-primary); margin-top: 0; margin-bottom: 10px;">
+    <!-- Google-Style Ultra-Clean Centered Hero Hub -->
+    <section style="text-align: center; padding: 40px 16px 20px 16px;">
+
+      <p
+        style="font-size: 22px; font-weight: 700; color: var(--apple-text-primary); margin-top: 0; margin-bottom: 10px; line-height: 1.3;">
         Generate Official Single Plot Layout Plans in 60 Seconds.
       </p>
 
-      <p style="font-size: 16px; color: var(--apple-text-secondary); max-width: 680px; margin: 0 auto 30px auto; line-height: 1.5;">
-        Instant Sakala-compliant B-to-A Khata PDF drawings with automated setback math, official line specs, and 100% client-side local privacy.
+      <p
+        style="font-size: 15px; color: var(--apple-text-secondary); max-width: 680px; margin: 0 auto 24px auto; line-height: 1.5;">
+        Instant Sakala-compliant B-to-A Khata PDF drawings with automated setback math, official line specs, and 100%
+        client-side local privacy.
       </p>
 
       <!-- Google-Style Action Buttons Hub -->
-      <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 30px;">
-        <a href="studio.html" class="apple-btn-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 28px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.3);">
+      <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+        <a href="studio.html" class="apple-btn-primary"
+          style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 28px; font-size: 15px; font-weight: 700; text-decoration: none; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.3);">
           <span>🚀 Start Plan Generator</span>
         </a>
-        <a href="studio.html?sampledata=true" class="apple-btn-secondary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 24px; font-size: 15px; font-weight: 600; text-decoration: none;">
+        <a href="studio.html?sampledata=true" class="apple-btn-secondary"
+          style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 48px; padding: 0 24px; font-size: 15px; font-weight: 600; text-decoration: none;">
           <span>👁️ Try Reference Sample</span>
         </a>
       </div>
 
       <!-- Local Privacy Guarantee Pill -->
-      <div style="background: rgba(52, 199, 89, 0.12); border: 1px solid rgba(52, 199, 89, 0.3); border-radius: 980px; padding: 8px 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: #15803d; font-weight: 600;">
-        <span>🔒 100% Client-Side Private: All data processing runs locally in your browser. Zero cloud server uploads.</span>
+      <div
+        style="background: rgba(52, 199, 89, 0.12); border: 1px solid rgba(52, 199, 89, 0.3); border-radius: 980px; padding: 8px 18px; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: #15803d; font-weight: 600; line-height: 1.4; text-align: center;">
+        <span>🔒 100% Client-Side Private: All data processing runs locally in your browser. Zero cloud server
+          uploads.</span>
       </div>
 
     </section>
 
     <!-- How It Works: 3 Simple Steps Section -->
     <section style="margin-top: 40px; padding: 40px 0;">
-      <h2 style="text-align: center; font-size: 28px; font-weight: 800; color: var(--apple-text-primary); margin-bottom: 30px;">
+      <h2
+        style="text-align: center; font-size: 28px; font-weight: 800; color: var(--apple-text-primary); margin-bottom: 30px;">
         How It Works in 3 Simple Steps
       </h2>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
-        
+
         <!-- Step 1 Card -->
         <div class="apple-card" style="text-align: left; padding: 28px 22px;">
           <div style="font-size: 32px; margin-bottom: 12px;">📝</div>
-          <h3 style="font-size: 18px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">1. Enter Property Details</h3>
+          <h3 style="font-size: 18px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">1. Enter
+            Property Details</h3>
           <p style="font-size: 13.5px; color: var(--apple-text-secondary); margin: 0; line-height: 1.5;">
-            Fill in owner name, survey number, and site measurements in our 7-step guided setup wizard. Opposite sides auto-sync automatically.
+            Fill in owner name, survey number, and site measurements in our 7-step guided setup wizard. Opposite sides
+            auto-sync automatically.
           </p>
         </div>
 
         <!-- Step 2 Card -->
         <div class="apple-card" style="text-align: left; padding: 28px 22px;">
           <div style="font-size: 32px; margin-bottom: 12px;">👁️</div>
-          <h3 style="font-size: 18px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">2. Preview Vector Drawing</h3>
+          <h3 style="font-size: 18px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">2. Preview
+            Vector Drawing</h3>
           <p style="font-size: 13.5px; color: var(--apple-text-secondary); margin: 0; line-height: 1.5;">
-            Watch your 2D architectural layout drawing render live on screen in real-time as you type, complete with setback math and road overlays.
+            Watch your 2D architectural layout drawing render live on screen in real-time as you type, complete with
+            setback math and road overlays.
           </p>
         </div>
 
         <!-- Step 3 Card -->
         <div class="apple-card" style="text-align: left; padding: 28px 22px;">
           <div style="font-size: 32px; margin-bottom: 12px;">📥</div>
-          <h3 style="font-size: 18px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">3. Download Official PDF</h3>
+          <h3 style="font-size: 18px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">3.
+            Download Official PDF</h3>
           <p style="font-size: 13.5px; color: var(--apple-text-secondary); margin: 0; line-height: 1.5;">
-            Export a high-resolution, 2-page Sakala-compliant PDF submission package directly into your device's Downloads folder.
+            Export a high-resolution, 2-page Sakala-compliant PDF submission package directly into your device's
+            Downloads folder.
           </p>
         </div>
 
@@ -109,19 +128,25 @@
 
       <!-- Bottom Start Now Callout -->
       <div style="text-align: center; margin-top: 40px;">
-        <a href="studio.html" class="apple-btn-primary" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 32px; font-size: 14px; font-weight: 700; text-decoration: none;">
+        <a href="studio.html" class="apple-btn-primary"
+          style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 32px; font-size: 14px; font-weight: 700; text-decoration: none;">
           <span>Start Creating Your Plan Now →</span>
         </a>
       </div>
     </section>
 
     <!-- Page Footer -->
-    <footer style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--apple-border); text-align: center; font-size: 12px; color: var(--apple-text-secondary);">
+    <footer
+      style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--apple-border); text-align: center; font-size: 12px; color: var(--apple-text-secondary);">
       <p style="margin-bottom: 12px;">
-        <a href="index.html" style="color: var(--apple-text-primary); text-decoration: none; font-weight: 700; margin: 0 10px;">Home</a> • 
-        <a href="studio.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Studio Workbench</a> • 
-        <a href="pricing.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Pricing</a> • 
-        <a href="legal.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Legal Terms & Privacy</a> • 
+        <a href="index.html"
+          style="color: var(--apple-text-primary); text-decoration: none; font-weight: 700; margin: 0 10px;">Home</a> •
+        <a href="studio.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Studio
+          Workbench</a> •
+        <a href="pricing.html"
+          style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Pricing</a> •
+        <a href="legal.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Legal
+          Terms & Privacy</a> •
         <a href="faq.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">FAQ</a>
       </p>
       <p>© 2026 BBMP e-Plan Studio. All processing performed 100% locally on client browser.</p>

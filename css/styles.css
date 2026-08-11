@@ -204,6 +204,7 @@ body {
   .apple-card {
     padding: 20px 18px;
   }
+
   .wizard-step-content {
     min-height: auto;
   }
@@ -211,6 +212,130 @@ body {
 
 .apple-card:hover {
   box-shadow: var(--apple-shadow-lg);
+}
+
+/* Horizontal Sliding Control Navigation Bar for Mobile Pages */
+.mobile-nav-slider {
+  display: none;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  background: rgba(230, 230, 235, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 980px;
+  padding: 4px;
+  margin: 12px auto 20px auto;
+  max-width: 100%;
+}
+
+.mobile-nav-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.mobile-nav-item {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  text-decoration: none;
+  border-radius: 980px;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-item.active {
+  background: #ffffff;
+  color: var(--apple-text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Compact Mobile Active Step Card for Wizard (studio.html) */
+.mobile-step-card {
+  display: none;
+  background: #ffffff;
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.mobile-step-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.mobile-step-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0066cc;
+  background: rgba(0, 102, 204, 0.1);
+  padding: 4px 10px;
+  border-radius: 980px;
+  letter-spacing: 0.02em;
+}
+
+.mobile-step-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+.mobile-step-progress-track {
+  width: 100%;
+  height: 5px;
+  background: #e5e5e7;
+  border-radius: 980px;
+  overflow: hidden;
+}
+
+.mobile-step-progress-fill {
+  height: 100%;
+  background: #0066cc;
+  width: 14.28%;
+  border-radius: 980px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Mobile Media Query Rules */
+@media (max-width: 768px) {
+  .mobile-nav-slider {
+    display: flex;
+  }
+
+  /* In Wizard mode on mobile (studio.html), hide page nav slider so mobile users get 100% focused wizard workspace */
+  body.wizard-mode .mobile-nav-slider,
+  body.wizard-mode .desktop-nav-bar {
+    display: none !important;
+  }
+
+  /* Hide multi-column desktop wizard tab stepper on mobile and show compact mobile step indicator */
+  .wizard-stepper-header {
+    display: none !important;
+  }
+
+  .mobile-step-card {
+    display: block !important;
+  }
+
+  /* Prevent iOS Safari auto-zoom on form inputs by ensuring font-size is at least 16px on mobile */
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Responsive SVG Viewport scroll container */
+  .svg-viewport-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
 }
 
 /* Mobile Segmented Control Tab Switcher */

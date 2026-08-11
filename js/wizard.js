@@ -340,15 +340,21 @@ function showStep(stepNum, shouldSave = true) {
     }
   }
 
-  // Update Header Banner Metadata
+  // Update Header Banner Metadata & Mobile Step Indicator Card
   const meta = STEP_METADATA[stepNum];
   const stepBadge = document.getElementById('stepCounterBadge');
   const stepTitle = document.getElementById('stepTitleText');
   const stepDesc = document.getElementById('stepDescText');
 
+  const mobileBadge = document.getElementById('mobileStepBadge');
+  const mobileTitle = document.getElementById('mobileStepTitle');
+
   if (stepBadge) stepBadge.textContent = `Step ${stepNum} of ${TOTAL_STEPS}`;
   if (stepTitle && meta) stepTitle.textContent = `${meta.icon} ${meta.title}`;
   if (stepDesc && meta) stepDesc.textContent = meta.desc;
+
+  if (mobileBadge) mobileBadge.textContent = `Step ${stepNum} of ${TOTAL_STEPS}`;
+  if (mobileTitle && meta) mobileTitle.textContent = `${meta.icon} ${meta.title}`;
 
   // Toggle Full-Width Export Viewport Section (Visible ONLY on Step 7)
   const exportSection = document.getElementById('exportViewportSection');
@@ -395,9 +401,14 @@ function showStep(stepNum, shouldSave = true) {
  */
 function updateProgressBar() {
   const progressBar = document.getElementById('wizardProgressBar');
+  const mobileProgress = document.getElementById('mobileStepProgressFill');
+  const pct = Math.round((currentStep / TOTAL_STEPS) * 100);
+
   if (progressBar) {
-    const pct = Math.round((currentStep / TOTAL_STEPS) * 100);
     progressBar.style.width = `${pct}%`;
+  }
+  if (mobileProgress) {
+    mobileProgress.style.width = `${pct}%`;
   }
 }
 
