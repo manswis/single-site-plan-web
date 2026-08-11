@@ -103,6 +103,9 @@ function prevStep() {
 function showStep(stepNum) {
   currentStep = stepNum;
 
+  // Clear any residual error messages on the target step when landing
+  clearStepErrors(stepNum);
+
   // Hide all step content panels
   for (let i = 1; i <= TOTAL_STEPS; i++) {
     const stepEl = document.getElementById(`wizardStep${i}`);
