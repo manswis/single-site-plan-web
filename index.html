@@ -478,7 +478,7 @@
 
         <div class="checkbox-box" style="margin-top: 12px;">
           <label>
-            <input type="checkbox" id="includeLegendPage" checked>
+            <input type="checkbox" id="includeLegendPage" checked onchange="toggleLegendSheetPage()">
             <span>📑 Include BBMP Line & Colour Specifications Sheet (Page 2) in Merged PDF Export</span>
           </label>
           <p>Generates a complete 2-page BBMP submission package (Page 1 = Layout Plan, Page 2 = Legend Specifications
@@ -495,7 +495,21 @@
       <button class="btn" onclick="generatePlan()">🎨 Generate BBMP Single Plot Plan</button>
     </div>
 
-    <!-- Output Plan (Architectural 70:30 Split Frame) -->
+    <!-- Action Bar for Direct PDF Export / Printing -->
+    <div class="card action-bar" id="actionBar" style="display:none; background: #f0fdf4; border-color: #86efac;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <strong style="color: #166534; font-size: 14px;">✅ BBMP Single Plot Layout Plan Generated Successfully</strong>
+          <p style="margin: 2px 0 0 0; font-size: 11px; color: #15803d;">Click below to trigger high-resolution 2-page merged PDF export or print directly for Sakala e-Khata submission.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn" style="background: #15803d;" onclick="printPlanPackage()">📥 Download PDF / Print Plan Package</button>
+          <button class="btn btn-secondary" onclick="toggleLegendSheetPage()">📑 Toggle Page 2 Legend Sheet</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Output Plan Page 1 (Architectural 70:30 Split Frame) -->
     <div class="plan-output card" id="planOutput">
       <div class="plan-sheet-frame">
 
@@ -839,6 +853,174 @@
         </div> <!-- End Sidebar Column -->
 
       </div> <!-- End Plan Sheet Frame -->
+    </div>
+
+    <!-- Output Page 2: BBMP Official Line & Colour Specifications Sheet (LEGEND.pdf) -->
+    <div class="card legend-sheet-output" id="legendSheetOutput" style="display:none;">
+      <div class="plan-sheet-frame" style="grid-template-columns: 1fr;">
+        <div class="legend-header-bar">
+          <h2>BRUHAT BENGALURU MAHANAGARA PALIKE</h2>
+          <h3>OFFICIAL LINE & COLOUR SPECIFICATIONS SHEET (LEGEND)</h3>
+          <p>Compliant with BBMP Sakala B-to-A Khata Conversion Standards & KTCP Act Sec 17 Regulations</p>
+        </div>
+
+        <!-- Section 1: Line Specifications Table -->
+        <div class="legend-section">
+          <h4>1. OFFICIAL LINE SPECIFICATIONS</h4>
+          <table class="legend-spec-table">
+            <thead>
+              <tr>
+                <th>FEATURE / BOUNDARY DESCRIPTION</th>
+                <th>LINE STYLE / STROKE PATTERN</th>
+                <th>COLOR / PATTERN CODE</th>
+                <th>TECHNICAL SPECIFICATION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Plot / Site Boundary Line</td>
+                <td><span class="line-sample stroke-dashdotdot"></span></td>
+                <td>Black (#000000)</td>
+                <td>Dash-Dot-Dot (12,3,3,3,3,3) 2.0px Stroke</td>
+              </tr>
+              <tr>
+                <td>Building Footprint Outline</td>
+                <td><span class="line-sample stroke-solid-blue"></span></td>
+                <td>Cobalt Blue (#1d4ed8)</td>
+                <td>Solid 2.0px Stroke + 45° Diagonal Hatch Fill</td>
+              </tr>
+              <tr>
+                <td>Setback Area Lines (Front/Rear/Sides)</td>
+                <td><span class="line-sample stroke-solid-green"></span></td>
+                <td>Emerald Green (#059669)</td>
+                <td>Dashed 1.0px Stroke (#059669)</td>
+              </tr>
+              <tr>
+                <td>Master Plan Road Widening Strip</td>
+                <td><span class="line-sample stroke-dash-grey"></span></td>
+                <td>Slate Grey (#64748b)</td>
+                <td>Grey 45° Diagonal Hatch Fill (RMP-2015)</td>
+              </tr>
+              <tr>
+                <td>Stormwater Drain / Nala Buffer Line</td>
+                <td><span class="line-sample stroke-dot-blue"></span></td>
+                <td>Sky Blue (#0284c7)</td>
+                <td>Sky Blue Dot Matrix Pattern Fill</td>
+              </tr>
+              <tr>
+                <td>Center Line of Abutting Public Road</td>
+                <td><span class="line-sample stroke-chain"></span></td>
+                <td>Slate Grey (#94a3b8)</td>
+                <td>Chain Line (C/L OF ROAD)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Section 2: Colour Coding & Hatch Fill Specifications -->
+        <div class="legend-section">
+          <h4>2. COLOUR CODING & HATCH PATTERN SPECIFICATIONS</h4>
+          <div class="color-spec-grid">
+            <div class="color-box">
+              <div class="swatch swatch-bldg"></div>
+              <div>
+                <strong>Building Footprint</strong><br>
+                <small>Cobalt Blue 45° Hatch</small>
+              </div>
+            </div>
+            <div class="color-box">
+              <div class="swatch swatch-road"></div>
+              <div>
+                <strong>Public Abutting Road</strong><br>
+                <small>Light Slate Grey Solid</small>
+              </div>
+            </div>
+            <div class="color-box">
+              <div class="swatch swatch-widening"></div>
+              <div>
+                <strong>Road Widening Strip</strong><br>
+                <small>Grey 45° Hatch Fill</small>
+              </div>
+            </div>
+            <div class="color-box">
+              <div class="swatch swatch-buffer"></div>
+              <div>
+                <strong>Buffer Zone (Nala/Lake)</strong><br>
+                <small>Sky Blue Dot Matrix</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Minimum Setback Matrix (RMP-2015 Bye-Laws) -->
+        <div class="legend-section">
+          <h4>3. BBMP MINIMUM SETBACK MATRIX (RMP-2015 BYE-LAWS)</h4>
+          <table class="legend-spec-table">
+            <thead>
+              <tr>
+                <th>ABUTTING ROAD WIDTH</th>
+                <th>MIN. FRONT SETBACK</th>
+                <th>MIN. REAR SETBACK</th>
+                <th>MIN. SIDE SETBACKS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Up to 6.0 m (&lt; 20 ft)</td>
+                <td>1.0 m (3'-3")</td>
+                <td>1.0 m (3'-3")</td>
+                <td>1.0 m (3'-3")</td>
+              </tr>
+              <tr>
+                <td>6.0 m to 9.0 m (20 - 30 ft)</td>
+                <td>1.5 m (5'-0")</td>
+                <td>1.0 m (3'-3")</td>
+                <td>1.0 m (3'-3")</td>
+              </tr>
+              <tr>
+                <td>9.0 m to 12.0 m (30 - 40 ft)</td>
+                <td>2.0 m (6'-6")</td>
+                <td>1.5 m (5'-0")</td>
+                <td>1.5 m (5'-0")</td>
+              </tr>
+              <tr>
+                <td>Above 12.0 m (&gt; 40 ft)</td>
+                <td>3.0 m (10'-0")</td>
+                <td>2.0 m (6'-6")</td>
+                <td>2.0 m (6'-6")</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Section 4: Mandatory Document Checklist -->
+        <div class="legend-section">
+          <h4>4. SAKALA B-TO-A KHATA MANDATORY DOCUMENT CHECKLIST</h4>
+          <ul class="checklist-grid">
+            <li>✅ ADLR 11E Survey Sketch (Bhoomi Portal)</li>
+            <li>✅ DC Conversion Order (KLR Act Sec 95)</li>
+            <li>✅ Up-to-date Tax Paid Receipt (SAS App)</li>
+            <li>✅ Encumbrance Certificate (EC for 13/30 Yrs)</li>
+            <li>✅ Title Deed / Registered Sale Deed</li>
+            <li>✅ e-Khata EP ID (Sakala Portal Ref)</li>
+          </ul>
+        </div>
+
+        <!-- Section 5: Verification & Seal Block -->
+        <div class="legend-footer-seals">
+          <div class="seal-box">
+            <div class="seal-line"></div>
+            <strong>Architect / Engineer Signature & Seal</strong><br>
+            <small>COA / BBMP Registration No.</small>
+          </div>
+          <div class="seal-box">
+            <div class="seal-line"></div>
+            <strong>BBMP Verification Officer (AEE / ADTP)</strong><br>
+            <small>Bruhat Bengaluru Mahanagara Palike</small>
+          </div>
+        </div>
+
+      </div> <!-- End Legend Sheet Frame -->
     </div>
 
     <!-- Sample Buttons Card with Precautionary Watermark Checkbox -->

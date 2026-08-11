@@ -1,6 +1,7 @@
 /**
  * @file ui.js
- * @description Handles dynamic DOM interaction logic, visibility toggles, and cardinal side dimension auto-syncing.
+ * @description Handles dynamic DOM interaction logic, visibility toggles, cardinal side dimension auto-syncing,
+ * legend page visibility, and native browser print/PDF export trigger logic.
  * @author Senior Systems Architect
  */
 
@@ -159,4 +160,37 @@ function toggleSampleWatermark() {
   if (watermarkGroup) {
     watermarkGroup.style.display = isChecked ? 'block' : 'none';
   }
+}
+
+/**
+ * Toggles visibility of Page 2 (BBMP Official Line & Colour Specifications Sheet)
+ * based on the state of the includeLegendPage checkbox.
+ * 
+ * @function toggleLegendSheetPage
+ * @returns {void}
+ */
+function toggleLegendSheetPage() {
+  const legendSheet = document.getElementById('legendSheetOutput');
+  const isChecked = document.getElementById('includeLegendPage') ? document.getElementById('includeLegendPage').checked : true;
+  if (legendSheet) {
+    legendSheet.style.display = isChecked ? 'block' : 'none';
+  }
+}
+
+/**
+ * Triggers native browser print / PDF export dialog for the generated BBMP plan package.
+ * Pre-configures page breaks and multi-page visibility before printing.
+ * 
+ * @function printPlanPackage
+ * @returns {void}
+ */
+function printPlanPackage() {
+  const planOutput = document.getElementById('planOutput');
+  if (!planOutput || planOutput.style.display === 'none') {
+    if (typeof validate === 'function' && !validate()) return;
+    if (typeof generatePlan === 'function') generatePlan();
+  }
+
+  toggleLegendSheetPage();
+  window.print();
 }

@@ -262,16 +262,16 @@ The plan sheet sidebar includes the 15 standard BBMP legal conditions:
 - [x] Implement Corner Splay (cut corner) geometry renderer in SVG.
 - [x] Implement dynamic Land Use Analysis math ($A_{\text{residential}}$, $A_{\text{road\_widening}}$, $A_{\text{buffer}}$, $A_{\text{total}}$).
 
-### Phase 4: A3 / A4 PDF Export & Multi-Page Merged Export
-- [ ] Add explicit **"📥 Download PDF / Print Plan"** button.
-- [ ] Implement Multi-Page Merged PDF layout:
-  - [ ] Page 1: Single Site Layout Plan (70:30 Frame).
-  - [ ] Page 2: BBMP Official Colour Coding & Line Specifications Sheet (when `#includeLegendPage` is checked).
-- [ ] Add `@media print` CSS rules with `page-break-before: always;` optimized for A4/A3 single-file PDF generation.
+### Phase 4: A3 / A4 PDF Export & Multi-Page Merged Export (COMPLETED)
+- [x] Add explicit **"📥 Download PDF / Print Plan"** button.
+- [x] Implement Multi-Page Merged PDF layout:
+  - [x] Page 1: Single Site Layout Plan (70:30 Frame).
+  - [x] Page 2: BBMP Official Colour Coding & Line Specifications Sheet (when `#includeLegendPage` is checked).
+- [x] Add `@media print` CSS rules with `page-break-before: always;` optimized for A4/A3 single-file PDF generation.
 
-### Phase 5: Testing & Sample Presets
-- [ ] Add sample pre-fill preset 1: **Standard 30x40 Site (6.0m Road)**
-- [ ] Add sample pre-fill preset 2: **Road Widening Site (12.0m widened to 18.0m as per RMP-2015)**
-- [ ] Add sample pre-fill preset 3: **Drain Buffer Site (7.0m Nala Buffer)**
-- [ ] Add sample pre-fill preset 4: **Odd / Irregular Site with Custom Setbacks**
-- [ ] Add sample pre-fill preset 5: **Full 2-Page Consolidated BBMP Submission Package**
+### Phase 5: Testing & Sample Presets (COMPLETED)
+- [x] Add sample pre-fill preset 1: **Standard 30x40 Site (1-Road)**
+- [x] Add sample pre-fill preset 2: **2-Side Corner Plot (North 30' Road & East 60' Main Road)**
+- [x] Add sample pre-fill preset 3: **Irregular / Odd Shaped Plot (Trapezoid Geometry)**
+- [x] Add sample pre-fill preset 4: **Road Widening Site (10' Strip Widening under RMP-2015)**
+- [x] Add sample pre-fill preset 5: **Full 2-Page Consolidated BBMP Submission Package (Page 1 Layout + Page 2 Legend Sheet)**

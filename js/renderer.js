@@ -498,6 +498,15 @@ function generatePlan() {
     toggleSampleWatermark();
   }
 
+  if (typeof toggleLegendSheetPage === 'function') {
+    toggleLegendSheetPage();
+  }
+
+  const actionBar = document.getElementById('actionBar');
+  if (actionBar) {
+    actionBar.style.display = 'block';
+  }
+
   document.getElementById('planOutput').style.display = 'block';
   document.getElementById('planOutput').scrollIntoView({ behavior: 'smooth' });
 }
