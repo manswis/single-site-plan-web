@@ -460,7 +460,6 @@ function validateStep(stepNum, showErrors = true) {
     case 1:
       isValid = checkRequired('ownerName', 'err-ownerName', showErrors) && isValid;
       isValid = checkRequired('epId', 'err-epId', showErrors) && isValid;
-      isValid = checkRequired('pidNo', 'err-pidNo', showErrors) && isValid;
       break;
     case 2:
       isValid = checkRequired('surveyNo', 'err-surveyNo', showErrors) && isValid;
