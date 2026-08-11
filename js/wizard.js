@@ -328,7 +328,7 @@ function goToStep(targetStep) {
   // 2. Forward Navigation: Validate all preceding steps
   for (let s = 1; s < targetStep; s++) {
     if (!validateStep(s, true)) {
-      showStep(s);
+      showStep(s, true, false);
       scrollFirstErrorIntoView(s);
       return false;
     }
@@ -372,13 +372,17 @@ function prevStep() {
  * 
  * @function showStep
  * @param {number} stepNum - Step number to activate.
+ * @param {boolean} [shouldSave=true] - Whether to auto-save draft.
+ * @param {boolean} [clearErrors=true] - Whether to clear step errors. Set to false when validation fails.
  * @returns {void}
  */
-function showStep(stepNum, shouldSave = true) {
+function showStep(stepNum, shouldSave = true, clearErrors = true) {
   currentStep = stepNum;
 
-  // Clear any residual error messages on the target step when landing
-  clearStepErrors(stepNum);
+  // Clear residual error messages ONLY on voluntary step navigation (not on validation failure)
+  if (clearErrors) {
+    clearStepErrors(stepNum);
+  }
 
   // Hide all step content panels
   for (let i = 1; i <= TOTAL_STEPS; i++) {
@@ -586,14 +590,16 @@ function checkRequired(fieldId, errId, showErrors = true) {
   if (!field) return true;
 
   const val = field.value ? field.value.trim() : '';
+  const container = field.closest('.field') || field.parentElement;
+
   if (!val) {
     if (showErrors) {
-      if (field.parentElement) field.parentElement.classList.add('error');
+      if (container) container.classList.add('error');
       if (err) err.style.display = 'block';
     }
     return false;
   } else {
-    if (field.parentElement) field.parentElement.classList.remove('error');
+    if (container) container.classList.remove('error');
     if (err) err.style.display = 'none';
     return true;
   }
@@ -612,7 +618,8 @@ function clearFieldError(fieldId, errId) {
   const err = document.getElementById(errId);
 
   if (field && field.value.trim() !== '') {
-    if (field.parentElement) field.parentElement.classList.remove('error');
+    const container = field.closest('.field') || field.parentElement;
+    if (container) container.classList.remove('error');
     if (err) err.style.display = 'none';
   }
 
@@ -652,7 +659,7 @@ function scrollFirstErrorIntoView(stepNum) {
   const stepPanel = document.getElementById(`wizardStep${stepNum}`);
   if (!stepPanel) return;
 
-  const firstErr = stepPanel.querySelector('.error-msg[style*="display: block"]');
+  const firstErr = stepPanel.querySelector('.error-msg[style*="display: block"]') || stepPanel.querySelector('.field.error');
   if (firstErr) {
     firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
