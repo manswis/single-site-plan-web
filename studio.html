@@ -239,29 +239,42 @@
           </div>
         </div>
 
-        <div class="grid" style="margin-top: 14px;">
+        <!-- Regular Site Mode: 2 Clean Fields (North/South & East/West) -->
+        <div id="regularSiteControls" class="grid" style="margin-top: 16px;">
+          <div class="field">
+            <label>↔️ North & South Dimension (Width in ft) <span class="required">*</span></label>
+            <input id="regNorthSouth" type="number" placeholder="e.g. 30" oninput="onRegularDimensionInput()">
+            <div class="error-msg" id="err-regNorthSouth">⚠ North & South dimension is required</div>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both North & South boundaries.</p>
+          </div>
+          <div class="field">
+            <label>↕️ East & West Dimension (Length in ft) <span class="required">*</span></label>
+            <input id="regEastWest" type="number" placeholder="e.g. 60" oninput="onRegularDimensionInput()">
+            <div class="error-msg" id="err-regEastWest">⚠ East & West dimension is required</div>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both East & West boundaries.</p>
+          </div>
+        </div>
+
+        <!-- Irregular Site Mode: 4 Independent Fields -->
+        <div id="irregularSiteControls" class="grid" style="margin-top: 16px; display: none;">
           <div class="field">
             <label>⬆️ North Side (ft) <span class="required">*</span></label>
-            <input id="sideNorth" type="number" placeholder="e.g. 40"
-              oninput="syncOppositeSides('sideNorth'); clearFieldError('sideNorth', 'err-sideNorth')">
+            <input id="sideNorth" type="number" placeholder="e.g. 40" oninput="clearFieldError('sideNorth', 'err-sideNorth')">
             <div class="error-msg" id="err-sideNorth">⚠ North dimension required</div>
           </div>
           <div class="field">
             <label>⬇️ South Side (ft) <span class="required">*</span></label>
-            <input id="sideSouth" type="number" placeholder="e.g. 40"
-              oninput="syncOppositeSides('sideSouth'); clearFieldError('sideSouth', 'err-sideSouth')">
+            <input id="sideSouth" type="number" placeholder="e.g. 40" oninput="clearFieldError('sideSouth', 'err-sideSouth')">
             <div class="error-msg" id="err-sideSouth">⚠ South dimension required</div>
           </div>
           <div class="field">
             <label>➡️ East Side (ft) <span class="required">*</span></label>
-            <input id="sideEast" type="number" placeholder="e.g. 60"
-              oninput="syncOppositeSides('sideEast'); clearFieldError('sideEast', 'err-sideEast')">
+            <input id="sideEast" type="number" placeholder="e.g. 60" oninput="clearFieldError('sideEast', 'err-sideEast')">
             <div class="error-msg" id="err-sideEast">⚠ East dimension required</div>
           </div>
           <div class="field">
             <label>⬅️ West Side (ft) <span class="required">*</span></label>
-            <input id="sideWest" type="number" placeholder="e.g. 60"
-              oninput="syncOppositeSides('sideWest'); clearFieldError('sideWest', 'err-sideWest')">
+            <input id="sideWest" type="number" placeholder="e.g. 60" oninput="clearFieldError('sideWest', 'err-sideWest')">
             <div class="error-msg" id="err-sideWest">⚠ West dimension required</div>
           </div>
         </div>

@@ -12,51 +12,95 @@
  * @function toggleOddSite
  * @returns {void}
  */
+/**
+ * Toggles visibility between regular rectangular plot mode (2-field N/S & E/W inputs)
+ * and odd/irregular quadrilateral plot mode (independent 4-side inputs).
+ * 
+ * @function toggleOddSite
+ * @returns {void}
+ */
 function toggleOddSite() {
   const isOdd = document.getElementById('oddSiteCheck') && document.getElementById('oddSiteCheck').checked;
+  const regControls = document.getElementById('regularSiteControls');
+  const irregControls = document.getElementById('irregularSiteControls');
   const hintEl = document.getElementById('oddSiteHint');
 
-  if (hintEl) {
-    hintEl.textContent = isOdd
-      ? '🔷 Irregular Site Mode: Enter exact independent measurements for all 4 sides.'
-      : '🔷 Rectangular Site Mode: Opposite sides auto-sync automatically.';
+  const regNS = document.getElementById('regNorthSouth');
+  const regEW = document.getElementById('regEastWest');
+  const nEl = document.getElementById('sideNorth');
+  const sEl = document.getElementById('sideSouth');
+  const eEl = document.getElementById('sideEast');
+  const wEl = document.getElementById('sideWest');
+
+  if (isOdd) {
+    // Irregular Mode: Show 4 independent fields
+    if (regControls) regControls.style.display = 'none';
+    if (irregControls) irregControls.style.display = 'grid';
+    if (hintEl) hintEl.textContent = '🔷 Irregular Site Mode: Enter exact independent measurements for all 4 sides.';
+
+    if (nEl && !nEl.value && regNS) nEl.value = regNS.value;
+    if (sEl && !sEl.value && regNS) sEl.value = regNS.value;
+    if (eEl && !eEl.value && regEW) eEl.value = regEW.value;
+    if (wEl && !wEl.value && regEW) wEl.value = regEW.value;
+  } else {
+    // Regular Mode: Show 2 clean fields (North/South & East/West)
+    if (regControls) regControls.style.display = 'grid';
+    if (irregControls) irregControls.style.display = 'none';
+    if (hintEl) hintEl.textContent = 'Rectangular Mode (Default): Enter North/South width and East/West length.';
+
+    if (regNS && nEl) regNS.value = nEl.value || (sEl ? sEl.value : '');
+    if (regEW && eEl) regEW.value = eEl.value || (wEl ? wEl.value : '');
+
+    onRegularDimensionInput();
   }
 
-  if (!isOdd) {
-    syncOppositeSides('sideNorth');
-    syncOppositeSides('sideEast');
-  }
-
+  if (typeof saveDraft === 'function') saveDraft();
   if (typeof generatePlan === 'function') generatePlan();
 }
 
 /**
- * Auto-syncs opposite cardinal sides (North <-> South, East <-> West) for rectangular plots.
+ * Handles input change on 2-column regular dimension fields.
+ * Syncs underlying sideNorth, sideSouth, sideEast, sideWest values and auto-calculates plot area.
  * 
- * @function syncOppositeSides
- * @param {string} changedId - ID of input field ('sideNorth', 'sideSouth', 'sideEast', 'sideWest').
+ * @function onRegularDimensionInput
  * @returns {void}
  */
-function syncOppositeSides(changedId) {
-  const isOdd = document.getElementById('oddSiteCheck') && document.getElementById('oddSiteCheck').checked;
-  if (isOdd) return;
+function onRegularDimensionInput() {
+  const regNS = document.getElementById('regNorthSouth');
+  const regEW = document.getElementById('regEastWest');
 
-  const changedEl = document.getElementById(changedId);
-  if (!changedEl) return;
-  const val = changedEl.value;
+  const nsVal = regNS ? regNS.value.trim() : '';
+  const ewVal = regEW ? regEW.value.trim() : '';
 
-  if (changedId === 'sideNorth') {
-    const sEl = document.getElementById('sideSouth');
-    if (sEl) sEl.value = val;
-  } else if (changedId === 'sideSouth') {
-    const nEl = document.getElementById('sideNorth');
-    if (nEl) nEl.value = val;
-  } else if (changedId === 'sideEast') {
-    const wEl = document.getElementById('sideWest');
-    if (wEl) wEl.value = val;
-  } else if (changedId === 'sideWest') {
-    const eEl = document.getElementById('sideEast');
-    if (eEl) eEl.value = val;
+  const nEl = document.getElementById('sideNorth');
+  const sEl = document.getElementById('sideSouth');
+  const eEl = document.getElementById('sideEast');
+  const wEl = document.getElementById('sideWest');
+
+  if (nEl) nEl.value = nsVal;
+  if (sEl) sEl.value = nsVal;
+  if (eEl) eEl.value = ewVal;
+  if (wEl) wEl.value = ewVal;
+
+  // Auto-calculate plot area if non-empty and user hasn't explicitly overridden it
+  const areaInput = document.getElementById('plotArea');
+  if (areaInput && (!areaInput.dataset.userEdited || areaInput.value === '')) {
+    const nsNum = parseFloat(nsVal);
+    const ewNum = parseFloat(ewVal);
+    if (!isNaN(nsNum) && !isNaN(ewNum) && nsNum > 0 && ewNum > 0) {
+      areaInput.value = Math.round(nsNum * ewNum);
+      if (typeof clearFieldError === 'function') clearFieldError('plotArea', 'err-plotArea');
+    }
+  }
+
+  if (typeof clearFieldError === 'function') {
+    clearFieldError('regNorthSouth', 'err-regNorthSouth');
+    clearFieldError('regEastWest', 'err-regEastWest');
+  }
+
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+};
   }
 
   calculatePlotAreaFromSides();

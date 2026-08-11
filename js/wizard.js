@@ -32,6 +32,7 @@ const DRAFT_FIELD_IDS = [
   'dcOrderNo', 'dcOrderDate', 'dcAuthority',
   'surveyNo', 'bbmpZone', 'wardNo', 'wardName', 'address',
   'plotArea', 'roadWidth', 'roadFacing', 'scale', 'floorsCount',
+  'regNorthSouth', 'regEastWest',
   'sideNorth', 'sideSouth', 'sideEast', 'sideWest',
   'typeNorth', 'typeSouth', 'typeEast', 'typeWest',
   'nameRoadNorth', 'widthRoadNorth', 'descPlotNorth',
@@ -428,10 +429,17 @@ function validateStep(stepNum, showErrors = true) {
       isValid = checkRequired('plotArea', 'err-plotArea', showErrors) && isValid;
       isValid = checkRequired('roadWidth', 'err-roadWidth', showErrors) && isValid;
       isValid = checkRequired('roadFacing', 'err-roadFacing', showErrors) && isValid;
-      isValid = checkRequired('sideNorth', 'err-sideNorth', showErrors) && isValid;
-      isValid = checkRequired('sideSouth', 'err-sideSouth', showErrors) && isValid;
-      isValid = checkRequired('sideEast', 'err-sideEast', showErrors) && isValid;
-      isValid = checkRequired('sideWest', 'err-sideWest', showErrors) && isValid;
+
+      const isOddSite = document.getElementById('oddSiteCheck') && document.getElementById('oddSiteCheck').checked;
+      if (isOddSite) {
+        isValid = checkRequired('sideNorth', 'err-sideNorth', showErrors) && isValid;
+        isValid = checkRequired('sideSouth', 'err-sideSouth', showErrors) && isValid;
+        isValid = checkRequired('sideEast', 'err-sideEast', showErrors) && isValid;
+        isValid = checkRequired('sideWest', 'err-sideWest', showErrors) && isValid;
+      } else {
+        isValid = checkRequired('regNorthSouth', 'err-regNorthSouth', showErrors) && isValid;
+        isValid = checkRequired('regEastWest', 'err-regEastWest', showErrors) && isValid;
+      }
       break;
     case 5:
       isValid = checkRequired('typeNorth', 'err-typeNorth', showErrors) && isValid;

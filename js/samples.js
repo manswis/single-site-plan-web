@@ -72,6 +72,8 @@ function loadSampleRegular() {
   setVal('address', 'No. 12, 3rd Cross, Rajajinagar, Bangalore - 560010');
 
   // Plot Dimensions (30' x 40')
+  setVal('regNorthSouth', '30');
+  setVal('regEastWest', '40');
   setVal('plotArea', '1200');
   setVal('sideNorth', '30');
   setVal('sideSouth', '30');
@@ -151,6 +153,8 @@ function loadSampleCornerPlot() {
   setVal('wardName', 'Yelahanka New Town');
   setVal('address', 'Corner Site No. 1, 4th Cross & 100ft Main Road, Yelahanka, Bangalore - 560064');
 
+  setVal('regNorthSouth', '40');
+  setVal('regEastWest', '60');
   setVal('plotArea', '2400');
   setVal('sideNorth', '40');
   setVal('sideSouth', '40');
