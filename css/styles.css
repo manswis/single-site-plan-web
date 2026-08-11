@@ -2379,3 +2379,123 @@ select:focus {
   flex: 1 !important;
   color: #0f172a !important;
 }
+
+/* FAQ & User Guide Visual Styling */
+.help-step-card {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.help-step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.help-step-badge {
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--apple-accent);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.help-step-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+.help-step-intro {
+  font-size: 13.5px;
+  color: var(--apple-text-secondary);
+  margin: 0 0 18px 0;
+}
+
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .help-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.help-field-item {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+[data-theme="dark"] .help-field-item {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.help-field-item h4 {
+  margin: 0 0 8px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+.help-field-item p {
+  margin: 0 0 8px 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--apple-text-secondary);
+}
+
+.sample-snippet-box {
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 10px 0;
+  font-size: 11.5px;
+}
+
+[data-theme="dark"] .sample-snippet-box {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+.snippet-tag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--apple-accent);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.snippet-content {
+  color: var(--apple-text-primary);
+}
+
+.doc-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--apple-accent);
+  text-decoration: none;
+  margin-top: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.doc-link-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}

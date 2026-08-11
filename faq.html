@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Frequently Asked Questions — BBMP e-Plan Studio</title>
+  <title>FAQ & Complete User Guide — BBMP e-Plan Studio</title>
 
   <!-- Google Fonts & Icons: Outfit, Inter & Material Symbols -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
   <link rel="stylesheet" href="css/styles.css">
   <script src="js/theme.js"></script>
@@ -33,10 +34,11 @@
           <a href="index.html">Home</a>
           <a href="studio.html">Studio Workbench</a>
           <a href="pricing.html">Pricing</a>
-          <a href="legal.html">Legal Disclaimer</a>
-          <a href="faq.html" class="active">FAQ</a>
+          <a href="legal.html">Legal Terms</a>
+          <a href="faq.html" class="active">FAQ & Help</a>
         </nav>
-        <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+        <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme"
+          title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
         </button>
       </div>
@@ -45,97 +47,332 @@
 
   <div class="container">
 
-    <!-- Horizontal Sliding Control Navigation Bar for Mobile Pages -->
+    <!-- Mobile Nav Slider -->
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
       <div class="mobile-nav-slider" style="margin-bottom: 0; flex: 1;">
         <a href="index.html" class="mobile-nav-item">Home</a>
         <a href="studio.html" class="mobile-nav-item">Workbench</a>
         <a href="pricing.html" class="mobile-nav-item">Pricing</a>
         <a href="legal.html" class="mobile-nav-item">Legal</a>
-        <a href="faq.html" class="mobile-nav-item active">FAQ</a>
+        <a href="faq.html" class="mobile-nav-item active">FAQ & Help</a>
       </div>
-      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
+        title="Toggle Light/Dark Mode">
         <span class="material-symbols-outlined">dark_mode</span>
       </button>
     </div>
 
-    <!-- FAQ Hero -->
-    <section class="apple-hero" style="padding-top: 50px;">
-      <h1>Frequently Asked Questions</h1>
-      <p class="subtitle">Everything you need to know about single plot layout plans, B-to-A Khata conversion standards,
-        and PDF exports.</p>
+    <!-- Hero Section -->
+    <section class="apple-hero" style="padding-top: 40px; padding-bottom: 20px;">
+      <h1>FAQ & Complete User Guide</h1>
+      <p class="subtitle">Step-by-step instructions to find official Karnataka revenue records, understand every form field,
+        and prepare your BBMP Sakala B-to-A Khata plan.</p>
     </section>
 
-    <!-- FAQ Accordion List -->
-    <section class="faq-section" style="margin-top: 20px;">
+    <!-- Navigation Pills: Guide vs FAQ -->
+    <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 30px;">
+      <button type="button" id="tabGuideBtn" class="apple-btn-primary" onclick="switchHelpTab('guide')"
+        style="padding: 10px 20px; font-weight: 600;">
+        💡 Field-by-Field User Guide
+      </button>
+      <button type="button" id="tabFaqBtn" class="apple-btn-secondary" onclick="switchHelpTab('faq')"
+        style="padding: 10px 20px; font-weight: 600;">
+        ❓ Frequently Asked Questions
+      </button>
+    </div>
+
+    <!-- SECTION 1: FIELD-BY-FIELD USER GUIDE -->
+    <div id="helpGuideSection" class="help-section">
+
+      <!-- Step 1 Guide Card -->
+      <div class="help-step-card">
+        <div class="help-step-header">
+          <span class="help-step-badge">Step 1</span>
+          <h3>🏛️ Revenue Records & Identifiers</h3>
+        </div>
+        <p class="help-step-intro">Enter official identifiers required for BBMP e-Khata validation and B-to-A Khata title conversion.</p>
+
+        <div class="help-grid">
+          <!-- Field 1: eKhata ID -->
+          <div class="help-field-item">
+            <h4>1. eKhata ID (ePID)</h4>
+            <p><strong>What it is:</strong> A unique 10-digit digital property identification number assigned by BBMP / Sakala e-Khata portal.</p>
+            <p><strong>Where to find it:</strong> Printed on top right of your draft or final e-Khata certificate (<code>bbmpekhata.karnataka.gov.in</code>).</p>
+            <div class="sample-snippet-box">
+              <div class="snippet-tag">Official Document Snippet</div>
+              <div class="snippet-content">
+                <strong>BBMP e-Khata Certificate</strong><br>
+                <span>e-Khata Property ID (ePID): <strong style="color: #2563eb;">1509988776</strong></span>
+              </div>
+            </div>
+            <a href="https://bbmpekhata.karnataka.gov.in/" target="_blank" rel="noopener" class="doc-link-btn">
+              🔗 Visit Karnataka e-Khata Portal ↗
+            </a>
+          </div>
+
+          <!-- Field 2: BBMP PID -->
+          <div class="help-field-item">
+            <h4>2. BBMP PID Number</h4>
+            <p><strong>What it is:</strong> Property Identification Number used for annual SAS Property Tax payments in Bengaluru.</p>
+            <p><strong>Where to find it:</strong> Printed on your annual SAS Property Tax receipt or tax khata record.</p>
+            <div class="sample-snippet-box">
+              <div class="snippet-tag">SAS Tax Receipt Snippet</div>
+              <div class="snippet-content">
+                <strong>BBMP Property Tax Receipt</strong><br>
+                <span>PID No: <strong style="color: #2563eb;">108-W0045-12</strong></span>
+              </div>
+            </div>
+            <a href="https://bbmptax.karnataka.gov.in/" target="_blank" rel="noopener" class="doc-link-btn">
+              🔗 BBMP Tax Receipt Portal ↗
+            </a>
+          </div>
+
+          <!-- Field 3: ADLR 11E Sketch -->
+          <div class="help-field-item">
+            <h4>3. ADLR 11E Survey Sketch No</h4>
+            <p><strong>What it is:</strong> Pre-mutation survey sketch reference issued by the Assistant Director of Land Records (ADLR).</p>
+            <p><strong>Where to find it:</strong> Issued via Bhoomi Mojini portal (e.g. <code>ADLR/11E/KR-7891/2023-24</code>).</p>
+            <div class="sample-snippet-box">
+              <div class="snippet-tag">Mojini 11E Sketch Snippet</div>
+              <div class="snippet-content">
+                <strong>Mojini 11E Survey Sketch</strong><br>
+                <span>Sketch Ref: <strong style="color: #2563eb;">ADLR/11E/KR-7891/23-24</strong></span>
+              </div>
+            </div>
+            <a href="https://bhoomi.karnataka.gov.in/mojini/" target="_blank" rel="noopener" class="doc-link-btn">
+              🔗 Bhoomi Mojini Portal ↗
+            </a>
+          </div>
+
+          <!-- Field 4: DC Conversion Order -->
+          <div class="help-field-item">
+            <h4>4. DC Conversion Order No & Date</h4>
+            <p><strong>What it is:</strong> Land conversion order from agricultural to non-agricultural residential use under KLR Act Sec 95.</p>
+            <p><strong>Where to find it:</strong> Printed on your official DC Conversion Order issued by DC, Bengaluru Urban District.</p>
+            <div class="sample-snippet-box">
+              <div class="snippet-tag">DC Order Snippet</div>
+              <div class="snippet-content">
+                <strong>District Commissioner Order</strong><br>
+                <span>Order No: <strong style="color: #2563eb;">ALN(E)SR.97/07-08</strong> (Dt: 12-04-2008)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 Guide Card -->
+      <div class="help-step-card">
+        <div class="help-step-header">
+          <span class="help-step-badge">Step 2</span>
+          <h3>📍 Property Location & Administration</h3>
+        </div>
+        <p class="help-step-intro">Select administrative details to align your site plan with BBMP zonal jurisdiction.</p>
+
+        <div class="help-grid">
+          <div class="help-field-item">
+            <h4>1. BBMP Zone & Ward Details</h4>
+            <p>Select your administrative zone (e.g. <em>East, West, South, Mahadevapura, Bommanahalli, Yelahanka, Dasarahalli, Rajarajeshwarinagar</em>) and enter official Ward Number & Name (e.g. <em>Ward #45, Malleshwaram</em>).</p>
+          </div>
+          <div class="help-field-item">
+            <h4>2. Complete Site Address</h4>
+            <p>Enter the full physical site location matching your registered deed (Door No, Cross, Main Road, Locality, Pincode).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 Guide Card -->
+      <div class="help-step-card">
+        <div class="help-step-header">
+          <span class="help-step-badge">Step 3</span>
+          <h3>📐 Plot Measurements & Geometry</h3>
+        </div>
+        <p class="help-step-intro">Input precise physical site measurements to generate accurate CAD vector geometry.</p>
+
+        <div class="help-grid">
+          <div class="help-field-item">
+            <h4>1. Regular vs Irregular Plot Mode</h4>
+            <p><strong>Regular Site:</strong> For rectangular or square plots, enter North-South and East-West dimensions.</p>
+            <p><strong>Irregular Site:</strong> For non-rectangular sites, check <em>"Irregular Site"</em> to enter 4 independent side lengths (North, South, East, West).</p>
+          </div>
+          <div class="help-field-item">
+            <h4>2. Road Width & Facing Direction</h4>
+            <p>Select the direction of the front main road (<code>North</code>, <code>South</code>, <code>East</code>, <code>West</code>) and enter the road width in feet and inches (e.g. <code>30 ft 0 in</code>). Road width determines minimum setback rules under BBMP RMP-2015 bye-laws.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 Guide Card -->
+      <div class="help-step-card">
+        <div class="help-step-header">
+          <span class="help-step-badge">Step 4</span>
+          <h3>🏗️ Structure & Building Setbacks</h3>
+        </div>
+        <p class="help-step-intro">Define floor counts and setback clearances compliant with municipal zoning bye-laws.</p>
+
+        <div class="help-grid">
+          <div class="help-field-item">
+            <h4>1. Building Type & Floors Count</h4>
+            <p>Choose building category (Residential, Commercial, Mixed Use) and floor structure (Vacant Plot, Stilt+Ground, G+1 to G+4).</p>
+          </div>
+          <div class="help-field-item">
+            <h4>2. Auto-Calculated Setbacks (RMP-2015)</h4>
+            <p>Setbacks (Front, Rear, Left, Right) are automatically computed based on plot size and road width according to BBMP RMP-2015 bye-laws. You may adjust values manually if required.</p>
+          </div>
+          <div class="help-field-item">
+            <h4>3. Footprint Alignment Direction</h4>
+            <p>Select whether the building long side runs horizontally (along North-South span) or vertically (along East-West span) to prevent footprint boundary overflow.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 & 6 Guide Card -->
+      <div class="help-step-card">
+        <div class="help-step-header">
+          <span class="help-step-badge">Step 5 & 6</span>
+          <h3>📜 Deed DNA & Special Constraints</h3>
+        </div>
+        <p class="help-step-intro">Define abutting site boundaries and Master Plan road widening or buffer zone constraints.</p>
+
+        <div class="help-grid">
+          <div class="help-field-item">
+            <h4>1. Schedule of Property Boundaries</h4>
+            <p>From your Registered Sale Deed Schedule, select what abuts each cardinal side (<code>Public Road</code>, <code>Private Property</code>, <code>Government Land</code>, <code>Stormwater Drain</code>).</p>
+          </div>
+          <div class="help-field-item">
+            <h4>2. Road Widening & Nala Buffer Zones</h4>
+            <p>If your property is affected by Master Plan road widening or a Nala/Lake buffer, toggle the constraint checkbox to render the official hatched zone on the plan sheet.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SECTION 2: FREQUENTLY ASKED QUESTIONS -->
+    <div id="helpFaqSection" class="faq-section" style="display: none; margin-top: 20px;">
+
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>❓ Is this single plot layout plan legally compliant with BBMP standards?</span>
+          <span>❓ What is BBMP B-to-A Khata conversion and why is a Single Plot Layout Plan required?</span>
           <span>+</span>
         </div>
         <div class="faq-answer">
-          Yes! All generated plans strictly adhere to Bruhat Bengaluru Mahanagara Palike (BBMP) B-to-A Khata guidelines,
-          KTCP Act Sec 17, and BDA RMP-2015 Master Plan setback bye-laws.
+          B-Khata is a temporary property tax register entry for unauthorized layouts. A-Khata is the official ownership khata certificate issued by BBMP for DC-converted properties with valid single plot layout plans. The single plot layout plan proves site dimensions, road access, and setback compliance under KTCP Act Sec 17.
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>❓ What is the difference between B-Khata and A-Khata conversion?</span>
+          <span>❓ Where do I get my official eKhata ID (ePID)?</span>
           <span>+</span>
         </div>
         <div class="faq-answer">
-          B-Khata is a temporary property tax register entry for unauthorized layouts. A-Khata is the official ownership
-          khata certificate issued by BBMP for DC-converted properties with valid single plot layout plans.
+          You can retrieve or verify your eKhata ID (ePID) from the official Karnataka e-Khata portal (<code>bbmpekhata.karnataka.gov.in</code>). It is a 10-digit number printed on top right of your draft or final e-Khata certificate.
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>❓ Do I still need a licensed architect signature on the generated plan?</span>
+          <span>❓ What is an ADLR 11E Survey Sketch and why is it needed?</span>
           <span>+</span>
         </div>
         <div class="faq-answer">
-          The generated PDF includes official COA/BBMP registration signature and seal blocks ready for your licensed
-          architect or engineer to review, sign, and seal before final municipal submission.
+          An ADLR 11E Sketch is a pre-mutation survey map issued by the Assistant Director of Land Records via the Bhoomi Mojini portal. It establishes official revenue survey boundaries for single plot layout approval.
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>❓ How does the software handle irregular or odd-shaped plots?</span>
+          <span>❓ How are building setbacks calculated on the workbench?</span>
           <span>+</span>
         </div>
         <div class="faq-answer">
-          You can toggle 'Irregular / Odd Shaped Site' mode in Step 3 to input exact independent measurements for North,
-          South, East, and West boundaries. The vector engine automatically calculates non-rectangular geometry.
+          Setbacks are dynamically calculated according to BBMP Revised Master Plan (RMP-2015) bye-laws based on abutting road width and plot depth. The system allocates minimum mandatory front, rear, left, and right setbacks while allowing manual adjustment.
         </div>
       </div>
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>❓ Is my personal and property data kept private and secure?</span>
+          <span>❓ How does the software handle irregular or 4-side unequal plots?</span>
           <span>+</span>
         </div>
         <div class="faq-answer">
-          100% Yes! All data processing, SVG rendering, and PDF file creation occur locally inside your web browser.
-          Zero property records or personal data are ever uploaded to any external server.
+          In Step 3, check "Irregular / Odd Shaped Site" to enter 4 independent side measurements (North, South, East, West). The CAD engine computes non-rectangular quadrilateral geometry and bounds setbacks against the shortest side to prevent boundary overflow.
         </div>
       </div>
-    </section>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>❓ Is my personal or property data uploaded to any cloud server?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          100% NO! All processing, SVG vector rendering, draft auto-persistence, and PDF export occur locally inside your browser using HTML5 LocalStorage and Canvas. Zero property records or personal data are ever uploaded to any external server.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>❓ Do I still need a licensed architect or engineer signature on the plan?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Yes. The generated PDF includes official COA/BBMP registration signature and seal blocks ready for your licensed architect, chartered engineer, or BBMP supervisor to review, sign, and seal before municipal submission.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>❓ What is the Page 2 Legend & Specifications Sheet?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Page 2 is an optional technical legend sheet containing official line style specifications, hatch pattern codes, RMP-2015 setback matrices, and Sakala B-to-A Khata mandatory document checklists.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>❓ Can I edit my inputs after reviewing the summary in Step 7?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Yes! On Step 7, each summary card features a prominent "Edit" button that takes you directly back to that wizard step, focuses the target field, and highlights it for fast modification.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Script for Tab Switching -->
+    <script>
+      function switchHelpTab(tab) {
+        const guideSec = document.getElementById('helpGuideSection');
+        const faqSec = document.getElementById('helpFaqSection');
+        const guideBtn = document.getElementById('tabGuideBtn');
+        const faqBtn = document.getElementById('tabFaqBtn');
+
+        if (tab === 'guide') {
+          guideSec.style.display = 'block';
+          faqSec.style.display = 'none';
+          guideBtn.className = 'apple-btn-primary';
+          faqBtn.className = 'apple-btn-secondary';
+        } else {
+          guideSec.style.display = 'none';
+          faqSec.style.display = 'block';
+          guideBtn.className = 'apple-btn-secondary';
+          faqBtn.className = 'apple-btn-primary';
+        }
+      }
+    </script>
 
     <!-- Page Footer -->
     <footer
       style="margin-top: 80px; padding-top: 30px; border-top: 1px solid var(--apple-border); text-align: center; font-size: 12px; color: var(--apple-text-secondary);">
       <p style="margin-bottom: 12px;">
-        <a href="index.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Studio
-          Workbench</a> •
-        <a href="pricing.html"
-          style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Pricing</a> •
-        <a href="legal.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Legal
-          Terms & Privacy</a> •
-        <a href="faq.html"
-          style="color: var(--apple-text-primary); text-decoration: none; font-weight: 700; margin: 0 10px;">FAQ</a>
+        <a href="index.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Home</a> •
+        <a href="studio.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Studio Workbench</a> •
+        <a href="pricing.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Pricing</a> •
+        <a href="legal.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 10px;">Legal Terms</a> •
+        <a href="faq.html" style="color: var(--apple-text-primary); text-decoration: none; font-weight: 700; margin: 0 10px;">FAQ & Help</a>
       </p>
       <p>© 2026 BBMP e-Plan Studio. All processing performed 100% locally on client browser.</p>
     </footer>
