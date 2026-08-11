@@ -1,13 +1,15 @@
 /**
  * @file wizard.js
  * @description Apple-style 7-Step Guided Setup Wizard Controller for BBMP e-Plan Studio.
- * Manages step state, lazy on-action validation, progress pill indicators, and smooth step transitions.
+ * Manages step state, lazy validation, progress indicators, draft auto-persistence, and smart session restoration.
  * @author Senior Systems Architect
  */
 
 /** Current active step index (1-based, 1 to 7) */
 let currentStep = 1;
 const TOTAL_STEPS = 7;
+const DRAFT_STORAGE_KEY = 'bbmp_studio_draft';
+const SESSION_FLAG_KEY = 'bbmp_session_active';
 
 /**
  * Step titles and descriptions for header guidance.
@@ -23,20 +25,230 @@ const STEP_METADATA = {
 };
 
 /**
+ * List of all form element IDs to persist in draft state.
+ */
+const DRAFT_FIELD_IDS = [
+  'ownerName', 'epId', 'pidNo', 'sasNo', 'adlrNo',
+  'dcOrderNo', 'dcOrderDate', 'dcAuthority',
+  'surveyNo', 'bbmpZone', 'wardNo', 'wardName', 'address',
+  'plotArea', 'roadWidth', 'roadFacing', 'scale', 'floorsCount',
+  'sideNorth', 'sideSouth', 'sideEast', 'sideWest',
+  'typeNorth', 'typeSouth', 'typeEast', 'typeWest',
+  'nameRoadNorth', 'widthRoadNorth', 'descPlotNorth',
+  'nameRoadSouth', 'widthRoadSouth', 'descPlotSouth',
+  'nameRoadEast', 'widthRoadEast', 'descPlotEast',
+  'nameRoadWest', 'widthRoadWest', 'descPlotWest',
+  'bldgWidth', 'bldgLength', 'builtUpArea',
+  'setbackFront', 'setbackRear', 'setbackLeft', 'setbackRight',
+  'proposedRoadWidth', 'roadWideningStripWidth',
+  'bufferType', 'bufferWidth',
+  'challanNo', 'challanFee', 'challanDate'
+];
+
+const DRAFT_CHECKBOX_IDS = [
+  'oddSiteCheck', 'roadWideningCheck', 'bufferCheck',
+  'includeLegendPage', 'sampleWatermarkCheck', 'legalConsentCheck'
+];
+
+/**
  * Initializes wizard state on page load.
+ * Checks for existing cached draft data:
+ * - On Page Refresh (F5 / active session): Auto-restores directly to saved step with data filled.
+ * - On Fresh Open (new tab / re-opened browser): Displays Apple Frosted Glass Restore Prompt Modal.
  * 
  * @function initWizard
  * @returns {void}
  */
 function initWizard() {
-  showStep(1);
-  updateProgressBar();
+  const hasDraft = checkAndRestoreDraft();
+  if (!hasDraft) {
+    showStep(1);
+    updateProgressBar();
+  }
 }
 
 /**
- * Navigates to a specific step index with smart lazy validation.
- * - Going Backward (targetStep < currentStep): Instant jump without showing errors.
- * - Going Forward (targetStep > currentStep): Validates all preceding steps. Shows errors on first incomplete step.
+ * Checks for existing cached draft in localStorage.
+ * 
+ * @function checkAndRestoreDraft
+ * @returns {boolean} True if draft was restored or modal prompt displayed.
+ */
+function checkAndRestoreDraft() {
+  const draftRaw = localStorage.getItem(DRAFT_STORAGE_KEY);
+  if (!draftRaw) return false;
+
+  try {
+    const draft = JSON.parse(draftRaw);
+    if (!draft || !draft.formData) return false;
+
+    // Detect if this is a Page Refresh (F5 / active session) vs Fresh Page Open
+    const isSessionActive = sessionStorage.getItem(SESSION_FLAG_KEY) === 'true';
+    const isNavReload = performance.navigation && performance.navigation.type === 1;
+
+    if (isSessionActive || isNavReload) {
+      // PAGE REFRESH: Restore silently and navigate directly to saved step!
+      restoreDraft(false);
+      return true;
+    } else {
+      // FRESH PAGE OPEN: Display Apple Frosted Glass Restore Prompt Modal!
+      showDraftRestoreModal(draft);
+      showStep(1); // Show Step 1 in background until user chooses action
+      return true;
+    }
+  } catch (e) {
+    console.error('Failed to parse saved draft:', e);
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+    return false;
+  }
+}
+
+/**
+ * Displays the Apple Frosted Glass Restore Modal with draft summary metadata.
+ * 
+ * @function showDraftRestoreModal
+ * @param {Object} draft - Draft object.
+ * @returns {void}
+ */
+function showDraftRestoreModal(draft) {
+  const modal = document.getElementById('draftRestoreModal');
+  if (!modal) return;
+
+  const ownerEl = document.getElementById('modalDraftOwner');
+  const stepEl = document.getElementById('modalDraftStep');
+  const timeEl = document.getElementById('modalDraftTime');
+
+  const owner = (draft.formData && draft.formData['ownerName']) ? draft.formData['ownerName'] : 'Unnamed Property';
+  const stepMeta = STEP_METADATA[draft.currentStep] || { title: 'Setup' };
+
+  if (ownerEl) ownerEl.textContent = owner;
+  if (stepEl) stepEl.textContent = `Step ${draft.currentStep} of 7 (${stepMeta.title})`;
+  if (timeEl) timeEl.textContent = formatDraftTimestamp(draft.timestamp);
+
+  modal.style.display = 'flex';
+}
+
+/**
+ * Formats a Unix timestamp into a human-readable relative time string.
+ * 
+ * @function formatDraftTimestamp
+ * @param {number} timestamp - Unix timestamp.
+ * @returns {string}
+ */
+function formatDraftTimestamp(timestamp) {
+  if (!timestamp) return 'Recently';
+  const diffSec = Math.floor((Date.now() - timestamp) / 1000);
+
+  if (diffSec < 60) return 'Just now';
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)} minutes ago`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)} hours ago`;
+  return `${Math.floor(diffSec / 86400)} days ago`;
+}
+
+/**
+ * Restores saved form data from localStorage and navigates to the saved step.
+ * 
+ * @function restoreDraft
+ * @param {boolean} [hideModal=true] - Whether to close the modal prompt.
+ * @returns {void}
+ */
+function restoreDraft(hideModal = true) {
+  const draftRaw = localStorage.getItem(DRAFT_STORAGE_KEY);
+  if (!draftRaw) return;
+
+  try {
+    const draft = JSON.parse(draftRaw);
+    const data = draft.formData || {};
+
+    // Restore text, number, and select fields
+    DRAFT_FIELD_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id] !== undefined) {
+        el.value = data[id];
+      }
+    });
+
+    // Restore checkboxes
+    DRAFT_CHECKBOX_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id] !== undefined) {
+        el.checked = data[id];
+      }
+    });
+
+    // Re-trigger dynamic UI toggles
+    if (typeof toggleOddSite === 'function') toggleOddSite();
+    if (typeof toggleRoadWidening === 'function') toggleRoadWidening();
+    if (typeof toggleBufferZone === 'function') toggleBufferZone();
+    if (typeof toggleBoundaryType === 'function') {
+      ['North', 'South', 'East', 'West'].forEach(dir => toggleBoundaryType(dir));
+    }
+
+    // Mark active session flag
+    sessionStorage.setItem(SESSION_FLAG_KEY, 'true');
+
+    if (hideModal) {
+      const modal = document.getElementById('draftRestoreModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    const targetStep = draft.currentStep || 1;
+    showStep(targetStep);
+
+    if (typeof generatePlan === 'function') {
+      generatePlan();
+    }
+  } catch (e) {
+    console.error('Error restoring draft:', e);
+  }
+}
+
+/**
+ * Discards cached draft and starts a fresh new plan.
+ * 
+ * @function discardDraft
+ * @returns {void}
+ */
+function discardDraft() {
+  localStorage.removeItem(DRAFT_STORAGE_KEY);
+  sessionStorage.setItem(SESSION_FLAG_KEY, 'true');
+
+  const modal = document.getElementById('draftRestoreModal');
+  if (modal) modal.style.display = 'none';
+
+  showStep(1);
+}
+
+/**
+ * Saves current form state and active step to localStorage.
+ * 
+ * @function saveDraft
+ * @returns {void}
+ */
+function saveDraft() {
+  const formData = {};
+
+  DRAFT_FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) formData[id] = el.value;
+  });
+
+  DRAFT_CHECKBOX_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) formData[id] = el.checked;
+  });
+
+  const payload = {
+    currentStep,
+    timestamp: Date.now(),
+    formData
+  };
+
+  localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
+  sessionStorage.setItem(SESSION_FLAG_KEY, 'true');
+}
+
+/**
+ * Navigates to a specific step index with smart lazy validation and draft saving.
  * 
  * @function goToStep
  * @param {number} targetStep - Target step number (1 to 7).
@@ -47,6 +259,7 @@ function goToStep(targetStep) {
 
   // 1. Instant Backward Navigation (no validation errors)
   if (targetStep < currentStep) {
+    saveDraft();
     showStep(targetStep);
     return true;
   }
@@ -54,13 +267,13 @@ function goToStep(targetStep) {
   // 2. Forward Navigation: Validate all preceding steps
   for (let s = 1; s < targetStep; s++) {
     if (!validateStep(s, true)) {
-      // Jump to the first incomplete step and display its errors
       showStep(s);
       scrollFirstErrorIntoView(s);
       return false;
     }
   }
 
+  saveDraft();
   showStep(targetStep);
   return true;
 }
@@ -282,7 +495,7 @@ function checkRequired(fieldId, errId, showErrors = true) {
 }
 
 /**
- * Clears error highlight for a single input field on user typing/selection.
+ * Clears error highlight for a single input field on user typing/selection and saves draft.
  * 
  * @function clearFieldError
  * @param {string} fieldId - Field element ID.
@@ -297,6 +510,8 @@ function clearFieldError(fieldId, errId) {
     if (field.parentElement) field.parentElement.classList.remove('error');
     if (err) err.style.display = 'none';
   }
+
+  saveDraft();
 
   if (typeof generatePlan === 'function') {
     generatePlan();
