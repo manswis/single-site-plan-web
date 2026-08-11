@@ -524,6 +524,11 @@ function validateStep(stepNum, showErrors = true) {
         isValid = checkRequired('regEastWest', 'err-regEastWest', showErrors) && isValid;
       }
       break;
+    case 4:
+      if (typeof validateBuildingSetbackFeasibility === 'function') {
+        isValid = validateBuildingSetbackFeasibility() && isValid;
+      }
+      break;
     case 5:
       isValid = checkRequired('typeNorth', 'err-typeNorth', showErrors) && isValid;
       isValid = checkRequired('typeSouth', 'err-typeSouth', showErrors) && isValid;

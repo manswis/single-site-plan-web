@@ -144,11 +144,16 @@ function onFtInInput(fieldId) {
     hiddenEl.value = Math.round(decimalVal * 10000) / 10000;
   }
 
-  // Trigger auto-sync callbacks for regular and irregular side measurements
+  // Trigger auto-sync callbacks for regular, irregular side measurements, building dimensions & setbacks
   if (fieldId === 'regNorthSouth' || fieldId === 'regEastWest') {
     onRegularDimensionInput();
   } else if (fieldId.startsWith('side')) {
     calculatePlotAreaFromSides();
+  } else if (fieldId === 'bldgWidth' || fieldId === 'bldgLength') {
+    calculateBuiltUpArea();
+    validateBuildingSetbackFeasibility();
+  } else if (fieldId.startsWith('setback')) {
+    validateBuildingSetbackFeasibility();
   }
 
   if (typeof clearFieldError === 'function') {
@@ -157,6 +162,134 @@ function onFtInInput(fieldId) {
 
   if (typeof saveDraft === 'function') saveDraft();
   if (typeof generatePlan === 'function') generatePlan();
+}
+
+/**
+ * Auto-calculates Total Built-up Area (sq.ft) from Building Width, Length, and Floors multiplier.
+ * Allows user to manually edit or override at any time.
+ * 
+ * @function calculateBuiltUpArea
+ * @returns {void}
+ */
+function calculateBuiltUpArea() {
+  const widthVal = parseFloat(document.getElementById('bldgWidth')?.value) || 0;
+  const lengthVal = parseFloat(document.getElementById('bldgLength')?.value) || 0;
+  const floorsSelect = document.getElementById('noOfFloors')?.value || '';
+
+  if (widthVal <= 0 || lengthVal <= 0) return;
+
+  const footprint = widthVal * lengthVal;
+
+  let multiplier = 1;
+  if (floorsSelect === 'Vacant Plot') multiplier = 0;
+  else if (floorsSelect === 'Stilt + Ground') multiplier = 1.5;
+  else if (floorsSelect === 'G+1') multiplier = 2;
+  else if (floorsSelect === 'G+2') multiplier = 3;
+  else if (floorsSelect === 'G+3') multiplier = 4;
+  else if (floorsSelect === 'G+4') multiplier = 5;
+
+  const totalSqFt = Math.round(footprint * multiplier);
+  const builtEl = document.getElementById('builtUpArea');
+  if (builtEl && totalSqFt >= 0) {
+    builtEl.value = totalSqFt;
+  }
+}
+
+/**
+ * Validates whether proposed Building Width and Length fit within plot dimensions & setbacks from Step 3.
+ * Returns true if valid or if fields are left empty.
+ * 
+ * @function validateBuildingSetbackFeasibility
+ * @returns {boolean} True if feasible or empty.
+ */
+function validateBuildingSetbackFeasibility() {
+  const widthVal = parseFloat(document.getElementById('bldgWidth')?.value) || 0;
+  const lengthVal = parseFloat(document.getElementById('bldgLength')?.value) || 0;
+
+  const warningBanner = document.getElementById('setbackFeasibilityWarning');
+  const warningText = document.getElementById('setbackFeasibilityText');
+  const errWidth = document.getElementById('err-bldgWidth');
+  const errLength = document.getElementById('err-bldgLength');
+
+  // Reset error displays
+  if (warningBanner) warningBanner.style.display = 'none';
+  if (errWidth) errWidth.style.display = 'none';
+  if (errLength) errLength.style.display = 'none';
+
+  // Rule: If user removed all data (empty), navigation to next step IS ALLOWED!
+  if (widthVal === 0 && lengthVal === 0) {
+    return true;
+  }
+
+  // Retrieve Step 3 Site Dimensions
+  const isOdd = document.getElementById('oddSiteCheck')?.checked;
+  let siteWidth = 0;
+  let siteLength = 0;
+
+  if (isOdd) {
+    const north = parseFloat(document.getElementById('sideNorth')?.value) || 0;
+    const south = parseFloat(document.getElementById('sideSouth')?.value) || 0;
+    const east = parseFloat(document.getElementById('sideEast')?.value) || 0;
+    const west = parseFloat(document.getElementById('sideWest')?.value) || 0;
+    siteWidth = Math.max(north, south);
+    siteLength = Math.max(east, west);
+  } else {
+    siteWidth = parseFloat(document.getElementById('regNorthSouth')?.value) || 0;
+    siteLength = parseFloat(document.getElementById('regEastWest')?.value) || 0;
+  }
+
+  // Retrieve Setbacks from Step 4
+  const frontSetback = parseFloat(document.getElementById('setbackFront')?.value) || 0;
+  const rearSetback = parseFloat(document.getElementById('setbackRear')?.value) || 0;
+  const leftSetback = parseFloat(document.getElementById('setbackLeft')?.value) || 0;
+  const rightSetback = parseFloat(document.getElementById('setbackRight')?.value) || 0;
+
+  const maxAllowedWidth = Math.max(0, siteWidth - leftSetback - rightSetback);
+  const maxAllowedLength = Math.max(0, siteLength - frontSetback - rearSetback);
+
+  let isFeasible = true;
+  let errorMsgs = [];
+
+  if (siteWidth > 0 && widthVal > siteWidth) {
+    isFeasible = false;
+    errorMsgs.push(`Building width (${widthVal} ft) exceeds total plot width (${siteWidth} ft).`);
+    if (errWidth) {
+      errWidth.textContent = `⚠ Building width (${widthVal} ft) exceeds total plot width (${siteWidth} ft).`;
+      errWidth.style.display = 'block';
+    }
+  } else if (siteWidth > 0 && maxAllowedWidth > 0 && widthVal > maxAllowedWidth) {
+    isFeasible = false;
+    errorMsgs.push(`Building width (${widthVal} ft) exceeds available width (${maxAllowedWidth.toFixed(1)} ft) after Left & Right setbacks.`);
+    if (errWidth) {
+      errWidth.textContent = `⚠ Exceeds available width (${maxAllowedWidth.toFixed(1)} ft) after left & right setbacks.`;
+      errWidth.style.display = 'block';
+    }
+  }
+
+  if (siteLength > 0 && lengthVal > siteLength) {
+    isFeasible = false;
+    errorMsgs.push(`Building length (${lengthVal} ft) exceeds total plot length (${siteLength} ft).`);
+    if (errLength) {
+      errLength.textContent = `⚠ Building length (${lengthVal} ft) exceeds total plot length (${siteLength} ft).`;
+      errLength.style.display = 'block';
+    }
+  } else if (siteLength > 0 && maxAllowedLength > 0 && lengthVal > maxAllowedLength) {
+    isFeasible = false;
+    errorMsgs.push(`Building length (${lengthVal} ft) exceeds available length (${maxAllowedLength.toFixed(1)} ft) after Front & Rear setbacks.`);
+    if (errLength) {
+      errLength.textContent = `⚠ Exceeds available length (${maxAllowedLength.toFixed(1)} ft) after front & rear setbacks.`;
+      errLength.style.display = 'block';
+    }
+  }
+
+  if (!isFeasible) {
+    if (warningBanner && warningText) {
+      warningText.textContent = errorMsgs.join(' ');
+      warningBanner.style.display = 'block';
+    }
+  }
+
+  return isFeasible;
 }
 
 /**

@@ -411,12 +411,21 @@
       <div id="wizardStep4" class="wizard-step-content" style="display:none;">
         <div class="info-tooltip-box">
           💡 <strong>Building Footprint:</strong> Leave building width and length empty to auto-calculate footprints
-          based on BBMP RMP-2015 minimum setback rules.
-        </div>
+           <!-- STEP 4: Building Proposal & Calculations -->
         <div class="grid">
           <div class="field">
+            <label>Proposed Building Type</label>
+            <select id="bldgType">
+              <option value="" selected>-- Select Type --</option>
+              <option value="Residential">Residential Building</option>
+              <option value="Commercial">Commercial Building</option>
+              <option value="Mixed Use">Mixed Use (Residential + Commercial)</option>
+              <option value="Industrial">Industrial Structure</option>
+            </select>
+          </div>
+          <div class="field">
             <label>Number of Floors</label>
-            <select id="floorsCount">
+            <select id="noOfFloors" onchange="calculateBuiltUpArea(); validateBuildingSetbackFeasibility();">
               <option value="" selected>-- Select Floors --</option>
               <option value="Vacant Plot">Vacant Plot</option>
               <option value="Stilt + Ground">Stilt + Ground</option>
@@ -426,42 +435,57 @@
               <option value="G+4">G + 4 Floors</option>
             </select>
           </div>
+        </div>
+
+        <!-- Building Width & Building Length side-by-side in one line on web -->
+        <div class="grid" style="margin-top: 14px;">
           <div class="field">
-            <label>Total Built-up Area (sq.ft)</label>
-            <input id="builtUpArea" type="number" placeholder="e.g. 2100">
-          </div>
-          <div class="field">
-            <label>Building Width</label>
+            <label>Building Width (ft)</label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="bldgWidth_ft" type="number" min="0" placeholder="30" class="ft-num-input"
-                  oninput="onFtInInput('bldgWidth')">
+                  oninput="onFtInInput('bldgWidth'); calculateBuiltUpArea(); validateBuildingSetbackFeasibility();">
                 <span class="unit-symbol">ft</span>
               </div>
               <div class="in-segment">
                 <input id="bldgWidth_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
-                  oninput="onFtInInput('bldgWidth')">
+                  oninput="onFtInInput('bldgWidth'); calculateBuiltUpArea(); validateBuildingSetbackFeasibility();">
                 <span class="unit-symbol">in</span>
               </div>
               <input id="bldgWidth" type="hidden">
             </div>
+            <div class="error-msg" id="err-bldgWidth"></div>
           </div>
           <div class="field">
-            <label>Building Length</label>
+            <label>Building Length (ft)</label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="bldgLength_ft" type="number" min="0" placeholder="40" class="ft-num-input"
-                  oninput="onFtInInput('bldgLength')">
+                  oninput="onFtInInput('bldgLength'); calculateBuiltUpArea(); validateBuildingSetbackFeasibility();">
                 <span class="unit-symbol">ft</span>
               </div>
               <div class="in-segment">
                 <input id="bldgLength_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
-                  oninput="onFtInInput('bldgLength')">
+                  oninput="onFtInInput('bldgLength'); calculateBuiltUpArea(); validateBuildingSetbackFeasibility();">
                 <span class="unit-symbol">in</span>
               </div>
               <input id="bldgLength" type="hidden">
             </div>
+            <div class="error-msg" id="err-bldgLength"></div>
           </div>
+        </div>
+
+        <!-- Total Built-up Area (Auto-calculated) -->
+        <div class="field" style="margin-top: 14px;">
+          <label>Total Built-up Area (sq.ft) <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Auto-calculated)</span></label>
+          <input id="builtUpArea" type="number" placeholder="Auto-calculated (e.g. 2400)">
+          <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Auto-computed from Footprint (Width × Length × Floors multiplier). You may adjust manually.</p>
+        </div>
+
+        <!-- Setback Feasibility Warning Banner -->
+        <div id="setbackFeasibilityWarning" style="display: none; background: rgba(255, 59, 48, 0.1); border: 1px solid rgba(255, 59, 48, 0.3); border-radius: 12px; padding: 12px 16px; margin-top: 14px; color: #d32f2f;">
+          <strong style="display: block; margin-bottom: 4px; font-size: 13px;">⚠ Setback & Building Dimension Mismatch</strong>
+          <span id="setbackFeasibilityText" style="font-size: 12.5px; line-height: 1.4;"></span>
         </div>
 
         <div class="grid" style="margin-top: 12px;">
