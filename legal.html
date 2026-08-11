@@ -6,14 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Legal Terms & Privacy Shield — BBMP e-Plan Studio</title>
 
-  <!-- Google Fonts: Outfit & Inter -->
+  <!-- Google Fonts & Icons: Outfit, Inter & Material Symbols -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
   <link rel="stylesheet" href="css/styles.css">
+  <script src="js/theme.js"></script>
 </head>
 
 <body>
@@ -26,25 +28,35 @@
         <span class="brand-text-mobile">🏛️ e-Plan Studio</span>
         <span class="apple-pill-badge">B-to-A Khata Ready</span>
       </a>
-      <nav class="apple-nav-links desktop-nav-bar">
-        <a href="index.html">Home</a>
-        <a href="studio.html">Studio Workbench</a>
-        <a href="pricing.html">Pricing</a>
-        <a href="legal.html" class="active">Legal Disclaimer</a>
-        <a href="faq.html">FAQ</a>
-      </nav>
+      <div style="display: flex; align-items: center;">
+        <nav class="apple-nav-links desktop-nav-bar">
+          <a href="index.html">Home</a>
+          <a href="studio.html">Studio Workbench</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="legal.html" class="active">Legal Disclaimer</a>
+          <a href="faq.html">FAQ</a>
+        </nav>
+        <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+      </div>
     </div>
   </header>
 
   <div class="container">
 
     <!-- Horizontal Sliding Control Navigation Bar for Mobile Pages -->
-    <div class="mobile-nav-slider">
-      <a href="index.html" class="mobile-nav-item">Home</a>
-      <a href="studio.html" class="mobile-nav-item">Workbench</a>
-      <a href="pricing.html" class="mobile-nav-item">Pricing</a>
-      <a href="legal.html" class="mobile-nav-item active">Legal</a>
-      <a href="faq.html" class="mobile-nav-item">FAQ</a>
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+      <div class="mobile-nav-slider" style="margin-bottom: 0; flex: 1;">
+        <a href="index.html" class="mobile-nav-item">Home</a>
+        <a href="studio.html" class="mobile-nav-item">Workbench</a>
+        <a href="pricing.html" class="mobile-nav-item">Pricing</a>
+        <a href="legal.html" class="mobile-nav-item active">Legal</a>
+        <a href="faq.html" class="mobile-nav-item">FAQ</a>
+      </div>
+      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+        <span class="material-symbols-outlined">dark_mode</span>
+      </button>
     </div>
 
     <!-- Legal Hero -->

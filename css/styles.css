@@ -27,6 +27,138 @@
   --apple-transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Dark Mode Tokens & Overrides */
+[data-theme="dark"] {
+  --apple-bg: #0d0d0e;
+  --apple-card-bg: #1c1c1e;
+  --apple-text-primary: #f5f5f7;
+  --apple-text-secondary: #98989d;
+  --apple-accent: #2997ff;
+  --apple-accent-hover: #0077ed;
+  --apple-border: rgba(255, 255, 255, 0.14);
+  --apple-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --apple-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] body {
+  background-color: var(--apple-bg);
+  color: var(--apple-text-primary);
+}
+
+[data-theme="dark"] .apple-navbar {
+  background: rgba(28, 28, 30, 0.85);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .apple-card,
+[data-theme="dark"] .how-it-works-card,
+[data-theme="dark"] .pricing-card {
+  background: #1c1c1e;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: #2c2c2e !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+[data-theme="dark"] .ft-in-wrapper {
+  background-color: #2c2c2e !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+[data-theme="dark"] .ft-segment {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] .ft-segment::after {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .ft-num-input,
+[data-theme="dark"] .in-num-input {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .unit-symbol {
+  color: #64b5f6 !important;
+}
+
+[data-theme="dark"] .apple-nav-links,
+[data-theme="dark"] .mobile-nav-slider {
+  background: rgba(44, 44, 46, 0.75);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .apple-nav-links a,
+[data-theme="dark"] .mobile-nav-item {
+  color: #98989d;
+}
+
+[data-theme="dark"] .apple-nav-links a:hover,
+[data-theme="dark"] .mobile-nav-item:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .apple-nav-links a.active,
+[data-theme="dark"] .mobile-nav-item.active {
+  background: #3a3a3c !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Separate Standalone Circular Theme Switcher Button */
+.theme-toggle-btn {
+  background: rgba(235, 235, 240, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--apple-text-secondary);
+  user-select: none;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.theme-toggle-btn .material-symbols-outlined {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.theme-toggle-btn:hover {
+  color: var(--apple-accent);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transform: scale(1.06);
+}
+
+[data-theme="dark"] .theme-toggle-btn {
+  background: rgba(44, 44, 46, 0.75);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #98989d;
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+  color: var(--apple-accent);
+  background: #3a3a3c;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-theme-btn {
+  display: none;
+}
+
 /* Global Reset & Base Typography */
 * {
   box-sizing: border-box;
@@ -494,10 +626,15 @@ body {
     display: inline-block !important;
   }
 
-  /* Hide desktop nav links & pill badge in Line 1 Header on mobile */
+  /* Hide desktop nav links, desktop theme button & pill badge in Line 1 Header on mobile */
+  .desktop-nav-bar,
   .apple-nav-links,
   .apple-pill-badge {
     display: none !important;
+  }
+
+  .mobile-theme-btn {
+    display: inline-flex !important;
   }
 
   /* Line 2 Header: Horizontal sliding control navigation bar with all options */
