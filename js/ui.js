@@ -213,6 +213,7 @@ function formatFeetInches(val) {
 
 /**
  * Validates whether proposed Building Width and Length fit within plot dimensions & setbacks from Step 3.
+ * Automatically checks both standard and perpendicular orientation alignments.
  * Returns true if valid or if fields are left empty.
  * 
  * @function validateBuildingSetbackFeasibility
@@ -239,20 +240,22 @@ function validateBuildingSetbackFeasibility() {
 
   // Retrieve Step 3 Site Dimensions
   const isOdd = document.getElementById('oddSiteCheck')?.checked;
-  let siteWidth = 0;
-  let siteLength = 0;
+  let north = 0, south = 0, east = 0, west = 0;
 
   if (isOdd) {
-    const north = parseFloat(document.getElementById('sideNorth')?.value) || 0;
-    const south = parseFloat(document.getElementById('sideSouth')?.value) || 0;
-    const east = parseFloat(document.getElementById('sideEast')?.value) || 0;
-    const west = parseFloat(document.getElementById('sideWest')?.value) || 0;
-    siteWidth = Math.max(north, south);
-    siteLength = Math.max(east, west);
+    north = parseFloat(document.getElementById('sideNorth')?.value) || 0;
+    south = parseFloat(document.getElementById('sideSouth')?.value) || 0;
+    east = parseFloat(document.getElementById('sideEast')?.value) || 0;
+    west = parseFloat(document.getElementById('sideWest')?.value) || 0;
   } else {
-    siteWidth = parseFloat(document.getElementById('regNorthSouth')?.value) || 0;
-    siteLength = parseFloat(document.getElementById('regEastWest')?.value) || 0;
+    north = south = parseFloat(document.getElementById('regNorthSouth')?.value) || 0;
+    east = west = parseFloat(document.getElementById('regEastWest')?.value) || 0;
   }
+
+  const spanNS = Math.max(north, south);
+  const spanEW = Math.max(east, west);
+
+  const maxPlotSpan = Math.max(spanNS, spanEW);
 
   // Retrieve Setbacks from Step 4
   const frontSetback = parseFloat(document.getElementById('setbackFront')?.value) || 0;
@@ -260,57 +263,40 @@ function validateBuildingSetbackFeasibility() {
   const leftSetback = parseFloat(document.getElementById('setbackLeft')?.value) || 0;
   const rightSetback = parseFloat(document.getElementById('setbackRight')?.value) || 0;
 
-  const maxAllowedWidth = Math.max(0, siteWidth - leftSetback - rightSetback);
-  const maxAllowedLength = Math.max(0, siteLength - frontSetback - rearSetback);
+  // Alignment Option A: Width along North/South (spanNS), Length along East/West (spanEW)
+  const availWidthA = Math.max(0, spanNS - leftSetback - rightSetback);
+  const availLengthA = Math.max(0, spanEW - frontSetback - rearSetback);
+  const isOptionAValid = (spanNS > 0 && widthVal <= spanNS && widthVal <= (availWidthA || spanNS)) &&
+                         (spanEW > 0 && lengthVal <= spanEW && lengthVal <= (availLengthA || spanEW));
 
-  let isFeasible = true;
+  // Alignment Option B: Length along North/South (spanNS), Width along East/West (spanEW)
+  const availLengthB = Math.max(0, spanNS - frontSetback - rearSetback);
+  const availWidthB = Math.max(0, spanEW - leftSetback - rightSetback);
+  const isOptionBValid = (spanNS > 0 && lengthVal <= spanNS && lengthVal <= (availLengthB || spanNS)) &&
+                         (spanEW > 0 && widthVal <= spanEW && widthVal <= (availWidthB || spanEW));
+
+  // If EITHER orientation fits the plot boundaries after setbacks, the proposal IS FEASIBLE!
+  if (isOptionAValid || isOptionBValid) {
+    return true; // 100% Valid!
+  }
+
+  // If NEITHER orientation fits, report explicit overflow
+  let isFeasible = false;
   let errorMsgs = [];
 
-  if (siteWidth > 0 && widthVal > siteWidth) {
-    isFeasible = false;
-    const msg = `Building width (${formatFeetInches(widthVal)}) exceeds total plot width (${formatFeetInches(siteWidth)}).`;
-    errorMsgs.push(msg);
-    if (errWidth) {
-      errWidth.textContent = `⚠ ${msg}`;
-      errWidth.style.display = 'block';
-    }
-  } else if (siteWidth > 0 && maxAllowedWidth > 0 && widthVal > maxAllowedWidth) {
-    isFeasible = false;
-    const msg = `Building width (${formatFeetInches(widthVal)}) exceeds max available width (${formatFeetInches(maxAllowedWidth)}) after Left (${formatFeetInches(leftSetback)}) & Right (${formatFeetInches(rightSetback)}) setbacks.`;
-    errorMsgs.push(msg);
-    if (errWidth) {
-      errWidth.textContent = `⚠ Exceeds available width (${formatFeetInches(maxAllowedWidth)}) after setbacks.`;
-      errWidth.style.display = 'block';
-    }
-  }
-
-  if (siteLength > 0 && lengthVal > siteLength) {
-    isFeasible = false;
-    const msg = `Building length (${formatFeetInches(lengthVal)}) exceeds total plot length (${formatFeetInches(siteLength)}).`;
-    errorMsgs.push(msg);
-    if (errLength) {
-      errLength.textContent = `⚠ ${msg}`;
-      errLength.style.display = 'block';
-    }
-  } else if (siteLength > 0 && maxAllowedLength > 0 && lengthVal > maxAllowedLength) {
-    isFeasible = false;
-    const msg = `Building length (${formatFeetInches(lengthVal)}) exceeds max available length (${formatFeetInches(maxAllowedLength)}) after Front (${formatFeetInches(frontSetback)}) & Rear (${formatFeetInches(rearSetback)}) setbacks.`;
-    errorMsgs.push(msg);
-    if (errLength) {
-      errLength.textContent = `⚠ Exceeds available length (${formatFeetInches(maxAllowedLength)}) after setbacks.`;
-      errLength.style.display = 'block';
-    }
-  }
-
-  // Check if swapping width and length fits the plot space!
-  let swapHint = "";
-  if (!isFeasible && lengthVal > siteLength && lengthVal <= siteWidth && widthVal <= siteLength) {
-    swapHint = `<br>💡 <strong>Smart Tip:</strong> Did you swap Width and Length? Your plot is <strong>${formatFeetInches(siteWidth)} wide × ${formatFeetInches(siteLength)} long</strong>. Try setting Building Width = <strong>${formatFeetInches(lengthVal)}</strong> and Building Length = <strong>${formatFeetInches(widthVal)}</strong>.`;
+  if (widthVal > maxPlotSpan && lengthVal > maxPlotSpan) {
+    errorMsgs.push(`Both building width (${formatFeetInches(widthVal)}) and length (${formatFeetInches(lengthVal)}) exceed total plot span (${formatFeetInches(maxPlotSpan)}).`);
+  } else if (widthVal > maxPlotSpan) {
+    errorMsgs.push(`Building width (${formatFeetInches(widthVal)}) exceeds max plot span (${formatFeetInches(maxPlotSpan)}).`);
+  } else if (lengthVal > maxPlotSpan) {
+    errorMsgs.push(`Building length (${formatFeetInches(lengthVal)}) exceeds max plot span (${formatFeetInches(maxPlotSpan)}).`);
+  } else {
+    errorMsgs.push(`Proposed building footprint (${formatFeetInches(widthVal)} × ${formatFeetInches(lengthVal)}) exceeds available building space after setbacks on plot (${formatFeetInches(spanNS)} × ${formatFeetInches(spanEW)}).`);
   }
 
   if (!isFeasible) {
     if (warningBanner && warningText) {
-      warningText.innerHTML = errorMsgs.join('<br>') + swapHint + `<br><span style="display:inline-block; margin-top:6px; color: var(--apple-text-secondary);">Max available building footprint after setbacks: <strong>${formatFeetInches(maxAllowedWidth)} Width × ${formatFeetInches(maxAllowedLength)} Length</strong>.</span>`;
+      warningText.innerHTML = errorMsgs.join('<br>') + `<br><span style="display:inline-block; margin-top:6px; color: var(--apple-text-secondary);">Plot Spans: <strong>${formatFeetInches(spanNS)} (N/S) × ${formatFeetInches(spanEW)} (E/W)</strong>. Setbacks: Front ${formatFeetInches(frontSetback)}, Rear ${formatFeetInches(rearSetback)}, Left ${formatFeetInches(leftSetback)}, Right ${formatFeetInches(rightSetback)}.</span>`;
       warningBanner.style.display = 'block';
     }
   }
