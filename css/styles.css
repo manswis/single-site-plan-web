@@ -2499,3 +2499,31 @@ select:focus {
   opacity: 0.8;
   text-decoration: underline;
 }
+
+@media (max-width: 768px) {
+  .help-step-card {
+    padding: 16px 14px !important;
+    border-radius: 14px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .help-field-item {
+    padding: 12px 10px !important;
+    border-radius: 10px !important;
+  }
+
+  .help-tab-container {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .help-tab-container button {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .legal-terms-card {
+    padding: 20px 16px !important;
+    border-radius: 14px !important;
+  }
+}
