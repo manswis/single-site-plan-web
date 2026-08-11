@@ -63,10 +63,10 @@
 [data-theme="dark"] .mobile-step-card,
 [data-theme="dark"] .action-bar,
 [data-theme="dark"] .apple-modal-card,
-[data-theme="dark"] [style*="background: #ffffff"],
-[data-theme="dark"] [style*="background:#ffffff"],
-[data-theme="dark"] [style*="background: #f8fafc"],
-[data-theme="dark"] [style*="background:#f8fafc"] {
+[data-theme="dark"] [style*="background: #ffffff"]:not(.plan-sheet-frame):not(#planOutput *):not(#legendSheetOutput *),
+[data-theme="dark"] [style*="background:#ffffff"]:not(.plan-sheet-frame):not(#planOutput *):not(#legendSheetOutput *),
+[data-theme="dark"] [style*="background: #f8fafc"]:not(.plan-sheet-frame):not(#planOutput *):not(#legendSheetOutput *),
+[data-theme="dark"] [style*="background:#f8fafc"]:not(.plan-sheet-frame):not(#planOutput *):not(#legendSheetOutput *) {
   background: #1c1c1e !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
   color: var(--apple-text-primary) !important;
@@ -2208,4 +2208,85 @@ select:focus {
     width: 100% !important;
     box-sizing: border-box !important;
   }
+}
+
+/* ==========================================================================
+   OFFICIAL ARCHITECTURAL A4 DOCUMENT FRAME - STRICT LIGHT MODE ISOLATION
+   Guarantees 100% crisp black text (#0f172a) on white paper (#ffffff) in all themes and PDF exports
+   ========================================================================== */
+.plan-sheet-frame,
+.plan-sheet-frame *,
+#planOutput .plan-sheet-frame,
+#planOutput .plan-sheet-frame *,
+#legendSheetOutput .plan-sheet-frame,
+#legendSheetOutput .plan-sheet-frame * {
+  color: #0f172a !important;
+}
+
+.plan-sheet-frame {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.plan-sheet-frame h1, .plan-sheet-frame h2, .plan-sheet-frame h3, .plan-sheet-frame h4, .plan-sheet-frame h5, .plan-sheet-frame h6,
+.plan-sheet-frame p, .plan-sheet-frame span, .plan-sheet-frame div, .plan-sheet-frame td, .plan-sheet-frame th, .plan-sheet-frame li,
+.plan-sheet-frame strong, .plan-sheet-frame b, .plan-sheet-frame label, .plan-sheet-frame ol, .plan-sheet-frame ul {
+  color: #0f172a !important;
+  opacity: 1 !important;
+}
+
+.plan-sheet-frame .plan-header h2 {
+  color: #0f172a !important;
+}
+
+.plan-sheet-frame .plan-header p,
+.plan-sheet-frame .footer-note {
+  color: #475569 !important;
+}
+
+.plan-sheet-frame .details-table,
+.plan-sheet-frame .landuse-table,
+.plan-sheet-frame .title-block-table,
+.plan-sheet-frame .legend-spec-table,
+.plan-sheet-frame .setback-matrix-table {
+  background: #ffffff !important;
+}
+
+.plan-sheet-frame .details-table td,
+.plan-sheet-frame .landuse-table td,
+.plan-sheet-frame .title-block-table td,
+.plan-sheet-frame .legend-spec-table td,
+.plan-sheet-frame .setback-matrix-table td {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #64748b !important;
+}
+
+.plan-sheet-frame .details-table .label,
+.plan-sheet-frame .landuse-table th,
+.plan-sheet-frame .title-block-table .tb-label,
+.plan-sheet-frame .sidebar-panel-header,
+.plan-sheet-frame .legend-spec-table th,
+.plan-sheet-frame .setback-matrix-table th,
+.plan-sheet-frame .legend-section h4 {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  border: 1px solid #64748b !important;
+}
+
+.plan-sheet-frame .sidebar-panel,
+.plan-sheet-frame .legend-section,
+.plan-sheet-frame .checklist-card {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.plan-sheet-frame .conditions-list {
+  color: #1e293b !important;
+  padding-left: 20px !important;
+}
+
+.plan-sheet-frame .conditions-list li {
+  color: #1e293b !important;
 }

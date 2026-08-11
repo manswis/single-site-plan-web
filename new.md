@@ -6,8 +6,5 @@
  - also improve FAQ's and add more points, and make it more user friendly
 7. improve "Legal Disclaimer" to more point to make it bullete proof, I dont want to be liable in any way, make it more like terms and condition (preserve current points as well)
  - I the developer cannot be liable for any damages including but not limited to rejection of plan, loss of money or any other damages 
-8. when I open new page its not asking custom popup , browser data found want to start fresh or restore data from local storage (browser crash situation)
-  - Show same popup when user hits "Start now" if old data exists
-  - If I open new page I think all cached sata is lost
 11. add kannada translation
 13. for each field add ? help icon when user taps show help where to get that
