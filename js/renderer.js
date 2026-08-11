@@ -357,35 +357,68 @@ function generatePlan() {
   document.getElementById('labelSideW').setAttribute('transform', `rotate(-90, ${offsetX - 16}, ${offsetY + drawH / 2})`);
   document.getElementById('labelSideW').textContent = 'WEST: ' + formatFeetInches(sideW);
 
-  // Setback Text Labels Positioned Centered Inside Setback Zones
-  const bldgDrawW = Math.max(15, (bldgW > 0 ? bldgW : (width - setbackL - setbackRt)) * ratio);
-  const bldgDrawH = Math.max(15, (bldgL > 0 ? bldgL : (length - setbackF - setbackR)) * ratio);
-  const bldgX = offsetX + (setbackL * ratio);
-  const bldgY = offsetY + (setbackF * ratio);
+  // Map setbacks to Cardinal Directions (Top, Bottom, Left, Right) based on Road Facing Direction
+  let sbTop = setbackF, sbBottom = setbackR, sbLeft = setbackL, sbRight = setbackRt;
+  let labelN = `Front Setback: ${formatFeetInches(setbackF)}`;
+  let labelS = `Rear Setback: ${formatFeetInches(setbackR)}`;
+  let labelE = `Right Setback: ${formatFeetInches(setbackRt)}`;
+  let labelW = `Left Setback: ${formatFeetInches(setbackL)}`;
 
-  // Front Setback (Top)
+  const rfDir = (roadFace || 'north').toLowerCase();
+  if (rfDir === 'east') {
+    sbTop = setbackL; sbBottom = setbackRt; sbLeft = setbackR; sbRight = setbackF;
+    labelN = `Left Setback: ${formatFeetInches(setbackL)}`;
+    labelS = `Right Setback: ${formatFeetInches(setbackRt)}`;
+    labelE = `Front Setback: ${formatFeetInches(setbackF)}`;
+    labelW = `Rear Setback: ${formatFeetInches(setbackR)}`;
+  } else if (rfDir === 'west') {
+    sbTop = setbackRt; sbBottom = setbackL; sbLeft = setbackF; sbRight = setbackR;
+    labelN = `Right Setback: ${formatFeetInches(setbackRt)}`;
+    labelS = `Left Setback: ${formatFeetInches(setbackL)}`;
+    labelE = `Rear Setback: ${formatFeetInches(setbackR)}`;
+    labelW = `Front Setback: ${formatFeetInches(setbackF)}`;
+  } else if (rfDir === 'south') {
+    sbTop = setbackR; sbBottom = setbackF; sbLeft = setbackRt; sbRight = setbackL;
+    labelN = `Rear Setback: ${formatFeetInches(setbackR)}`;
+    labelS = `Front Setback: ${formatFeetInches(setbackF)}`;
+    labelE = `Left Setback: ${formatFeetInches(setbackL)}`;
+    labelW = `Right Setback: ${formatFeetInches(setbackRt)}`;
+  }
+
+  // Setback Text Labels Positioned Centered Inside Setback Zones
+  const bldgDrawW = Math.max(15, (bldgW > 0 ? bldgW : (width - sbLeft - sbRight)) * ratio);
+  const bldgDrawH = Math.max(15, (bldgL > 0 ? bldgL : (length - sbTop - sbBottom)) * ratio);
+  const bldgX = offsetX + (sbLeft * ratio);
+  const bldgY = offsetY + (sbTop * ratio);
+
+  bldgRect.setAttribute('x', bldgX);
+  bldgRect.setAttribute('y', bldgY);
+  bldgRect.setAttribute('width', bldgDrawW);
+  bldgRect.setAttribute('height', bldgDrawH);
+
+  // Front / Top Setback (North Side)
   document.getElementById('setbackN').setAttribute('x', offsetX + drawW / 2);
   document.getElementById('setbackN').setAttribute('y', offsetY + (bldgY - offsetY) / 2 + 4);
-  document.getElementById('setbackN').textContent = "Front Setback: " + formatFeetInches(setbackF > 0 ? setbackF : (sideN - bldgW) / 2);
+  document.getElementById('setbackN').textContent = labelN;
 
-  // Rear Setback (Bottom)
+  // Rear / Bottom Setback (South Side)
   document.getElementById('setbackS').setAttribute('x', offsetX + drawW / 2);
   document.getElementById('setbackS').setAttribute('y', (offsetY + drawH) - (offsetY + drawH - (bldgY + bldgDrawH)) / 2 + 4);
-  document.getElementById('setbackS').textContent = "Rear Setback: " + formatFeetInches(setbackR > 0 ? setbackR : (sideS - bldgW) / 2);
+  document.getElementById('setbackS').textContent = labelS;
 
   // Right Setback (East Side - Rotated -90 deg cleanly inside right setback band)
   const sbEastX = (offsetX + drawW) - (offsetX + drawW - (bldgX + bldgDrawW)) / 2;
   document.getElementById('setbackE').setAttribute('x', sbEastX);
   document.getElementById('setbackE').setAttribute('y', offsetY + drawH / 2);
   document.getElementById('setbackE').setAttribute('transform', `rotate(-90, ${sbEastX}, ${offsetY + drawH / 2})`);
-  document.getElementById('setbackE').textContent = "Right Setback: " + formatFeetInches(setbackRt > 0 ? setbackRt : (sideE - bldgL) / 2);
+  document.getElementById('setbackE').textContent = labelE;
 
   // Left Setback (West Side - Rotated -90 deg cleanly inside left setback band)
   const sbWestX = offsetX + (bldgX - offsetX) / 2;
   document.getElementById('setbackW').setAttribute('x', sbWestX);
   document.getElementById('setbackW').setAttribute('y', offsetY + drawH / 2);
   document.getElementById('setbackW').setAttribute('transform', `rotate(-90, ${sbWestX}, ${offsetY + drawH / 2})`);
-  document.getElementById('setbackW').textContent = "Left Setback: " + formatFeetInches(setbackL > 0 ? setbackL : (sideW - bldgL) / 2);
+  document.getElementById('setbackW').textContent = labelW;
 
   // Interior Building Footprint Text
   const bldgTitle = document.getElementById('bldgTitle');
