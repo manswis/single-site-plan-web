@@ -1,6 +1,6 @@
 /**
  * @file wizard.js
- * @description Apple-style 7-Step Guided Setup Wizard Controller for BBMP e-Plan Studio.
+ * @description Apple-style 7-Step Guided Setup Wizard Controller for e-Plan Studio.
  * Manages step state, lazy validation, progress indicators, draft auto-persistence, and smart session restoration.
  * @author Senior Systems Architect
  */
@@ -665,7 +665,7 @@ function scrollFirstErrorIntoView(stepNum) {
     const input = errorContainer.querySelector('input:not([type="hidden"]), select, textarea');
     if (input && typeof input.focus === 'function') {
       setTimeout(() => {
-        try { input.focus(); } catch (e) {}
+        try { input.focus(); } catch (e) { }
       }, 150);
     }
   }

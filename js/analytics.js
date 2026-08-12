@@ -1,6 +1,6 @@
 /**
  * @file analytics.js
- * @description Zero-privacy-intrusion live stats counter for BBMP e-Plan Studio.
+ * @description Zero-privacy-intrusion live stats counter for e-Plan Studio.
  * Tracks unique session visits and total plans generated using Miles Hilliard CountAPI.
  * Features browser sessionStorage deduplication to prevent count inflation on page refreshes.
  * @author Senior Systems Architect

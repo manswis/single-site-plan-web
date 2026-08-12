@@ -1,6 +1,6 @@
 /**
  * @file theme.js
- * @description Automatic Dark & Light mode theme manager for BBMP e-Plan Studio.
+ * @description Automatic Dark & Light mode theme manager for e-Plan Studio.
  * Detects browser preference by default and allows persistent user toggling via navbar icon.
  */
 
