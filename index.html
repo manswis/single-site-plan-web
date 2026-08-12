@@ -12,7 +12,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
   <!-- Favicon for Chrome, Safari & iOS -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -40,7 +41,8 @@
           <a href="legal.html">Legal Disclaimer</a>
           <a href="faq.html">FAQ & Help</a>
         </nav>
-        <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+        <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme"
+          title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
         </button>
       </div>
@@ -58,7 +60,8 @@
         <a href="legal.html" class="mobile-nav-item">Legal</a>
         <a href="faq.html" class="mobile-nav-item">FAQ & Help</a>
       </div>
-      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
+        title="Toggle Light/Dark Mode">
         <span class="material-symbols-outlined">dark_mode</span>
       </button>
     </div>
@@ -111,27 +114,35 @@
       <!-- Clean Alert Modal Dialog on Home Page (No Icons) -->
       <div id="draftRestoreModal" class="apple-modal-overlay" style="display: none;">
         <div class="apple-modal-card alert-modal-card">
-          <h3 style="margin: 0 0 8px 0; font-size: 19px; font-weight: 700; color: var(--apple-text-primary);">Previous Session Found</h3>
+          <h3 style="margin: 0 0 8px 0; font-size: 19px; font-weight: 700; color: var(--apple-text-primary);">Previous
+            Session Found</h3>
           <p style="margin: 0 0 16px 0; font-size: 13px; color: var(--apple-text-secondary); line-height: 1.5;">
             A saved single plot plan draft was detected in your browser memory.
           </p>
 
-          <div class="apple-modal-body" style="background: var(--apple-card-bg); border: 1px solid var(--apple-border); border-radius: 12px; padding: 14px; margin-bottom: 20px; text-align: left; font-size: 13px;">
-            <p style="margin: 0 0 6px 0; color: var(--apple-text-primary);"><strong>Owner:</strong> <span id="modalDraftOwner">Ramesh Kumar</span></p>
-            <p style="margin: 0 0 6px 0; color: var(--apple-text-primary);"><strong>Saved Step:</strong> <span id="modalDraftStep">Step 3 of 7</span></p>
-            <p style="margin: 0; color: var(--apple-text-primary);"><strong>Last Saved:</strong> <span id="modalDraftTime">Just now</span></p>
+          <div class="apple-modal-body"
+            style="background: var(--apple-card-bg); border: 1px solid var(--apple-border); border-radius: 12px; padding: 14px; margin-bottom: 20px; text-align: left; font-size: 13px;">
+            <p style="margin: 0 0 6px 0; color: var(--apple-text-primary);"><strong>Owner:</strong> <span
+                id="modalDraftOwner">Ramesh Kumar</span></p>
+            <p style="margin: 0 0 6px 0; color: var(--apple-text-primary);"><strong>Saved Step:</strong> <span
+                id="modalDraftStep">Step 3 of 7</span></p>
+            <p style="margin: 0; color: var(--apple-text-primary);"><strong>Last Saved:</strong> <span
+                id="modalDraftTime">Just now</span></p>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <button class="apple-btn-secondary" onclick="handleHomeDiscard()" style="height: 44px; font-weight: 700;">Start Fresh</button>
-            <button class="apple-btn-primary" onclick="handleHomeRestore()" style="height: 44px; font-weight: 700;">Restore</button>
+            <button class="apple-btn-secondary" onclick="handleHomeDiscard()"
+              style="height: 44px; font-weight: 700;">Start Fresh</button>
+            <button class="apple-btn-primary" onclick="handleHomeRestore()"
+              style="height: 44px; font-weight: 700;">Restore</button>
           </div>
         </div>
       </div>
 
       <!-- Local Privacy Guarantee Pill -->
       <div class="privacy-guarantee-badge">
-        <span>🛡️ <strong>100% Private & Confidential:</strong> Your property details stay safely on your device. Zero internet uploads or server tracking.</span>
+        <span>🛡️ <strong>100% Private & Confidential:</strong> Your property details stay safely on your device. Zero
+          internet uploads or server tracking.</span>
       </div>
 
     </section>
@@ -150,7 +161,8 @@
           <div class="step-num-badge">01</div>
           <h3>Enter Property & Site Dimensions</h3>
           <p>
-            Fill in owner details, survey numbers, and plot dimensions using dedicated feet (<code>ft</code>) and inches (<code>in</code>) controls. Opposite sides auto-sync automatically.
+            Fill in owner details, survey numbers, and plot dimensions using dedicated feet (<code>ft</code>) and inches
+            (<code>in</code>) controls. Opposite sides auto-sync automatically.
           </p>
         </div>
 
@@ -159,16 +171,18 @@
           <div class="step-num-badge">02</div>
           <h3>Real-Time Live Architectural Preview</h3>
           <p>
-            Watch your 2D site plan drawing update instantly on screen in real-time as you type, complete with BBMP RMP-2015 setbacks, road overlays, and compass orientation.
+            Watch your 2D site plan drawing update instantly on screen in real-time as you type, complete with BBMP
+            RMP-2015 setbacks, road overlays, and compass orientation.
           </p>
         </div>
 
         <!-- Step 3 Card -->
         <div class="how-it-works-card">
           <div class="step-num-badge">03</div>
-          <h3>Export Sakala-Compliant PDF</h3>
+          <h3>Export Design PDF</h3>
           <p>
-            Download or print your official 2-page B-to-A Khata architectural plan drawing set directly from your browser with zero cloud server delays or data leaks.
+            Download or print your official 2-page B-to-A Khata architectural plan drawing set directly from your
+            browser with zero cloud server delays or data leaks.
           </p>
         </div>
 
@@ -221,7 +235,7 @@
               return;
             }
           }
-        } catch (e) {}
+        } catch (e) { }
       }
       window.location.href = 'studio.html';
     }

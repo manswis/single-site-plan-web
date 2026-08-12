@@ -50,11 +50,16 @@
   border-bottom-color: rgba(255, 255, 255, 0.12) !important;
 }
 
-/* All Cards, Workbench Steps, Pricing, Legal & Tooltip Containers */
+/* All Cards, Workbench Steps, Pricing, FAQ, Help & Legal Containers */
 [data-theme="dark"] .apple-card,
 [data-theme="dark"] .how-it-works-card,
 [data-theme="dark"] .pricing-card,
 [data-theme="dark"] .price-card,
+[data-theme="dark"] .faq-item,
+[data-theme="dark"] .faq-section,
+[data-theme="dark"] .help-step-card,
+[data-theme="dark"] .help-field-item,
+[data-theme="dark"] .legal-terms-card,
 [data-theme="dark"] .wizard-stepper-header,
 [data-theme="dark"] .stepper-header,
 [data-theme="dark"] .boundary-card,
@@ -62,15 +67,25 @@
 [data-theme="dark"] .conditional-panel,
 [data-theme="dark"] .mobile-step-card,
 [data-theme="dark"] .action-bar,
-[data-theme="dark"] .apple-modal-card,
-[data-theme="dark"] [style*="background: #ffffff"]:not(.plan-sheet-frame):not(#planOutput *):not(#legendSheetOutput *),
-[data-theme="dark"] [style*="background:#ffffff"]:not(.plan-sheet-frame):not(#planOutput *):not(#legendSheetOutput *),
-[data-theme="dark"] [style*="background: #f8fafc"]:not(.plan-sheet-frame):not(#planOutput *):not(#legendSheetOutput *),
-[data-theme="dark"] [style*="background:#f8fafc"]:not(.plan-sheet-frame):not(#planOutput *):not(#legendSheetOutput *) {
+[data-theme="dark"] .apple-modal-card {
   background: #1c1c1e !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
   color: var(--apple-text-primary) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .faq-question {
+  color: var(--apple-text-primary) !important;
+}
+
+[data-theme="dark"] .faq-answer {
+  color: var(--apple-text-secondary) !important;
+}
+
+[data-theme="dark"] .sample-snippet-box {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: var(--apple-text-primary) !important;
 }
 
 /* Modal Overlay & Centered Alert Dialog */
@@ -1934,11 +1949,12 @@ select:focus {
 }
 
 .faq-item {
-  background: #ffffff;
+  background: var(--apple-card-bg);
   border-radius: 12px;
   border: 1px solid var(--apple-border);
   margin-bottom: 12px;
   overflow: hidden;
+  transition: var(--apple-transition);
 }
 
 .faq-question {
