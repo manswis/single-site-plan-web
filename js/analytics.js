@@ -1,12 +1,13 @@
 /**
  * @file analytics.js
  * @description Zero-privacy-intrusion live stats counter for BBMP e-Plan Studio.
- * Tracks total page visits and total plans generated.
- * Uses non-blocking background fetch with 100% privacy compliance (no cookies, no IP logging).
+ * Tracks total page visits and total plans generated using Miles Hilliard CountAPI.
  * @author Senior Systems Architect
  */
 
-const STATS_NAMESPACE = 'bbmp-eplan-studio-v1';
+const VISITS_KEY = 'bbmp_eplan_studio_visits_2026';
+const PLANS_KEY = 'bbmp_eplan_studio_plans_2026';
+const API_BASE = 'https://countapi.mileshilliard.com/api/v1';
 
 /**
  * Initializes and fetches live visitor and plan stats.
@@ -17,9 +18,10 @@ const STATS_NAMESPACE = 'bbmp-eplan-studio-v1';
  */
 function initLiveStats(incrementVisit = false) {
   const visitEndpoint = incrementVisit
-    ? `https://api.countapi.xyz/hit/${STATS_NAMESPACE}/visits`
-    : `https://api.countapi.xyz/get/${STATS_NAMESPACE}/visits`;
+    ? `${API_BASE}/hit/${VISITS_KEY}`
+    : `${API_BASE}/get/${VISITS_KEY}`;
 
+  // 1. Fetch/Increment Visits
   fetch(visitEndpoint)
     .then(res => res.json())
     .then(data => {
@@ -27,16 +29,17 @@ function initLiveStats(incrementVisit = false) {
         updateStatElements('statVisits', data.value);
       }
     })
-    .catch(() => {});
+    .catch(err => console.warn('Visits counter offline:', err));
 
-  fetch(`https://api.countapi.xyz/get/${STATS_NAMESPACE}/plans`)
+  // 2. Fetch Plans Generated
+  fetch(`${API_BASE}/get/${PLANS_KEY}`)
     .then(res => res.json())
     .then(data => {
       if (data && typeof data.value === 'number') {
         updateStatElements('statPlans', data.value);
       }
     })
-    .catch(() => {});
+    .catch(err => console.warn('Plans counter offline:', err));
 }
 
 /**
@@ -46,14 +49,14 @@ function initLiveStats(incrementVisit = false) {
  * @returns {void}
  */
 function trackPlanGenerated() {
-  fetch(`https://api.countapi.xyz/hit/${STATS_NAMESPACE}/plans`)
+  fetch(`${API_BASE}/hit/${PLANS_KEY}`)
     .then(res => res.json())
     .then(data => {
       if (data && typeof data.value === 'number') {
         updateStatElements('statPlans', data.value);
       }
     })
-    .catch(() => {});
+    .catch(err => console.warn('Plan increment failed:', err));
 }
 
 /**
