@@ -1,7 +1,8 @@
 /**
  * @file analytics.js
  * @description Zero-privacy-intrusion live stats counter for BBMP e-Plan Studio.
- * Tracks total page visits and total plans generated using Miles Hilliard CountAPI.
+ * Tracks unique session visits and total plans generated using Miles Hilliard CountAPI.
+ * Features browser sessionStorage deduplication to prevent count inflation on page refreshes.
  * @author Senior Systems Architect
  */
 
@@ -11,17 +12,33 @@ const API_BASE = 'https://countapi.mileshilliard.com/api/v1';
 
 /**
  * Initializes and fetches live visitor and plan stats.
+ * Deduplicates visit increments per browser session using sessionStorage.
  * 
  * @function initLiveStats
- * @param {boolean} [incrementVisit=false] - Whether to increment page visit counter.
+ * @param {boolean} [shouldAttemptIncrement=false] - Whether to attempt visit increment.
  * @returns {void}
  */
-function initLiveStats(incrementVisit = false) {
-  const visitEndpoint = incrementVisit
+function initLiveStats(shouldAttemptIncrement = false) {
+  const SESSION_KEY = 'eplan_visit_session_tracked';
+  let isNewSession = false;
+
+  if (shouldAttemptIncrement) {
+    try {
+      if (!sessionStorage.getItem(SESSION_KEY)) {
+        isNewSession = true;
+        sessionStorage.setItem(SESSION_KEY, 'true');
+      }
+    } catch (e) {
+      // Fallback if sessionStorage is restricted
+      isNewSession = true;
+    }
+  }
+
+  const visitEndpoint = isNewSession
     ? `${API_BASE}/hit/${VISITS_KEY}`
     : `${API_BASE}/get/${VISITS_KEY}`;
 
-  // 1. Fetch/Increment Visits
+  // 1. Fetch/Increment Unique Session Visits
   fetch(visitEndpoint)
     .then(res => res.json())
     .then(data => {
