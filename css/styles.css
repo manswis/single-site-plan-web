@@ -1478,9 +1478,25 @@ select:focus {
 }
 
 @media (max-width: 950px) {
-  .plan-sheet-frame {
+  .plan-sheet-frame:not(.pdf-export-frame) {
     grid-template-columns: 1fr;
   }
+}
+
+/* Force 100% Fixed 70:30 Desktop Split-Frame Layout during PDF Export on ALL devices (Mobile & Desktop) */
+body.pdf-export-active .plan-sheet-frame,
+.pdf-export-frame {
+  width: 1000px !important;
+  min-width: 1000px !important;
+  max-width: 1000px !important;
+  grid-template-columns: 67% 33% !important;
+  box-sizing: border-box !important;
+}
+
+body.pdf-export-active .drawing-canvas-column,
+.pdf-export-frame .drawing-canvas-column {
+  border-right: 2px solid var(--apple-text-primary) !important;
+  padding-right: 16px !important;
 }
 
 .drawing-canvas-column {
