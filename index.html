@@ -78,11 +78,34 @@
       </p>
 
       <!-- Google-Style Action Buttons Hub -->
-      <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px;">
+      <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
         <button type="button" class="apple-btn-primary" onclick="handleStartNowClick()"
           style="display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 32px; font-size: 15px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 102, 204, 0.3);">
           <span>Start Now</span>
         </button>
+      </div>
+
+      <!-- Premium 2-Block Live Stats Grid -->
+      <div class="premium-stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon-box">
+            <span class="material-symbols-outlined">visibility</span>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number" id="statVisits">—</span>
+            <span class="stat-label">Total Visits</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-box accent">
+            <span class="material-symbols-outlined">architecture</span>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number" id="statPlans">—</span>
+            <span class="stat-label">Plans Generated</span>
+          </div>
+        </div>
       </div>
 
       <!-- Clean Alert Modal Dialog on Home Page (No Icons) -->
@@ -222,7 +245,14 @@
       }
       window.location.href = 'studio.html?action=fresh';
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof initLiveStats === 'function') {
+        initLiveStats(true);
+      }
+    });
   </script>
+  <script src="js/analytics.js"></script>
 </body>
 
 </html>

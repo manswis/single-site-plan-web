@@ -994,6 +994,11 @@ function onGeneratePlanClick() {
     generatePlan();
   }
 
+  // Track generated plan count in analytics
+  if (typeof trackPlanGenerated === 'function') {
+    trackPlanGenerated();
+  }
+
   // Mark plan as generated and display viewport
   isPlanGenerated = true;
   const viewport = document.getElementById('exportViewportSection');
