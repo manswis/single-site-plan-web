@@ -1117,9 +1117,16 @@ const FIELD_HELP_DATA = {
     where: "If your road is slated for widening, check this box to render the hatched widening strip overlay on your plan."
   },
   bufferZone: {
-    title: "Stormwater Drain / Lake Buffer Zone",
-    what: "Mandatory buffer zone required next to Rajakaluve (Stormwater Drains) or Lakes under KTCP Act Sec 17.",
-    where: "If your site is adjacent to a drain or water body, check this to render the sky-blue buffer zone overlay."
+    title: "Stormwater Drain / Rajakaluve / Lake Buffer Zone",
+    what: "Non-buildable open space buffer required if your plot abuts a natural drain or water body.",
+    where: "Check your village map, survey sketch, or BBMP RMP-2015 Master Plan overlay (Primary Drain 50m, Secondary 25m, Tertiary 15m, Lake 30m)."
+  },
+  challanDetails: {
+    title: "Government Challan & Remitted Fee Details",
+    what: "The payment receipt details for government fees (Betterment charges, Scrutiny fees, or Khata processing fees) paid to BBMP or K2 Treasury.",
+    where: "Printed on your official K2 Treasury, Sakala, or Bank payment receipt.",
+    sample: "Fee: ₹48,000 | Challan No: CH-2024-99881 | Date: 12-02-2026",
+    note: "This section is 100% optional. If you haven't paid the fee yet, you can leave these fields blank."
   }
 };
 
