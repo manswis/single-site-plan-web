@@ -174,7 +174,7 @@ export default {
         const cleanId = decodeURIComponent(ticketId).trim().toUpperCase();
 
         const ticket = await env.DB.prepare(`
-          SELECT id, type, priority, status, subject, public_response, created_at, updated_at
+          SELECT id, type, priority, status, subject, message, public_response, created_at, updated_at
           FROM tickets
           WHERE id = ? AND deleted_at IS NULL
         `).bind(cleanId).first();
@@ -186,8 +186,8 @@ export default {
         }
 
         let safeSubject = ticket.subject;
-        if (safeSubject.length > 50) {
-          safeSubject = safeSubject.slice(0, 47) + '...';
+        if (safeSubject.length > 80) {
+          safeSubject = safeSubject.slice(0, 77) + '...';
         }
 
         return jsonResponse({
@@ -198,6 +198,7 @@ export default {
             priority: ticket.priority,
             status: ticket.status,
             subject: safeSubject,
+            message: ticket.message,
             public_response: ticket.public_response || null,
             created_at: ticket.created_at,
             updated_at: ticket.updated_at

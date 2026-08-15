@@ -441,18 +441,91 @@ function renderTrackingResult(ticket) {
     }
   });
 
-  // Admin Response Box
-  const replyBox = document.getElementById('resAdminReplyBox');
-  const replyText = document.getElementById('resAdminReplyText');
-  if (ticket.public_response && ticket.public_response.trim().length > 0) {
-    if (replyText) replyText.textContent = ticket.public_response;
-    if (replyBox) replyBox.style.display = 'block';
-  } else {
-    if (replyBox) replyBox.style.display = 'none';
-  }
+  // Render Timeline Chat Conversation
+  renderTimelineChat(ticket, statusInfo);
 
   resultCard.style.display = 'block';
   resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// Render dynamic chat bubbles
+function renderTimelineChat(ticket, statusInfo) {
+  const container = document.getElementById('chatThreadContainer');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  // 1. Initial User Request Message
+  const userMsgEl = document.createElement('div');
+  userMsgEl.className = 'chat-message-item user-message';
+  userMsgEl.innerHTML = `
+    <div class="chat-avatar-box">
+      <span class="material-symbols-outlined">person</span>
+    </div>
+    <div class="chat-bubble">
+      <div class="chat-bubble-header">
+        <div class="chat-sender-info">
+          <span class="chat-sender-name">You (Requester)</span>
+        </div>
+        <span class="chat-timestamp">${formatDate(ticket.created_at)}</span>
+      </div>
+      <div class="chat-subject-highlight">
+        <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">push_pin</span>
+        <span>${escapeHtml(ticket.subject)}</span>
+      </div>
+      <div class="chat-message-text">${escapeHtml(ticket.message || 'No description provided.')}</div>
+    </div>
+  `;
+  container.appendChild(userMsgEl);
+
+  // 2. System Status Event Milestone
+  const milestoneEl = document.createElement('div');
+  milestoneEl.className = 'chat-system-milestone';
+  milestoneEl.innerHTML = `
+    <div class="milestone-line"></div>
+    <div class="milestone-pill">
+      <span class="material-symbols-outlined" style="font-size: 14px;">update</span>
+      <span>Status: <strong>${escapeHtml(statusInfo.label)}</strong> • ${formatDate(ticket.updated_at || ticket.created_at)}</span>
+    </div>
+    <div class="milestone-line"></div>
+  `;
+  container.appendChild(milestoneEl);
+
+  // 3. Admin / Engineering Response Bubble (or Awaiting state)
+  if (ticket.public_response && ticket.public_response.trim().length > 0) {
+    const adminMsgEl = document.createElement('div');
+    adminMsgEl.className = 'chat-message-item admin-message';
+    adminMsgEl.innerHTML = `
+      <div class="chat-avatar-box">
+        <span class="material-symbols-outlined">account_balance</span>
+      </div>
+      <div class="chat-bubble">
+        <div class="chat-bubble-header">
+          <div class="chat-sender-info">
+            <span class="chat-sender-name">e-Plan Studio Engineering Team</span>
+            <span class="chat-badge-verified">
+              <span class="material-symbols-outlined" style="font-size: 11px;">verified</span>
+              Verified
+            </span>
+          </div>
+          <span class="chat-timestamp">${formatDate(ticket.updated_at)}</span>
+        </div>
+        <div class="chat-message-text">${escapeHtml(ticket.public_response)}</div>
+      </div>
+    `;
+    container.appendChild(adminMsgEl);
+  } else {
+    const awaitingEl = document.createElement('div');
+    awaitingEl.className = 'chat-awaiting-box';
+    awaitingEl.innerHTML = `
+      <span class="material-symbols-outlined spin-icon" style="color: var(--apple-accent); font-size: 20px;">hourglass_top</span>
+      <div>
+        <strong>Awaiting Engineering Team Review</strong>
+        <div style="font-size: 11px; margin-top: 2px;">Your ticket is in the triage queue. Updates and developer replies will appear directly in this conversation thread.</div>
+      </div>
+    `;
+    container.appendChild(awaitingEl);
+  }
 }
 
 // Utility: Date formatter

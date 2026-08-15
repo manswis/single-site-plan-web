@@ -3093,3 +3093,200 @@ body.pdf-export-active .drawing-canvas-column,
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* ==========================================================================
+   Timeline Chat Conversation Format Styles
+   ========================================================================== */
+
+.timeline-chat-section {
+  margin-top: 32px;
+  border-top: 1px solid var(--apple-border);
+  padding-top: 24px;
+}
+
+.timeline-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timeline-chat-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.chat-message-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.chat-avatar-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.user-message .chat-avatar-box {
+  background: #e5e5ea;
+  color: #1c1c1e;
+}
+
+[data-theme="dark"] .user-message .chat-avatar-box {
+  background: #2c2c2e;
+  color: #f5f5f7;
+}
+
+.admin-message .chat-avatar-box {
+  background: rgba(0, 102, 204, 0.12);
+  color: var(--apple-accent);
+  border: 1px solid rgba(0, 102, 204, 0.25);
+}
+
+.chat-bubble {
+  flex: 1;
+  border-radius: 16px;
+  padding: 16px 18px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.user-message .chat-bubble {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-top-left-radius: 4px;
+}
+
+.admin-message .chat-bubble {
+  background: rgba(0, 102, 204, 0.04);
+  border: 1px solid rgba(0, 102, 204, 0.2);
+  border-top-left-radius: 4px;
+}
+
+[data-theme="dark"] .admin-message .chat-bubble {
+  background: rgba(41, 151, 255, 0.08);
+  border-color: rgba(41, 151, 255, 0.25);
+}
+
+.chat-bubble-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--apple-border);
+}
+
+.chat-sender-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chat-sender-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+.chat-badge-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  background: rgba(0, 102, 204, 0.12);
+  color: var(--apple-accent);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.chat-timestamp {
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+}
+
+.chat-subject-highlight {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chat-message-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--apple-text-primary);
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+/* System Milestone Divider */
+.chat-system-milestone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 6px 0;
+}
+
+.milestone-line {
+  flex: 1;
+  height: 1px;
+  background: var(--apple-border);
+}
+
+.milestone-pill {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  background: rgba(0, 0, 0, 0.04);
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+[data-theme="dark"] .milestone-pill {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Awaiting Team Response State */
+.chat-awaiting-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px dashed var(--apple-border);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.01);
+  color: var(--apple-text-secondary);
+  font-size: 13px;
+}
+
+[data-theme="dark"] .chat-awaiting-box {
+  background: rgba(255, 255, 255, 0.02);
+}

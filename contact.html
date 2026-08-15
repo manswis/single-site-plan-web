@@ -327,15 +327,16 @@
           </div>
         </div>
 
-        <!-- Official Team Response Callout Box (Shown when public_response exists) -->
-        <div id="resAdminReplyBox" class="admin-response-box" style="display: none; margin-top: 24px;">
-          <div class="admin-response-header">
-            <span class="material-symbols-outlined" style="color: var(--apple-accent); font-size: 18px;">forum</span>
-            <span>Official Resolution / Admin Update</span>
+        <!-- Dynamic Timeline Chat Conversation Thread -->
+        <div class="timeline-chat-section">
+          <div class="timeline-section-title">
+            <span class="material-symbols-outlined" style="color: var(--apple-accent);">forum</span>
+            <span>Communication & Resolution Timeline</span>
           </div>
-          <p id="resAdminReplyText" class="admin-response-content">
-            —
-          </p>
+
+          <div class="timeline-chat-thread" id="chatThreadContainer">
+            <!-- Dynamically populated by renderTrackingResult in js/contact.js -->
+          </div>
         </div>
 
       </div>
