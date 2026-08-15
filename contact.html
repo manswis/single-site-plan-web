@@ -415,6 +415,44 @@
 
     </div>
 
+    <!-- Apple-Style Terms & Privacy Agreement Modal -->
+    <div id="termsConsentModal" class="apple-modal-overlay" style="display: none;">
+      <div class="apple-modal-card alert-modal-card" style="max-width: 520px; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+          <span class="material-symbols-outlined" style="font-size: 26px; color: var(--apple-accent);">gavel</span>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Submission Terms & Privacy Agreement</h3>
+        </div>
+        
+        <p style="margin: 0 0 14px 0; font-size: 13px; color: var(--apple-text-secondary); line-height: 1.5;">
+          Please review and accept our standard voluntary cloud transmission terms before your request is queued in our developer triage system.
+        </p>
+
+        <div class="apple-modal-body"
+          style="background: var(--apple-card-bg); border: 1px solid var(--apple-border); border-radius: 12px; padding: 14px; margin-bottom: 18px; font-size: 12px; line-height: 1.6; color: var(--apple-text-primary); max-height: 160px; overflow-y: auto;">
+          <ul style="margin: 0; padding-left: 18px;">
+            <li style="margin-bottom: 6px;"><strong>Voluntary Transmission:</strong> Support messages and device diagnostics are processed on third-party cloud infrastructure (Cloudflare D1) at your sole election.</li>
+            <li style="margin-bottom: 6px;"><strong>No Sensitive Property Data:</strong> You confirm you are not transmitting confidential banking, financial, or unredacted personal property deeds.</li>
+            <li style="margin-bottom: 6px;"><strong>Limitation of Liability:</strong> Developer aggregate liability for data incidents, network interruptions, or server outages is limited to INR ₹0 as defined in our <a href="legal.html" target="_blank" style="color: var(--apple-accent); font-weight: 600; text-decoration: underline;">Legal Terms & Disclaimer</a>.</li>
+            <li><strong>Open-Source AS-IS:</strong> All software and developer responses are provided AS-IS under the MIT license.</li>
+          </ul>
+        </div>
+
+        <!-- Mandatory Checkbox Agreement -->
+        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; margin-bottom: 20px; font-size: 13px; color: var(--apple-text-primary); user-select: none;">
+          <input type="checkbox" id="modalTermsCheckbox" style="width: 18px; height: 18px; margin-top: 2px; accent-color: var(--apple-accent); cursor: pointer;">
+          <span>I have read, understood, and agree to the <a href="legal.html" target="_blank" style="color: var(--apple-accent); font-weight: 600; text-decoration: underline;">Legal Terms & Privacy Disclaimer</a>.</span>
+        </label>
+
+        <!-- Modal Action Buttons -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <button type="button" class="apple-btn-secondary" onclick="closeTermsModal()"
+            style="height: 44px; font-weight: 700; border-radius: 10px;">Cancel</button>
+          <button type="button" id="confirmSubmitBtn" class="apple-btn-primary" onclick="proceedConfirmedSubmit()" disabled
+            style="height: 44px; font-weight: 700; border-radius: 10px; opacity: 0.5; cursor: not-allowed;">Confirm & Submit</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Page Footer -->
     <footer
       style="margin-top: 80px; padding-top: 30px; border-top: 1px solid var(--apple-border); text-align: center; font-size: 12px; color: var(--apple-text-secondary);">

@@ -145,15 +145,27 @@ function checkUrlParamsForTracking() {
   } catch (e) { }
 }
 
-// 3. Form Submission Handling
+// 3. Form Submission Handling & Consent Modal Workflow
+let pendingTicketPayload = null;
+
 function setupFormSubmission() {
   const form = document.getElementById('ticketSubmitForm');
+  const checkbox = document.getElementById('modalTermsCheckbox');
+  const confirmBtn = document.getElementById('confirmSubmitBtn');
+
+  if (checkbox && confirmBtn) {
+    checkbox.addEventListener('change', () => {
+      confirmBtn.disabled = !checkbox.checked;
+      confirmBtn.style.opacity = checkbox.checked ? '1' : '0.5';
+      confirmBtn.style.cursor = checkbox.checked ? 'pointer' : 'not-allowed';
+    });
+  }
+
   if (!form) return;
 
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const submitBtn = document.getElementById('ticketSubmitBtn');
     const alertBox = document.getElementById('submitAlertBox');
     if (alertBox) {
       alertBox.style.display = 'none';
@@ -183,13 +195,8 @@ function setupFormSubmission() {
       return;
     }
 
-    // Set Loading State
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="material-symbols-outlined spin-icon">sync</span> Submitting Request...';
-    }
-
-    const payload = {
+    // Save payload and open Terms Modal
+    pendingTicketPayload = {
       type: activeCategory,
       priority,
       name,
@@ -200,45 +207,95 @@ function setupFormSubmission() {
       client_info: getClientDiagnostics()
     };
 
-    try {
-      const response = await fetch('/api/tickets', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-
-      let data = {};
-      const responseText = await response.text();
-      try {
-        data = JSON.parse(responseText);
-      } catch (jsonErr) {
-        throw new Error(
-          response.status === 404
-            ? 'The API endpoint (/api/tickets) is not yet deployed or route not found.'
-            : (responseText || `Server responded with status ${response.status}`)
-        );
-      }
-
-      if (!response.ok || data.error) {
-        throw new Error(data.error || 'Failed to submit request.');
-      }
-
-      // Success Display
-      showSubmissionSuccess(data.ticketId, data.type);
-      form.reset();
-
-    } catch (err) {
-      showFormAlert(err.message || 'An error occurred. Please check your connection and try again.', 'error');
-    } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Submit Request';
-      }
-    }
+    openTermsModal();
   });
+}
+
+// Open Terms & Privacy Consent Modal
+function openTermsModal() {
+  const modal = document.getElementById('termsConsentModal');
+  const checkbox = document.getElementById('modalTermsCheckbox');
+  const confirmBtn = document.getElementById('confirmSubmitBtn');
+
+  if (checkbox) checkbox.checked = false;
+  if (confirmBtn) {
+    confirmBtn.disabled = true;
+    confirmBtn.style.opacity = '0.5';
+    confirmBtn.style.cursor = 'not-allowed';
+  }
+
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+// Close Terms & Privacy Consent Modal
+function closeTermsModal() {
+  const modal = document.getElementById('termsConsentModal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+// Execute confirmed submission after user accepts terms
+async function proceedConfirmedSubmit() {
+  if (!pendingTicketPayload) {
+    closeTermsModal();
+    return;
+  }
+
+  closeTermsModal();
+
+  const submitBtn = document.getElementById('ticketSubmitBtn');
+  const form = document.getElementById('ticketSubmitForm');
+
+  // Set Loading State
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="material-symbols-outlined spin-icon">sync</span> Submitting Request...';
+  }
+
+  try {
+    const response = await fetch('/api/tickets', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(pendingTicketPayload)
+    });
+
+    let data = {};
+    const responseText = await response.text();
+    try {
+      data = JSON.parse(responseText);
+    } catch (jsonErr) {
+      throw new Error(
+        response.status === 404
+          ? 'The API endpoint (/api/tickets) is not yet deployed or route not found.'
+          : (responseText || `Server responded with status ${response.status}`)
+      );
+    }
+
+    if (!response.ok || data.error) {
+      throw new Error(data.error || 'Failed to submit request.');
+    }
+
+    // Success Display
+    showSubmissionSuccess(data.ticketId, data.type);
+    if (form) form.reset();
+    pendingTicketPayload = null;
+
+  } catch (err) {
+    showFormAlert(err.message || 'An error occurred. Please check your connection and try again.', 'error');
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Submit Request';
+    }
+  }
 }
 
 function showFormAlert(message, type = 'error') {
