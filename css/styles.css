@@ -2725,3 +2725,371 @@ body.pdf-export-active .drawing-canvas-column,
     padding: 0 8px;
   }
 }
+
+/* ==========================================================================
+   Contact & Ticket Tracking System Styles
+   ========================================================================== */
+
+.contact-tabs-container {
+  display: flex;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 24px;
+  gap: 4px;
+}
+
+[data-theme="dark"] .contact-tabs-container {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.contact-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  transition: var(--apple-transition);
+}
+
+.contact-tab-btn:hover {
+  color: var(--apple-text-primary);
+}
+
+.contact-tab-btn.active {
+  background: var(--apple-card-bg);
+  color: var(--apple-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] .contact-tab-btn.active {
+  background: #2c2c2e;
+  color: var(--apple-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.contact-tab-panel {
+  display: none;
+}
+
+.contact-tab-panel.active {
+  display: block;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Category Chips Grid */
+.category-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.category-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  background: var(--apple-card-bg);
+  color: var(--apple-text-primary);
+  cursor: pointer;
+  transition: var(--apple-transition);
+  text-align: left;
+}
+
+.category-chip:hover {
+  border-color: var(--apple-accent);
+  transform: translateY(-1px);
+}
+
+.category-chip.active {
+  border-color: var(--apple-accent);
+  background: rgba(0, 102, 204, 0.06);
+  box-shadow: 0 0 0 1px var(--apple-accent);
+}
+
+[data-theme="dark"] .category-chip.active {
+  background: rgba(41, 151, 255, 0.12);
+  border-color: var(--apple-accent);
+}
+
+.chip-icon {
+  font-size: 20px;
+}
+
+.chip-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Form Styles */
+.form-input-styled,
+.form-textarea-styled {
+  width: 100%;
+  border: 1px solid var(--apple-border);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--apple-text-primary);
+  background-color: var(--apple-card-bg);
+  outline: none;
+  box-sizing: border-box;
+  font-family: var(--apple-font);
+  transition: var(--apple-transition);
+}
+
+.form-input-styled {
+  height: 42px;
+  padding: 0 12px;
+}
+
+.form-textarea-styled {
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.form-input-styled:focus,
+.form-textarea-styled:focus {
+  border-color: var(--apple-border-focus);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+}
+
+/* Alert Notification */
+.contact-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+.contact-alert-error {
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--apple-red);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+}
+
+.contact-alert-success {
+  background: rgba(52, 199, 89, 0.1);
+  color: var(--apple-green);
+  border: 1px solid rgba(52, 199, 89, 0.2);
+}
+
+/* Ticket ID Highlight Pill */
+.ticket-id-display-card {
+  background: rgba(0, 102, 204, 0.05);
+  border: 1px dashed var(--apple-accent);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 480px;
+}
+
+[data-theme="dark"] .ticket-id-display-card {
+  background: rgba(41, 151, 255, 0.08);
+}
+
+/* Status Pill */
+.ticket-status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.status-open {
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--apple-accent);
+}
+
+.status-review {
+  background: rgba(255, 149, 0, 0.12);
+  color: var(--apple-amber);
+}
+
+.status-progress {
+  background: rgba(88, 86, 214, 0.12);
+  color: #5856d6;
+}
+
+.status-resolved {
+  background: rgba(52, 199, 89, 0.12);
+  color: var(--apple-green);
+}
+
+.status-closed {
+  background: rgba(142, 142, 147, 0.15);
+  color: var(--apple-text-secondary);
+}
+
+/* 4-Step Visual Stepper */
+.status-stepper-container {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 32px 0 20px 0;
+}
+
+.stepper-track-line {
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  right: 24px;
+  height: 3px;
+  background: var(--apple-border);
+  z-index: 1;
+}
+
+.stepper-node {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 80px;
+  text-align: center;
+}
+
+.node-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--apple-card-bg);
+  border: 2px solid var(--apple-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--apple-text-secondary);
+  transition: var(--apple-transition);
+}
+
+.node-circle .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.node-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+}
+
+.stepper-node.completed .node-circle {
+  background: var(--apple-green);
+  border-color: var(--apple-green);
+  color: #ffffff;
+}
+
+.stepper-node.completed .node-label {
+  color: var(--apple-green);
+}
+
+.stepper-node.current .node-circle {
+  background: var(--apple-accent);
+  border-color: var(--apple-accent);
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
+}
+
+.stepper-node.current .node-label {
+  color: var(--apple-accent);
+  font-weight: 700;
+}
+
+/* Ticket Meta Grid */
+.ticket-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+[data-theme="dark"] .ticket-meta-grid {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.meta-label {
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.meta-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+}
+
+/* Admin Response Callout */
+.admin-response-box {
+  background: rgba(0, 102, 204, 0.04);
+  border: 1px solid rgba(0, 102, 204, 0.2);
+  border-left: 4px solid var(--apple-accent);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+[data-theme="dark"] .admin-response-box {
+  background: rgba(41, 151, 255, 0.08);
+  border-color: rgba(41, 151, 255, 0.2);
+  border-left-color: var(--apple-accent);
+}
+
+.admin-response-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  margin-bottom: 8px;
+}
+
+.admin-response-content {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--apple-text-primary);
+  margin: 0;
+  white-space: pre-line;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
