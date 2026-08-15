@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us & Support Ticket Tracking — e-Plan Studio</title>
-  <meta name="description" content="Submit bug reports, feature requests, error diagnostics, and suggestions for e-Plan Studio. Track your ticket status live.">
+  <title>Support & Issue Tracking — e-Plan Studio</title>
+  <meta name="description" content="Submit bug reports, feature requests, drawing errors, and feedback for e-Plan Studio. Live ticket status tracking with engineering response timeline.">
 
   <!-- Google Fonts & Icons: Outfit, Inter & Material Symbols -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,7 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -30,18 +30,19 @@
   <header class="apple-navbar">
     <div class="apple-navbar-content">
       <a href="index.html" class="apple-brand">
-        <span class="brand-text-desktop">🏛️ e-Plan Studio</span>
-        <span class="brand-text-mobile">🏛️ e-Plan Studio</span>
-        <span class="apple-pill-badge">B-to-A Khata Ready</span>
+        <span class="material-symbols-outlined brand-icon">architecture</span>
+        <span class="brand-text-desktop">e-Plan Studio</span>
+        <span class="brand-text-mobile">e-Plan Studio</span>
+        <span class="apple-pill-badge">B-to-A Khata</span>
       </a>
       <div style="display: flex; align-items: center;">
         <nav class="apple-nav-links desktop-nav-bar">
           <a href="index.html">Home</a>
           <a href="studio.html">Studio Workbench</a>
           <a href="pricing.html">Pricing</a>
-          <a href="legal.html">Legal Disclaimer</a>
+          <a href="legal.html">Legal Terms</a>
           <a href="faq.html">FAQ & Help</a>
-          <a href="contact.html" class="active">Contact & Support</a>
+          <a href="contact.html" class="active">Support & Tickets</a>
         </nav>
         <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme"
           title="Toggle Light/Dark Mode">
@@ -51,7 +52,7 @@
     </div>
   </header>
 
-  <div class="container" style="max-width: 900px;">
+  <div class="container" style="max-width: 920px;">
 
     <!-- Horizontal Sliding Control Navigation Bar for Mobile Pages -->
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
@@ -60,8 +61,8 @@
         <a href="studio.html" class="mobile-nav-item">Workbench</a>
         <a href="pricing.html" class="mobile-nav-item">Pricing</a>
         <a href="legal.html" class="mobile-nav-item">Legal</a>
-        <a href="faq.html" class="mobile-nav-item">FAQ & Help</a>
-        <a href="contact.html" class="mobile-nav-item active">Contact</a>
+        <a href="faq.html" class="mobile-nav-item">FAQ</a>
+        <a href="contact.html" class="mobile-nav-item active">Support</a>
       </div>
       <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
         title="Toggle Light/Dark Mode">
@@ -70,204 +71,275 @@
     </div>
 
     <!-- Header Section -->
-    <div style="text-align: center; margin-bottom: 32px; padding-top: 20px;">
-      <h1 style="font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800; color: var(--apple-text-primary); margin-bottom: 8px;">
-        Contact & Support Center
-      </h1>
-      <p style="font-size: 15px; color: var(--apple-text-secondary); max-width: 600px; margin: 0 auto; line-height: 1.5;">
-        Have a bug to report, layout feature request, calculation query, or feedback? Submit your request below or track an existing ticket.
+    <section class="support-header-hero">
+      <div class="support-hero-badge">
+        <span class="material-symbols-outlined" style="font-size: 15px;">headset_mic</span>
+        <span>Developer & Technical Desk</span>
+      </div>
+      <h1 class="support-hero-title">Support & Issue Resolution</h1>
+      <p class="support-hero-subtitle">
+        Submit bug reports, request layout drawing capabilities, or track the real-time resolution timeline of your active inquiry.
       </p>
-    </div>
+    </section>
 
-    <!-- Dual Tab Selector -->
-    <div class="contact-tabs-container">
-      <button type="button" class="contact-tab-btn active" data-tab="submit">
-        <span class="material-symbols-outlined">edit_note</span>
-        <span>Submit a Request</span>
+    <!-- Dual Tab Selector Segmented Control -->
+    <div class="premium-tab-segment">
+      <button type="button" class="tab-segment-btn active" data-tab="submit">
+        <span class="material-symbols-outlined">add_task</span>
+        <span>Submit Request</span>
       </button>
-      <button type="button" class="contact-tab-btn" data-tab="track">
-        <span class="material-symbols-outlined">troubleshoot</span>
+      <button type="button" class="tab-segment-btn" data-tab="track">
+        <span class="material-symbols-outlined">radar</span>
         <span>Track Status by ID</span>
       </button>
     </div>
 
-    <!-- TAB 1: Submit Form Panel -->
+    <!-- =========================================================================
+         TAB 1: SUBMIT REQUEST PANEL
+         ========================================================================= -->
     <div class="contact-tab-panel active" id="tabPanel-submit">
       
       <!-- Submission Card -->
-      <div class="apple-card" id="ticketFormCard" style="padding: 28px;">
+      <div class="apple-card support-card-container" id="ticketFormCard">
         
-        <!-- Category Selector Chips -->
-        <label style="display: block; font-size: 13px; font-weight: 600; color: var(--apple-text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">
-          What would you like to submit?
-        </label>
-        <div class="category-chips-grid">
-          <button type="button" class="category-chip active" data-type="bug">
-            <span class="chip-icon">🐛</span>
-            <span class="chip-title">Bug Report</span>
+        <div class="form-section-header">
+          <span class="material-symbols-outlined header-section-icon">category</span>
+          <div>
+            <h2 class="form-section-title">Select Request Category</h2>
+            <p class="form-section-desc">Choose the category that best describes your technical inquiry or feedback.</p>
+          </div>
+        </div>
+
+        <!-- 4 Premium Category Selector Tiles -->
+        <div class="category-tiles-grid">
+          
+          <button type="button" class="category-tile active" data-type="bug">
+            <div class="tile-icon-wrapper tile-icon-bug">
+              <span class="material-symbols-outlined">bug_report</span>
+            </div>
+            <div class="tile-content">
+              <div class="tile-title-row">
+                <span class="tile-title">Bug Report</span>
+                <span class="material-symbols-outlined tile-check">check_circle</span>
+              </div>
+              <p class="tile-desc">Setback calculation mismatch, boundary glitch, or drawing misalignment.</p>
+            </div>
           </button>
-          <button type="button" class="category-chip" data-type="feature">
-            <span class="chip-icon">✨</span>
-            <span class="chip-title">Feature Request</span>
+
+          <button type="button" class="category-tile" data-type="feature">
+            <div class="tile-icon-wrapper tile-icon-feature">
+              <span class="material-symbols-outlined">auto_awesome</span>
+            </div>
+            <div class="tile-content">
+              <div class="tile-title-row">
+                <span class="tile-title">Feature Request</span>
+                <span class="material-symbols-outlined tile-check">check_circle</span>
+              </div>
+              <p class="tile-desc">Request new floor support, custom road angles, or BBMP layout formats.</p>
+            </div>
           </button>
-          <button type="button" class="category-chip" data-type="error">
-            <span class="chip-icon">⚠️</span>
-            <span class="chip-title">Error / Issue</span>
+
+          <button type="button" class="category-tile" data-type="error">
+            <div class="tile-icon-wrapper tile-icon-error">
+              <span class="material-symbols-outlined">warning</span>
+            </div>
+            <div class="tile-content">
+              <div class="tile-title-row">
+                <span class="tile-title">Technical Error</span>
+                <span class="material-symbols-outlined tile-check">check_circle</span>
+              </div>
+              <p class="tile-desc">PDF generation failure, rendering freeze, or browser exception.</p>
+            </div>
           </button>
-          <button type="button" class="category-chip" data-type="suggestion">
-            <span class="chip-icon">💡</span>
-            <span class="chip-title">Suggestion</span>
+
+          <button type="button" class="category-tile" data-type="suggestion">
+            <div class="tile-icon-wrapper tile-icon-suggestion">
+              <span class="material-symbols-outlined">lightbulb</span>
+            </div>
+            <div class="tile-content">
+              <div class="tile-title-row">
+                <span class="tile-title">General Feedback</span>
+                <span class="material-symbols-outlined tile-check">check_circle</span>
+              </div>
+              <p class="tile-desc">Suggestions for workflow, Sakala guidelines, or user experience.</p>
+            </div>
           </button>
+
         </div>
 
         <!-- Alert Notification Box -->
         <div id="submitAlertBox" class="contact-alert" style="display: none;"></div>
 
-        <form id="ticketSubmitForm" style="margin-top: 24px;">
+        <form id="ticketSubmitForm" class="support-form">
           <input type="hidden" id="ticketTypeInput" value="bug">
+          <input type="hidden" id="ticketPriority" value="medium">
           
-          <!-- Honeypot anti-spam trap (invisible to real users) -->
+          <!-- Honeypot anti-spam trap (hidden from users) -->
           <div style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
             <input type="text" id="ticketHoneypot" tabindex="-1" autocomplete="off">
           </div>
 
           <!-- Name & Email Row -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px;">
-            <div>
-              <label for="ticketName" style="display: block; font-size: 13px; font-weight: 600; color: var(--apple-text-primary); margin-bottom: 6px;">
-                Your Name <span style="font-weight: 400; color: var(--apple-text-secondary);">(Optional)</span>
+          <div class="form-row-dual">
+            <div class="form-field-group">
+              <label for="ticketName" class="form-field-label">
+                <span>Your Name</span>
+                <span class="label-optional">(Optional)</span>
               </label>
-              <input type="text" id="ticketName" placeholder="e.g. Ramesh Kumar" style="width: 100%;">
+              <div class="input-with-icon">
+                <span class="material-symbols-outlined input-icon">person</span>
+                <input type="text" id="ticketName" class="field-control" placeholder="e.g. Ramesh Kumar">
+              </div>
             </div>
-            <div>
-              <label for="ticketEmail" style="display: block; font-size: 13px; font-weight: 600; color: var(--apple-text-primary); margin-bottom: 6px;">
-                Email Address <span style="color: var(--apple-red);">*</span>
+
+            <div class="form-field-group">
+              <label for="ticketEmail" class="form-field-label">
+                <span>Email Address</span>
+                <span class="label-required">*</span>
               </label>
-              <input type="email" id="ticketEmail" required placeholder="name@example.com" class="form-input-styled" style="width: 100%;">
+              <div class="input-with-icon">
+                <span class="material-symbols-outlined input-icon">mail</span>
+                <input type="email" id="ticketEmail" required class="field-control" placeholder="name@example.com">
+              </div>
             </div>
           </div>
 
-          <!-- Priority & Subject Row -->
-          <div style="display: grid; grid-template-columns: 160px 1fr; gap: 16px; margin-bottom: 18px;">
-            <div>
-              <label for="ticketPriority" style="display: block; font-size: 13px; font-weight: 600; color: var(--apple-text-primary); margin-bottom: 6px;">
-                Priority
+          <!-- Priority Segmented Bar & Subject -->
+          <div class="form-row-dual">
+            <div class="form-field-group">
+              <label class="form-field-label">
+                <span>Priority Level</span>
               </label>
-              <select id="ticketPriority" style="width: 100%;">
-                <option value="low">🟢 Low</option>
-                <option value="medium" selected>🟡 Medium</option>
-                <option value="high">🔴 High / Urgent</option>
-              </select>
+              <div class="priority-segmented-control">
+                <button type="button" class="priority-btn" data-priority="low">
+                  <span class="priority-dot dot-low"></span>
+                  <span>Low</span>
+                </button>
+                <button type="button" class="priority-btn active" data-priority="medium">
+                  <span class="priority-dot dot-medium"></span>
+                  <span>Medium</span>
+                </button>
+                <button type="button" class="priority-btn" data-priority="high">
+                  <span class="priority-dot dot-high"></span>
+                  <span>High</span>
+                </button>
+              </div>
             </div>
-            <div>
-              <label for="ticketSubject" style="display: block; font-size: 13px; font-weight: 600; color: var(--apple-text-primary); margin-bottom: 6px;">
-                Subject Summary <span style="color: var(--apple-red);">*</span>
+
+            <div class="form-field-group">
+              <label for="ticketSubject" class="form-field-label">
+                <span>Subject Summary</span>
+                <span class="label-required">*</span>
               </label>
-              <input type="text" id="ticketSubject" required placeholder="e.g. Setback calculation mismatch on corner plot" style="width: 100%;">
+              <div class="input-with-icon">
+                <span class="material-symbols-outlined input-icon">title</span>
+                <input type="text" id="ticketSubject" required class="field-control" placeholder="e.g. Setback calculation mismatch on corner plot">
+              </div>
             </div>
           </div>
 
-          <!-- Detailed Description -->
-          <div style="margin-bottom: 24px;">
-            <label for="ticketMessage" style="display: block; font-size: 13px; font-weight: 600; color: var(--apple-text-primary); margin-bottom: 6px;">
-              Detailed Description <span style="color: var(--apple-red);">*</span>
+          <!-- Detailed Description Field -->
+          <div class="form-field-group">
+            <label for="ticketMessage" class="form-field-label">
+              <span>Detailed Description</span>
+              <span class="label-required">*</span>
             </label>
-            <textarea id="ticketMessage" required rows="6" class="form-textarea-styled"
+            <textarea id="ticketMessage" required rows="5" class="field-control textarea-control"
               placeholder="Please describe what happened, what step you were on, and what you expected to see..."></textarea>
-            <span style="font-size: 11px; color: var(--apple-text-secondary); margin-top: 4px; display: block;">
-              🔒 Browser diagnostics (OS, screen resolution) will be securely attached to help our engineers reproduce issues accurately.
-            </span>
+            
+            <!-- Safe Diagnostics Callout -->
+            <div class="diagnostics-info-badge">
+              <span class="material-symbols-outlined badge-info-icon">lock</span>
+              <span>Client environment diagnostics (browser, OS, viewport) will be safely attached to assist developer triage.</span>
+            </div>
           </div>
 
-          <!-- Submit Button -->
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-            <span style="font-size: 12px; color: var(--apple-text-secondary);">
-              By submitting, you agree to our <a href="legal.html" style="color: var(--apple-accent); text-decoration: none;">Privacy Terms</a>.
+          <!-- Form Footer Actions -->
+          <div class="form-actions-bar">
+            <span class="privacy-note">
+              Protected by DPDP privacy compliance. Reviewed only by project engineers.
             </span>
-            <button type="submit" id="ticketSubmitBtn" class="apple-btn-primary"
-              style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 24px; font-weight: 600; border: none; cursor: pointer; border-radius: 10px;">
+            <button type="submit" id="ticketSubmitBtn" class="apple-btn-primary submit-action-btn">
               <span class="material-symbols-outlined">send</span>
-              Submit Request
+              <span>Submit Request</span>
             </button>
           </div>
         </form>
       </div>
 
-      <!-- Success State Card (Shown after submission) -->
-      <div class="apple-card" id="ticketSuccessCard" style="display: none; padding: 36px; text-align: center;">
-        <div style="width: 64px; height: 64px; background: rgba(52, 199, 89, 0.12); color: var(--apple-green); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-          <span class="material-symbols-outlined" style="font-size: 36px;">check_circle</span>
+      <!-- Success State Card -->
+      <div class="apple-card support-card-container success-card-view" id="ticketSuccessCard" style="display: none;">
+        <div class="success-icon-badge">
+          <span class="material-symbols-outlined">check</span>
         </div>
-        <h2 style="font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 700; color: var(--apple-text-primary); margin-bottom: 8px;">
-          Request Logged Successfully!
-        </h2>
-        <p style="font-size: 14px; color: var(--apple-text-secondary); max-width: 500px; margin: 0 auto 20px auto;">
-          Your <span id="successTicketType" style="font-weight: 700; color: var(--apple-text-primary);">BUG</span> ticket has been queued in our engineering triage pipeline.
+        <h2 class="success-heading">Request Submitted Successfully</h2>
+        <p class="success-subheading">
+          Your <span id="successTicketType" class="success-type-tag">BUG REPORT</span> has been logged in our engineering triage pipeline.
         </p>
 
-        <!-- Ticket ID Highlight Pill Box -->
+        <!-- Ticket ID Card -->
         <div class="ticket-id-display-card">
-          <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--apple-text-secondary); margin-bottom: 6px;">
-            Your Unique Tracking ID
-          </div>
-          <div id="generatedTicketId" style="font-family: monospace; font-size: 26px; font-weight: 800; color: var(--apple-accent); letter-spacing: 1px;">
-            REQ-XXXX-XXXX
-          </div>
-          <div style="margin-top: 14px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-            <button type="button" id="copyTicketBtn" class="apple-btn-secondary" onclick="copyTicketId()" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 13px; font-weight: 600;">
-              <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span>
-              Copy Ticket ID
+          <div class="ticket-id-caption">Your Unique Tracking ID</div>
+          <div id="generatedTicketId" class="ticket-id-code">REQ-XXXX-XXXX</div>
+          
+          <div class="ticket-id-actions">
+            <button type="button" id="copyTicketBtn" class="apple-btn-secondary id-action-btn" onclick="copyTicketId()">
+              <span class="material-symbols-outlined">content_copy</span>
+              <span>Copy Tracking ID</span>
             </button>
-            <button type="button" class="apple-btn-primary" onclick="trackGeneratedTicket()" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; font-size: 13px; font-weight: 600; border: none;">
-              <span class="material-symbols-outlined" style="font-size: 16px;">troubleshoot</span>
-              Track This Ticket
+            <button type="button" class="apple-btn-primary id-action-btn" onclick="trackGeneratedTicket()">
+              <span class="material-symbols-outlined">timeline</span>
+              <span>Track Conversation</span>
             </button>
           </div>
         </div>
 
         <div style="margin-top: 24px;">
-          <button type="button" class="apple-btn-text" onclick="resetContactForm()" style="font-size: 13px; color: var(--apple-text-secondary); text-decoration: underline; background: none; border: none; cursor: pointer;">
-            ← Submit Another Request
+          <button type="button" class="reset-form-link" onclick="resetContactForm()">
+            <span class="material-symbols-outlined" style="font-size: 16px;">arrow_back</span>
+            <span>Submit Another Request</span>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: Live Status Tracker Panel -->
+    <!-- =========================================================================
+         TAB 2: STATUS & TIMELINE TRACKER PANEL
+         ========================================================================= -->
     <div class="contact-tab-panel" id="tabPanel-track">
       
       <!-- Lookup Form Card -->
-      <div class="apple-card" style="padding: 28px; margin-bottom: 24px;">
-        <label for="trackIdInput" style="display: block; font-size: 14px; font-weight: 600; color: var(--apple-text-primary); margin-bottom: 8px;">
-          Enter Your Ticket ID
-        </label>
-        <form id="ticketTrackForm" style="display: flex; gap: 12px; flex-wrap: wrap;">
-          <input type="text" id="trackIdInput" required placeholder="e.g. REQ-9X4K-72M1"
-            style="flex: 1; min-width: 220px; font-family: monospace; font-size: 15px; font-weight: 600; text-transform: uppercase;">
-          <button type="submit" id="trackLookupBtn" class="apple-btn-primary"
-            style="display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 22px; font-weight: 600; border: none; cursor: pointer; border-radius: 10px;">
+      <div class="apple-card support-card-container" style="margin-bottom: 24px;">
+        <div class="form-section-header">
+          <span class="material-symbols-outlined header-section-icon">search_insights</span>
+          <div>
+            <h2 class="form-section-title">Track Ticket Status</h2>
+            <p class="form-section-desc">Enter your 10-character Ticket ID to view live engineering progress and official responses.</p>
+          </div>
+        </div>
+
+        <form id="ticketTrackForm" class="track-lookup-form">
+          <div class="input-with-icon" style="flex: 1; min-width: 240px;">
+            <span class="material-symbols-outlined input-icon">confirmation_number</span>
+            <input type="text" id="trackIdInput" required placeholder="e.g. REQ-BCE5-T923" class="field-control tracking-input">
+          </div>
+          <button type="submit" id="trackLookupBtn" class="apple-btn-primary track-submit-btn">
             <span class="material-symbols-outlined">search</span>
-            Check Status
+            <span>Lookup Status</span>
           </button>
         </form>
 
         <div id="trackAlertBox" class="contact-alert" style="display: none; margin-top: 16px;"></div>
       </div>
 
-      <!-- Live Tracking Results Card (Hidden until queried) -->
-      <div class="apple-card" id="trackResultCard" style="display: none; padding: 28px;">
+      <!-- Live Tracking Results Card -->
+      <div class="apple-card support-card-container" id="trackResultCard" style="display: none;">
         
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--apple-border); padding-bottom: 18px; margin-bottom: 24px;">
+        <div class="track-result-header">
           <div>
-            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--apple-text-secondary); margin-bottom: 4px;">
-              Tracking Inquiry
-            </div>
-            <h2 id="resTicketSubject" style="font-size: 18px; font-weight: 700; color: var(--apple-text-primary); margin: 0;">
-              —
-            </h2>
-            <div style="font-family: monospace; font-size: 13px; color: var(--apple-accent); font-weight: 600; margin-top: 4px;" id="resTicketId">
-              REQ-XXXX-XXXX
-            </div>
+            <span class="track-inquiry-tag">Active Ticket Inquiry</span>
+            <h2 id="resTicketSubject" class="track-ticket-title">—</h2>
+            <div id="resTicketId" class="track-ticket-id-pill">REQ-XXXX-XXXX</div>
           </div>
           <div>
             <span id="resTicketStatus" class="ticket-status-pill status-open">Submitted</span>
@@ -280,7 +352,7 @@
           
           <div class="stepper-node completed" id="stepNode-submitted">
             <div class="node-circle">
-              <span class="material-symbols-outlined">check</span>
+              <span class="material-symbols-outlined">task_alt</span>
             </div>
             <div class="node-label">Submitted</div>
           </div>
@@ -301,14 +373,14 @@
 
           <div class="stepper-node pending" id="stepNode-resolved">
             <div class="node-circle">
-              <span class="material-symbols-outlined">task_alt</span>
+              <span class="material-symbols-outlined">verified</span>
             </div>
             <div class="node-label">Resolved</div>
           </div>
         </div>
 
         <!-- Ticket Meta Details Grid -->
-        <div class="ticket-meta-grid" style="margin-top: 28px;">
+        <div class="ticket-meta-grid">
           <div class="meta-item">
             <span class="meta-label">Category</span>
             <span class="meta-value" id="resTicketType">—</span>
@@ -330,7 +402,7 @@
         <!-- Dynamic Timeline Chat Conversation Thread -->
         <div class="timeline-chat-section">
           <div class="timeline-section-title">
-            <span class="material-symbols-outlined" style="color: var(--apple-accent);">forum</span>
+            <span class="material-symbols-outlined" style="color: var(--apple-accent); font-size: 20px;">forum</span>
             <span>Communication & Resolution Timeline</span>
           </div>
 
@@ -343,7 +415,7 @@
 
     </div>
 
-    <!-- Footer -->
+    <!-- Page Footer -->
     <footer
       style="margin-top: 80px; padding-top: 30px; border-top: 1px solid var(--apple-border); text-align: center; font-size: 12px; color: var(--apple-text-secondary);">
       <p
@@ -359,8 +431,8 @@
         <a href="faq.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 8px;">FAQ &
           Help</a> •
         <a href="contact.html"
-          style="color: var(--apple-text-primary); text-decoration: none; font-weight: 700; margin: 0 8px;">Contact &
-          Support</a> •
+          style="color: var(--apple-text-primary); text-decoration: none; font-weight: 700; margin: 0 8px;">Support &
+          Tickets</a> •
         <a href="https://github.com/manswis/singleSitePlan-web" target="_blank" rel="noopener noreferrer"
           style="color: var(--apple-text-secondary); text-decoration: none; font-weight: 600; margin: 0 8px; display: inline-flex; align-items: center; gap: 5px;">
           <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: text-bottom;">

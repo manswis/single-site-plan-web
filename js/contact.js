@@ -37,14 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
   checkUrlParamsForTracking();
 });
 
-// 1. Category Chips Selection
+// 1. Category Tiles Selection
 function setupCategoryChips() {
-  const chips = document.querySelectorAll('.category-chip');
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      chips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      activeCategory = chip.getAttribute('data-type') || 'bug';
+  const tiles = document.querySelectorAll('.category-tile, .category-chip');
+  tiles.forEach(tile => {
+    tile.addEventListener('click', () => {
+      tiles.forEach(t => t.classList.remove('active'));
+      tile.classList.add('active');
+      activeCategory = tile.getAttribute('data-type') || 'bug';
 
       const typeInput = document.getElementById('ticketTypeInput');
       if (typeInput) {
@@ -57,17 +57,36 @@ function setupCategoryChips() {
       if (msgArea && subjectInput) {
         if (activeCategory === 'bug') {
           subjectInput.placeholder = 'e.g. Setback calculation mismatch on corner plot';
-          msgArea.placeholder = 'Please describe what happened, what step you were on, and what you expected to see...';
+          msgArea.placeholder = 'Please describe the bug in detail: what measurements were entered, what step failed, and what you expected to see...';
         } else if (activeCategory === 'feature') {
-          subjectInput.placeholder = 'e.g. Add support for G+4 floor residential layouts';
-          msgArea.placeholder = 'Describe the new feature or layout requirement and how it will help your planning...';
+          subjectInput.placeholder = 'e.g. Support for G+4 floor residential layouts';
+          msgArea.placeholder = 'Describe the requested feature or layout capability and how it supports your planning needs...';
         } else if (activeCategory === 'error') {
-          subjectInput.placeholder = 'e.g. PDF generation failed with error code';
-          msgArea.placeholder = 'Paste the exact error message or describe what caused the generator to fail...';
+          subjectInput.placeholder = 'e.g. PDF export failed during vector render';
+          msgArea.placeholder = 'Please describe the technical error: any browser console message or unexpected stop in generation...';
         } else {
-          subjectInput.placeholder = 'e.g. Suggestion for improved road direction UI';
+          subjectInput.placeholder = 'e.g. Enhancement suggestion for road width controls';
           msgArea.placeholder = 'Share your thoughts, suggestions, or general inquiry with the engineering team...';
         }
+      }
+    });
+  });
+
+  // Priority Segmented Control Handler
+  setupPrioritySelector();
+}
+
+function setupPrioritySelector() {
+  const priorityBtns = document.querySelectorAll('.priority-btn');
+  const priorityInput = document.getElementById('ticketPriority');
+
+  priorityBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      priorityBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const chosenPriority = btn.getAttribute('data-priority') || 'medium';
+      if (priorityInput) {
+        priorityInput.value = chosenPriority;
       }
     });
   });
@@ -75,7 +94,7 @@ function setupCategoryChips() {
 
 // 2. Tab Switching (Submit vs Track)
 function setupTabSwitching() {
-  const tabButtons = document.querySelectorAll('.contact-tab-btn');
+  const tabButtons = document.querySelectorAll('.tab-segment-btn, .contact-tab-btn');
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const targetTab = btn.getAttribute('data-tab');
@@ -85,7 +104,7 @@ function setupTabSwitching() {
 }
 
 function switchTab(tabName) {
-  const tabButtons = document.querySelectorAll('.contact-tab-btn');
+  const tabButtons = document.querySelectorAll('.tab-segment-btn, .contact-tab-btn');
   const panels = document.querySelectorAll('.contact-tab-panel');
 
   tabButtons.forEach(btn => {
