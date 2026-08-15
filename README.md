@@ -47,11 +47,11 @@ e-Plan Studio employs a decoupled, privacy-first architectural paradigm:
 │   │   Interactive CAD   │   │  BBMP Setback Math   │   │  jsPDF Vector  │   │
 │   │   Canvas (SVG 2D)   │◄──┤  Calculation Engine  │──►│  PDF Exporter  │   │
 │   └─────────────────────┘   └──────────────────────┘   └────────────────┘   │
-│              ▲                                                               │
-│              │ (Zero Telemetry / Persisted locally)                          │
-│              ▼                                                               │
+│              ▲                                                              │
+│              │ (Zero Telemetry / Persisted locally)                         │
+│              ▼                                                              │
 │   ┌────────────────────────────────────────────────┐                        │
-│   │  Device LocalStorage (Isolated on User Device)  │                        │
+│   │  Device LocalStorage (Isolated on User Device)  │                       │
 │   └────────────────────────────────────────────────┘                        │
 └─────────────────────────────────────────────────────────────────────────────┘
                                        │
