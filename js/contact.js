@@ -45,7 +45,7 @@ function setupCategoryChips() {
       chips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
       activeCategory = chip.getAttribute('data-type') || 'bug';
-      
+
       const typeInput = document.getElementById('ticketTypeInput');
       if (typeInput) {
         typeInput.value = activeCategory;
@@ -96,29 +96,34 @@ function switchTab(tabName) {
     panel.classList.toggle('active', panel.id === `tabPanel-${tabName}`);
   });
 
-  // Update URL hash for sharing / bookmarks
-  if (window.history && window.history.replaceState) {
-    const currentUrl = new URL(window.location.href);
-    currentUrl.hash = `#${tabName}`;
-    window.history.replaceState({}, '', currentUrl.toString());
-  }
+  // Update URL hash for sharing / bookmarks safely
+  try {
+    if (window.history && window.history.replaceState && window.location.href.startsWith('http')) {
+      const currentUrl = new URL(window.location.href);
+      currentUrl.hash = `#${tabName}`;
+      window.history.replaceState({}, '', currentUrl.toString());
+    }
+  } catch (e) { }
 }
 
 // Check if URL has ?track=REQ-XXXX or #track
 function checkUrlParamsForTracking() {
-  const url = new URL(window.location.href);
-  const trackId = url.searchParams.get('track') || url.searchParams.get('id');
+  try {
+    if (!window.location.href.startsWith('http')) return;
+    const url = new URL(window.location.href);
+    const trackId = url.searchParams.get('track') || url.searchParams.get('id');
 
-  if (trackId) {
-    switchTab('track');
-    const trackInput = document.getElementById('trackIdInput');
-    if (trackInput) {
-      trackInput.value = trackId.trim();
-      executeTrackLookup(trackId.trim());
+    if (trackId) {
+      switchTab('track');
+      const trackInput = document.getElementById('trackIdInput');
+      if (trackInput) {
+        trackInput.value = trackId.trim();
+        executeTrackLookup(trackId.trim());
+      }
+    } else if (window.location.hash === '#track') {
+      switchTab('track');
     }
-  } else if (window.location.hash === '#track') {
-    switchTab('track');
-  }
+  } catch (e) { }
 }
 
 // 3. Form Submission Handling
@@ -179,11 +184,24 @@ function setupFormSubmission() {
     try {
       const response = await fetch('/api/tickets', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify(payload)
       });
 
-      const data = await response.json();
+      let data = {};
+      const responseText = await response.text();
+      try {
+        data = JSON.parse(responseText);
+      } catch (jsonErr) {
+        throw new Error(
+          response.status === 404
+            ? 'The API endpoint (/api/tickets) is not yet deployed or route not found.'
+            : (responseText || `Server responded with status ${response.status}`)
+        );
+      }
 
       if (!response.ok || data.error) {
         throw new Error(data.error || 'Failed to submit request.');
@@ -233,7 +251,7 @@ function showSubmissionSuccess(ticketId, type) {
 }
 
 // Reset form to submit another request
-window.resetContactForm = function() {
+window.resetContactForm = function () {
   const formCard = document.getElementById('ticketFormCard');
   const successCard = document.getElementById('ticketSuccessCard');
   if (formCard) formCard.style.display = 'block';
@@ -241,22 +259,44 @@ window.resetContactForm = function() {
 };
 
 // Copy ticket ID to clipboard
-window.copyTicketId = function() {
+window.copyTicketId = function () {
   const idEl = document.getElementById('generatedTicketId');
   if (!idEl) return;
   const id = idEl.textContent.trim();
-  navigator.clipboard.writeText(id).then(() => {
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(id).then(() => {
+      const copyBtn = document.getElementById('copyTicketBtn');
+      if (copyBtn) {
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<span class="material-symbols-outlined">check</span> Copied!';
+        setTimeout(() => { copyBtn.innerHTML = originalHtml; }, 2000);
+      }
+    }).catch(() => fallbackCopy(id));
+  } else {
+    fallbackCopy(id);
+  }
+};
+
+function fallbackCopy(text) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  document.body.appendChild(textArea);
+  textArea.select();
+  try {
+    document.execCommand('copy');
     const copyBtn = document.getElementById('copyTicketBtn');
     if (copyBtn) {
       const originalHtml = copyBtn.innerHTML;
       copyBtn.innerHTML = '<span class="material-symbols-outlined">check</span> Copied!';
       setTimeout(() => { copyBtn.innerHTML = originalHtml; }, 2000);
     }
-  });
-};
+  } catch (err) { }
+  document.body.removeChild(textArea);
+}
 
 // Quick jump to tracking tab with generated ID
-window.trackGeneratedTicket = function() {
+window.trackGeneratedTicket = function () {
   const idEl = document.getElementById('generatedTicketId');
   if (!idEl) return;
   const id = idEl.textContent.trim();
@@ -302,8 +342,21 @@ async function executeTrackLookup(ticketId) {
   }
 
   try {
-    const response = await fetch(`/api/tickets/${encodeURIComponent(cleanId)}`);
-    const data = await response.json();
+    const response = await fetch(`/api/tickets/${encodeURIComponent(cleanId)}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+
+    let data = {};
+    const responseText = await response.text();
+    try {
+      data = JSON.parse(responseText);
+    } catch (jsonErr) {
+      throw new Error(
+        response.status === 404
+          ? `No ticket found with ID "${cleanId}".`
+          : (responseText || `Server returned status ${response.status}`)
+      );
+    }
 
     if (!response.ok || data.error) {
       throw new Error(data.error || 'Ticket not found.');
@@ -311,12 +364,14 @@ async function executeTrackLookup(ticketId) {
 
     renderTrackingResult(data.ticket);
 
-    // Update URL query without page reload
-    if (window.history && window.history.replaceState) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('track', cleanId);
-      window.history.replaceState({}, '', url.toString());
-    }
+    // Update URL query safely
+    try {
+      if (window.history && window.history.replaceState && window.location.href.startsWith('http')) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('track', cleanId);
+        window.history.replaceState({}, '', url.toString());
+      }
+    } catch (e) { }
 
   } catch (err) {
     if (alertBox) {
