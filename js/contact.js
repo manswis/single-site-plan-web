@@ -491,29 +491,33 @@ function renderTimelineChat(ticket, statusInfo) {
   `;
   container.appendChild(milestoneEl);
 
-  // 3. Admin / Engineering Response Bubble (or Awaiting state)
-  if (ticket.public_response && ticket.public_response.trim().length > 0) {
-    const adminMsgEl = document.createElement('div');
-    adminMsgEl.className = 'chat-message-item admin-message';
-    adminMsgEl.innerHTML = `
-      <div class="chat-avatar-box">
-        <span class="material-symbols-outlined">account_balance</span>
-      </div>
-      <div class="chat-bubble">
-        <div class="chat-bubble-header">
-          <div class="chat-sender-info">
-            <span class="chat-sender-name">e-Plan Studio Engineering Team</span>
-            <span class="chat-badge-verified">
-              <span class="material-symbols-outlined" style="font-size: 11px;">verified</span>
-              Verified
-            </span>
-          </div>
-          <span class="chat-timestamp">${formatDate(ticket.updated_at)}</span>
+  // 3. Admin / Engineering Response Bubbles (Listview)
+  const messagesList = parseAdminResponses(ticket.public_response, ticket.updated_at);
+
+  if (messagesList.length > 0) {
+    messagesList.forEach(msg => {
+      const adminMsgEl = document.createElement('div');
+      adminMsgEl.className = 'chat-message-item admin-message';
+      adminMsgEl.innerHTML = `
+        <div class="chat-avatar-box">
+          <span class="material-symbols-outlined">account_balance</span>
         </div>
-        <div class="chat-message-text">${escapeHtml(ticket.public_response)}</div>
-      </div>
-    `;
-    container.appendChild(adminMsgEl);
+        <div class="chat-bubble">
+          <div class="chat-bubble-header">
+            <div class="chat-sender-info">
+              <span class="chat-sender-name">${escapeHtml(msg.author || 'e-Plan Studio Engineering Team')}</span>
+              <span class="chat-badge-verified">
+                <span class="material-symbols-outlined" style="font-size: 11px;">verified</span>
+                Verified
+              </span>
+            </div>
+            <span class="chat-timestamp">${formatDate(msg.time || ticket.updated_at)}</span>
+          </div>
+          <div class="chat-message-text">${escapeHtml(msg.text)}</div>
+        </div>
+      `;
+      container.appendChild(adminMsgEl);
+    });
   } else {
     const awaitingEl = document.createElement('div');
     awaitingEl.className = 'chat-awaiting-box';
@@ -526,6 +530,56 @@ function renderTimelineChat(ticket, statusInfo) {
     `;
     container.appendChild(awaitingEl);
   }
+}
+
+// Helper to parse multiple admin messages (JSON Array, multi-line, or plain text)
+function parseAdminResponses(rawResponse, defaultTime) {
+  if (!rawResponse || typeof rawResponse !== 'string' || rawResponse.trim().length === 0) {
+    return [];
+  }
+
+  const trimmed = rawResponse.trim();
+
+  // 1. Try parsing as JSON Array
+  if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (Array.isArray(parsed)) {
+        return parsed.map(item => {
+          if (typeof item === 'string') {
+            return { text: item, time: defaultTime, author: 'e-Plan Studio Engineering Team' };
+          } else if (typeof item === 'object' && item !== null) {
+            return {
+              text: item.text || item.message || '',
+              time: item.time || item.created_at || defaultTime,
+              author: item.author || item.name || 'e-Plan Studio Engineering Team'
+            };
+          }
+          return null;
+        }).filter(item => item && item.text.trim().length > 0);
+      }
+    } catch (e) {}
+  }
+
+  // 2. Try parsing delimiter "---" if admin added multiple updates separated by divider
+  if (trimmed.includes('\n---\n') || trimmed.includes('\n---')) {
+    const parts = trimmed.split(/\n-{3,}\n?/);
+    return parts
+      .map(part => part.trim())
+      .filter(part => part.length > 0)
+      .map(part => ({
+        text: part,
+        time: defaultTime,
+        author: 'e-Plan Studio Engineering Team'
+      }));
+  }
+
+  // 3. Single standard text response
+  return [{
+    text: trimmed,
+    time: defaultTime,
+    author: 'e-Plan Studio Engineering Team'
+  }];
 }
 
 // Utility: Date formatter
