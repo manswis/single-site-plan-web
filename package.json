@@ -1,0 +1,20 @@
+{
+  "name": "eplan-studio",
+  "version": "1.1.0",
+  "description": "Instant, 100% client-side vector CAD site plan drafting engine for BBMP Sakala B-to-A Khata drawings.",
+  "main": "_worker.js",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "npx wrangler dev",
+    "deploy": "node build.js && npx wrangler deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manswis/singleSitePlan-web.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

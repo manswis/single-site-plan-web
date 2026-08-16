@@ -4,5 +4,9 @@ schema.sql
 .git/
 .gitignore
 .assetsignore
+package.json
+package-lock.json
+build.js
+node_modules/
 README.md
 LICENSE

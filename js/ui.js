@@ -572,20 +572,6 @@ function switchMobileTab(tabName) {
 }
 
 /**
- * Toggles legal consent acceptance state and updates Action Bar buttons.
- * 
- * @function toggleLegalConsent
- * @returns {void}
- */
-function toggleLegalConsent() {
-  const isChecked = document.getElementById('legalConsentCheck') ? document.getElementById('legalConsentCheck').checked : false;
-  const errLegal = document.getElementById('err-legalConsent');
-  if (errLegal) {
-    errLegal.style.display = isChecked ? 'none' : 'block';
-  }
-}
-
-/**
  * Direct client-side PDF file download using jsPDF + html2canvas.
  * Downloads multi-page A4 PDF file directly into user's Downloads folder WITHOUT opening print UI.
  * 
