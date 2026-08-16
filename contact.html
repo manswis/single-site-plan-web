@@ -113,69 +113,69 @@
           </div>
         </div>
 
-        <div class="form-section-header">
-          <span class="material-symbols-outlined header-section-icon">category</span>
-          <div>
-            <h2 class="form-section-title">Select Request Category</h2>
-            <p class="form-section-desc">Choose the category that best describes your technical inquiry or feedback.</p>
+        <!-- Request Category Group -->
+        <div class="form-field-group" style="margin-bottom: 22px;">
+          <label class="form-field-label">
+            <span>Request Category</span>
+            <span class="label-required">*</span>
+          </label>
+
+          <!-- 4 Premium Category Selector Tiles -->
+          <div class="category-tiles-grid">
+
+            <button type="button" class="category-tile active" data-type="bug">
+              <div class="tile-icon-wrapper tile-icon-bug">
+                <span class="material-symbols-outlined">bug_report</span>
+              </div>
+              <div class="tile-content">
+                <div class="tile-title-row">
+                  <span class="tile-title">Bug Report</span>
+                  <span class="material-symbols-outlined tile-check">check_circle</span>
+                </div>
+                <p class="tile-desc">Setback calculation mismatch, boundary glitch, or drawing misalignment.</p>
+              </div>
+            </button>
+
+            <button type="button" class="category-tile" data-type="feature">
+              <div class="tile-icon-wrapper tile-icon-feature">
+                <span class="material-symbols-outlined">auto_awesome</span>
+              </div>
+              <div class="tile-content">
+                <div class="tile-title-row">
+                  <span class="tile-title">Feature Request</span>
+                  <span class="material-symbols-outlined tile-check">check_circle</span>
+                </div>
+                <p class="tile-desc">Request new floor support, custom road angles, or BBMP layout formats.</p>
+              </div>
+            </button>
+
+            <button type="button" class="category-tile" data-type="error">
+              <div class="tile-icon-wrapper tile-icon-error">
+                <span class="material-symbols-outlined">warning</span>
+              </div>
+              <div class="tile-content">
+                <div class="tile-title-row">
+                  <span class="tile-title">Technical Error</span>
+                  <span class="material-symbols-outlined tile-check">check_circle</span>
+                </div>
+                <p class="tile-desc">PDF generation failure, rendering freeze, or browser exception.</p>
+              </div>
+            </button>
+
+            <button type="button" class="category-tile" data-type="suggestion">
+              <div class="tile-icon-wrapper tile-icon-suggestion">
+                <span class="material-symbols-outlined">lightbulb</span>
+              </div>
+              <div class="tile-content">
+                <div class="tile-title-row">
+                  <span class="tile-title">General Feedback</span>
+                  <span class="material-symbols-outlined tile-check">check_circle</span>
+                </div>
+                <p class="tile-desc">Suggestions for workflow, Sakala guidelines, or user experience.</p>
+              </div>
+            </button>
+
           </div>
-        </div>
-
-        <!-- 4 Premium Category Selector Tiles -->
-        <div class="category-tiles-grid">
-
-          <button type="button" class="category-tile active" data-type="bug">
-            <div class="tile-icon-wrapper tile-icon-bug">
-              <span class="material-symbols-outlined">bug_report</span>
-            </div>
-            <div class="tile-content">
-              <div class="tile-title-row">
-                <span class="tile-title">Bug Report</span>
-                <span class="material-symbols-outlined tile-check">check_circle</span>
-              </div>
-              <p class="tile-desc">Setback calculation mismatch, boundary glitch, or drawing misalignment.</p>
-            </div>
-          </button>
-
-          <button type="button" class="category-tile" data-type="feature">
-            <div class="tile-icon-wrapper tile-icon-feature">
-              <span class="material-symbols-outlined">auto_awesome</span>
-            </div>
-            <div class="tile-content">
-              <div class="tile-title-row">
-                <span class="tile-title">Feature Request</span>
-                <span class="material-symbols-outlined tile-check">check_circle</span>
-              </div>
-              <p class="tile-desc">Request new floor support, custom road angles, or BBMP layout formats.</p>
-            </div>
-          </button>
-
-          <button type="button" class="category-tile" data-type="error">
-            <div class="tile-icon-wrapper tile-icon-error">
-              <span class="material-symbols-outlined">warning</span>
-            </div>
-            <div class="tile-content">
-              <div class="tile-title-row">
-                <span class="tile-title">Technical Error</span>
-                <span class="material-symbols-outlined tile-check">check_circle</span>
-              </div>
-              <p class="tile-desc">PDF generation failure, rendering freeze, or browser exception.</p>
-            </div>
-          </button>
-
-          <button type="button" class="category-tile" data-type="suggestion">
-            <div class="tile-icon-wrapper tile-icon-suggestion">
-              <span class="material-symbols-outlined">lightbulb</span>
-            </div>
-            <div class="tile-content">
-              <div class="tile-title-row">
-                <span class="tile-title">General Feedback</span>
-                <span class="material-symbols-outlined tile-check">check_circle</span>
-              </div>
-              <p class="tile-desc">Suggestions for workflow, Sakala guidelines, or user experience.</p>
-            </div>
-          </button>
-
         </div>
 
         <!-- Alert Notification Box -->
