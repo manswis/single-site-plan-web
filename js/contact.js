@@ -145,6 +145,13 @@ function checkUrlParamsForTracking() {
         trackInput.value = trackId.trim();
         executeTrackLookup(trackId.trim());
       }
+      // Clean query parameter from URL so subsequent refreshes don't auto-query
+      try {
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete('track');
+        cleanUrl.searchParams.delete('id');
+        window.history.replaceState({}, '', cleanUrl.toString());
+      } catch (e) { }
     } else if (window.location.hash === '#track') {
       switchTab('track');
     }
@@ -780,24 +787,14 @@ async function executeTrackLookup(ticketId) {
 
     renderTrackingResult(data.ticket);
 
-    // Auto-save/refresh ticket in browser localStorage vault upon successful query
+    // Auto-save/record ticket in browser localStorage vault (id, title, date only)
     if (data.ticket && data.ticket.id) {
       saveTicketToStorage({
         id: data.ticket.id,
-        type: data.ticket.type || 'bug',
-        subject: data.ticket.subject || 'Support Inquiry',
+        title: data.ticket.subject || 'Support Inquiry',
         date: data.ticket.created_at || new Date().toISOString()
       });
     }
-
-    // Update URL query safely
-    try {
-      if (window.history && window.history.replaceState && window.location.href.startsWith('http')) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('track', cleanId);
-        window.history.replaceState({}, '', url.toString());
-      }
-    } catch (e) { }
 
   } catch (err) {
     if (alertBox) {
