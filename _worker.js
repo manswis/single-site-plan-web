@@ -122,21 +122,72 @@ async function verifyAdminAuth(request, env) {
   return { authorized: isValid, rateLimited: false };
 }
 
+// Self-Healing Schema Migration to remove obsolete restrictive SQLite CHECK constraints
+async function ensureSchemaUpdated(db) {
+  if (!db) return;
+  try {
+    const tableInfo = await db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='tickets'").first();
+    if (tableInfo && tableInfo.sql) {
+      // If table definition has the old CHECK constraint that blocks on_hold or infeasible
+      if (tableInfo.sql.includes("status IN ('open'") && !tableInfo.sql.includes('on_hold')) {
+        await db.batch([
+          db.prepare("ALTER TABLE tickets RENAME TO tickets_old"),
+          db.prepare(`
+            CREATE TABLE tickets (
+              id TEXT PRIMARY KEY,
+              type TEXT NOT NULL,
+              priority TEXT NOT NULL DEFAULT 'medium',
+              status TEXT NOT NULL DEFAULT 'open',
+              name TEXT DEFAULT '',
+              email TEXT NOT NULL,
+              subject TEXT NOT NULL,
+              message TEXT NOT NULL,
+              public_response TEXT DEFAULT '',
+              internal_notes TEXT DEFAULT '',
+              ip_hash TEXT NOT NULL,
+              client_info TEXT DEFAULT '{}',
+              created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+          `),
+          db.prepare(`
+            INSERT INTO tickets (id, type, priority, status, name, email, subject, message, public_response, internal_notes, ip_hash, client_info, created_at, updated_at)
+            SELECT id, type, priority, status, name, email, subject, message, public_response, internal_notes, ip_hash, client_info, created_at, updated_at
+            FROM tickets_old
+          `),
+          db.prepare("DROP TABLE tickets_old"),
+          db.prepare("CREATE INDEX IF NOT EXISTS idx_tickets_status_created ON tickets(status, created_at DESC)"),
+          db.prepare("CREATE INDEX IF NOT EXISTS idx_tickets_email ON tickets(email)"),
+          db.prepare("CREATE INDEX IF NOT EXISTS idx_tickets_ip_hash_created ON tickets(ip_hash, created_at DESC)")
+        ]);
+      }
+    }
+  } catch (err) {
+    console.error('Auto-migration error:', err);
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    // Handle preflight OPTIONS for CORS
+    // Handle CORS preflight options
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         status: 204,
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Key'
+          'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          'Access-Control-Max-Age': '86400'
         }
       });
+    }
+
+    // Auto-update D1 table schema on database operations
+    if (pathname.startsWith('/api/admin/') && env.DB) {
+      ctx.waitUntil ? ctx.waitUntil(ensureSchemaUpdated(env.DB)) : await ensureSchemaUpdated(env.DB);
     }
 
     // =========================================================================
@@ -446,6 +497,8 @@ export default {
       // 3D. POST /api/admin/tickets/:id/status (Update status, priority, or internal notes)
       if (pathname.match(/^\/api\/admin\/tickets\/[^\/]+\/status$/) && request.method === 'POST') {
         try {
+          await ensureSchemaUpdated(env.DB);
+
           const parts = pathname.split('/');
           const ticketId = decodeURIComponent(parts[4] || '').toUpperCase();
 
