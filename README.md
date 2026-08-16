@@ -67,7 +67,7 @@ flowchart TD
 ## 🏗️ Repository Structure
 
 ```
-singleSitePlan-web/
+single-site-plan-web/
 ├── index.html                # Google-style landing page hub & 7-step wizard
 ├── studio.html               # Live 2D CAD Workbench with interactive controls
 ├── contact.html              # Support & issue tracker with timeline conversation
