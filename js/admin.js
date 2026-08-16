@@ -1,8 +1,8 @@
 /**
  * @file js/admin.js
  * @description Frontend controller for the e-Plan Studio Admin Console.
- * Handles passkey session authentication, ticket list filtering, active ticket inspection,
- * instant status updates, timeline multi-message replies, and internal notes persistence.
+ * Built with Apple HIG standards: session authentication, real-time ticket filtering,
+ * canned developer responses, public timeline sync, and private notes management.
  */
 
 const STORAGE_KEY = 'eplan_admin_passkey';
@@ -139,12 +139,16 @@ function setupEventListeners() {
 
   // Search Input (Debounced)
   const searchInput = document.getElementById('adminSearchInput');
+  const clearBtn = document.getElementById('clearSearchBtn');
   if (searchInput) {
     let debounceTimer;
     searchInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      if (clearBtn) clearBtn.style.display = val.length > 0 ? 'block' : 'none';
+
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
-        activeSearchQuery = e.target.value.trim();
+        activeSearchQuery = val;
         loadTickets();
       }, 300);
     });
@@ -155,6 +159,17 @@ function setupEventListeners() {
   if (replyForm) {
     replyForm.addEventListener('submit', handleReplySubmit);
   }
+}
+
+function clearAdminSearch() {
+  const searchInput = document.getElementById('adminSearchInput');
+  const clearBtn = document.getElementById('clearSearchBtn');
+  if (searchInput) {
+    searchInput.value = '';
+    activeSearchQuery = '';
+  }
+  if (clearBtn) clearBtn.style.display = 'none';
+  loadTickets();
 }
 
 // ============================================================================
@@ -195,7 +210,7 @@ async function loadTickets() {
     }
 
     currentTickets = data.tickets || [];
-    renderMetrics(data.metrics || {});
+    renderMetricBadges(data.metrics || {});
     renderInboxList(currentTickets);
 
     // If an active ticket is selected, refresh its details
@@ -216,16 +231,20 @@ async function loadTickets() {
   }
 }
 
-function renderMetrics(metrics) {
-  const elTotal = document.getElementById('metricTotal');
-  const elOpen = document.getElementById('metricOpen');
-  const elProgress = document.getElementById('metricProgress');
-  const elResolved = document.getElementById('metricResolved');
+function renderMetricBadges(metrics) {
+  const bTotal = document.getElementById('badgeTotal');
+  const bOpen = document.getElementById('badgeOpen');
+  const bReview = document.getElementById('badgeReview');
+  const bProgress = document.getElementById('badgeProgress');
+  const bResolved = document.getElementById('badgeResolved');
+  const bClosed = document.getElementById('badgeClosed');
 
-  if (elTotal) elTotal.textContent = metrics.total || 0;
-  if (elOpen) elOpen.textContent = metrics.open || 0;
-  if (elProgress) elProgress.textContent = metrics.in_progress || 0;
-  if (elResolved) elResolved.textContent = metrics.resolved || 0;
+  if (bTotal) bTotal.textContent = metrics.total || 0;
+  if (bOpen) bOpen.textContent = metrics.open || 0;
+  if (bReview) bReview.textContent = metrics.in_review || 0;
+  if (bProgress) bProgress.textContent = metrics.in_progress || 0;
+  if (bResolved) bResolved.textContent = metrics.resolved || 0;
+  if (bClosed) bClosed.textContent = metrics.closed || 0;
 }
 
 function renderInboxList(tickets) {
@@ -237,7 +256,7 @@ function renderInboxList(tickets) {
       <div style="padding: 40px 16px; text-align: center; color: var(--apple-text-secondary);">
         <span class="material-symbols-outlined" style="font-size: 32px; opacity: 0.4;">inbox</span>
         <div style="font-size: 13px; font-weight: 600; margin-top: 6px;">No Tickets Found</div>
-        <div style="font-size: 11px; margin-top: 2px;">No support tickets match the current filter.</div>
+        <div style="font-size: 11px; margin-top: 2px;">No support inquiries match the selected filter.</div>
       </div>
     `;
     return;
@@ -338,12 +357,12 @@ function renderTicketDetail(ticket) {
     } catch (e) {}
 
     diagContainer.innerHTML = `
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; font-size: 11px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 11px;">
         <div><strong>OS / Platform:</strong> ${escapeHtml(diagObj.platform || '—')}</div>
         <div><strong>Browser User-Agent:</strong> <span style="font-family: monospace; font-size: 10px;">${escapeHtml((diagObj.userAgent || '—').slice(0, 50))}...</span></div>
-        <div><strong>Screen Size:</strong> ${diagObj.screenWidth || '—'} × ${diagObj.screenHeight || '—'}</div>
-        <div><strong>Viewport Size:</strong> ${diagObj.windowInnerWidth || '—'} × ${diagObj.windowInnerHeight || '—'}</div>
-        <div><strong>Referrer:</strong> ${escapeHtml(diagObj.referrer || 'direct')}</div>
+        <div><strong>Screen Resolution:</strong> ${diagObj.screenWidth || '—'} × ${diagObj.screenHeight || '—'}</div>
+        <div><strong>Viewport Dimensions:</strong> ${diagObj.windowInnerWidth || '—'} × ${diagObj.windowInnerHeight || '—'}</div>
+        <div><strong>Referrer Source:</strong> ${escapeHtml(diagObj.referrer || 'direct')}</div>
         <div><strong>Logged Timestamp:</strong> ${formatDate(ticket.created_at)}</div>
       </div>
     `;
@@ -427,7 +446,57 @@ function parseResponses(rawResponse, defaultTime) {
 }
 
 // ============================================================================
-// 5. ACTIONS: STATUS CHANGE, REPLY POST & INTERNAL NOTES
+// 5. CANNED TEMPLATES & QUICK ACTIONS
+// ============================================================================
+function insertCannedResponse(type) {
+  const textarea = document.getElementById('replyMessageInput');
+  if (!textarea) return;
+
+  const templates = {
+    investigating: 'Hi! Our engineering team has received this report and is actively investigating the issue in our development environment.',
+    fix_deployed: 'Hi! A fix has been deployed to the live calculation engine. Please re-generate your PDF and let us know if it matches your expectations.',
+    need_info: 'Hi! Could you please share your site dimensions or the specific survey sketch page you are working with so we can reproduce accurately?'
+  };
+
+  const textToInsert = templates[type] || '';
+  if (textToInsert) {
+    textarea.value = textToInsert;
+    textarea.focus();
+  }
+}
+
+function copyActiveTicketId() {
+  if (!selectedTicketId) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(selectedTicketId).then(() => {
+      showToast(`Copied ${selectedTicketId} to clipboard`);
+    }).catch(() => {
+      showToast(selectedTicketId);
+    });
+  } else {
+    showToast(selectedTicketId);
+  }
+}
+
+function openPublicTracker() {
+  if (!selectedTicketId) return;
+  window.open(`contact.html?track=${encodeURIComponent(selectedTicketId)}`, '_blank');
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('adminToast');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  toast.classList.add('visible');
+  setTimeout(() => {
+    toast.classList.remove('visible');
+    setTimeout(() => { toast.style.display = 'none'; }, 300);
+  }, 2000);
+}
+
+// ============================================================================
+// 6. ACTIONS: STATUS CHANGE, REPLY POST & INTERNAL NOTES
 // ============================================================================
 async function handleStatusChange(newStatus) {
   if (!selectedTicketId) return;
@@ -447,7 +516,7 @@ async function handleStatusChange(newStatus) {
       throw new Error('Failed to update status.');
     }
 
-    // Refresh tickets in background
+    showToast(`Status updated to ${newStatus.toUpperCase()}`);
     loadTickets();
 
   } catch (err) {
@@ -497,6 +566,7 @@ async function handleReplySubmit(e) {
 
     replyInput.value = '';
     if (resolveCheckbox) resolveCheckbox.checked = false;
+    showToast('Reply published to timeline ✓');
 
     // Reload active ticket and list
     loadTickets();
@@ -537,6 +607,7 @@ async function handleSaveInternalNotes() {
     if (!response.ok) throw new Error('Failed to save notes.');
 
     saveBtn.textContent = 'Saved ✓';
+    showToast('Internal notes saved');
     setTimeout(() => {
       saveBtn.disabled = false;
       saveBtn.textContent = 'Save Notes';
@@ -552,7 +623,7 @@ async function handleSaveInternalNotes() {
 }
 
 // ============================================================================
-// 6. UTILITIES
+// 7. UTILITIES
 // ============================================================================
 function formatDate(dateStr) {
   if (!dateStr) return '—';

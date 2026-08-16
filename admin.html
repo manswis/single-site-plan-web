@@ -32,14 +32,12 @@
         <span class="material-symbols-outlined" style="font-size: 32px;">admin_panel_settings</span>
       </div>
       <h1 class="admin-login-title">e-Plan Studio Admin</h1>
-      <p class="admin-login-desc">Enter your secret administrative passkey to access the support desk and issue triage
-        manager.</p>
+      <p class="admin-login-desc">Enter your administrative passkey to unlock the developer triage console and support desk.</p>
 
-      <div id="loginAlertBox" class="contact-alert contact-alert-error" style="display: none; margin-bottom: 16px;">
-      </div>
+      <div id="loginAlertBox" class="contact-alert contact-alert-error" style="display: none; margin-bottom: 16px;"></div>
 
       <form id="adminLoginForm">
-        <div class="form-field-group" style="margin-bottom: 20px;">
+        <div class="form-field-group" style="margin-bottom: 20px; text-align: left;">
           <label for="adminPasskeyInput" class="form-field-label">
             <span>Admin Passkey</span>
           </label>
@@ -54,16 +52,16 @@
           </div>
         </div>
 
-        <button type="submit" id="loginSubmitBtn" class="apple-btn-primary"
-          style="width: 100%; height: 46px; font-weight: 700; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer;">
+        <button type="submit" id="loginSubmitBtn" class="apple-btn-primary login-action-btn">
           <span class="material-symbols-outlined">lock_open</span>
           <span>Unlock Console</span>
         </button>
       </form>
 
-      <div style="margin-top: 20px; text-align: center;">
-        <a href="index.html" style="font-size: 12px; color: var(--apple-text-secondary); text-decoration: none;">
-          ← Back to Studio Home
+      <div style="margin-top: 24px; text-align: center;">
+        <a href="index.html" class="admin-back-link">
+          <span class="material-symbols-outlined" style="font-size: 16px;">arrow_back</span>
+          <span>Return to Studio Home</span>
         </a>
       </div>
     </div>
@@ -73,70 +71,88 @@
        2. MAIN ADMIN DASHBOARD WORKSPACE
        ========================================================================= -->
   <div id="adminDashboardView" class="admin-dashboard-wrapper" style="display: none;">
-
+    
     <!-- Top Navigation Header -->
     <header class="admin-top-nav">
       <div class="admin-nav-left">
+        <a href="index.html" class="admin-nav-home-btn" title="Back to Public App">
+          <span class="material-symbols-outlined">domain</span>
+          <span>e-Plan Studio</span>
+        </a>
+        <span class="admin-nav-divider">/</span>
         <div class="admin-brand-pill">
-          <span class="material-symbols-outlined"
-            style="font-size: 20px; color: var(--apple-accent);">shield_person</span>
-          <span class="admin-brand-title">e-Plan Studio Admin</span>
+          <span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">shield_person</span>
+          <span>Admin Console</span>
         </div>
 
-        <!-- Metric Counter Pills -->
-        <div class="admin-metrics-bar">
-          <div class="metric-pill">
-            <span class="metric-num" id="metricTotal">0</span>
-            <span class="metric-label">Total</span>
-          </div>
-          <div class="metric-pill metric-pill-open">
-            <span class="metric-num" id="metricOpen">0</span>
-            <span class="metric-label">Open</span>
-          </div>
-          <div class="metric-pill metric-pill-progress">
-            <span class="metric-num" id="metricProgress">0</span>
-            <span class="metric-label">In Progress</span>
-          </div>
-          <div class="metric-pill metric-pill-resolved">
-            <span class="metric-num" id="metricResolved">0</span>
-            <span class="metric-label">Resolved</span>
-          </div>
+        <!-- Infrastructure Status Pill -->
+        <div class="admin-heartbeat-pill">
+          <span class="heartbeat-dot"></span>
+          <span>Cloudflare D1 Active</span>
         </div>
       </div>
 
       <div class="admin-nav-right">
-        <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme"
-          title="Toggle Light/Dark Mode">
+        <a href="studio.html" class="admin-nav-link" target="_blank" title="Open Studio Workbench">
+          <span class="material-symbols-outlined" style="font-size: 16px;">architecture</span>
+          <span class="desktop-only-text">Workbench</span>
+        </a>
+        <a href="contact.html" class="admin-nav-link" target="_blank" title="Open Public Helpdesk">
+          <span class="material-symbols-outlined" style="font-size: 16px;">support_agent</span>
+          <span class="desktop-only-text">Public Desk</span>
+        </a>
+        <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
         </button>
-        <button type="button" class="apple-btn-secondary logout-btn" onclick="handleAdminLogout()">
-          <span class="material-symbols-outlined" style="font-size: 16px;">logout</span>
-          <span>Lock / Exit</span>
+        <button type="button" class="apple-btn-secondary logout-btn" onclick="handleAdminLogout()" title="Lock Session">
+          <span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
+          <span>Lock</span>
         </button>
       </div>
     </header>
 
     <!-- Main Workspace Container -->
     <main class="admin-main-grid">
-
+      
       <!-- LEFT COLUMN: Ticket Inbox List -->
       <section class="admin-inbox-pane">
-
+        
         <!-- Search & Status Filter Controls -->
         <div class="inbox-controls-header">
           <div class="input-with-icon" style="margin-bottom: 12px;">
             <span class="material-symbols-outlined input-icon">search</span>
             <input type="text" id="adminSearchInput" class="field-control" placeholder="Search ID, email, keyword..."
               style="height: 38px; font-size: 12px;">
+            <button type="button" id="clearSearchBtn" class="clear-search-btn" onclick="clearAdminSearch()" style="display: none;" title="Clear search">
+              <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+            </button>
           </div>
 
           <div class="inbox-filter-chips" id="inboxFilterChips">
-            <button type="button" class="filter-chip active" data-status="all">All</button>
-            <button type="button" class="filter-chip" data-status="open">Open</button>
-            <button type="button" class="filter-chip" data-status="in_review">Review</button>
-            <button type="button" class="filter-chip" data-status="in_progress">In Progress</button>
-            <button type="button" class="filter-chip" data-status="resolved">Resolved</button>
-            <button type="button" class="filter-chip" data-status="closed">Closed</button>
+            <button type="button" class="filter-chip active" data-status="all">
+              <span>All</span>
+              <span class="filter-badge" id="badgeTotal">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-status="open">
+              <span>Open</span>
+              <span class="filter-badge badge-open" id="badgeOpen">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-status="in_review">
+              <span>Review</span>
+              <span class="filter-badge" id="badgeReview">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-status="in_progress">
+              <span>Progress</span>
+              <span class="filter-badge badge-progress" id="badgeProgress">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-status="resolved">
+              <span>Resolved</span>
+              <span class="filter-badge badge-resolved" id="badgeResolved">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-status="closed">
+              <span>Closed</span>
+              <span class="filter-badge" id="badgeClosed">0</span>
+            </button>
           </div>
         </div>
 
@@ -151,41 +167,48 @@
 
       <!-- RIGHT COLUMN: Detailed Ticket Inspector & Conversation Manager -->
       <section class="admin-detail-pane" id="adminDetailPane">
-
+        
         <!-- Empty Selection State -->
         <div id="noTicketSelected" class="empty-detail-state">
-          <span class="material-symbols-outlined"
-            style="font-size: 48px; color: var(--apple-text-secondary); opacity: 0.5;">mark_chat_unread</span>
-          <h3 style="margin: 12px 0 4px 0; font-size: 16px; color: var(--apple-text-primary);">Select a Ticket</h3>
-          <p style="font-size: 13px; color: var(--apple-text-secondary); margin: 0;">Choose a support inquiry from the
-            left inbox to review, update status, or post timeline responses.</p>
+          <div class="empty-icon-circle">
+            <span class="material-symbols-outlined" style="font-size: 36px; color: var(--apple-accent);">inbox_customize</span>
+          </div>
+          <h3 style="margin: 14px 0 4px 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">Select a Support Inquiry</h3>
+          <p style="font-size: 13px; color: var(--apple-text-secondary); max-width: 380px; margin: 0; line-height: 1.5;">Choose a ticket from the left inbox rail to inspect details, change status, or post verified timeline replies.</p>
         </div>
 
         <!-- Active Ticket Detail Workspace -->
         <div id="activeTicketWorkspace" style="display: none;" class="active-ticket-workspace">
-
-          <!-- Detail Header Bar -->
+          
+          <!-- Detail Header Card -->
           <div class="detail-header-card">
             <div class="detail-header-left">
               <div class="detail-badge-row">
+                <span id="detailTicketId" class="detail-ticket-id-pill">REQ-XXXX-XXXX</span>
                 <span id="detailCategoryBadge" class="ticket-type-pill">—</span>
                 <span id="detailPriorityBadge" class="ticket-priority-tag">—</span>
-                <span id="detailTicketId" class="detail-ticket-id-pill">REQ-XXXX-XXXX</span>
               </div>
               <h2 id="detailSubject" class="detail-subject-title">—</h2>
             </div>
 
-            <!-- Instant Status Switcher Dropdown -->
-            <div class="detail-status-control">
-              <label for="detailStatusSelect"
-                style="font-size: 11px; font-weight: 600; color: var(--apple-text-secondary); text-transform: uppercase;">Status</label>
-              <select id="detailStatusSelect" class="status-dropdown-control" onchange="handleStatusChange(this.value)">
-                <option value="open">Open / Submitted</option>
-                <option value="in_review">Under Review</option>
-                <option value="in_progress">In Progress</option>
-                <option value="resolved">Resolved</option>
-                <option value="closed">Closed</option>
-              </select>
+            <!-- Quick Action Toolbar -->
+            <div class="detail-header-actions">
+              <div class="detail-status-control">
+                <select id="detailStatusSelect" class="status-dropdown-control" onchange="handleStatusChange(this.value)">
+                  <option value="open">Open / Submitted</option>
+                  <option value="in_review">Under Review</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="resolved">Resolved</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </div>
+
+              <button type="button" class="icon-tool-btn" onclick="copyActiveTicketId()" title="Copy Ticket ID">
+                <span class="material-symbols-outlined">content_copy</span>
+              </button>
+              <button type="button" class="icon-tool-btn" onclick="openPublicTracker()" title="Open Public Tracker">
+                <span class="material-symbols-outlined">open_in_new</span>
+              </button>
             </div>
           </div>
 
@@ -193,14 +216,14 @@
           <div class="requester-profile-card">
             <div class="requester-info-grid">
               <div>
-                <span class="info-label">Requester</span>
+                <span class="info-label">Requester Name</span>
                 <div class="info-value-row">
                   <span class="material-symbols-outlined info-sub-icon">person</span>
                   <span id="detailRequesterName">—</span>
                 </div>
               </div>
               <div>
-                <span class="info-label">Email Address</span>
+                <span class="info-label">Email Contact</span>
                 <div class="info-value-row">
                   <span class="material-symbols-outlined info-sub-icon">mail</span>
                   <a id="detailRequesterEmailLink" href="#" class="email-link">—</a>
@@ -209,7 +232,7 @@
               <div>
                 <span class="info-label">Submitted On</span>
                 <div class="info-value-row">
-                  <span class="material-symbols-outlined info-sub-icon">calendar_today</span>
+                  <span class="material-symbols-outlined info-sub-icon">schedule</span>
                   <span id="detailSubmittedTime">—</span>
                 </div>
               </div>
@@ -230,7 +253,7 @@
           <!-- Original Message Description -->
           <div class="user-original-message-card">
             <div class="section-micro-heading">
-              <span class="material-symbols-outlined" style="font-size: 16px;">chat</span>
+              <span class="material-symbols-outlined" style="font-size: 16px;">description</span>
               <span>Initial User Description</span>
             </div>
             <div id="detailOriginalMessage" class="original-message-text">—</div>
@@ -239,7 +262,7 @@
           <!-- Timeline Conversation Thread -->
           <div class="admin-timeline-section">
             <div class="section-micro-heading">
-              <span class="material-symbols-outlined" style="font-size: 16px;">forum</span>
+              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">forum</span>
               <span>Public Resolution Timeline (Visible to User)</span>
             </div>
 
@@ -255,18 +278,32 @@
               <span>Post Official Response</span>
             </div>
 
+            <!-- 1-Click Canned Response Chips -->
+            <div class="canned-responses-bar">
+              <span class="canned-label">Quick Templates:</span>
+              <button type="button" class="canned-chip" onclick="insertCannedResponse('investigating')">
+                <span class="material-symbols-outlined" style="font-size: 14px;">search</span>
+                <span>Investigating</span>
+              </button>
+              <button type="button" class="canned-chip" onclick="insertCannedResponse('fix_deployed')">
+                <span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
+                <span>Fix Deployed</span>
+              </button>
+              <button type="button" class="canned-chip" onclick="insertCannedResponse('need_info')">
+                <span class="material-symbols-outlined" style="font-size: 14px;">help</span>
+                <span>Need Info</span>
+              </button>
+            </div>
+
             <form id="adminReplyForm">
               <textarea id="replyMessageInput" required rows="4" class="field-control textarea-control"
-                placeholder="Type your official update or resolution response to the requester..."></textarea>
-
+                placeholder="Type your official response to appear in the user's timeline..."></textarea>
+              
               <div class="reply-composer-footer">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                  <label
-                    style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--apple-text-secondary); cursor: pointer;">
-                    <input type="checkbox" id="replySetResolvedCheckbox" style="accent-color: var(--apple-accent);">
-                    <span>Mark as Resolved on Send</span>
-                  </label>
-                </div>
+                <label class="resolve-on-reply-toggle">
+                  <input type="checkbox" id="replySetResolvedCheckbox">
+                  <span>Mark ticket as <strong>Resolved</strong> on send</span>
+                </label>
 
                 <button type="submit" id="sendReplyBtn" class="apple-btn-primary send-reply-btn">
                   <span class="material-symbols-outlined">send</span>
@@ -283,8 +320,8 @@
               <span>Private Developer Notes (Not Visible to User)</span>
             </div>
             <textarea id="internalNotesInput" rows="3" class="field-control textarea-control"
-              placeholder="Add internal notes, developer triage findings, or PR links..."></textarea>
-            <div style="text-align: right; margin-top: 8px;">
+              placeholder="Add private developer notes, triage observations, or GitHub PR links..."></textarea>
+            <div style="text-align: right; margin-top: 10px;">
               <button type="button" id="saveNotesBtn" class="apple-btn-secondary" onclick="handleSaveInternalNotes()"
                 style="height: 36px; padding: 0 16px; font-size: 12px; font-weight: 600; border-radius: 8px;">
                 <span>Save Notes</span>
@@ -298,6 +335,9 @@
     </main>
 
   </div>
+
+  <!-- Toast Notification Pill -->
+  <div id="adminToast" class="admin-toast" style="display: none;"></div>
 
   <script src="js/admin.js"></script>
 </body>
