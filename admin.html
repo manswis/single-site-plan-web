@@ -29,9 +29,9 @@
   <div id="adminLoginView" class="admin-login-wrapper">
     <div class="apple-card admin-login-card">
       <div class="admin-login-icon">
-        <span class="app-brand-icon" style="font-size: 32px; line-height: 1;">🏛️</span>
+        <span class="app-brand-icon" style="font-size: 32px; line-height: 1;"></span>
       </div>
-      <h1 class="admin-login-title">e-Plan Studio Admin</h1>
+      <h1 class="admin-login-title"><span class="app-brand-name"></span> Admin</h1>
       <p class="admin-login-desc">Enter your administrative passkey to unlock the developer triage console and support
         desk.</p>
 
@@ -60,11 +60,12 @@
         </button>
       </form>
 
-      <div style="margin-top: 24px; text-align: center;">
+      <div style="margin-top: 24px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
         <a href="index.html" class="admin-back-link">
           <span class="material-symbols-outlined" style="font-size: 16px;">arrow_back</span>
           <span>Return to Studio Home</span>
         </a>
+        <span class="footer-version-tag">v<span class="app-version"></span></span>
       </div>
     </div>
   </div>
@@ -87,8 +88,8 @@
           </button>
 
           <a href="index.html" class="admin-nav-home-btn" id="adminNavHomeBtn" title="Back to Public App">
-            <span class="app-brand-icon" style="font-size: 17px; line-height: 1;">🏛️</span>
-            <span>e-Plan Studio</span>
+            <span class="app-brand-icon" style="font-size: 17px; line-height: 1;"></span>
+            <span class="app-brand-name"></span>
           </a>
         </div>
 
@@ -116,7 +117,7 @@
       <!-- Row 2: Status & Context Strip -->
       <div class="admin-nav-row admin-nav-row-secondary">
         <div class="admin-brand-pill" id="adminBrandPill">
-          <span class="app-brand-icon" style="font-size: 14px; line-height: 1;">🏛️</span>
+          <span class="app-brand-icon" style="font-size: 14px; line-height: 1;"></span>
           <span>Admin Console</span>
         </div>
 

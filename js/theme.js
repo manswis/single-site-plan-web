@@ -1,12 +1,12 @@
 /**
  * @file theme.js
- * @description Automatic Dark & Light mode theme manager and Centralized App Brand Configuration for e-Plan Studio.
+ * @description Automatic Dark & Light mode theme manager and Centralized App Configuration for e-Plan Studio.
  * Detects browser preference by default, allows persistent user toggling via navbar icon,
- * and maintains a centralized brand icon and identity across all pages.
+ * and maintains single-source-of-truth brand identity, name, and version across all pages.
  */
 
 // ============================================================================
-// 1. CENTRALIZED BRAND CONFIGURATION (Change here to effect everywhere)
+// 1. SINGLE SOURCE OF TRUTH (Edit here to change across all pages)
 // ============================================================================
 window.APP_CONFIG = {
   BRAND_ICON: '🏛️',
@@ -47,13 +47,28 @@ window.APP_CONFIG = {
   }
 
   /**
-   * Synchronizes centralized brand icon to all .app-brand-icon elements across the DOM
+   * Dynamically populates all .app-brand-icon, .app-brand-name, and .app-version elements
+   * from the single-source-of-truth window.APP_CONFIG.
    */
-  function syncBrandIcons() {
-    const icon = (window.APP_CONFIG && window.APP_CONFIG.BRAND_ICON) ? window.APP_CONFIG.BRAND_ICON : '🏛️';
-    const brandElements = document.querySelectorAll('.app-brand-icon');
-    brandElements.forEach(el => {
+  function syncAppConfig() {
+    const cfg = window.APP_CONFIG || {};
+    const icon = cfg.BRAND_ICON || '🏛️';
+    const version = cfg.VERSION || '1.2.0';
+    const name = cfg.BRAND_NAME || 'e-Plan Studio';
+
+    // 1. Synchronize Brand Icons
+    document.querySelectorAll('.app-brand-icon').forEach(el => {
       el.textContent = icon;
+    });
+
+    // 2. Synchronize Brand Names
+    document.querySelectorAll('.app-brand-name').forEach(el => {
+      el.textContent = name;
+    });
+
+    // 3. Synchronize App Version Tags
+    document.querySelectorAll('.app-version').forEach(el => {
+      el.textContent = version;
     });
   }
 
@@ -71,10 +86,10 @@ window.APP_CONFIG = {
     applyTheme(nextTheme);
   };
 
-  // Sync toggle icons and brand icons on DOM ready and listen for OS system theme changes
+  // Sync theme and all App Config bindings on DOM load
   document.addEventListener('DOMContentLoaded', function () {
     applyTheme(initialTheme);
-    syncBrandIcons();
+    syncAppConfig();
 
     if (window.matchMedia) {
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {

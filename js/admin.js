@@ -391,16 +391,10 @@ function selectTicket(ticketId) {
     const mainGrid = document.getElementById('adminMainGrid');
     const mobileBackBtn = document.getElementById('mobileBackToInboxBtn');
     const navHomeBtn = document.getElementById('adminNavHomeBtn');
-    const navDivider = document.getElementById('adminNavDivider');
-    const brandPill = document.getElementById('adminBrandPill');
-    const heartbeatPill = document.getElementById('adminHeartbeatPill');
 
     if (mainGrid) mainGrid.classList.add('mobile-detail-active');
     if (mobileBackBtn) mobileBackBtn.style.display = 'inline-flex';
     if (navHomeBtn) navHomeBtn.style.display = 'none';
-    if (navDivider) navDivider.style.display = 'none';
-    if (brandPill) brandPill.style.display = 'none';
-    if (heartbeatPill) heartbeatPill.style.display = 'none';
 
     // Scroll mobile detail view to top
     const detailPane = document.getElementById('adminDetailPane');
@@ -413,16 +407,10 @@ function exitMobileDetail() {
   const mainGrid = document.getElementById('adminMainGrid');
   const mobileBackBtn = document.getElementById('mobileBackToInboxBtn');
   const navHomeBtn = document.getElementById('adminNavHomeBtn');
-  const navDivider = document.getElementById('adminNavDivider');
-  const brandPill = document.getElementById('adminBrandPill');
-  const heartbeatPill = document.getElementById('adminHeartbeatPill');
 
   if (mainGrid) mainGrid.classList.remove('mobile-detail-active');
   if (mobileBackBtn) mobileBackBtn.style.display = 'none';
   if (navHomeBtn) navHomeBtn.style.display = 'inline-flex';
-  if (navDivider) navDivider.style.display = 'inline';
-  if (brandPill) brandPill.style.display = 'inline-flex';
-  if (heartbeatPill) heartbeatPill.style.display = 'inline-flex';
 
   const items = document.querySelectorAll('.inbox-item');
   items.forEach(item => item.classList.remove('active'));
@@ -434,16 +422,10 @@ window.addEventListener('resize', () => {
     const mainGrid = document.getElementById('adminMainGrid');
     const mobileBackBtn = document.getElementById('mobileBackToInboxBtn');
     const navHomeBtn = document.getElementById('adminNavHomeBtn');
-    const navDivider = document.getElementById('adminNavDivider');
-    const brandPill = document.getElementById('adminBrandPill');
-    const heartbeatPill = document.getElementById('adminHeartbeatPill');
 
     if (mainGrid) mainGrid.classList.remove('mobile-detail-active');
     if (mobileBackBtn) mobileBackBtn.style.display = 'none';
     if (navHomeBtn) navHomeBtn.style.display = 'inline-flex';
-    if (navDivider) navDivider.style.display = 'inline';
-    if (brandPill) brandPill.style.display = 'inline-flex';
-    if (heartbeatPill) heartbeatPill.style.display = 'inline-flex';
   }
 });
 
