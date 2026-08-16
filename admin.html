@@ -409,14 +409,14 @@
         </div>
       </div>
 
-      <div style="background: rgba(0, 0, 0, 0.03); border: 1px solid var(--apple-border); border-radius: 10px; padding: 12px; margin-bottom: 18px;">
-        <div style="font-size: 11px; font-weight: 700; color: var(--apple-text-secondary); text-transform: uppercase; margin-bottom: 4px;">Subject</div>
-        <div id="deleteModalTicketSubject" style="font-size: 13px; font-weight: 600; color: var(--apple-text-primary); line-height: 1.4;">—</div>
+      <div class="delete-preview-box">
+        <div style="font-size: 11px; font-weight: 700; color: var(--apple-text-secondary); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.04em;">Subject</div>
+        <div id="deleteModalTicketSubject" style="font-size: 14px; font-weight: 600; color: var(--apple-text-primary); line-height: 1.4;">—</div>
       </div>
 
       <!-- Mandatory Confirmation Checkbox -->
-      <label class="terms-checkbox-label" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; margin-bottom: 22px; font-size: 12px; color: var(--apple-text-primary); line-height: 1.4;">
-        <input type="checkbox" id="deleteConsentCheckbox" style="margin-top: 2px; width: 16px; height: 16px; accent-color: var(--apple-red);" onchange="toggleDeleteButtonState()">
+      <label class="delete-checkbox-label">
+        <input type="checkbox" id="deleteConsentCheckbox" onchange="toggleDeleteButtonState()">
         <span>I understand this ticket will be <strong>permanently deleted</strong> and cannot be restored.</span>
       </label>
 
@@ -424,7 +424,7 @@
         <button type="button" class="apple-btn-secondary" onclick="closeDeleteTicketModal()" style="height: 38px; padding: 0 16px; font-size: 13px;">
           Cancel
         </button>
-        <button type="button" id="confirmDeleteBtn" class="apple-btn-danger" onclick="executeDeleteTicket()" disabled style="height: 38px; padding: 0 16px; font-size: 13px; opacity: 0.4; cursor: not-allowed;">
+        <button type="button" id="confirmDeleteBtn" class="apple-btn-danger" onclick="executeDeleteTicket()" disabled style="height: 38px; padding: 0 16px; font-size: 13px;">
           <span class="material-symbols-outlined" style="font-size: 16px;">delete_forever</span>
           <span>Delete Ticket</span>
         </button>

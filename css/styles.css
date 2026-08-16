@@ -4470,10 +4470,120 @@ body.pdf-export-active .drawing-canvas-column,
   border-color: var(--apple-accent);
 }
 
-.icon-tool-btn.delete-tool-btn:hover {
+.icon-tool-btn.delete-tool-btn {
   color: var(--apple-red);
-  border-color: var(--apple-red);
+  border-color: rgba(255, 59, 48, 0.25);
+}
+
+[data-theme="dark"] .icon-tool-btn.delete-tool-btn {
+  color: #ff453a;
+  border-color: rgba(255, 69, 58, 0.35);
+}
+
+.icon-tool-btn.delete-tool-btn:hover {
+  color: #ffffff !important;
+  border-color: var(--apple-red) !important;
+  background: var(--apple-red) !important;
+}
+
+[data-theme="dark"] .icon-tool-btn.delete-tool-btn:hover {
+  background: #ff453a !important;
+  border-color: #ff453a !important;
+  color: #ffffff !important;
+}
+
+/* Modal Close Button (Circular, Glassmorphic & Dark-Mode Adaptive) */
+.modal-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--apple-transition);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .modal-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--apple-text-secondary);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.modal-close-btn:hover {
+  background: rgba(0, 0, 0, 0.12);
+  color: var(--apple-text-primary);
+}
+
+[data-theme="dark"] .modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.modal-close-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+/* Modal Alerts & Preview Box */
+.contact-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.contact-alert-error {
   background: rgba(255, 59, 48, 0.08);
+  border: 1px solid rgba(255, 59, 48, 0.25);
+  color: #c92a2a;
+}
+
+[data-theme="dark"] .contact-alert-error {
+  background: rgba(255, 69, 58, 0.15);
+  border: 1px solid rgba(255, 69, 58, 0.35);
+  color: #ff8580;
+}
+
+.delete-preview-box {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+
+[data-theme="dark"] .delete-preview-box {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.delete-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 22px;
+  font-size: 13px;
+  color: var(--apple-text-primary);
+  line-height: 1.4;
+  user-select: none;
+}
+
+.delete-checkbox-label input[type="checkbox"] {
+  margin-top: 2px;
+  width: 17px;
+  height: 17px;
+  accent-color: var(--apple-red);
+  cursor: pointer;
 }
 
 .apple-btn-danger {
@@ -4491,7 +4601,22 @@ body.pdf-export-active .drawing-canvas-column,
 
 .apple-btn-danger:hover:not(:disabled) {
   background: #d32f2f;
-  box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+  box-shadow: 0 4px 14px rgba(255, 59, 48, 0.4);
+}
+
+[data-theme="dark"] .apple-btn-danger {
+  background: #ff453a;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .apple-btn-danger:hover:not(:disabled) {
+  background: #ff6961;
+}
+
+.apple-btn-danger:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
 }
 
 .icon-tool-btn .material-symbols-outlined {
