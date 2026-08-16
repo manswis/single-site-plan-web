@@ -3319,6 +3319,191 @@ body.pdf-export-active .drawing-canvas-column,
   border-radius: 10px;
 }
 
+.saved-cache-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(52, 199, 89, 0.12);
+  color: #248a3d;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(52, 199, 89, 0.25);
+}
+
+[data-theme="dark"] .saved-cache-badge {
+  background: rgba(50, 215, 75, 0.15);
+  color: #32d74b;
+  border-color: rgba(50, 215, 75, 0.3);
+}
+
+/* Saved Tickets Device Vault */
+.saved-tickets-card {
+  padding: 20px 24px;
+}
+
+.saved-tickets-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.saved-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.saved-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.saved-count-pill {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(0, 113, 227, 0.1);
+  color: var(--apple-accent);
+  font-size: 11px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+[data-theme="dark"] .saved-count-pill {
+  background: rgba(41, 151, 255, 0.18);
+}
+
+.clear-history-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--apple-border);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  transition: var(--apple-transition);
+}
+
+.clear-history-btn:hover {
+  background: rgba(255, 59, 48, 0.08);
+  color: #ff3b30;
+  border-color: rgba(255, 59, 48, 0.3);
+}
+
+.saved-tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.saved-ticket-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--apple-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: var(--apple-transition);
+  position: relative;
+  cursor: pointer;
+}
+
+.saved-ticket-item:hover {
+  border-color: var(--apple-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .saved-ticket-item {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.saved-ticket-main {
+  flex: 1;
+  min-width: 0;
+  padding-right: 8px;
+}
+
+.saved-ticket-top-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.saved-ticket-id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--apple-accent);
+}
+
+.saved-ticket-time {
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+}
+
+.saved-ticket-subject {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--apple-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.saved-ticket-remove-btn {
+  background: transparent;
+  border: none;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--apple-transition);
+  flex-shrink: 0;
+}
+
+.saved-ticket-remove-btn:hover {
+  background: rgba(255, 59, 48, 0.12);
+  color: #ff3b30;
+}
+
+.saved-ticket-remove-btn span {
+  font-size: 16px;
+}
+
+.saved-privacy-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--apple-text-secondary);
+  padding-top: 14px;
+  border-top: 1px dashed var(--apple-border);
+  line-height: 1.4;
+}
+
 .reset-form-link {
   display: inline-flex;
   align-items: center;

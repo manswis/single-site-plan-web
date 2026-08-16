@@ -321,6 +321,11 @@
           <div class="ticket-id-caption">Your Unique Tracking ID</div>
           <div id="generatedTicketId" class="ticket-id-code">REQ-XXXX-XXXX</div>
 
+          <div class="saved-cache-badge">
+            <span class="material-symbols-outlined" style="font-size: 16px;">bookmark_added</span>
+            <span>Saved to this browser for 1-click status tracking</span>
+          </div>
+
           <div class="ticket-id-actions">
             <button type="button" id="copyTicketBtn" class="apple-btn-secondary id-action-btn" onclick="copyTicketId()">
               <span class="material-symbols-outlined">content_copy</span>
@@ -371,6 +376,34 @@
         </form>
 
         <div id="trackAlertBox" class="contact-alert" style="display: none; margin-top: 16px;"></div>
+      </div>
+
+      <!-- Recent Saved Inquiries on Device -->
+      <div class="apple-card support-card-container saved-tickets-card" id="savedTicketsCard" style="display: none; margin-bottom: 24px;">
+        <div class="saved-tickets-header">
+          <div class="saved-header-left">
+            <span class="material-symbols-outlined header-section-icon" style="font-size: 20px; color: var(--apple-accent);">history</span>
+            <div>
+              <h3 class="saved-section-title">Recent Inquiries on this Device</h3>
+              <span id="savedTicketsCountBadge" class="saved-count-pill">0 Saved</span>
+            </div>
+          </div>
+          <button type="button" class="clear-history-btn" id="clearSavedTicketsBtn" onclick="clearAllSavedTickets()">
+            <span class="material-symbols-outlined" style="font-size: 16px;">delete_sweep</span>
+            <span>Clear History</span>
+          </button>
+        </div>
+
+        <!-- Saved Tickets Dynamic Grid -->
+        <div id="savedTicketsList" class="saved-tickets-grid">
+          <!-- Dynamically populated in js/contact.js -->
+        </div>
+
+        <!-- Transparent Privacy Footnote -->
+        <div class="saved-privacy-footer">
+          <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">lock</span>
+          <span>Stored only in your browser's local cache on this device. Never sent to third parties or shared across computers.</span>
+        </div>
       </div>
 
       <!-- Live Tracking Results Card -->

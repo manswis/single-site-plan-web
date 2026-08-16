@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupFormSubmission();
   setupAttachmentHandlers();
   setupTrackingLookup();
+  setupSavedTicketsVault();
   checkUrlParamsForTracking();
 });
 
@@ -115,6 +116,10 @@ function switchTab(tabName) {
   panels.forEach(panel => {
     panel.classList.toggle('active', panel.id === `tabPanel-${tabName}`);
   });
+
+  if (tabName === 'track') {
+    renderSavedTicketsList();
+  }
 
   // Update URL hash for sharing / bookmarks safely
   try {
@@ -565,8 +570,19 @@ async function proceedConfirmedSubmit() {
       throw new Error(data.error || 'Failed to submit request.');
     }
 
+    const submittedSubject = pendingTicketPayload?.subject || document.getElementById('ticketSubject')?.value?.trim() || 'Support Inquiry';
+    const submittedType = data.type || pendingTicketPayload?.type || 'bug';
+
+    // Auto-save ticket to browser localStorage vault for seamless 1-click tracking
+    saveTicketToStorage({
+      id: data.ticketId,
+      type: submittedType,
+      subject: submittedSubject,
+      date: new Date().toISOString()
+    });
+
     // Success Display
-    showSubmissionSuccess(data.ticketId, data.type);
+    showSubmissionSuccess(data.ticketId, submittedType);
     if (form) form.reset();
     currentAttachments = [];
     renderAttachmentPreviews();
@@ -763,6 +779,16 @@ async function executeTrackLookup(ticketId) {
     }
 
     renderTrackingResult(data.ticket);
+
+    // Auto-save/refresh ticket in browser localStorage vault upon successful query
+    if (data.ticket && data.ticket.id) {
+      saveTicketToStorage({
+        id: data.ticket.id,
+        type: data.ticket.type || 'bug',
+        subject: data.ticket.subject || 'Support Inquiry',
+        date: data.ticket.created_at || new Date().toISOString()
+      });
+    }
 
     // Update URL query safely
     try {
@@ -1035,4 +1061,138 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+// ============================================================================
+// 6. LOCAL BROWSER TICKET VAULT (Recent Inquiries Manager)
+// ============================================================================
+const SAVED_TICKETS_KEY = 'eplan_saved_tickets_vault';
+
+function setupSavedTicketsVault() {
+  renderSavedTicketsList();
+}
+
+function getSavedTickets() {
+  try {
+    const raw = localStorage.getItem(SAVED_TICKETS_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveTicketToStorage(ticket) {
+  if (!ticket || !ticket.id) return;
+  try {
+    let list = getSavedTickets();
+    // Remove if already exists to bump to the top of list
+    list = list.filter(t => t.id !== ticket.id);
+    list.unshift({
+      id: ticket.id,
+      type: ticket.type || 'bug',
+      subject: ticket.subject || 'Support Inquiry',
+      date: ticket.date || new Date().toISOString()
+    });
+    // Cap at most recent 8 items
+    if (list.length > 8) list = list.slice(0, 8);
+    localStorage.setItem(SAVED_TICKETS_KEY, JSON.stringify(list));
+    renderSavedTicketsList();
+  } catch (e) { }
+}
+
+function removeSingleSavedTicket(id, event) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  try {
+    let list = getSavedTickets();
+    list = list.filter(t => t.id !== id);
+    localStorage.setItem(SAVED_TICKETS_KEY, JSON.stringify(list));
+    renderSavedTicketsList();
+  } catch (e) { }
+}
+
+window.removeSingleSavedTicket = removeSingleSavedTicket;
+
+window.clearAllSavedTickets = function () {
+  try {
+    localStorage.removeItem(SAVED_TICKETS_KEY);
+    renderSavedTicketsList();
+  } catch (e) { }
+};
+
+window.lookupSavedTicket = function (ticketId) {
+  const input = document.getElementById('trackIdInput');
+  if (input) {
+    input.value = ticketId;
+    switchTab('track');
+    executeTrackLookup(ticketId);
+  }
+};
+
+function renderSavedTicketsList() {
+  const card = document.getElementById('savedTicketsCard');
+  const listEl = document.getElementById('savedTicketsList');
+  const countBadge = document.getElementById('savedTicketsCountBadge');
+  if (!card || !listEl) return;
+
+  const tickets = getSavedTickets();
+  if (tickets.length === 0) {
+    card.style.display = 'none';
+    listEl.innerHTML = '';
+    return;
+  }
+
+  card.style.display = 'block';
+  if (countBadge) countBadge.textContent = `${tickets.length} Saved`;
+
+  listEl.innerHTML = '';
+  tickets.forEach(ticket => {
+    const item = document.createElement('div');
+    item.className = 'saved-ticket-item';
+
+    const timeAgo = formatRelativeTime(ticket.date);
+    const safeType = escapeHtml(ticket.type || 'bug');
+    const safeId = escapeHtml(ticket.id);
+    const safeSubject = escapeHtml(ticket.subject || 'Support Inquiry');
+
+    item.onclick = () => window.lookupSavedTicket(ticket.id);
+
+    item.innerHTML = `
+      <div class="saved-ticket-main">
+        <div class="saved-ticket-top-row">
+          <span class="ticket-type-tag type-${safeType}">${safeType.toUpperCase()}</span>
+          <span class="saved-ticket-id">${safeId}</span>
+          <span class="saved-ticket-time">• ${escapeHtml(timeAgo)}</span>
+        </div>
+        <div class="saved-ticket-subject">${safeSubject}</div>
+      </div>
+      <button type="button" class="saved-ticket-remove-btn" title="Remove from this browser" onclick="removeSingleSavedTicket('${safeId}', event)">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    `;
+    listEl.appendChild(item);
+  });
+}
+
+function formatRelativeTime(dateStr) {
+  if (!dateStr) return 'Recently';
+  try {
+    const diff = Date.now() - new Date(dateStr.includes('Z') ? dateStr : dateStr + 'Z').getTime();
+    if (isNaN(diff)) return 'Recently';
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return 'Yesterday';
+    if (days < 30) return `${days}d ago`;
+    return new Date(dateStr).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  } catch (e) {
+    return 'Recently';
+  }
 }
