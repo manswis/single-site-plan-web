@@ -122,7 +122,8 @@
             title="Toggle Light/Dark Mode">
             <span class="material-symbols-outlined">dark_mode</span>
           </button>
-          <button type="button" class="apple-btn-secondary logout-btn" onclick="handleAdminLogout()" title="Lock Session">
+          <button type="button" class="apple-btn-secondary logout-btn" onclick="handleAdminLogout()"
+            title="Lock Session">
             <span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
             <span>Lock</span>
           </button>
@@ -175,6 +176,14 @@
             <button type="button" class="filter-chip" data-status="in_progress">
               <span>Progress</span>
               <span class="filter-badge badge-progress" id="badgeProgress">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-status="on_hold">
+              <span>On Hold</span>
+              <span class="filter-badge badge-hold" id="badgeHold">0</span>
+            </button>
+            <button type="button" class="filter-chip" data-status="infeasible">
+              <span>Infeasible</span>
+              <span class="filter-badge badge-infeasible" id="badgeInfeasible">0</span>
             </button>
             <button type="button" class="filter-chip" data-status="resolved">
               <span>Resolved</span>
@@ -232,11 +241,13 @@
               <div class="detail-status-control">
                 <select id="detailStatusSelect" class="status-dropdown-control"
                   onchange="handleStatusChange(this.value)">
-                  <option value="open">Open / Submitted</option>
-                  <option value="in_review">Under Review</option>
-                  <option value="in_progress">In Progress</option>
-                  <option value="resolved">Resolved</option>
-                  <option value="closed">Closed</option>
+                  <option value="open">🔵 Open / Submitted</option>
+                  <option value="in_review">🟣 Under Review</option>
+                  <option value="in_progress">🟠 In Progress</option>
+                  <option value="on_hold">🟡 On Hold</option>
+                  <option value="infeasible">🔴 Infeasible</option>
+                  <option value="resolved">🟢 Resolved</option>
+                  <option value="closed">⚫ Closed</option>
                 </select>
               </div>
 

@@ -265,6 +265,8 @@ function renderMetricBadges(metrics) {
   const bOpen = document.getElementById('badgeOpen');
   const bReview = document.getElementById('badgeReview');
   const bProgress = document.getElementById('badgeProgress');
+  const bHold = document.getElementById('badgeHold');
+  const bInfeasible = document.getElementById('badgeInfeasible');
   const bResolved = document.getElementById('badgeResolved');
   const bClosed = document.getElementById('badgeClosed');
 
@@ -272,6 +274,8 @@ function renderMetricBadges(metrics) {
   if (bOpen) bOpen.textContent = metrics.open || 0;
   if (bReview) bReview.textContent = metrics.in_review || 0;
   if (bProgress) bProgress.textContent = metrics.in_progress || 0;
+  if (bHold) bHold.textContent = metrics.on_hold || 0;
+  if (bInfeasible) bInfeasible.textContent = metrics.infeasible || 0;
   if (bResolved) bResolved.textContent = metrics.resolved || 0;
   if (bClosed) bClosed.textContent = metrics.closed || 0;
 }
@@ -309,8 +313,20 @@ function renderInboxList(tickets) {
       open: 'status-open',
       in_review: 'status-review',
       in_progress: 'status-progress',
+      on_hold: 'status-hold',
+      infeasible: 'status-infeasible',
       resolved: 'status-resolved',
       closed: 'status-closed'
+    };
+
+    const statusLabels = {
+      open: 'Open',
+      in_review: 'In Review',
+      in_progress: 'In Progress',
+      on_hold: 'On Hold',
+      infeasible: 'Infeasible',
+      resolved: 'Resolved',
+      closed: 'Closed'
     };
 
     // Header
@@ -320,8 +336,10 @@ function renderInboxList(tickets) {
     const idRow = document.createElement('div');
     idRow.className = 'inbox-id-row';
 
+    // Status Indicator Dot (colored by ticket status)
     const dot = document.createElement('span');
-    dot.className = `priority-dot dot-${ticket.priority || 'medium'}`;
+    dot.className = `status-indicator-dot dot-${ticket.status || 'open'}`;
+    dot.title = `Status: ${statusLabels[ticket.status] || ticket.status}`;
 
     const idSpan = document.createElement('span');
     idSpan.className = 'inbox-ticket-id';
@@ -338,7 +356,7 @@ function renderInboxList(tickets) {
 
     const statusPill = document.createElement('span');
     statusPill.className = `ticket-status-pill ${statusClasses[ticket.status] || 'status-open'}`;
-    statusPill.textContent = ticket.status;
+    statusPill.textContent = statusLabels[ticket.status] || ticket.status;
 
     header.appendChild(idRow);
     header.appendChild(statusPill);

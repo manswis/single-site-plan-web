@@ -485,6 +485,8 @@ function renderTrackingResult(ticket) {
     open: { label: 'Submitted / Open', class: 'status-open' },
     in_review: { label: 'Under Review', class: 'status-review' },
     in_progress: { label: 'In Progress', class: 'status-progress' },
+    on_hold: { label: 'On Hold / Pending Info', class: 'status-hold' },
+    infeasible: { label: 'Infeasible / Not Supported', class: 'status-infeasible' },
     resolved: { label: 'Resolved', class: 'status-resolved' },
     closed: { label: 'Closed', class: 'status-closed' }
   };

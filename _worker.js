@@ -11,7 +11,7 @@ function generateTicketId() {
   const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
   const randomValues = new Uint8Array(8);
   crypto.getRandomValues(randomValues);
-  
+
   let part1 = '';
   let part2 = '';
   for (let i = 0; i < 4; i++) {
@@ -116,7 +116,7 @@ async function verifyAdminAuth(request, env) {
         // Log failure
         await env.DB.prepare('INSERT INTO auth_failures (ip_hash) VALUES (?)').bind(ipHash).run();
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return { authorized: isValid, rateLimited: false };
@@ -353,6 +353,8 @@ export default {
               SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) as count_open,
               SUM(CASE WHEN status = 'in_review' THEN 1 ELSE 0 END) as count_review,
               SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as count_progress,
+              SUM(CASE WHEN status = 'on_hold' THEN 1 ELSE 0 END) as count_hold,
+              SUM(CASE WHEN status = 'infeasible' THEN 1 ELSE 0 END) as count_infeasible,
               SUM(CASE WHEN status = 'resolved' THEN 1 ELSE 0 END) as count_resolved,
               SUM(CASE WHEN status = 'closed' THEN 1 ELSE 0 END) as count_closed
             FROM tickets
@@ -366,6 +368,8 @@ export default {
               open: countsResult?.count_open || 0,
               in_review: countsResult?.count_review || 0,
               in_progress: countsResult?.count_progress || 0,
+              on_hold: countsResult?.count_hold || 0,
+              infeasible: countsResult?.count_infeasible || 0,
               resolved: countsResult?.count_resolved || 0,
               closed: countsResult?.count_closed || 0
             }
@@ -382,34 +386,30 @@ export default {
           const ticketId = decodeURIComponent(parts[4] || '').toUpperCase();
 
           let body = {};
-          try { body = await request.json(); } catch (e) {}
+          try { body = await request.json(); } catch (e) { }
 
-          const replyText = (body.message || '').trim();
-          const author = (body.author || 'e-Plan Studio Engineering Team').trim();
+          const replyText = (body.reply || '').trim();
+          const author = (body.author || 'e-Plan Support Team').trim();
           const newStatus = (body.status || '').trim();
 
-          if (!replyText || replyText.length < 2) {
-            return jsonResponse({ error: 'Reply text must be at least 2 characters.' }, 400);
+          if (!replyText) {
+            return jsonResponse({ error: 'Reply text is required.' }, 400);
           }
 
           // Fetch existing ticket
           const existing = await env.DB.prepare('SELECT public_response, status FROM tickets WHERE id = ?').bind(ticketId).first();
           if (!existing) {
-            return jsonResponse({ error: `Ticket "${ticketId}" not found.` }, 404);
+            return jsonResponse({ error: 'Ticket not found.' }, 404);
           }
 
-          // Parse existing responses as JSON array or convert plain text
           let messages = [];
-          const raw = (existing.public_response || '').trim();
-          if (raw.startsWith('[') && raw.endsWith(']')) {
+          if (existing.public_response) {
             try {
-              messages = JSON.parse(raw);
-              if (!Array.isArray(messages)) messages = [];
+              messages = JSON.parse(existing.public_response);
+              if (!Array.isArray(messages)) messages = [{ text: existing.public_response, time: new Date().toISOString() }];
             } catch (e) {
-              messages = [{ text: raw, time: new Date().toISOString(), author: 'e-Plan Studio Engineering Team' }];
+              messages = [{ text: existing.public_response, time: new Date().toISOString() }];
             }
-          } else if (raw.length > 0) {
-            messages = [{ text: raw, time: new Date().toISOString(), author: 'e-Plan Studio Engineering Team' }];
           }
 
           // Append new response object
@@ -420,7 +420,7 @@ export default {
           });
 
           const updatedJson = JSON.stringify(messages);
-          const finalStatus = (newStatus && ['open', 'in_review', 'in_progress', 'resolved', 'closed'].includes(newStatus))
+          const finalStatus = (newStatus && ['open', 'in_review', 'in_progress', 'on_hold', 'infeasible', 'resolved', 'closed'].includes(newStatus))
             ? newStatus
             : existing.status;
 
@@ -450,10 +450,10 @@ export default {
           const ticketId = decodeURIComponent(parts[4] || '').toUpperCase();
 
           let body = {};
-          try { body = await request.json(); } catch (e) {}
+          try { body = await request.json(); } catch (e) { }
 
           const { status, internal_notes } = body;
-          const validStatuses = ['open', 'in_review', 'in_progress', 'resolved', 'closed'];
+          const validStatuses = ['open', 'in_review', 'in_progress', 'on_hold', 'infeasible', 'resolved', 'closed'];
 
           if (status && !validStatuses.includes(status)) {
             return jsonResponse({ error: 'Invalid status value.' }, 400);

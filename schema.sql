@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS tickets (
     id TEXT PRIMARY KEY,                       -- e.g. REQ-BCE5-T923
     type TEXT NOT NULL,                        -- 'bug' | 'feature' | 'error' | 'suggestion'
     priority TEXT NOT NULL DEFAULT 'medium',   -- 'low' | 'medium' | 'high'
-    status TEXT NOT NULL DEFAULT 'open',       -- 'open' | 'in_review' | 'in_progress' | 'resolved' | 'closed'
+    status TEXT NOT NULL DEFAULT 'open',       -- 'open' | 'in_review' | 'in_progress' | 'on_hold' | 'infeasible' | 'resolved' | 'closed'
     name TEXT DEFAULT '',                      -- Optional requester name
     email TEXT NOT NULL,                       -- Contact email for updates
     subject TEXT NOT NULL,                     -- Summary headline

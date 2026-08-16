@@ -4192,6 +4192,152 @@ body.pdf-export-active .drawing-canvas-column,
   max-width: 180px;
 }
 
+/* Status Indicator Dot (Ticket List) */
+.status-indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.status-indicator-dot.dot-open {
+  background: #0071e3;
+  box-shadow: 0 0 6px rgba(0, 113, 227, 0.4);
+}
+
+.status-indicator-dot.dot-in_review {
+  background: #af52de;
+  box-shadow: 0 0 6px rgba(175, 82, 222, 0.4);
+}
+
+.status-indicator-dot.dot-in_progress {
+  background: #ff9500;
+  box-shadow: 0 0 6px rgba(255, 149, 0, 0.4);
+}
+
+.status-indicator-dot.dot-on_hold {
+  background: #eab308;
+  box-shadow: 0 0 6px rgba(234, 179, 8, 0.4);
+}
+
+.status-indicator-dot.dot-infeasible {
+  background: #e11d48;
+  box-shadow: 0 0 6px rgba(225, 29, 72, 0.4);
+}
+
+.status-indicator-dot.dot-resolved {
+  background: #34c759;
+  box-shadow: 0 0 6px rgba(52, 199, 89, 0.4);
+}
+
+.status-indicator-dot.dot-closed {
+  background: #8e8e93;
+}
+
+/* Ticket Status Pills */
+.ticket-status-pill {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.ticket-status-pill.status-open {
+  background: rgba(0, 113, 227, 0.1);
+  color: #0071e3;
+}
+
+.ticket-status-pill.status-review {
+  background: rgba(175, 82, 222, 0.12);
+  color: #af52de;
+}
+
+.ticket-status-pill.status-progress {
+  background: rgba(255, 149, 0, 0.12);
+  color: #ff9500;
+}
+
+.ticket-status-pill.status-hold {
+  background: rgba(234, 179, 8, 0.12);
+  color: #ca8a04;
+}
+
+.ticket-status-pill.status-infeasible {
+  background: rgba(225, 29, 72, 0.12);
+  color: #e11d48;
+}
+
+.ticket-status-pill.status-resolved {
+  background: rgba(52, 199, 89, 0.12);
+  color: #34c759;
+}
+
+.ticket-status-pill.status-closed {
+  background: rgba(142, 142, 147, 0.12);
+  color: #8e8e93;
+}
+
+/* Dark mode pill variations */
+[data-theme="dark"] .ticket-status-pill.status-open {
+  background: rgba(41, 151, 255, 0.15);
+  color: #2997ff;
+}
+
+[data-theme="dark"] .ticket-status-pill.status-review {
+  background: rgba(191, 90, 242, 0.15);
+  color: #bf5af2;
+}
+
+[data-theme="dark"] .ticket-status-pill.status-progress {
+  background: rgba(255, 159, 10, 0.15);
+  color: #ff9f0a;
+}
+
+[data-theme="dark"] .ticket-status-pill.status-hold {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+}
+
+[data-theme="dark"] .ticket-status-pill.status-infeasible {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+}
+
+[data-theme="dark"] .ticket-status-pill.status-resolved {
+  background: rgba(48, 209, 88, 0.15);
+  color: #30d158;
+}
+
+[data-theme="dark"] .ticket-status-pill.status-closed {
+  background: rgba(142, 142, 147, 0.15);
+  color: #98989d;
+}
+
+/* Filter badge colors */
+.filter-badge.badge-hold {
+  background: rgba(234, 179, 8, 0.15);
+  color: #ca8a04;
+}
+
+.filter-badge.badge-infeasible {
+  background: rgba(225, 29, 72, 0.15);
+  color: #e11d48;
+}
+
+[data-theme="dark"] .filter-badge.badge-hold {
+  background: rgba(250, 204, 21, 0.2);
+  color: #facc15;
+}
+
+[data-theme="dark"] .filter-badge.badge-infeasible {
+  background: rgba(244, 63, 94, 0.2);
+  color: #f43f5e;
+}
+
 /* Right Column: Detail Inspector */
 .admin-detail-pane {
   flex: 1;
