@@ -4486,12 +4486,19 @@ body.pdf-export-active .drawing-canvas-column,
 .detail-header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
+.detail-priority-control,
+.detail-status-control {
+  display: inline-flex;
+  align-items: center;
+}
+
+.priority-dropdown-control,
 .status-dropdown-control {
   height: 38px;
-  padding: 0 12px;
+  padding: 0 10px;
   font-size: 13px;
   font-weight: 700;
   border: 1.5px solid var(--apple-border);
@@ -4500,10 +4507,18 @@ body.pdf-export-active .drawing-canvas-column,
   color: var(--apple-text-primary);
   cursor: pointer;
   outline: none;
+  transition: var(--apple-transition);
 }
 
+.priority-dropdown-control:focus,
 .status-dropdown-control:focus {
   border-color: var(--apple-accent);
+}
+
+.detail-action-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .icon-tool-btn {
@@ -5037,7 +5052,45 @@ body.pdf-export-active .drawing-canvas-column,
     gap: 14px;
   }
 
-  .detail-header-card,
+  .detail-header-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+
+  .detail-header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px solid var(--apple-border);
+  }
+
+  .detail-priority-control,
+  .detail-status-control {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .priority-dropdown-control,
+  .status-dropdown-control {
+    width: 100%;
+  }
+
+  .detail-action-buttons-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    padding-left: 8px;
+  }
+
   .requester-profile-card,
   .user-original-message-card,
   .admin-timeline-section,

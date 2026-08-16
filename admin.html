@@ -238,9 +238,20 @@
 
             <!-- Quick Action Toolbar -->
             <div class="detail-header-actions">
+              <!-- Priority Selector Dropdown -->
+              <div class="detail-priority-control">
+                <select id="detailPrioritySelect" class="priority-dropdown-control"
+                  onchange="handlePriorityChange(this.value)" title="Change Priority Level">
+                  <option value="low">🟢 Low Priority</option>
+                  <option value="medium">🟡 Medium Priority</option>
+                  <option value="high">🔴 High Priority</option>
+                </select>
+              </div>
+
+              <!-- Status Selector Dropdown -->
               <div class="detail-status-control">
                 <select id="detailStatusSelect" class="status-dropdown-control"
-                  onchange="handleStatusChange(this.value)">
+                  onchange="handleStatusChange(this.value)" title="Change Ticket Status">
                   <option value="open">🔵 Open / Submitted</option>
                   <option value="in_review">🟣 Under Review</option>
                   <option value="in_progress">🟠 In Progress</option>
@@ -251,15 +262,18 @@
                 </select>
               </div>
 
-              <button type="button" class="icon-tool-btn" onclick="copyActiveTicketId()" title="Copy Ticket ID">
-                <span class="material-symbols-outlined">content_copy</span>
-              </button>
-              <button type="button" class="icon-tool-btn" onclick="openPublicTracker()" title="Open Public Tracker">
-                <span class="material-symbols-outlined">open_in_new</span>
-              </button>
-              <button type="button" class="icon-tool-btn delete-tool-btn" onclick="openDeleteTicketModal()" title="Permanently Delete Ticket">
-                <span class="material-symbols-outlined">delete</span>
-              </button>
+              <!-- Action Buttons Group (Copy, Open Tracker, Delete) with explicit spacing -->
+              <div class="detail-action-buttons-group">
+                <button type="button" class="icon-tool-btn" onclick="copyActiveTicketId()" title="Copy Ticket ID">
+                  <span class="material-symbols-outlined">content_copy</span>
+                </button>
+                <button type="button" class="icon-tool-btn" onclick="openPublicTracker()" title="Open Public Tracker">
+                  <span class="material-symbols-outlined">open_in_new</span>
+                </button>
+                <button type="button" class="icon-tool-btn delete-tool-btn" onclick="openDeleteTicketModal()" title="Permanently Delete Ticket">
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
             </div>
           </div>
 

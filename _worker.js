@@ -443,7 +443,7 @@ export default {
         }
       }
 
-      // 3D. POST /api/admin/tickets/:id/status (Update status or internal notes)
+      // 3D. POST /api/admin/tickets/:id/status (Update status, priority, or internal notes)
       if (pathname.match(/^\/api\/admin\/tickets\/[^\/]+\/status$/) && request.method === 'POST') {
         try {
           const parts = pathname.split('/');
@@ -452,11 +452,15 @@ export default {
           let body = {};
           try { body = await request.json(); } catch (e) { }
 
-          const { status, internal_notes } = body;
+          const { status, priority, internal_notes } = body;
           const validStatuses = ['open', 'in_review', 'in_progress', 'on_hold', 'infeasible', 'resolved', 'closed'];
+          const validPriorities = ['low', 'medium', 'high'];
 
           if (status && !validStatuses.includes(status)) {
             return jsonResponse({ error: 'Invalid status value.' }, 400);
+          }
+          if (priority && !validPriorities.includes(priority)) {
+            return jsonResponse({ error: 'Invalid priority value.' }, 400);
           }
 
           let sql = 'UPDATE tickets SET updated_at = CURRENT_TIMESTAMP';
@@ -465,6 +469,10 @@ export default {
           if (status) {
             sql += ', status = ?';
             params.push(status);
+          }
+          if (priority) {
+            sql += ', priority = ?';
+            params.push(priority);
           }
           if (typeof internal_notes === 'string') {
             sql += ', internal_notes = ?';

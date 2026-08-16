@@ -492,7 +492,18 @@ function renderTicketDetail(ticket) {
   document.getElementById('detailTicketId').textContent = ticket.id;
   document.getElementById('detailSubject').textContent = ticket.subject;
   document.getElementById('detailCategoryBadge').textContent = (ticket.type || 'bug').toUpperCase();
-  document.getElementById('detailPriorityBadge').textContent = `Priority: ${(ticket.priority || 'medium').toUpperCase()}`;
+
+  const priorityBadge = document.getElementById('detailPriorityBadge');
+  if (priorityBadge) {
+    priorityBadge.textContent = (ticket.priority || 'medium').toUpperCase();
+    priorityBadge.className = `ticket-priority-tag priority-${ticket.priority || 'medium'}`;
+  }
+
+  // Priority Selector
+  const prioritySelect = document.getElementById('detailPrioritySelect');
+  if (prioritySelect) {
+    prioritySelect.value = ticket.priority || 'medium';
+  }
 
   // Status Selector
   const statusSelect = document.getElementById('detailStatusSelect');
@@ -515,7 +526,7 @@ function renderTicketDetail(ticket) {
     let diagObj = {};
     try {
       diagObj = typeof ticket.client_info === 'string' ? JSON.parse(ticket.client_info) : (ticket.client_info || {});
-    } catch (e) {}
+    } catch (e) { }
 
     diagContainer.innerHTML = '';
     const diagGrid = document.createElement('div');
@@ -569,7 +580,7 @@ function renderAdminTimeline(ticket) {
   // 1. Initial User Message
   const userEl = document.createElement('div');
   userEl.className = 'chat-message-item user-message';
-  
+
   const userAvatar = document.createElement('div');
   userAvatar.className = 'chat-avatar-box';
   userAvatar.innerHTML = '<span class="material-symbols-outlined">person</span>';
@@ -665,7 +676,7 @@ function parseResponses(rawResponse, defaultTime) {
           author: item.author || 'e-Plan Studio Engineering Team'
         })).filter(item => item.text.trim().length > 0);
       }
-    } catch (e) {}
+    } catch (e) { }
   }
   return [{ text: trimmed, time: defaultTime, author: 'e-Plan Studio Engineering Team' }];
 }
@@ -721,8 +732,49 @@ function showToast(msg) {
 }
 
 // ============================================================================
-// 6. ACTIONS: STATUS CHANGE, REPLY POST & INTERNAL NOTES
+// 6. ACTIONS: PRIORITY CHANGE, STATUS CHANGE, REPLY POST & INTERNAL NOTES
 // ============================================================================
+async function handlePriorityChange(newPriority) {
+  if (!selectedTicketId) return;
+
+  try {
+    const response = await fetch(`/api/admin/tickets/${encodeURIComponent(selectedTicketId)}/status`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${activePasskey}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ priority: newPriority })
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || 'Failed to update priority.');
+    }
+
+    const ticket = currentTickets.find(t => t.id === selectedTicketId);
+    if (ticket) {
+      ticket.priority = newPriority;
+    }
+
+    const priorityBadge = document.getElementById('detailPriorityBadge');
+    if (priorityBadge) {
+      priorityBadge.textContent = newPriority.toUpperCase();
+      priorityBadge.className = `ticket-priority-tag priority-${newPriority}`;
+    }
+
+    showToast(`Priority updated to ${newPriority.toUpperCase()}`);
+    loadTickets();
+
+  } catch (err) {
+    alert('Error updating priority: ' + err.message);
+    const ticket = currentTickets.find(t => t.id === selectedTicketId);
+    const select = document.getElementById('detailPrioritySelect');
+    if (ticket && select) select.value = ticket.priority || 'medium';
+  }
+}
+
 async function handleStatusChange(newStatus) {
   if (!selectedTicketId) return;
 
@@ -738,14 +790,23 @@ async function handleStatusChange(newStatus) {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to update status.');
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || 'Failed to update status.');
     }
 
-    showToast(`Status updated to ${newStatus.toUpperCase()}`);
+    const ticket = currentTickets.find(t => t.id === selectedTicketId);
+    if (ticket) {
+      ticket.status = newStatus;
+    }
+
+    showToast(`Status updated to ${newStatus.replace('_', ' ').toUpperCase()}`);
     loadTickets();
 
   } catch (err) {
     alert('Error updating status: ' + err.message);
+    const ticket = currentTickets.find(t => t.id === selectedTicketId);
+    const select = document.getElementById('detailStatusSelect');
+    if (ticket && select) select.value = ticket.status || 'open';
   }
 }
 
