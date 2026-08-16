@@ -37,43 +37,29 @@ In Bengaluru, Karnataka, property owners converting a **B-Khata property into an
 
 ## 🏛️ System Architecture
 
-e-Plan Studio employs a decoupled, privacy-first architectural paradigm:
+```mermaid
+flowchart TD
+    subgraph Client ["💻 Client Browser (100% Offline-First)"]
+        direction TB
+        CAD["📐 Interactive CAD Canvas (SVG 2D)"]
+        Math["⚙️ BBMP Setback Math Engine"]
+        PDF["📄 jsPDF Vector PDF Exporter"]
+        Storage[("💾 Device LocalStorage (Isolated on Device)")]
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      CLIENT BROWSER (100% Offline-First)                    │
-│                                                                             │
-│   ┌─────────────────────┐   ┌──────────────────────┐   ┌────────────────┐   │
-│   │   Interactive CAD   │   │  BBMP Setback Math   │   │  jsPDF Vector  │   │
-│   │   Canvas (SVG 2D)   │◄──┤  Calculation Engine  │──►│  PDF Exporter  │   │
-│   └─────────────────────┘   └──────────────────────┘   └────────────────┘   │
-│              ▲                                                              │
-│              │ (Zero Telemetry / Persisted locally)                         │
-│              ▼                                                              │
-│   ┌────────────────────────────────────────────────┐                        │
-│   │  Device LocalStorage (Isolated on User Device)  │                       │
-│   └────────────────────────────────────────────────┘                        │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                       │
-                      (Voluntary Support Inquiries Only)
-                                       │
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│               SERVERLESS EDGE BACKEND (Cloudflare Workers + D1)             │
-│                                                                             │
-│   ┌──────────────────────────────────────────────────────────────────────┐  │
-│   │ Cloudflare Worker API Gateway (_worker.js)                           │  │
-│   │  - Anti-Spam Honeypot Trap                                           │  │
-│   │  - Daily Salted SHA-256 IP Rate Limiter (Max 5/hr)                   │  │
-│   │  - Zero-PII Public Status Endpoint (/api/tickets/:id)                │  │
-│   └──────────────────────────────────┬───────────────────────────────────┘  │
-│                                      │ (Parameterized SQL)                  │
-│                                      ▼                                      │
-│   ┌──────────────────────────────────────────────────────────────────────┐  │
-│   │ Cloudflare D1 SQL Database (APAC Edge Cluster)                       │  │
-│   │  - Table: tickets (Encrypted in transit & at rest)                   │  │
-│   └──────────────────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────────────┘
+        Math <--> CAD
+        Math --> PDF
+        CAD <--> Storage
+    end
+
+    subgraph Edge ["⚡ Serverless Edge Backend (Cloudflare)"]
+        direction TB
+        API["🛡️ Cloudflare Worker API Gateway (_worker.js)\n• Anti-Spam Honeypot Trap\n• Daily Salted IP Rate Limiter (Max 5/hr)\n• 5-Layer Image Sanitizer"]
+        D1[("🗄️ Cloudflare D1 SQL Database\n• Encrypted Public/Admin Tickets")]
+
+        API -->|"Parameterized SQL"| D1
+    end
+
+    Client -->|"Voluntary Support Inquiries Only"| API
 ```
 
 ---
