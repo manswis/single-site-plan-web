@@ -2,21 +2,25 @@
  * @file js/admin.js
  * @description Frontend controller for the e-Plan Studio Admin Console.
  * Built with Apple HIG standards: session authentication, real-time ticket filtering,
- * canned developer responses, public timeline sync, and private notes management.
+ * canned developer responses, public timeline sync, private notes management,
+ * 15-minute inactivity auto-lock, and zero-trust DOM insertion against XSS.
  */
 
 const STORAGE_KEY = 'eplan_admin_passkey';
+const INACTIVITY_TIMEOUT_MS = 15 * 60 * 1000; // 15 Minutes
 
 let activePasskey = '';
 let currentTickets = [];
 let selectedTicketId = null;
 let activeStatusFilter = 'all';
 let activeSearchQuery = '';
+let inactivityTimer = null;
 
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
   initAuth();
   setupEventListeners();
+  setupInactivityAutoLock();
 });
 
 // ============================================================================
@@ -42,6 +46,7 @@ function showLoginView() {
 function showDashboardView() {
   document.getElementById('adminLoginView').style.display = 'none';
   document.getElementById('adminDashboardView').style.display = 'flex';
+  resetInactivityTimer();
   loadTickets();
 }
 
@@ -60,9 +65,10 @@ async function verifyAndLaunch(passkey) {
       sessionStorage.setItem(STORAGE_KEY, passkey);
       showDashboardView();
     } else {
+      const data = await response.json().catch(() => ({}));
       sessionStorage.removeItem(STORAGE_KEY);
       showLoginView();
-      showLoginError('Invalid Admin Passkey. Access denied.');
+      showLoginError(data.error || 'Invalid Admin Passkey. Access denied.');
     }
   } catch (err) {
     showLoginError('Network or server error while authenticating: ' + err.message);
@@ -73,6 +79,7 @@ function handleAdminLogout() {
   sessionStorage.removeItem(STORAGE_KEY);
   activePasskey = '';
   selectedTicketId = null;
+  if (inactivityTimer) clearTimeout(inactivityTimer);
   showLoginView();
 }
 
@@ -96,6 +103,26 @@ function togglePasskeyVisibility() {
       icon.textContent = 'visibility';
     }
   }
+}
+
+// Inactivity Auto-Lock (Finding 2 Remediation)
+function setupInactivityAutoLock() {
+  const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
+  events.forEach(evt => {
+    window.addEventListener(evt, () => {
+      if (activePasskey) resetInactivityTimer();
+    }, { passive: true });
+  });
+}
+
+function resetInactivityTimer() {
+  if (inactivityTimer) clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(() => {
+    if (activePasskey) {
+      handleAdminLogout();
+      showLoginError('Session locked due to 15 minutes of inactivity for security.');
+    }
+  }, INACTIVITY_TIMEOUT_MS);
 }
 
 // ============================================================================
@@ -199,8 +226,10 @@ async function loadTickets() {
       }
     });
 
-    if (response.status === 401) {
+    if (response.status === 401 || response.status === 429) {
+      const errData = await response.json().catch(() => ({}));
       handleAdminLogout();
+      showLoginError(errData.error || 'Access denied.');
       return;
     }
 
@@ -247,6 +276,7 @@ function renderMetricBadges(metrics) {
   if (bClosed) bClosed.textContent = metrics.closed || 0;
 }
 
+// Zero-Trust DOM Renderer (Finding 3 Remediation)
 function renderInboxList(tickets) {
   const container = document.getElementById('inboxTicketList');
   if (!container) return;
@@ -283,21 +313,59 @@ function renderInboxList(tickets) {
       closed: 'status-closed'
     };
 
-    item.innerHTML = `
-      <div class="inbox-item-header">
-        <div class="inbox-id-row">
-          <span class="priority-dot dot-${ticket.priority || 'medium'}"></span>
-          <span class="inbox-ticket-id">${escapeHtml(ticket.id)}</span>
-          <span class="material-symbols-outlined inbox-type-icon" title="${escapeHtml(ticket.type)}">${typeIcons[ticket.type] || 'help'}</span>
-        </div>
-        <span class="ticket-status-pill ${statusClasses[ticket.status] || 'status-open'}">${escapeHtml(ticket.status)}</span>
-      </div>
-      <div class="inbox-item-subject">${escapeHtml(ticket.subject)}</div>
-      <div class="inbox-item-footer">
-        <span class="inbox-requester">${escapeHtml(ticket.email)}</span>
-        <span class="inbox-date">${formatRelativeTime(ticket.created_at)}</span>
-      </div>
-    `;
+    // Header
+    const header = document.createElement('div');
+    header.className = 'inbox-item-header';
+
+    const idRow = document.createElement('div');
+    idRow.className = 'inbox-id-row';
+
+    const dot = document.createElement('span');
+    dot.className = `priority-dot dot-${ticket.priority || 'medium'}`;
+
+    const idSpan = document.createElement('span');
+    idSpan.className = 'inbox-ticket-id';
+    idSpan.textContent = ticket.id;
+
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'material-symbols-outlined inbox-type-icon';
+    iconSpan.textContent = typeIcons[ticket.type] || 'help';
+    iconSpan.title = ticket.type;
+
+    idRow.appendChild(dot);
+    idRow.appendChild(idSpan);
+    idRow.appendChild(iconSpan);
+
+    const statusPill = document.createElement('span');
+    statusPill.className = `ticket-status-pill ${statusClasses[ticket.status] || 'status-open'}`;
+    statusPill.textContent = ticket.status;
+
+    header.appendChild(idRow);
+    header.appendChild(statusPill);
+
+    // Subject (Safe text node)
+    const subjectDiv = document.createElement('div');
+    subjectDiv.className = 'inbox-item-subject';
+    subjectDiv.textContent = ticket.subject;
+
+    // Footer
+    const footer = document.createElement('div');
+    footer.className = 'inbox-item-footer';
+
+    const requesterSpan = document.createElement('span');
+    requesterSpan.className = 'inbox-requester';
+    requesterSpan.textContent = ticket.email;
+
+    const dateSpan = document.createElement('span');
+    dateSpan.className = 'inbox-date';
+    dateSpan.textContent = formatRelativeTime(ticket.created_at);
+
+    footer.appendChild(requesterSpan);
+    footer.appendChild(dateSpan);
+
+    item.appendChild(header);
+    item.appendChild(subjectDiv);
+    item.appendChild(footer);
 
     container.appendChild(item);
   });
@@ -327,7 +395,7 @@ function renderTicketDetail(ticket) {
   const workspace = document.getElementById('activeTicketWorkspace');
   workspace.style.display = 'flex';
 
-  // Badges & Subject
+  // Badges & Subject (Pure text nodes)
   document.getElementById('detailTicketId').textContent = ticket.id;
   document.getElementById('detailSubject').textContent = ticket.subject;
   document.getElementById('detailCategoryBadge').textContent = (ticket.type || 'bug').toUpperCase();
@@ -356,19 +424,34 @@ function renderTicketDetail(ticket) {
       diagObj = typeof ticket.client_info === 'string' ? JSON.parse(ticket.client_info) : (ticket.client_info || {});
     } catch (e) {}
 
-    diagContainer.innerHTML = `
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 11px;">
-        <div><strong>OS / Platform:</strong> ${escapeHtml(diagObj.platform || '—')}</div>
-        <div><strong>Browser User-Agent:</strong> <span style="font-family: monospace; font-size: 10px;">${escapeHtml((diagObj.userAgent || '—').slice(0, 50))}...</span></div>
-        <div><strong>Screen Resolution:</strong> ${diagObj.screenWidth || '—'} × ${diagObj.screenHeight || '—'}</div>
-        <div><strong>Viewport Dimensions:</strong> ${diagObj.windowInnerWidth || '—'} × ${diagObj.windowInnerHeight || '—'}</div>
-        <div><strong>Referrer Source:</strong> ${escapeHtml(diagObj.referrer || 'direct')}</div>
-        <div><strong>Logged Timestamp:</strong> ${formatDate(ticket.created_at)}</div>
-      </div>
-    `;
+    diagContainer.innerHTML = '';
+    const diagGrid = document.createElement('div');
+    diagGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 11px;';
+
+    const fields = [
+      { label: 'OS / Platform:', value: diagObj.platform || '—' },
+      { label: 'Browser Agent:', value: (diagObj.userAgent || '—').slice(0, 50) + '...' },
+      { label: 'Screen Resolution:', value: `${diagObj.screenWidth || '—'} × ${diagObj.screenHeight || '—'}` },
+      { label: 'Viewport Dimensions:', value: `${diagObj.windowInnerWidth || '—'} × ${diagObj.windowInnerHeight || '—'}` },
+      { label: 'Referrer Source:', value: diagObj.referrer || 'direct' },
+      { label: 'Logged Timestamp:', value: formatDate(ticket.created_at) }
+    ];
+
+    fields.forEach(f => {
+      const box = document.createElement('div');
+      const strong = document.createElement('strong');
+      strong.textContent = f.label + ' ';
+      const span = document.createElement('span');
+      span.textContent = f.value;
+      box.appendChild(strong);
+      box.appendChild(span);
+      diagGrid.appendChild(box);
+    });
+
+    diagContainer.appendChild(diagGrid);
   }
 
-  // Original Message
+  // Original Message (Pure textContent)
   document.getElementById('detailOriginalMessage').textContent = ticket.message || 'No description provided.';
 
   // Timeline Conversation Thread
@@ -393,16 +476,37 @@ function renderAdminTimeline(ticket) {
   // 1. Initial User Message
   const userEl = document.createElement('div');
   userEl.className = 'chat-message-item user-message';
-  userEl.innerHTML = `
-    <div class="chat-avatar-box"><span class="material-symbols-outlined">person</span></div>
-    <div class="chat-bubble">
-      <div class="chat-bubble-header">
-        <span class="chat-sender-name">${escapeHtml(ticket.name || 'Requester')}</span>
-        <span class="chat-timestamp">${formatDate(ticket.created_at)}</span>
-      </div>
-      <div class="chat-message-text">${escapeHtml(ticket.message)}</div>
-    </div>
-  `;
+  
+  const userAvatar = document.createElement('div');
+  userAvatar.className = 'chat-avatar-box';
+  userAvatar.innerHTML = '<span class="material-symbols-outlined">person</span>';
+
+  const userBubble = document.createElement('div');
+  userBubble.className = 'chat-bubble';
+
+  const userBubbleHeader = document.createElement('div');
+  userBubbleHeader.className = 'chat-bubble-header';
+
+  const userName = document.createElement('span');
+  userName.className = 'chat-sender-name';
+  userName.textContent = ticket.name || 'Requester';
+
+  const userTime = document.createElement('span');
+  userTime.className = 'chat-timestamp';
+  userTime.textContent = formatDate(ticket.created_at);
+
+  userBubbleHeader.appendChild(userName);
+  userBubbleHeader.appendChild(userTime);
+
+  const userText = document.createElement('div');
+  userText.className = 'chat-message-text';
+  userText.textContent = ticket.message;
+
+  userBubble.appendChild(userBubbleHeader);
+  userBubble.appendChild(userText);
+
+  userEl.appendChild(userAvatar);
+  userEl.appendChild(userBubble);
   container.appendChild(userEl);
 
   // 2. Admin Replies
@@ -410,19 +514,47 @@ function renderAdminTimeline(ticket) {
   replies.forEach(rep => {
     const adminEl = document.createElement('div');
     adminEl.className = 'chat-message-item admin-message';
-    adminEl.innerHTML = `
-      <div class="chat-avatar-box"><span class="material-symbols-outlined">shield_person</span></div>
-      <div class="chat-bubble">
-        <div class="chat-bubble-header">
-          <div class="chat-sender-info">
-            <span class="chat-sender-name">${escapeHtml(rep.author || 'e-Plan Studio Engineering Team')}</span>
-            <span class="chat-badge-verified"><span class="material-symbols-outlined" style="font-size: 11px;">verified</span> Verified</span>
-          </div>
-          <span class="chat-timestamp">${formatDate(rep.time || ticket.updated_at)}</span>
-        </div>
-        <div class="chat-message-text">${escapeHtml(rep.text)}</div>
-      </div>
-    `;
+
+    const adminAvatar = document.createElement('div');
+    adminAvatar.className = 'chat-avatar-box';
+    adminAvatar.innerHTML = '<span class="material-symbols-outlined">shield_person</span>';
+
+    const adminBubble = document.createElement('div');
+    adminBubble.className = 'chat-bubble';
+
+    const adminBubbleHeader = document.createElement('div');
+    adminBubbleHeader.className = 'chat-bubble-header';
+
+    const senderInfo = document.createElement('div');
+    senderInfo.className = 'chat-sender-info';
+
+    const adminName = document.createElement('span');
+    adminName.className = 'chat-sender-name';
+    adminName.textContent = rep.author || 'e-Plan Studio Engineering Team';
+
+    const verifiedTag = document.createElement('span');
+    verifiedTag.className = 'chat-badge-verified';
+    verifiedTag.innerHTML = '<span class="material-symbols-outlined" style="font-size: 11px;">verified</span> Verified';
+
+    senderInfo.appendChild(adminName);
+    senderInfo.appendChild(verifiedTag);
+
+    const adminTime = document.createElement('span');
+    adminTime.className = 'chat-timestamp';
+    adminTime.textContent = formatDate(rep.time || ticket.updated_at);
+
+    adminBubbleHeader.appendChild(senderInfo);
+    adminBubbleHeader.appendChild(adminTime);
+
+    const adminText = document.createElement('div');
+    adminText.className = 'chat-message-text';
+    adminText.textContent = rep.text;
+
+    adminBubble.appendChild(adminBubbleHeader);
+    adminBubble.appendChild(adminText);
+
+    adminEl.appendChild(adminAvatar);
+    adminEl.appendChild(adminBubble);
     container.appendChild(adminEl);
   });
 }

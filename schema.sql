@@ -1,6 +1,7 @@
 -- ============================================================================
 -- e-Plan Studio: Cloudflare D1 Database Schema
 -- Table: tickets (Support requests, bug reports, and timeline tracking)
+-- Table: auth_failures (Brute-force lockout prevention for admin console)
 -- ============================================================================
 
 CREATE TABLE IF NOT EXISTS tickets (
@@ -24,3 +25,11 @@ CREATE TABLE IF NOT EXISTS tickets (
 CREATE INDEX IF NOT EXISTS idx_tickets_status_created ON tickets(status, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_tickets_email ON tickets(email);
 CREATE INDEX IF NOT EXISTS idx_tickets_ip_hash_created ON tickets(ip_hash, created_at DESC);
+
+-- Table: auth_failures (Rate limiting for admin passkey attempts)
+CREATE TABLE IF NOT EXISTS auth_failures (
+    ip_hash TEXT NOT NULL,
+    attempt_time DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_failures_ip_time ON auth_failures(ip_hash, attempt_time DESC);

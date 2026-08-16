@@ -2,8 +2,8 @@
  * @file _worker.js
  * @description Cloudflare Worker Advanced Entrypoint.
  * Intercepts /api/tickets and /api/admin routes to interact with Cloudflare D1 (env.DB),
- * enforcing cryptographic admin authorization (env.ADMIN_SECRET),
- * and delegates static asset serving to env.ASSETS.
+ * enforcing cryptographic admin authorization (env.ADMIN_SECRET), brute-force IP rate limiting,
+ * and security headers. Delegates static asset serving to env.ASSETS.
  */
 
 // Helper to generate a non-sequential, cryptographically secure Ticket ID (e.g. REQ-9X4K-72M1)
@@ -37,12 +37,16 @@ function isValidEmail(email) {
   return typeof email === 'string' && re.test(email.trim()) && email.length <= 254;
 }
 
+// Global Security Response Builder with strict OWASP headers
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
       'Content-Type': 'application/json',
       'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'DENY',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';",
       'Cache-Control': 'no-store, no-cache, must-revalidate',
       'Access-Control-Allow-Origin': '*'
     }
@@ -59,11 +63,40 @@ async function timingSafeAuthCheck(providedToken, secretToken) {
   return crypto.subtle.timingSafeEqual(a, b);
 }
 
-// Admin Authorization Gatekeeper
+// Admin Authorization Gatekeeper with Brute-Force Rate Limiting
 async function verifyAdminAuth(request, env) {
   if (!env.ADMIN_SECRET || typeof env.ADMIN_SECRET !== 'string' || env.ADMIN_SECRET.trim().length === 0) {
-    return false;
+    return { authorized: false, rateLimited: false };
   }
+
+  const clientIp = request.headers.get('CF-Connecting-IP') || request.headers.get('x-real-ip') || '0.0.0.0';
+  const ipHash = await computeIpHash(clientIp);
+
+  // Check Brute-Force Rate Limiter (Max 5 failed attempts per 15 minutes)
+  if (env.DB && ipHash) {
+    try {
+      await env.DB.prepare(`
+        CREATE TABLE IF NOT EXISTS auth_failures (
+          ip_hash TEXT NOT NULL,
+          attempt_time DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+      `).run();
+
+      const failureRow = await env.DB.prepare(`
+        SELECT COUNT(*) as fail_count 
+        FROM auth_failures 
+        WHERE ip_hash = ? AND attempt_time >= datetime('now', '-15 minutes')
+      `).bind(ipHash).first();
+
+      const failCount = failureRow ? failureRow.fail_count : 0;
+      if (failCount >= 5) {
+        return { authorized: false, rateLimited: true };
+      }
+    } catch (e) {
+      console.warn('Auth failure check warning:', e.message);
+    }
+  }
+
   const authHeader = request.headers.get('Authorization') || '';
   let token = '';
   if (authHeader.startsWith('Bearer ')) {
@@ -71,7 +104,22 @@ async function verifyAdminAuth(request, env) {
   } else {
     token = request.headers.get('X-Admin-Key') || '';
   }
-  return await timingSafeAuthCheck(token, env.ADMIN_SECRET.trim());
+
+  const isValid = await timingSafeAuthCheck(token, env.ADMIN_SECRET.trim());
+
+  if (env.DB && ipHash) {
+    try {
+      if (isValid) {
+        // Clear failures on successful login
+        await env.DB.prepare('DELETE FROM auth_failures WHERE ip_hash = ?').bind(ipHash).run();
+      } else {
+        // Log failure
+        await env.DB.prepare('INSERT INTO auth_failures (ip_hash) VALUES (?)').bind(ipHash).run();
+      }
+    } catch (e) {}
+  }
+
+  return { authorized: isValid, rateLimited: false };
 }
 
 export default {
@@ -244,16 +292,23 @@ export default {
     }
 
     // =========================================================================
-    // 3. ADMIN ROUTES: Restricted by ADMIN_SECRET
+    // 3. ADMIN ROUTES: Restricted by ADMIN_SECRET + Rate Limiter
     // =========================================================================
     if (pathname.startsWith('/api/admin')) {
       if (!env.DB) {
         return jsonResponse({ error: 'Database binding "DB" not configured.' }, 500);
       }
 
-      // Check Cryptographic Authorization Gate
-      const isAuthorized = await verifyAdminAuth(request, env);
-      if (!isAuthorized) {
+      // Check Cryptographic Authorization Gate & Rate Limit
+      const authResult = await verifyAdminAuth(request, env);
+
+      if (authResult.rateLimited) {
+        return jsonResponse({
+          error: 'Too many failed login attempts. Access is locked for 15 minutes to protect against brute-force attacks.'
+        }, 429);
+      }
+
+      if (!authResult.authorized) {
         return jsonResponse({
           error: 'Unauthorized: Invalid or missing admin credentials.'
         }, 401);
