@@ -3101,9 +3101,17 @@ body.pdf-export-active .drawing-canvas-column,
   border-radius: 50%;
 }
 
-.dot-low { background: var(--apple-green); }
-.dot-medium { background: var(--apple-amber); }
-.dot-high { background: var(--apple-red); }
+.dot-low {
+  background: var(--apple-green);
+}
+
+.dot-medium {
+  background: var(--apple-amber);
+}
+
+.dot-high {
+  background: var(--apple-red);
+}
 
 /* Diagnostics Badge */
 .diagnostics-info-badge {
@@ -3646,33 +3654,42 @@ body.pdf-export-active .drawing-canvas-column,
   .support-card-container {
     padding: 20px 16px;
   }
+
   .category-tiles-grid {
     grid-template-columns: 1fr;
     gap: 10px;
   }
+
   .form-row-dual {
     grid-template-columns: 1fr;
     gap: 14px;
   }
+
   .support-hero-title {
     font-size: 26px;
   }
+
   .status-stepper-container {
     margin: 20px 0 16px 0;
   }
+
   .stepper-node {
     width: 65px;
   }
+
   .node-circle {
     width: 32px;
     height: 32px;
   }
+
   .node-circle .material-symbols-outlined {
     font-size: 16px;
   }
+
   .node-label {
     font-size: 10px;
   }
+
   .ticket-id-code {
     font-size: 22px;
   }
@@ -3685,8 +3702,11 @@ body.pdf-export-active .drawing-canvas-column,
 .admin-body {
   background-color: var(--apple-bg);
   min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Login Screen */
@@ -3695,8 +3715,11 @@ body.pdf-export-active .drawing-canvas-column,
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 20px;
+  min-height: 100dvh;
+  width: 100%;
+  padding: 24px 16px;
   box-sizing: border-box;
+  margin: auto;
 }
 
 .admin-login-card {
@@ -3706,6 +3729,7 @@ body.pdf-export-active .drawing-canvas-column,
   border-radius: 24px;
   text-align: center;
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08);
+  margin: auto;
 }
 
 .admin-login-icon {
@@ -4448,14 +4472,31 @@ body.pdf-export-active .drawing-canvas-column,
   .admin-main-grid {
     grid-template-columns: 1fr;
   }
+
   .admin-inbox-pane {
     height: auto;
     max-height: 40vh;
   }
+
   .admin-detail-pane {
     height: auto;
   }
+
   .desktop-only-text {
     display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-login-wrapper {
+    padding: 16px;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .admin-login-card {
+    padding: 32px 20px;
+    border-radius: 20px;
+    margin: auto;
   }
 }
