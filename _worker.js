@@ -122,13 +122,23 @@ async function verifyAdminAuth(request, env) {
   return { authorized: isValid, rateLimited: false };
 }
 
-// Self-Healing Schema Migration to ensure attachments column and lift obsolete restrictive SQLite CHECK constraints
+/// Self-Healing Schema Migration to ensure attachments column and lift obsolete restrictive SQLite CHECK constraints
+let schemaMigrationCompleted = false;
+
 async function ensureSchemaUpdated(db) {
-  if (!db) return;
+  if (!db || schemaMigrationCompleted) return;
   try {
+    // 1. Check if attachments column exists using PRAGMA table_info
+    const colInfo = await db.prepare("PRAGMA table_info(tickets)").all();
+    const columns = colInfo && colInfo.results ? colInfo.results.map(c => c.name) : [];
+
+    if (columns.length > 0 && !columns.includes('attachments')) {
+      await db.prepare("ALTER TABLE tickets ADD COLUMN attachments TEXT DEFAULT '[]'").run();
+    }
+
+    // 2. Check if old restrictive CHECK constraint exists in table DDL
     const tableInfo = await db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='tickets'").first();
     if (tableInfo && tableInfo.sql) {
-      // 1. If table definition has the old CHECK constraint that blocks on_hold or infeasible
       if (tableInfo.sql.includes("status IN ('open'") && !tableInfo.sql.includes('on_hold')) {
         await db.batch([
           db.prepare("ALTER TABLE tickets RENAME TO tickets_old"),
@@ -161,11 +171,10 @@ async function ensureSchemaUpdated(db) {
           db.prepare("CREATE INDEX IF NOT EXISTS idx_tickets_email ON tickets(email)"),
           db.prepare("CREATE INDEX IF NOT EXISTS idx_tickets_ip_hash_created ON tickets(ip_hash, created_at DESC)")
         ]);
-      } else if (!tableInfo.sql.includes('attachments')) {
-        // 2. Add attachments column if not yet present
-        await db.prepare("ALTER TABLE tickets ADD COLUMN attachments TEXT DEFAULT '[]'").run();
       }
     }
+
+    schemaMigrationCompleted = true;
   } catch (err) {
     console.error('Auto-migration error:', err);
   }
@@ -189,9 +198,9 @@ export default {
       });
     }
 
-    // Auto-update D1 table schema on database operations
-    if (pathname.startsWith('/api/admin/') && env.DB) {
-      ctx.waitUntil ? ctx.waitUntil(ensureSchemaUpdated(env.DB)) : await ensureSchemaUpdated(env.DB);
+    // Auto-update D1 table schema on API database operations
+    if (pathname.startsWith('/api/') && env.DB) {
+      await ensureSchemaUpdated(env.DB);
     }
 
     // =========================================================================
@@ -200,7 +209,7 @@ export default {
     if (pathname === '/api/tickets' && request.method === 'POST') {
       try {
         if (!env.DB) {
-          return jsonResponse({ error: 'Database binding "DB" is not connected. Please check Cloudflare Bindings.' }, 500);
+          return jsonResponse({ error: 'Database binding "DB" not configured.' }, 500);
         }
 
         let body = {};
@@ -293,25 +302,49 @@ export default {
           }
         }
 
-        // Generate unique ticket ID and insert
+        // Generate unique ticket ID and insert with auto-recovery
         const ticketId = generateTicketId();
         const clientInfoStr = client_info ? JSON.stringify(client_info) : '{}';
 
-        await env.DB.prepare(`
-          INSERT INTO tickets (id, type, priority, status, name, email, subject, message, attachments, public_response, internal_notes, ip_hash, client_info)
-          VALUES (?, ?, ?, 'open', ?, ?, ?, ?, ?, '', '', ?, ?)
-        `).bind(
-          ticketId,
-          ticketType,
-          ticketPriority,
-          cleanName,
-          cleanEmail,
-          cleanSubject,
-          cleanMessage,
-          attachmentsJson,
-          ipHash || 'unknown',
-          clientInfoStr
-        ).run();
+        try {
+          await env.DB.prepare(`
+            INSERT INTO tickets (id, type, priority, status, name, email, subject, message, attachments, public_response, internal_notes, ip_hash, client_info)
+            VALUES (?, ?, ?, 'open', ?, ?, ?, ?, ?, '', '', ?, ?)
+          `).bind(
+            ticketId,
+            ticketType,
+            ticketPriority,
+            cleanName,
+            cleanEmail,
+            cleanSubject,
+            cleanMessage,
+            attachmentsJson,
+            ipHash || 'unknown',
+            clientInfoStr
+          ).run();
+        } catch (insertErr) {
+          if (String(insertErr.message).includes('has no column named attachments') || String(insertErr).includes('attachments')) {
+            await env.DB.prepare("ALTER TABLE tickets ADD COLUMN attachments TEXT DEFAULT '[]'").run();
+            // Retry insert
+            await env.DB.prepare(`
+              INSERT INTO tickets (id, type, priority, status, name, email, subject, message, attachments, public_response, internal_notes, ip_hash, client_info)
+              VALUES (?, ?, ?, 'open', ?, ?, ?, ?, ?, '', '', ?, ?)
+            `).bind(
+              ticketId,
+              ticketType,
+              ticketPriority,
+              cleanName,
+              cleanEmail,
+              cleanSubject,
+              cleanMessage,
+              attachmentsJson,
+              ipHash || 'unknown',
+              clientInfoStr
+            ).run();
+          } else {
+            throw insertErr;
+          }
+        }
 
         return jsonResponse({
           success: true,
