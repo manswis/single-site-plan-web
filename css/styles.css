@@ -4288,42 +4288,81 @@ body.pdf-export-active .drawing-canvas-column,
 }
 
 .filter-footer-btn {
-  height: 34px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
+  height: 36px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 6px;
   cursor: pointer;
   transition: var(--apple-transition);
-  border: none;
+  border: 1px solid transparent;
+  user-select: none;
 }
 
 .filter-footer-reset {
-  background: rgba(0, 0, 0, 0.05);
-  color: var(--apple-text-secondary);
+  background: rgba(0, 0, 0, 0.06);
+  border-color: var(--apple-border);
+  color: var(--apple-text-primary) !important;
+}
+
+.filter-footer-reset span {
+  color: var(--apple-text-primary) !important;
+  font-weight: 600;
 }
 
 [data-theme="dark"] .filter-footer-reset {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--apple-text-secondary);
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .filter-footer-reset span {
+  color: #ffffff !important;
+  font-weight: 600;
 }
 
 .filter-footer-reset:hover {
-  background: rgba(255, 59, 48, 0.12);
-  color: var(--apple-red);
+  background: rgba(255, 59, 48, 0.15) !important;
+  border-color: var(--apple-red) !important;
+  color: var(--apple-red) !important;
+}
+
+.filter-footer-reset:hover span {
+  color: var(--apple-red) !important;
 }
 
 .filter-footer-apply {
-  background: var(--apple-accent);
-  color: #ffffff;
+  background: #0071e3 !important;
+  color: #ffffff !important;
+  border-color: #0071e3 !important;
+  font-weight: 700 !important;
+}
+
+.filter-footer-apply span,
+.filter-footer-apply .material-symbols-outlined {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="dark"] .filter-footer-apply {
+  background: #0a84ff !important;
+  color: #ffffff !important;
+  border-color: #0a84ff !important;
+  box-shadow: 0 2px 10px rgba(10, 132, 255, 0.45);
+}
+
+[data-theme="dark"] .filter-footer-apply span,
+[data-theme="dark"] .filter-footer-apply .material-symbols-outlined {
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 .filter-footer-apply:hover {
-  opacity: 0.92;
-  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.35);
+  opacity: 0.94;
+  box-shadow: 0 4px 14px rgba(10, 132, 255, 0.55);
 }
 
 /* Active Filter Tags Bar */
