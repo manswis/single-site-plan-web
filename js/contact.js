@@ -596,9 +596,16 @@ function showSubmissionSuccess(ticketId, type) {
   const successCard = document.getElementById('ticketSuccessCard');
   const idEl = document.getElementById('generatedTicketId');
   const typeEl = document.getElementById('successTicketType');
+  const form = document.getElementById('ticketSubmitForm');
 
   if (idEl) idEl.textContent = ticketId;
   if (typeEl) typeEl.textContent = type.toUpperCase();
+
+  // Thoroughly clear all form inputs and attachments
+  if (form) form.reset();
+  currentAttachments = [];
+  renderAttachmentPreviews();
+  pendingTicketPayload = null;
 
   if (formCard) formCard.style.display = 'none';
   if (successCard) {
@@ -611,8 +618,44 @@ function showSubmissionSuccess(ticketId, type) {
 window.resetContactForm = function () {
   const formCard = document.getElementById('ticketFormCard');
   const successCard = document.getElementById('ticketSuccessCard');
-  if (formCard) formCard.style.display = 'block';
+  const form = document.getElementById('ticketSubmitForm');
+
+  // Complete cleanup of form inputs and attachments
+  if (form) form.reset();
+  currentAttachments = [];
+  renderAttachmentPreviews();
+  pendingTicketPayload = null;
+
+  // Reset category selector to default "bug"
+  const tiles = document.querySelectorAll('.category-tile');
+  tiles.forEach(t => t.classList.remove('active'));
+  const defaultTile = document.querySelector('.category-tile[data-type="bug"]');
+  if (defaultTile) defaultTile.classList.add('active');
+  activeCategory = 'bug';
+  const typeInput = document.getElementById('ticketTypeInput');
+  if (typeInput) typeInput.value = 'bug';
+
+  // Reset priority buttons to default "medium"
+  const priorityBtns = document.querySelectorAll('.priority-btn');
+  priorityBtns.forEach(b => b.classList.remove('active'));
+  const defaultPriority = document.querySelector('.priority-btn[data-priority="medium"]');
+  if (defaultPriority) defaultPriority.classList.add('active');
+  const priorityInput = document.getElementById('ticketPriority');
+  if (priorityInput) priorityInput.value = 'medium';
+
+  // Clear alert boxes
+  const alertBox = document.getElementById('submitAlertBox');
+  if (alertBox) {
+    alertBox.style.display = 'none';
+    alertBox.className = 'contact-alert';
+  }
+
+  // Restore form card view
   if (successCard) successCard.style.display = 'none';
+  if (formCard) {
+    formCard.style.display = 'block';
+    formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 };
 
 // Copy ticket ID to clipboard

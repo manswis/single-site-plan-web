@@ -249,12 +249,12 @@ export default {
         const cleanName = (name && typeof name === 'string') ? name.trim().slice(0, 100) : '';
         const cleanEmail = email.trim().toLowerCase().slice(0, 254);
 
-        // 5-Layer Security: Validate and sanitize attachments (max 2 images, max 350KB Base64 each)
+        // 5-Layer Security: Validate and sanitize attachments (max 2 images, max 1.5MB Base64 each)
         let sanitizedAttachments = [];
         if (Array.isArray(attachments)) {
           const rawAttachments = attachments.slice(0, 2);
           for (const item of rawAttachments) {
-            if (typeof item === 'string' && item.startsWith('data:image/') && item.length <= 350000) {
+            if (typeof item === 'string' && item.startsWith('data:image/') && item.length <= 1500000) {
               // Ensure it's strictly raster JPEG, WebP, or PNG (no SVG, no HTML/JS injection)
               if (item.startsWith('data:image/jpeg;base64,') || item.startsWith('data:image/webp;base64,') || item.startsWith('data:image/png;base64,')) {
                 if (!item.includes('<script') && !item.includes('</') && !item.includes('<svg')) {
@@ -267,11 +267,11 @@ export default {
               }
             } else if (item && typeof item === 'object' && typeof item.dataUrl === 'string') {
               const dataUrl = item.dataUrl;
-              if (dataUrl.startsWith('data:image/') && dataUrl.length <= 350000) {
+              if (dataUrl.startsWith('data:image/') && dataUrl.length <= 1500000) {
                 if (dataUrl.startsWith('data:image/jpeg;base64,') || dataUrl.startsWith('data:image/webp;base64,') || dataUrl.startsWith('data:image/png;base64,')) {
                   if (!dataUrl.includes('<script') && !dataUrl.includes('</') && !dataUrl.includes('<svg')) {
                     sanitizedAttachments.push({
-                      name: String(item.name || 'screenshot.jpg').slice(0, 50),
+                      name: String(item.name || 'screenshot.jpg').replace(/[^\w\.-]/g, '_').slice(0, 50),
                       size: Number(item.size || Math.round(dataUrl.length * 0.75)),
                       dataUrl: dataUrl
                     });
