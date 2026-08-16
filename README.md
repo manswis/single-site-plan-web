@@ -90,25 +90,36 @@ singleSitePlan-web/
 ├── legal.html                # Legally binding Terms of Service & Privacy (DPDP compliant)
 ├── faq.html                  # Interactive field-by-field guide & Sakala FAQ accordions
 ├── _worker.js                # Cloudflare Workers serverless API router & D1 bindings
+├── build.js                  # Ultra-fast esbuild asset minification & bundling script (<30ms)
+├── package.json              # Project scripts (build, dev, deploy) & build dependencies
 ├── schema.sql                # Standalone D1 database table and index definitions
 ├── wrangler.toml             # Cloudflare Workers & D1 deployment manifest
-├── .assetsignore             # Excludes backend worker files from public static assets
+├── .assetsignore             # Excludes backend worker files & node_modules from public assets
 ├── .gitignore                # Standard Git ignore rules for node, wrangler & OS files
 ├── favicon.svg               # Vector SVG blueprint favicon
 ├── LICENSE                   # Official MIT Open Source License
 ├── README.md                 # Project documentation (This file)
 ├── css/
-│   └── styles.css            # Apple HIG master design system tokens & print styles
+│   ├── styles.css            # Human-readable master CSS design tokens & print styles
+│   └── styles.min.css        # Compressed production stylesheet (83 KB)
 └── js/
-    ├── wizard.js             # 7-step guided wizard state manager & draft persistence
-    ├── studio.js             # CAD Workbench UI and real-time state synchronizer
-    ├── ui.js                 # DOM interaction handlers & PDF export engine (jsPDF)
-    ├── validator.js          # Sakala data validation rules & error focus engine
-    ├── renderer.js           # SVG 2D CAD vector graphics rendering engine
-    ├── theme.js              # Automatic Dark/Light mode theme manager
-    ├── analytics.js          # Zero-privacy session deduplicated live stats counter
+    ├── admin.js              # Human-readable admin controller & session security
+    ├── admin.min.js          # Production minified admin controller
+    ├── analytics.js          # Session deduplicated live stats counter
+    ├── analytics.min.js      # Production minified analytics counter
     ├── contact.js            # Helpdesk controller, consent modal & timeline renderer
-    └── admin.js              # Admin triage controller, canned responses & session security
+    ├── contact.min.js        # Production minified helpdesk controller
+    ├── renderer.js           # SVG 2D CAD vector graphics rendering engine
+    ├── renderer.min.js       # Production minified CAD renderer
+    ├── studio.bundle.min.js  # Unified single-bundle production CAD engine
+    ├── theme.js              # Automatic Dark/Light mode theme manager
+    ├── theme.min.js          # Production minified theme manager
+    ├── ui.js                 # DOM interaction handlers & PDF export engine (jsPDF)
+    ├── ui.min.js             # Production minified UI handlers
+    ├── validator.js          # Sakala data validation rules & error focus engine
+    ├── validator.min.js      # Production minified validator
+    ├── wizard.js             # 7-step guided wizard state manager & draft persistence
+    └── wizard.min.js         # Production minified wizard
 ```
 
 ---
@@ -116,6 +127,7 @@ singleSitePlan-web/
 ## 🛠️ Technology Stack
 
 - **Frontend Core:** Semantic HTML5, Vanilla JavaScript (ES6+), Vanilla CSS3 (Apple Design System).
+- **Build Engine:** `esbuild` for ultra-fast, zero-runtime production minification and code compression.
 - **Vector CAD Engine:** Scalable Vector Graphics (SVG) with mathematical coordinate transformations.
 - **Document Generation:** `jsPDF` + `html2canvas` for client-side vector PDF compilation.
 - **Serverless API & Edge Hosting:** Cloudflare Workers with Static Assets.
@@ -126,25 +138,35 @@ singleSitePlan-web/
 
 ## 💻 Local Development Setup
 
-No complex Node.js build tools or heavy dependencies are required. The frontend runs 100% natively in any modern web browser.
+The project provides human-readable source code for development and an automated `esbuild` pipeline for generating compressed, high-performance production assets.
+
+### 1. Clone & Install Dependencies
+```bash
+git clone https://github.com/manswis/singleSitePlan-web.git
+cd singleSitePlan-web
+npm install
+```
+
+### 2. Build Production Assets (< 30ms)
+To minify all JavaScript modules and CSS stylesheets into production `.min` files:
+```bash
+npm run build
+```
+*Outputs size savings breakdown and builds `js/*.min.js`, `js/studio.bundle.min.js`, and `css/styles.min.css`.*
+
+---
 
 ### Option A: Static Frontend Only (No Backend)
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/manswis/singleSitePlan-web.git
-   cd singleSitePlan-web
-   ```
+Serve locally via any static web server:
+```bash
+# Using Python 3
+python3 -m http.server 8000
 
-2. **Serve locally via Python or Node:**
-   ```bash
-   # Using Python 3
-   python3 -m http.server 8000
-
-   # Or using npx serve
-   npx serve ./
-   ```
-   Open `http://localhost:8000` in your web browser.
+# Or using npx serve
+npx serve ./
+```
+Open `http://localhost:8000` in your web browser.
 
 ---
 
@@ -152,26 +174,29 @@ No complex Node.js build tools or heavy dependencies are required. The frontend 
 
 To test the support desk API and database integration locally using Wrangler:
 
-1. **Install Wrangler CLI:**
-   ```bash
-   npm install -g wrangler
-   ```
-
-2. **Authenticate with Cloudflare (one-time):**
+1. **Authenticate with Cloudflare (one-time):**
    ```bash
    npx wrangler login
    ```
 
-3. **Initialize the local D1 SQLite database:**
+2. **Initialize the local D1 SQLite database:**
    ```bash
    npx wrangler d1 execute single_site_plan_support_tickets_db --local --file=schema.sql
    ```
 
-4. **Start the local edge development server:**
+3. **Start the local edge development server:**
    ```bash
-   npx wrangler dev
+   npm run dev
    ```
    Open `http://localhost:8787` in your browser. Both static CAD drafting and `/api/tickets` will run locally with instant hot-reloading.
+
+---
+
+### 🚀 Production Deployment
+To build minified assets and deploy directly to Cloudflare Workers:
+```bash
+npm run deploy
+```
 
 ---
 
