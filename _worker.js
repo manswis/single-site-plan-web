@@ -456,8 +456,8 @@ export default {
           let body = {};
           try { body = await request.json(); } catch (e) { }
 
-          const replyText = (body.reply || '').trim();
-          const author = (body.author || 'e-Plan Support Team').trim();
+          const replyText = (body.reply || body.message || '').trim();
+          const author = (body.author || 'e-Plan Studio Engineering Team').trim();
           const newStatus = (body.status || '').trim();
 
           if (!replyText) {

@@ -968,6 +968,7 @@ async function handleReplySubmit(e) {
 
   try {
     const payload = {
+      reply: text,
       message: text,
       author: 'e-Plan Studio Engineering Team',
       status: shouldResolve ? 'resolved' : ''
@@ -983,7 +984,7 @@ async function handleReplySubmit(e) {
       body: JSON.stringify(payload)
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
     if (!response.ok || data.error) {
       throw new Error(data.error || 'Failed to post reply.');
     }
@@ -992,7 +993,16 @@ async function handleReplySubmit(e) {
     if (resolveCheckbox) resolveCheckbox.checked = false;
     showToast('Reply published to timeline ✓');
 
-    // Reload active ticket and list
+    // Update active ticket state in memory and re-render conversation
+    const activeId = selectedTicketId;
+    const ticket = currentTickets.find(t => t.id === activeId);
+    if (ticket) {
+      ticket.public_response = data.public_response || ticket.public_response;
+      if (data.status) ticket.status = data.status;
+      renderTicketDetail(ticket);
+    }
+
+    // Refresh inbox list and metrics in background
     loadTickets();
 
   } catch (err) {
