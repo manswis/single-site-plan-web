@@ -1087,14 +1087,25 @@ function saveTicketToStorage(ticket) {
   if (!ticket || !ticket.id) return;
   try {
     let list = getSavedTickets();
-    // Remove if already exists to bump to the top of list
-    list = list.filter(t => t.id !== ticket.id);
-    list.unshift({
+    const existingIndex = list.findIndex(t => t.id === ticket.id);
+    const title = ticket.title || ticket.subject || (existingIndex >= 0 ? list[existingIndex].title : 'Support Inquiry');
+    const date = ticket.date || ticket.created_at || (existingIndex >= 0 ? list[existingIndex].date : new Date().toISOString());
+
+    const item = {
       id: ticket.id,
-      type: ticket.type || 'bug',
-      subject: ticket.subject || 'Support Inquiry',
-      date: ticket.date || new Date().toISOString()
-    });
+      title: title,
+      date: date
+    };
+
+    if (existingIndex >= 0) {
+      // Keep list order completely fixed / unaltered when enquiring
+      list[existingIndex] = item;
+    } else {
+      // Insert new item and maintain stable chronological order (newest first, matching DB)
+      list.push(item);
+      list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }
+
     // Cap at most recent 8 items
     if (list.length > 8) list = list.slice(0, 8);
     localStorage.setItem(SAVED_TICKETS_KEY, JSON.stringify(list));
@@ -1155,20 +1166,18 @@ function renderSavedTicketsList() {
     item.className = 'saved-ticket-item';
 
     const timeAgo = formatRelativeTime(ticket.date);
-    const safeType = escapeHtml(ticket.type || 'bug');
     const safeId = escapeHtml(ticket.id);
-    const safeSubject = escapeHtml(ticket.subject || 'Support Inquiry');
+    const safeTitle = escapeHtml(ticket.title || ticket.subject || 'Support Inquiry');
 
     item.onclick = () => window.lookupSavedTicket(ticket.id);
 
     item.innerHTML = `
       <div class="saved-ticket-main">
         <div class="saved-ticket-top-row">
-          <span class="ticket-type-tag type-${safeType}">${safeType.toUpperCase()}</span>
           <span class="saved-ticket-id">${safeId}</span>
           <span class="saved-ticket-time">• ${escapeHtml(timeAgo)}</span>
         </div>
-        <div class="saved-ticket-subject">${safeSubject}</div>
+        <div class="saved-ticket-subject">${safeTitle}</div>
       </div>
       <button type="button" class="saved-ticket-remove-btn" title="Remove from this browser" onclick="removeSingleSavedTicket('${safeId}', event)">
         <span class="material-symbols-outlined">close</span>
