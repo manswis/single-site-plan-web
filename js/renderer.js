@@ -511,29 +511,50 @@ function generatePlan() {
 
     // Interior Building Footprint Text
     if (bldgTitle && bldgDimText) {
+      const isNarrow = Math.min(sideN, sideS) < 25;
       bldgTitle.setAttribute('x', bldgX + bldgDrawW / 2);
       bldgTitle.setAttribute('y', bldgY + bldgDrawH / 2 - 6);
+      bldgTitle.setAttribute('font-size', isNarrow ? '10' : '13');
       bldgTitle.textContent = (bldgType && bldgType !== 'Residential' ? bldgType.toUpperCase() : 'EXISTING BUILDING');
       bldgDimText.setAttribute('x', bldgX + bldgDrawW / 2);
       bldgDimText.setAttribute('y', bldgY + bldgDrawH / 2 + 10);
+      bldgDimText.setAttribute('font-size', isNarrow ? '9' : '11');
       bldgDimText.textContent = `${formatFeetInches(bldgRenderW)} × ${formatFeetInches(bldgRenderH)}`;
     }
   }
 
-  // 9. Render Corner Splay for 2-side Corner Plots (e.g. North & East Road access)
-  const isCorner = boundaries.North.type === 'road' && boundaries.East.type === 'road';
+  // 9. Render Corner Splay for 2-side Corner Plots (Any 2 intersecting roads)
   const splayPoly = document.getElementById('splayPoly');
-  if (isCorner && splayPoly) {
-    const splaySize = 5 * ratio; // 5ft corner splay
-    const p1 = `${topRight.x - splaySize},${topRight.y}`;
-    const p2 = `${topRight.x},${topRight.y + splaySize}`;
-    splayPoly.setAttribute('points', `${p1} ${topRight.x},${topRight.y} ${p2}`);
+  const hasNorthRoad = boundaries.North.type === 'road';
+  const hasSouthRoad = boundaries.South.type === 'road';
+  const hasEastRoad = boundaries.East.type === 'road';
+  const hasWestRoad = boundaries.West.type === 'road';
+
+  let cornerPoints = null;
+  const splaySize = 5 * ratio; // 5ft statutory municipal splay
+
+  if (hasNorthRoad && hasEastRoad) {
+    // Top-Right Corner (North & East)
+    cornerPoints = `${topRight.x - splaySize},${topRight.y} ${topRight.x},${topRight.y} ${topRight.x},${topRight.y + splaySize}`;
+  } else if (hasNorthRoad && hasWestRoad) {
+    // Top-Left Corner (North & West)
+    cornerPoints = `${topLeft.x + splaySize},${topLeft.y} ${topLeft.x},${topLeft.y} ${topLeft.x},${topLeft.y + splaySize}`;
+  } else if (hasSouthRoad && hasEastRoad) {
+    // Bottom-Right Corner (South & East)
+    cornerPoints = `${botRight.x - splaySize},${botRight.y} ${botRight.x},${botRight.y} ${botRight.x},${botRight.y - splaySize}`;
+  } else if (hasSouthRoad && hasWestRoad) {
+    // Bottom-Left Corner (South & West)
+    cornerPoints = `${botLeft.x + splaySize},${botLeft.y} ${botLeft.x},${botLeft.y} ${botLeft.x},${botLeft.y - splaySize}`;
+  }
+
+  if (cornerPoints && splayPoly) {
+    splayPoly.setAttribute('points', cornerPoints);
     splayPoly.style.display = 'block';
   } else if (splayPoly) {
     splayPoly.style.display = 'none';
   }
 
-  // 10. Render RMP-2015 Road Widening Strip Overlay
+  // 10. Render RMP-2015 Road Widening Strip Overlay (Oriented to Active Road)
   const roadWideningRect = document.getElementById('roadWideningRect');
   const roadWideningText = document.getElementById('roadWideningText');
   if (isRoadWidening && stripW > 0 && roadWideningRect && roadWideningText) {
@@ -541,20 +562,44 @@ function generatePlan() {
     roadWideningRect.style.display = 'block';
     roadWideningText.style.display = 'block';
 
-    if (roadFace === 'north') {
+    const rf = (roadFace || 'north').toLowerCase();
+    if (rf === 'north') {
       roadWideningRect.setAttribute('x', topLeft.x);
       roadWideningRect.setAttribute('y', topLeft.y);
       roadWideningRect.setAttribute('width', drawW);
       roadWideningRect.setAttribute('height', stripPx);
       roadWideningText.setAttribute('x', topLeft.x + drawW / 2);
       roadWideningText.setAttribute('y', topLeft.y + stripPx / 2 + 3);
-    } else {
+      roadWideningText.removeAttribute('transform');
+    } else if (rf === 'east') {
+      roadWideningRect.setAttribute('x', topRight.x - stripPx);
+      roadWideningRect.setAttribute('y', topRight.y);
+      roadWideningRect.setAttribute('width', stripPx);
+      roadWideningRect.setAttribute('height', drawH);
+      const textX = topRight.x - stripPx / 2;
+      const textY = topRight.y + drawH / 2;
+      roadWideningText.setAttribute('x', textX);
+      roadWideningText.setAttribute('y', textY);
+      roadWideningText.setAttribute('transform', `rotate(-90, ${textX}, ${textY})`);
+    } else if (rf === 'west') {
       roadWideningRect.setAttribute('x', topLeft.x);
+      roadWideningRect.setAttribute('y', topLeft.y);
+      roadWideningRect.setAttribute('width', stripPx);
+      roadWideningRect.setAttribute('height', drawH);
+      const textX = topLeft.x + stripPx / 2;
+      const textY = topLeft.y + drawH / 2;
+      roadWideningText.setAttribute('x', textX);
+      roadWideningText.setAttribute('y', textY);
+      roadWideningText.setAttribute('transform', `rotate(-90, ${textX}, ${textY})`);
+    } else {
+      // South (default)
+      roadWideningRect.setAttribute('x', botLeft.x);
       roadWideningRect.setAttribute('y', botLeft.y - stripPx);
       roadWideningRect.setAttribute('width', drawW);
       roadWideningRect.setAttribute('height', stripPx);
-      roadWideningText.setAttribute('x', topLeft.x + drawW / 2);
+      roadWideningText.setAttribute('x', botLeft.x + drawW / 2);
       roadWideningText.setAttribute('y', botLeft.y - stripPx / 2 + 3);
+      roadWideningText.removeAttribute('transform');
     }
     roadWideningText.textContent = `ROAD WIDENING STRIP (${formatFeetInches(stripW)})`;
   } else if (roadWideningRect && roadWideningText) {
@@ -562,7 +607,7 @@ function generatePlan() {
     roadWideningText.style.display = 'none';
   }
 
-  // 11. Render Drain / Lake Buffer Zone Overlay
+  // 11. Render Drain / Lake Buffer Zone Overlay (Oriented to Matching Drain Boundary)
   const bufferRect = document.getElementById('bufferRect');
   const bufferText = document.getElementById('bufferText');
   if (isBuffer && bufW > 0 && bufferRect && bufferText) {
@@ -570,24 +615,59 @@ function generatePlan() {
     bufferRect.style.display = 'block';
     bufferText.style.display = 'block';
 
-    bufferRect.setAttribute('x', botLeft.x);
-    bufferRect.setAttribute('y', botLeft.y - bufPx);
-    bufferRect.setAttribute('width', drawW);
-    bufferRect.setAttribute('height', bufPx);
+    const hasNorthDrain = boundaries.North.type === 'drain' || boundaries.North.type === 'lake';
+    const hasEastDrain = boundaries.East.type === 'drain' || boundaries.East.type === 'lake';
+    const hasWestDrain = boundaries.West.type === 'drain' || boundaries.West.type === 'lake';
 
-    bufferText.setAttribute('x', botLeft.x + drawW / 2);
-    bufferText.setAttribute('y', botLeft.y - bufPx / 2 + 3);
+    if (hasNorthDrain) {
+      bufferRect.setAttribute('x', topLeft.x);
+      bufferRect.setAttribute('y', topLeft.y);
+      bufferRect.setAttribute('width', drawW);
+      bufferRect.setAttribute('height', bufPx);
+      bufferText.setAttribute('x', topLeft.x + drawW / 2);
+      bufferText.setAttribute('y', topLeft.y + bufPx / 2 + 3);
+      bufferText.removeAttribute('transform');
+    } else if (hasEastDrain) {
+      bufferRect.setAttribute('x', topRight.x - bufPx);
+      bufferRect.setAttribute('y', topRight.y);
+      bufferRect.setAttribute('width', bufPx);
+      bufferRect.setAttribute('height', drawH);
+      const tX = topRight.x - bufPx / 2;
+      const tY = topRight.y + drawH / 2;
+      bufferText.setAttribute('x', tX);
+      bufferText.setAttribute('y', tY);
+      bufferText.setAttribute('transform', `rotate(-90, ${tX}, ${tY})`);
+    } else if (hasWestDrain) {
+      bufferRect.setAttribute('x', topLeft.x);
+      bufferRect.setAttribute('y', topLeft.y);
+      bufferRect.setAttribute('width', bufPx);
+      bufferRect.setAttribute('height', drawH);
+      const tX = topLeft.x + bufPx / 2;
+      const tY = topLeft.y + drawH / 2;
+      bufferText.setAttribute('x', tX);
+      bufferText.setAttribute('y', tY);
+      bufferText.setAttribute('transform', `rotate(-90, ${tX}, ${tY})`);
+    } else {
+      // South (default)
+      bufferRect.setAttribute('x', botLeft.x);
+      bufferRect.setAttribute('y', botLeft.y - bufPx);
+      bufferRect.setAttribute('width', drawW);
+      bufferRect.setAttribute('height', bufPx);
+      bufferText.setAttribute('x', botLeft.x + drawW / 2);
+      bufferText.setAttribute('y', botLeft.y - bufPx / 2 + 3);
+      bufferText.removeAttribute('transform');
+    }
     bufferText.textContent = `NALA / LAKE BUFFER ZONE (${formatFeetInches(bufW)})`;
   } else if (bufferRect && bufferText) {
     bufferRect.style.display = 'none';
     bufferText.style.display = 'none';
   }
 
-  // 12. Multi-Road Render Handling (Layer 4 Outermost Position)
-  renderRoadOrLabel('North', boundaries.North, topLeft.x, topLeft.y - 60, (topRight.x - topLeft.x), 32, 'top', offsetX + drawW / 2, offsetY - 66);
-  renderRoadOrLabel('South', boundaries.South, botLeft.x, botLeft.y + 58, (botRight.x - botLeft.x), 32, 'bottom', offsetX + drawW / 2, botLeft.y + 102);
-  renderRoadOrLabel('East', boundaries.East, topRight.x + 58, topRight.y, 32, (botRight.y - topRight.y), 'right', topRight.x + 105, offsetY + drawH / 2);
-  renderRoadOrLabel('West', boundaries.West, topLeft.x - 80, topLeft.y, 32, (botLeft.y - topLeft.y), 'left', topLeft.x - 92, offsetY + drawH / 2);
+  // 12. Multi-Road Render Handling (Layer 4 Outermost Position with Generous Margins)
+  renderRoadOrLabel('North', boundaries.North, topLeft.x, topLeft.y - 65, (topRight.x - topLeft.x), 32, 'top', offsetX + drawW / 2, offsetY - 72);
+  renderRoadOrLabel('South', boundaries.South, botLeft.x, botLeft.y + 68, (botRight.x - botLeft.x), 32, 'bottom', offsetX + drawW / 2, botLeft.y + 112);
+  renderRoadOrLabel('East', boundaries.East, topRight.x + 68, topRight.y, 32, (botRight.y - topRight.y), 'right', topRight.x + 115, offsetY + drawH / 2);
+  renderRoadOrLabel('West', boundaries.West, topLeft.x - 85, topLeft.y, 32, (botLeft.y - topLeft.y), 'left', topLeft.x - 98, offsetY + drawH / 2);
 
   /**
    * Dynamically renders road rectangle or adjacency label with precise non-overlapping coordinates.
