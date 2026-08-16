@@ -216,7 +216,22 @@ Execute `schema.sql` against your remote Cloudflare database:
 npx wrangler d1 execute single_site_plan_support_tickets_db --remote --file=schema.sql
 ```
 
-### 4. Deploy to Production
+### 4. Configure Your Admin Passkey (`ADMIN_SECRET`)
+To lock your `/admin.html` dashboard behind a secure cryptographic passkey:
+
+#### Option A: Via Wrangler CLI (Recommended)
+```bash
+npx wrangler secret put ADMIN_SECRET
+# Enter your secret passkey when prompted (e.g. MySecretPasskey2026!)
+```
+
+#### Option B: Via Cloudflare Dashboard
+1. Go to **Cloudflare Dashboard** → **Workers & Pages** → select your worker (`single-site-plan`).
+2. Navigate to **Settings** → **Variables and Secrets**.
+3. Under **Environment Variables**, click **Add variable**.
+4. Set **Variable name** to `ADMIN_SECRET`, type your secret passkey, check **Encrypt**, and click **Save and Deploy**.
+
+### 5. Deploy to Production
 ```bash
 npx wrangler deploy
 ```
@@ -225,9 +240,20 @@ npx wrangler deploy
 
 ## 🛡️ Admin Ticket Triage & Response Workflow
 
-Admins can triage, review, and reply to user support inquiries directly from the Cloudflare Dashboard D1 Console or via Wrangler CLI:
+Once deployed, you have two ways to manage tickets:
 
-### 1. View Recent Inquiries:
+### Method 1: Using the Web-Based Admin Console (Recommended)
+1. Navigate to `https://your-domain.workers.dev/admin.html` in your browser.
+2. Enter the `ADMIN_SECRET` passkey you configured above.
+3. Review ticket details, view client diagnostics, click **1-click canned response chips**, change ticket status, and post verified timeline replies without writing any SQL!
+
+---
+
+### Method 2: Direct SQL Queries (via Cloudflare Console / CLI)
+
+Admins can also triage and reply directly from the Cloudflare Dashboard D1 Console or via Wrangler CLI:
+
+#### 1. View Recent Inquiries:
 ```sql
 SELECT id, type, priority, status, name, email, subject, message, created_at 
 FROM tickets 
@@ -235,9 +261,9 @@ ORDER BY created_at DESC
 LIMIT 20;
 ```
 
-### 2. Post a Verified Response to the User's Timeline:
+#### 2. Post a Verified Response to the User's Timeline:
 
-#### Option A: Post a Structured JSON Multi-Message Thread:
+##### Option A: Post a Structured JSON Multi-Message Thread:
 ```sql
 UPDATE tickets 
 SET status = 'in_progress',
