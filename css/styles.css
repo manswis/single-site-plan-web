@@ -443,23 +443,9 @@ body {
 }
 
 .footer-version-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid var(--apple-border);
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 11px;
-  font-weight: 600;
   color: var(--apple-text-secondary);
-  vertical-align: middle;
-  margin-left: 6px;
-}
-
-[data-theme="dark"] .footer-version-tag {
-  background: rgba(255, 255, 255, 0.05);
+  font-size: inherit;
+  font-weight: 500;
 }
 
 .apple-nav-links {
