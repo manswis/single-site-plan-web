@@ -60,7 +60,8 @@
         </button>
       </form>
 
-      <div style="margin-top: 24px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--apple-text-secondary);">
+      <div
+        style="margin-top: 24px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--apple-text-secondary);">
         <a href="index.html" class="admin-back-link">
           <span class="material-symbols-outlined" style="font-size: 16px;">arrow_back</span>
           <span>Return to Studio Home</span>
@@ -78,45 +79,23 @@
 
     <!-- Top Navigation Header -->
     <header class="admin-top-nav">
-      <!-- Row 1: Brand & Actions -->
-      <div class="admin-nav-row admin-nav-row-primary">
-        <div class="admin-nav-brand-group">
-          <!-- Mobile-Only Back Button -->
-          <button type="button" id="mobileBackToInboxBtn" class="mobile-back-btn" onclick="exitMobileDetail()"
-            style="display: none;" title="Back to Tickets List">
-            <span class="material-symbols-outlined">arrow_back</span>
-            <span>Tickets</span>
-          </button>
+      <!-- Left: Branding, Admin Console Pill & D1 Status Pill -->
+      <div class="admin-nav-left">
+        <!-- Mobile-Only Back Button -->
+        <button type="button" id="mobileBackToInboxBtn" class="mobile-back-btn" onclick="exitMobileDetail()"
+          style="display: none;" title="Back to Tickets List">
+          <span class="material-symbols-outlined">arrow_back</span>
+          <span>Tickets</span>
+        </button>
 
-          <a href="index.html" class="admin-nav-home-btn" id="adminNavHomeBtn" title="Back to Public App">
-            <span class="app-brand-icon" style="font-size: 17px; line-height: 1;"></span>
-            <span class="app-brand-name"></span>
-          </a>
-        </div>
+        <a href="index.html" class="admin-nav-home-btn" id="adminNavHomeBtn" title="Back to Public App">
+          <span class="app-brand-icon" style="font-size: 17px; line-height: 1;"></span>
+          <span class="app-brand-name"></span>
+        </a>
 
-        <div class="admin-nav-actions-group">
-          <a href="studio.html" class="admin-nav-link" target="_blank" title="Open Studio Workbench">
-            <span class="material-symbols-outlined" style="font-size: 16px;">architecture</span>
-            <span class="desktop-only-text">Workbench</span>
-          </a>
-          <a href="contact.html" class="admin-nav-link" target="_blank" title="Open Public Helpdesk">
-            <span class="material-symbols-outlined" style="font-size: 16px;">support_agent</span>
-            <span class="desktop-only-text">Public Desk</span>
-          </a>
-          <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme"
-            title="Toggle Light/Dark Mode">
-            <span class="material-symbols-outlined">dark_mode</span>
-          </button>
-          <button type="button" class="apple-btn-secondary logout-btn" onclick="handleAdminLogout()"
-            title="Lock Session">
-            <span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
-            <span>Lock</span>
-          </button>
-        </div>
-      </div>
+        <span class="admin-nav-divider desktop-only-text" id="adminNavDivider">/</span>
 
-      <!-- Row 2: Status & Context Strip -->
-      <div class="admin-nav-row admin-nav-row-secondary">
+        <!-- Admin Console Badge -->
         <div class="admin-brand-pill" id="adminBrandPill">
           <span class="app-brand-icon" style="font-size: 14px; line-height: 1;"></span>
           <span>Admin Console</span>
@@ -127,6 +106,26 @@
           <span class="heartbeat-dot"></span>
           <span>Cloudflare D1 Active</span>
         </div>
+      </div>
+
+      <!-- Right: Links, Light/Dark Mode & Lock Button (Extreme Right) -->
+      <div class="admin-nav-right">
+        <a href="studio.html" class="admin-nav-link" target="_blank" title="Open Studio Workbench">
+          <span class="material-symbols-outlined" style="font-size: 16px;">architecture</span>
+          <span class="desktop-only-text">Workbench</span>
+        </a>
+        <a href="contact.html" class="admin-nav-link" target="_blank" title="Open Public Helpdesk">
+          <span class="material-symbols-outlined" style="font-size: 16px;">support_agent</span>
+          <span class="desktop-only-text">Public Desk</span>
+        </a>
+        <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme"
+          title="Toggle Light/Dark Mode">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+        <button type="button" class="apple-btn-secondary logout-btn" onclick="handleAdminLogout()" title="Lock Session">
+          <span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
+          <span>Lock</span>
+        </button>
       </div>
     </header>
 

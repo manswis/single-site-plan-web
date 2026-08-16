@@ -3878,33 +3878,23 @@ body.pdf-export-active .drawing-canvas-column,
   z-index: 100;
 }
 
-.admin-nav-row {
-  display: flex;
-  align-items: center;
-}
-
-.admin-nav-row-primary {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.admin-nav-brand-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.admin-nav-actions-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.admin-nav-row-secondary {
+.admin-nav-left {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.admin-nav-divider {
+  color: var(--apple-text-secondary);
+  font-size: 14px;
+  opacity: 0.4;
+}
+
+.admin-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
 }
 
 .admin-nav-home-btn {
@@ -4578,20 +4568,23 @@ body.pdf-export-active .drawing-canvas-column,
     align-items: stretch;
   }
 
-  .admin-nav-row-primary {
+  .admin-nav-left {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
   }
 
-  .admin-nav-row-secondary {
+  .admin-nav-right {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
+    gap: 10px;
     padding-top: 6px;
     border-top: 1px solid var(--apple-border);
+    margin-left: 0;
   }
 
   .admin-nav-home-btn {
