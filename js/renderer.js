@@ -391,14 +391,15 @@ function generatePlan() {
 
   // Check Building Type (Vacant Plot vs Constructed Structure)
   const bldgType = (document.getElementById('bldgType')?.value || '').trim();
-  const isVacant = bldgType === 'Vacant Plot' || bldgType === 'vacant';
+  const isExplicitVacant = bldgType === 'Vacant Plot' || bldgType === 'vacant';
+  const hasBuilding = !isExplicitVacant && (bldgW > 0 || bldgL > 0 || setbackF > 0 || setbackR > 0 || setbackL > 0 || setbackRt > 0);
 
   const setbackRect = document.getElementById('setbackRect');
   const bldgTitle = document.getElementById('bldgTitle');
   const bldgDimText = document.getElementById('bldgDimText');
 
-  if (isVacant) {
-    // Vacant Plot: Clean empty site with zero building footprint or setback hatching
+  if (!hasBuilding) {
+    // Vacant Plot / Open Site: Zero setbacks, zero building footprint
     if (bldgRect) bldgRect.style.display = 'none';
     if (setbackRect) setbackRect.style.display = 'none';
 
@@ -468,29 +469,45 @@ function generatePlan() {
     bldgRect.setAttribute('width', bldgDrawW);
     bldgRect.setAttribute('height', bldgDrawH);
 
-    // Front / Top Setback (North Side)
-    document.getElementById('setbackN').setAttribute('x', offsetX + drawW / 2);
-    document.getElementById('setbackN').setAttribute('y', offsetY + (bldgY - offsetY) / 2 + 4);
-    document.getElementById('setbackN').textContent = labelN;
+    // Front / Top Setback (North Side) - Only render if positive
+    if (sbTop > 0) {
+      document.getElementById('setbackN').setAttribute('x', offsetX + drawW / 2);
+      document.getElementById('setbackN').setAttribute('y', offsetY + (bldgY - offsetY) / 2 + 4);
+      document.getElementById('setbackN').textContent = labelN;
+    } else {
+      document.getElementById('setbackN').textContent = '';
+    }
 
-    // Rear / Bottom Setback (South Side)
-    document.getElementById('setbackS').setAttribute('x', offsetX + drawW / 2);
-    document.getElementById('setbackS').setAttribute('y', (offsetY + drawH) - (offsetY + drawH - (bldgY + bldgDrawH)) / 2 + 4);
-    document.getElementById('setbackS').textContent = labelS;
+    // Rear / Bottom Setback (South Side) - Only render if positive
+    if (sbBottom > 0) {
+      document.getElementById('setbackS').setAttribute('x', offsetX + drawW / 2);
+      document.getElementById('setbackS').setAttribute('y', (offsetY + drawH) - (offsetY + drawH - (bldgY + bldgDrawH)) / 2 + 4);
+      document.getElementById('setbackS').textContent = labelS;
+    } else {
+      document.getElementById('setbackS').textContent = '';
+    }
 
-    // Right Setback (East Side - Rotated -90 deg cleanly inside right setback band)
-    const sbEastX = (offsetX + drawW) - (offsetX + drawW - (bldgX + bldgDrawW)) / 2;
-    document.getElementById('setbackE').setAttribute('x', sbEastX);
-    document.getElementById('setbackE').setAttribute('y', offsetY + drawH / 2);
-    document.getElementById('setbackE').setAttribute('transform', `rotate(-90, ${sbEastX}, ${offsetY + drawH / 2})`);
-    document.getElementById('setbackE').textContent = labelE;
+    // Right Setback (East Side) - Only render if positive
+    if (sbRight > 0) {
+      const sbEastX = (offsetX + drawW) - (offsetX + drawW - (bldgX + bldgDrawW)) / 2;
+      document.getElementById('setbackE').setAttribute('x', sbEastX);
+      document.getElementById('setbackE').setAttribute('y', offsetY + drawH / 2);
+      document.getElementById('setbackE').setAttribute('transform', `rotate(-90, ${sbEastX}, ${offsetY + drawH / 2})`);
+      document.getElementById('setbackE').textContent = labelE;
+    } else {
+      document.getElementById('setbackE').textContent = '';
+    }
 
-    // Left Setback (West Side - Rotated -90 deg cleanly inside left setback band)
-    const sbWestX = offsetX + (bldgX - offsetX) / 2;
-    document.getElementById('setbackW').setAttribute('x', sbWestX);
-    document.getElementById('setbackW').setAttribute('y', offsetY + drawH / 2);
-    document.getElementById('setbackW').setAttribute('transform', `rotate(-90, ${sbWestX}, ${offsetY + drawH / 2})`);
-    document.getElementById('setbackW').textContent = labelW;
+    // Left Setback (West Side) - Only render if positive
+    if (sbLeft > 0) {
+      const sbWestX = offsetX + (bldgX - offsetX) / 2;
+      document.getElementById('setbackW').setAttribute('x', sbWestX);
+      document.getElementById('setbackW').setAttribute('y', offsetY + drawH / 2);
+      document.getElementById('setbackW').setAttribute('transform', `rotate(-90, ${sbWestX}, ${offsetY + drawH / 2})`);
+      document.getElementById('setbackW').textContent = labelW;
+    } else {
+      document.getElementById('setbackW').textContent = '';
+    }
 
     // Interior Building Footprint Text
     if (bldgTitle && bldgDimText) {
