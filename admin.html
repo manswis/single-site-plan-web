@@ -32,9 +32,11 @@
         <span class="material-symbols-outlined" style="font-size: 32px;">admin_panel_settings</span>
       </div>
       <h1 class="admin-login-title">e-Plan Studio Admin</h1>
-      <p class="admin-login-desc">Enter your administrative passkey to unlock the developer triage console and support desk.</p>
+      <p class="admin-login-desc">Enter your administrative passkey to unlock the developer triage console and support
+        desk.</p>
 
-      <div id="loginAlertBox" class="contact-alert contact-alert-error" style="display: none; margin-bottom: 16px;"></div>
+      <div id="loginAlertBox" class="contact-alert contact-alert-error" style="display: none; margin-bottom: 16px;">
+      </div>
 
       <form id="adminLoginForm">
         <div class="form-field-group" style="margin-bottom: 20px; text-align: left;">
@@ -71,22 +73,30 @@
        2. MAIN ADMIN DASHBOARD WORKSPACE
        ========================================================================= -->
   <div id="adminDashboardView" class="admin-dashboard-wrapper" style="display: none;">
-    
+
     <!-- Top Navigation Header -->
     <header class="admin-top-nav">
       <div class="admin-nav-left">
-        <a href="index.html" class="admin-nav-home-btn" title="Back to Public App">
+        <!-- Mobile-Only Back Button -->
+        <button type="button" id="mobileBackToInboxBtn" class="mobile-back-btn" onclick="exitMobileDetail()"
+          style="display: none;" title="Back to Tickets List">
+          <span class="material-symbols-outlined">arrow_back</span>
+          <span>Tickets</span>
+        </button>
+
+        <a href="index.html" class="admin-nav-home-btn" id="adminNavHomeBtn" title="Back to Public App">
           <span class="material-symbols-outlined">domain</span>
           <span>e-Plan Studio</span>
         </a>
-        <span class="admin-nav-divider">/</span>
-        <div class="admin-brand-pill">
-          <span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">shield_person</span>
+        <span class="admin-nav-divider" id="adminNavDivider">/</span>
+        <div class="admin-brand-pill" id="adminBrandPill">
+          <span class="material-symbols-outlined"
+            style="font-size: 18px; color: var(--apple-accent);">shield_person</span>
           <span>Admin Console</span>
         </div>
 
         <!-- Infrastructure Status Pill -->
-        <div class="admin-heartbeat-pill">
+        <div class="admin-heartbeat-pill" id="adminHeartbeatPill">
           <span class="heartbeat-dot"></span>
           <span>Cloudflare D1 Active</span>
         </div>
@@ -101,7 +111,8 @@
           <span class="material-symbols-outlined" style="font-size: 16px;">support_agent</span>
           <span class="desktop-only-text">Public Desk</span>
         </a>
-        <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+        <button type="button" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme"
+          title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
         </button>
         <button type="button" class="apple-btn-secondary logout-btn" onclick="handleAdminLogout()" title="Lock Session">
@@ -112,18 +123,19 @@
     </header>
 
     <!-- Main Workspace Container -->
-    <main class="admin-main-grid">
-      
+    <main class="admin-main-grid" id="adminMainGrid">
+
       <!-- LEFT COLUMN: Ticket Inbox List -->
       <section class="admin-inbox-pane">
-        
+
         <!-- Search & Status Filter Controls -->
         <div class="inbox-controls-header">
           <div class="input-with-icon" style="margin-bottom: 12px;">
             <span class="material-symbols-outlined input-icon">search</span>
             <input type="text" id="adminSearchInput" class="field-control" placeholder="Search ID, email, keyword..."
               style="height: 38px; font-size: 12px;">
-            <button type="button" id="clearSearchBtn" class="clear-search-btn" onclick="clearAdminSearch()" style="display: none;" title="Clear search">
+            <button type="button" id="clearSearchBtn" class="clear-search-btn" onclick="clearAdminSearch()"
+              style="display: none;" title="Clear search">
               <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
             </button>
           </div>
@@ -167,19 +179,24 @@
 
       <!-- RIGHT COLUMN: Detailed Ticket Inspector & Conversation Manager -->
       <section class="admin-detail-pane" id="adminDetailPane">
-        
+
         <!-- Empty Selection State -->
         <div id="noTicketSelected" class="empty-detail-state">
           <div class="empty-icon-circle">
-            <span class="material-symbols-outlined" style="font-size: 36px; color: var(--apple-accent);">inbox_customize</span>
+            <span class="material-symbols-outlined"
+              style="font-size: 36px; color: var(--apple-accent);">inbox_customize</span>
           </div>
-          <h3 style="margin: 14px 0 4px 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">Select a Support Inquiry</h3>
-          <p style="font-size: 13px; color: var(--apple-text-secondary); max-width: 380px; margin: 0; line-height: 1.5;">Choose a ticket from the left inbox rail to inspect details, change status, or post verified timeline replies.</p>
+          <h3 style="margin: 14px 0 4px 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">Select
+            a Support Inquiry</h3>
+          <p
+            style="font-size: 13px; color: var(--apple-text-secondary); max-width: 380px; margin: 0; line-height: 1.5;">
+            Choose a ticket from the left inbox rail to inspect details, change status, or post verified timeline
+            replies.</p>
         </div>
 
         <!-- Active Ticket Detail Workspace -->
         <div id="activeTicketWorkspace" style="display: none;" class="active-ticket-workspace">
-          
+
           <!-- Detail Header Card -->
           <div class="detail-header-card">
             <div class="detail-header-left">
@@ -194,7 +211,8 @@
             <!-- Quick Action Toolbar -->
             <div class="detail-header-actions">
               <div class="detail-status-control">
-                <select id="detailStatusSelect" class="status-dropdown-control" onchange="handleStatusChange(this.value)">
+                <select id="detailStatusSelect" class="status-dropdown-control"
+                  onchange="handleStatusChange(this.value)">
                   <option value="open">Open / Submitted</option>
                   <option value="in_review">Under Review</option>
                   <option value="in_progress">In Progress</option>
@@ -298,7 +316,7 @@
             <form id="adminReplyForm">
               <textarea id="replyMessageInput" required rows="4" class="field-control textarea-control"
                 placeholder="Type your official response to appear in the user's timeline..."></textarea>
-              
+
               <div class="reply-composer-footer">
                 <label class="resolve-on-reply-toggle">
                   <input type="checkbox" id="replySetResolvedCheckbox">

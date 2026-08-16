@@ -4467,19 +4467,92 @@ body.pdf-export-active .drawing-canvas-column,
   transform: translateY(0);
 }
 
-/* Responsive Rules for Admin Console */
-@media (max-width: 900px) {
-  .admin-main-grid {
-    grid-template-columns: 1fr;
+/* Mobile Back Button */
+.mobile-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--apple-accent);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--apple-transition);
+}
+
+[data-theme="dark"] .mobile-back-btn {
+  background: rgba(41, 151, 255, 0.15);
+}
+
+.mobile-back-btn:hover {
+  background: var(--apple-accent);
+  color: #ffffff;
+}
+
+/* Responsive Rules for Admin Console — Seamless iOS & Desktop Experience */
+@media (min-width: 769px) {
+  .mobile-back-btn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-top-nav {
+    padding: 0 14px;
   }
 
+  .admin-main-grid {
+    grid-template-columns: 1fr;
+    position: relative;
+  }
+
+  /* Default State: Show Full-Screen Inbox */
   .admin-inbox-pane {
-    height: auto;
-    max-height: 40vh;
+    width: 100%;
+    height: calc(100vh - 60px);
+    height: calc(100dvh - 60px);
+    max-height: none;
+    border-right: none;
+    display: flex;
   }
 
   .admin-detail-pane {
-    height: auto;
+    display: none;
+    width: 100%;
+    height: calc(100vh - 60px);
+    height: calc(100dvh - 60px);
+    max-height: none;
+  }
+
+  /* Drill-Down Active State: Show Full-Screen Detail View */
+  .admin-main-grid.mobile-detail-active .admin-inbox-pane {
+    display: none;
+  }
+
+  .admin-main-grid.mobile-detail-active .admin-detail-pane {
+    display: flex;
+  }
+
+  .active-ticket-workspace {
+    padding: 16px 12px;
+    gap: 14px;
+  }
+
+  .detail-header-card,
+  .requester-profile-card,
+  .user-original-message-card,
+  .admin-timeline-section,
+  .reply-composer-card,
+  .internal-notes-card {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+
+  .detail-subject-title {
+    font-size: 17px;
   }
 
   .desktop-only-text {
@@ -4498,5 +4571,14 @@ body.pdf-export-active .drawing-canvas-column,
     padding: 32px 20px;
     border-radius: 20px;
     margin: auto;
+  }
+
+  .canned-responses-bar {
+    gap: 6px;
+  }
+
+  .canned-chip {
+    padding: 3px 8px;
+    font-size: 10px;
   }
 }
