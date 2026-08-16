@@ -481,6 +481,25 @@ export default {
           return jsonResponse({ error: 'Failed to update ticket: ' + err.message }, 500);
         }
       }
+
+      // 3E. DELETE /api/admin/tickets/:id (Permanently delete ticket)
+      if (pathname.match(/^\/api\/admin\/tickets\/[^\/]+$/) && request.method === 'DELETE') {
+        try {
+          const parts = pathname.split('/');
+          const ticketId = decodeURIComponent(parts[4] || '').toUpperCase();
+
+          const existing = await env.DB.prepare('SELECT id FROM tickets WHERE id = ?').bind(ticketId).first();
+          if (!existing) {
+            return jsonResponse({ error: 'Ticket not found.' }, 404);
+          }
+
+          await env.DB.prepare('DELETE FROM tickets WHERE id = ?').bind(ticketId).run();
+
+          return jsonResponse({ success: true, ticketId, message: 'Ticket deleted permanently from D1.' });
+        } catch (err) {
+          return jsonResponse({ error: 'Failed to delete ticket: ' + err.message }, 500);
+        }
+      }
     }
 
     // =========================================================================

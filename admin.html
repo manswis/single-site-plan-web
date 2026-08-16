@@ -257,6 +257,9 @@
               <button type="button" class="icon-tool-btn" onclick="openPublicTracker()" title="Open Public Tracker">
                 <span class="material-symbols-outlined">open_in_new</span>
               </button>
+              <button type="button" class="icon-tool-btn delete-tool-btn" onclick="openDeleteTicketModal()" title="Permanently Delete Ticket">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
             </div>
           </div>
 
@@ -382,6 +385,51 @@
       </section>
     </main>
 
+  </div>
+
+  <!-- =========================================================================
+       3. PERMANENT DELETE CONFIRMATION MODAL
+       ========================================================================= -->
+  <div id="deleteConfirmModal" class="apple-modal-overlay no-print" style="display: none;">
+    <div class="apple-modal-card" style="max-width: 460px; text-align: left;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="material-symbols-outlined" style="color: var(--apple-red); font-size: 24px;">delete_forever</span>
+          <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">Delete Ticket Permanently</h3>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeDeleteTicketModal()" aria-label="Close">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="contact-alert contact-alert-error" style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 16px; padding: 12px 14px;">
+        <span class="material-symbols-outlined" style="font-size: 20px; flex-shrink: 0;">warning</span>
+        <div style="font-size: 12px; line-height: 1.5;">
+          <strong>Irreversible Action:</strong> You are about to permanently delete ticket <strong id="deleteModalTicketId">—</strong> and all its public timeline responses, internal notes, and diagnostic records from Cloudflare D1.
+        </div>
+      </div>
+
+      <div style="background: rgba(0, 0, 0, 0.03); border: 1px solid var(--apple-border); border-radius: 10px; padding: 12px; margin-bottom: 18px;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--apple-text-secondary); text-transform: uppercase; margin-bottom: 4px;">Subject</div>
+        <div id="deleteModalTicketSubject" style="font-size: 13px; font-weight: 600; color: var(--apple-text-primary); line-height: 1.4;">—</div>
+      </div>
+
+      <!-- Mandatory Confirmation Checkbox -->
+      <label class="terms-checkbox-label" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; margin-bottom: 22px; font-size: 12px; color: var(--apple-text-primary); line-height: 1.4;">
+        <input type="checkbox" id="deleteConsentCheckbox" style="margin-top: 2px; width: 16px; height: 16px; accent-color: var(--apple-red);" onchange="toggleDeleteButtonState()">
+        <span>I understand this ticket will be <strong>permanently deleted</strong> and cannot be restored.</span>
+      </label>
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button type="button" class="apple-btn-secondary" onclick="closeDeleteTicketModal()" style="height: 38px; padding: 0 16px; font-size: 13px;">
+          Cancel
+        </button>
+        <button type="button" id="confirmDeleteBtn" class="apple-btn-danger" onclick="executeDeleteTicket()" disabled style="height: 38px; padding: 0 16px; font-size: 13px; opacity: 0.4; cursor: not-allowed;">
+          <span class="material-symbols-outlined" style="font-size: 16px;">delete_forever</span>
+          <span>Delete Ticket</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Toast Notification Pill -->

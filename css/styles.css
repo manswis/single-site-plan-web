@@ -4470,6 +4470,30 @@ body.pdf-export-active .drawing-canvas-column,
   border-color: var(--apple-accent);
 }
 
+.icon-tool-btn.delete-tool-btn:hover {
+  color: var(--apple-red);
+  border-color: var(--apple-red);
+  background: rgba(255, 59, 48, 0.08);
+}
+
+.apple-btn-danger {
+  background: var(--apple-red);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--apple-transition);
+}
+
+.apple-btn-danger:hover:not(:disabled) {
+  background: #d32f2f;
+  box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+}
+
 .icon-tool-btn .material-symbols-outlined {
   font-size: 18px;
 }

@@ -815,6 +815,106 @@ async function handleSaveInternalNotes() {
 }
 
 // ============================================================================
+// 6B. DELETE TICKET WORKFLOW (Irreversible Confirmation with Checkbox)
+// ============================================================================
+function openDeleteTicketModal() {
+  if (!selectedTicketId) return;
+
+  const ticket = currentTickets.find(t => t.id === selectedTicketId);
+  const modal = document.getElementById('deleteConfirmModal');
+  const idEl = document.getElementById('deleteModalTicketId');
+  const subjectEl = document.getElementById('deleteModalTicketSubject');
+  const checkbox = document.getElementById('deleteConsentCheckbox');
+  const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+  if (idEl) idEl.textContent = selectedTicketId;
+  if (subjectEl) subjectEl.textContent = ticket ? ticket.subject : '—';
+  if (checkbox) checkbox.checked = false;
+  if (confirmBtn) {
+    confirmBtn.disabled = true;
+    confirmBtn.style.opacity = '0.4';
+    confirmBtn.style.cursor = 'not-allowed';
+  }
+
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+  }
+}
+
+function closeDeleteTicketModal() {
+  const modal = document.getElementById('deleteConfirmModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+}
+
+function toggleDeleteButtonState() {
+  const checkbox = document.getElementById('deleteConsentCheckbox');
+  const confirmBtn = document.getElementById('confirmDeleteBtn');
+  if (checkbox && confirmBtn) {
+    confirmBtn.disabled = !checkbox.checked;
+    confirmBtn.style.opacity = checkbox.checked ? '1' : '0.4';
+    confirmBtn.style.cursor = checkbox.checked ? 'pointer' : 'not-allowed';
+  }
+}
+
+async function executeDeleteTicket() {
+  if (!selectedTicketId) return;
+
+  const checkbox = document.getElementById('deleteConsentCheckbox');
+  if (!checkbox || !checkbox.checked) return;
+
+  const confirmBtn = document.getElementById('confirmDeleteBtn');
+  if (confirmBtn) {
+    confirmBtn.disabled = true;
+    confirmBtn.innerHTML = '<span class="material-symbols-outlined spin-icon" style="font-size: 16px;">sync</span> Deleting...';
+  }
+
+  try {
+    const response = await fetch(`/api/admin/tickets/${encodeURIComponent(selectedTicketId)}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${adminPasskey}`
+      }
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || 'Failed to delete ticket.');
+    }
+
+    const deletedId = selectedTicketId;
+    closeDeleteTicketModal();
+    showToast(`Ticket ${deletedId} deleted permanently.`);
+
+    // Reset workspace state
+    selectedTicketId = null;
+    const workspace = document.getElementById('activeTicketWorkspace');
+    const emptyState = document.getElementById('noTicketSelected');
+    if (workspace) workspace.style.display = 'none';
+    if (emptyState) emptyState.style.display = 'flex';
+
+    if (window.innerWidth <= 768) {
+      exitMobileDetail();
+    }
+
+    // Refresh inbox list
+    fetchTickets();
+
+  } catch (err) {
+    alert('Error deleting ticket: ' + err.message);
+  } finally {
+    if (confirmBtn) {
+      confirmBtn.disabled = false;
+      confirmBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 16px;">delete_forever</span> <span>Delete Ticket</span>';
+      toggleDeleteButtonState();
+    }
+  }
+}
+
+// ============================================================================
 // 7. UTILITIES
 // ============================================================================
 function formatDate(dateStr) {
