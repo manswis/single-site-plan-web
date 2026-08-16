@@ -622,14 +622,24 @@ window.addEventListener('resize', () => {
 // 4. DETAIL INSPECTOR & CONVERSATION MANAGER
 // ============================================================================
 function renderTicketDetail(ticket) {
-  document.getElementById('noTicketSelected').style.display = 'none';
-  const workspace = document.getElementById('activeTicketWorkspace');
-  workspace.style.display = 'flex';
+  const emptyState = document.getElementById('noTicketSelected');
+  if (emptyState) emptyState.style.display = 'none';
 
-  // Badges & Subject (Pure text nodes)
-  document.getElementById('detailTicketId').textContent = ticket.id;
-  document.getElementById('detailSubject').textContent = ticket.subject;
-  document.getElementById('detailCategoryBadge').textContent = (ticket.type || 'bug').toUpperCase();
+  const workspace = document.getElementById('activeTicketWorkspace');
+  if (workspace) workspace.style.display = 'flex';
+
+  // Badges & Subject with safe ID fallbacks
+  const idEl = document.getElementById('detailTicketId');
+  if (idEl) idEl.textContent = ticket.id;
+
+  const subjectEl = document.getElementById('detailTicketSubject') || document.getElementById('detailSubject');
+  if (subjectEl) subjectEl.textContent = ticket.subject || '—';
+
+  const typeEl = document.getElementById('detailTicketType') || document.getElementById('detailCategoryBadge');
+  if (typeEl) {
+    typeEl.textContent = (ticket.type || 'bug').toUpperCase();
+    typeEl.className = `ticket-type-tag type-${ticket.type || 'bug'}`;
+  }
 
   const priorityBadge = document.getElementById('detailPriorityBadge');
   if (priorityBadge) {
@@ -650,13 +660,17 @@ function renderTicketDetail(ticket) {
   }
 
   // Requester Profile
-  document.getElementById('detailRequesterName').textContent = ticket.name || 'Anonymous Requester';
+  const nameEl = document.getElementById('detailRequesterName');
+  if (nameEl) nameEl.textContent = ticket.name || 'Anonymous Requester';
+
   const emailLink = document.getElementById('detailRequesterEmailLink');
   if (emailLink) {
     emailLink.textContent = ticket.email;
     emailLink.href = `mailto:${encodeURIComponent(ticket.email)}?subject=${encodeURIComponent(`[${ticket.id}] Regarding: ${ticket.subject}`)}`;
   }
-  document.getElementById('detailSubmittedTime').textContent = formatDate(ticket.created_at);
+
+  const timeEl = document.getElementById('detailSubmittedTime');
+  if (timeEl) timeEl.textContent = formatDate(ticket.created_at);
 
   // Client Diagnostics Inspector
   const diagContainer = document.getElementById('detailDiagnosticsContent');
@@ -694,7 +708,8 @@ function renderTicketDetail(ticket) {
   }
 
   // Original Message (Pure textContent)
-  document.getElementById('detailOriginalMessage').textContent = ticket.message || 'No description provided.';
+  const origMsgEl = document.getElementById('detailOriginalMessage');
+  if (origMsgEl) origMsgEl.textContent = ticket.message || 'No description provided.';
 
   // Attached Screenshots Gallery
   const attCard = document.getElementById('detailAttachmentsCard');
@@ -702,7 +717,16 @@ function renderTicketDetail(ticket) {
   let attachments = [];
   if (ticket.attachments) {
     try {
-      attachments = typeof ticket.attachments === 'string' ? JSON.parse(ticket.attachments) : ticket.attachments;
+      let raw = ticket.attachments;
+      if (typeof raw === 'string') {
+        try { raw = JSON.parse(raw); } catch (e) { }
+      }
+      if (typeof raw === 'string') {
+        try { raw = JSON.parse(raw); } catch (e) { }
+      }
+      if (Array.isArray(raw)) {
+        attachments = raw;
+      }
     } catch (e) { }
   }
 
@@ -714,11 +738,11 @@ function renderTicketDetail(ticket) {
       attachments.forEach((att, idx) => {
         const src = typeof att === 'string' ? att : att.dataUrl;
         const name = (typeof att === 'object' && att.name) ? att.name : `Screenshot ${idx + 1}`;
-        const sizeStr = (typeof att === 'object' && att.size) ? `${(att.size / 1024).toFixed(1)} KB` : '';
+        const sizeStr = (typeof att === 'object' && att.size) ? ` • ${(att.size / 1024).toFixed(1)} KB` : '';
 
         const item = document.createElement('div');
         item.className = 'admin-attachment-thumb-card';
-        item.onclick = () => openImageLightbox(src, `${name} (${sizeStr})`);
+        item.onclick = () => openImageLightbox(src, `${name}${sizeStr}`);
         item.innerHTML = `
           <div class="admin-thumb-img-wrap">
             <img src="${src}" alt="${escapeHtml(name)}" loading="lazy">
@@ -728,7 +752,7 @@ function renderTicketDetail(ticket) {
           </div>
           <div class="admin-thumb-caption">
             <span class="admin-thumb-name">${escapeHtml(name)}</span>
-            <span class="admin-thumb-size">${sizeStr}</span>
+            <span class="admin-thumb-size">${sizeStr.replace(' • ', '')}</span>
           </div>
         `;
         attGallery.appendChild(item);
@@ -749,7 +773,7 @@ function renderTicketDetail(ticket) {
   }
 
   // Scroll workspace to top
-  workspace.scrollTop = 0;
+  if (workspace) workspace.scrollTop = 0;
 }
 
 function renderAdminTimeline(ticket) {
