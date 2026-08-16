@@ -1064,7 +1064,7 @@ function openDeleteTicketModal() {
   if (checkbox) checkbox.checked = false;
   if (confirmBtn) {
     confirmBtn.disabled = true;
-    confirmBtn.style.opacity = '0.4';
+    confirmBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 17px;">delete_forever</span> <span>Delete Ticket</span>';
     confirmBtn.style.cursor = 'not-allowed';
   }
 
@@ -1087,7 +1087,6 @@ function toggleDeleteButtonState() {
   const confirmBtn = document.getElementById('confirmDeleteBtn');
   if (checkbox && confirmBtn) {
     confirmBtn.disabled = !checkbox.checked;
-    confirmBtn.style.opacity = checkbox.checked ? '1' : '0.4';
     confirmBtn.style.cursor = checkbox.checked ? 'pointer' : 'not-allowed';
   }
 }
@@ -1101,7 +1100,7 @@ async function executeDeleteTicket() {
   const confirmBtn = document.getElementById('confirmDeleteBtn');
   if (confirmBtn) {
     confirmBtn.disabled = true;
-    confirmBtn.innerHTML = '<span class="material-symbols-outlined spin-icon" style="font-size: 16px;">sync</span> Deleting...';
+    confirmBtn.innerHTML = '<span class="material-symbols-outlined spin-icon" style="font-size: 16px;">sync</span> <span>Deleting...</span>';
   }
 
   try {

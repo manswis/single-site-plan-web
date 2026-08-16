@@ -193,7 +193,8 @@
                       <span class="filter-badge badge-open" id="badgeOpen">0</span>
                     </label>
                     <label class="filter-checkbox-item" data-status="in_review">
-                      <input type="checkbox" class="filter-status-cb" value="in_review" onchange="onFilterItemToggled()">
+                      <input type="checkbox" class="filter-status-cb" value="in_review"
+                        onchange="onFilterItemToggled()">
                       <span class="filter-item-left">
                         <span class="status-indicator-dot dot-in_review"></span>
                         <span class="filter-item-text">In Review</span>
@@ -201,7 +202,8 @@
                       <span class="filter-badge badge-review" id="badgeReview">0</span>
                     </label>
                     <label class="filter-checkbox-item" data-status="in_progress">
-                      <input type="checkbox" class="filter-status-cb" value="in_progress" onchange="onFilterItemToggled()">
+                      <input type="checkbox" class="filter-status-cb" value="in_progress"
+                        onchange="onFilterItemToggled()">
                       <span class="filter-item-left">
                         <span class="status-indicator-dot dot-in_progress"></span>
                         <span class="filter-item-text">In Progress</span>
@@ -217,7 +219,8 @@
                       <span class="filter-badge badge-hold" id="badgeHold">0</span>
                     </label>
                     <label class="filter-checkbox-item" data-status="infeasible">
-                      <input type="checkbox" class="filter-status-cb" value="infeasible" onchange="onFilterItemToggled()">
+                      <input type="checkbox" class="filter-status-cb" value="infeasible"
+                        onchange="onFilterItemToggled()">
                       <span class="filter-item-left">
                         <span class="status-indicator-dot dot-infeasible"></span>
                         <span class="filter-item-text">Infeasible</span>
@@ -279,10 +282,12 @@
 
                 <!-- Popover Footer: Reset & Apply Buttons -->
                 <div class="filter-popover-footer">
-                  <button type="button" class="filter-footer-btn filter-footer-reset" onclick="resetFilterSelections()" title="Reset all selections">
+                  <button type="button" class="filter-footer-btn filter-footer-reset" onclick="resetFilterSelections()"
+                    title="Reset all selections">
                     <span>Reset</span>
                   </button>
-                  <button type="button" class="filter-footer-btn filter-footer-apply" onclick="applyFilterSelections()" title="Apply selected filters">
+                  <button type="button" class="filter-footer-btn filter-footer-apply" onclick="applyFilterSelections()"
+                    title="Apply selected filters">
                     <span class="material-symbols-outlined" style="font-size: 14px;">check</span>
                     <span>Apply</span>
                   </button>
@@ -374,7 +379,8 @@
                 <button type="button" class="icon-tool-btn" onclick="openPublicTracker()" title="Open Public Tracker">
                   <span class="material-symbols-outlined">open_in_new</span>
                 </button>
-                <button type="button" class="icon-tool-btn delete-tool-btn" onclick="openDeleteTicketModal()" title="Permanently Delete Ticket">
+                <button type="button" class="icon-tool-btn delete-tool-btn" onclick="openDeleteTicketModal()"
+                  title="Permanently Delete Ticket">
                   <span class="material-symbols-outlined">delete</span>
                 </button>
               </div>
@@ -512,24 +518,32 @@
     <div class="apple-modal-card" style="max-width: 460px; text-align: left;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span class="material-symbols-outlined" style="color: var(--apple-red); font-size: 24px;">delete_forever</span>
-          <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">Delete Ticket Permanently</h3>
+          <span class="material-symbols-outlined"
+            style="color: var(--apple-red); font-size: 24px;">delete_forever</span>
+          <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">Delete Ticket
+            Permanently</h3>
         </div>
         <button type="button" class="modal-close-btn" onclick="closeDeleteTicketModal()" aria-label="Close">
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
 
-      <div class="contact-alert contact-alert-error" style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 16px; padding: 12px 14px;">
+      <div class="contact-alert contact-alert-error"
+        style="display: flex; align-items: flex-start; gap: 8px; margin-bottom: 16px; padding: 12px 14px;">
         <span class="material-symbols-outlined" style="font-size: 20px; flex-shrink: 0;">warning</span>
         <div style="font-size: 12px; line-height: 1.5;">
-          <strong>Irreversible Action:</strong> You are about to permanently delete ticket <strong id="deleteModalTicketId">—</strong> and all its public timeline responses, internal notes, and diagnostic records from Cloudflare D1.
+          <strong>Irreversible Action:</strong> You are about to permanently delete ticket <strong
+            id="deleteModalTicketId">—</strong> and all its public timeline responses, internal notes, and diagnostic
+          records from Cloudflare D1.
         </div>
       </div>
 
       <div class="delete-preview-box">
-        <div style="font-size: 11px; font-weight: 700; color: var(--apple-text-secondary); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.04em;">Subject</div>
-        <div id="deleteModalTicketSubject" style="font-size: 14px; font-weight: 600; color: var(--apple-text-primary); line-height: 1.4;">—</div>
+        <div
+          style="font-size: 11px; font-weight: 700; color: var(--apple-text-secondary); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.04em;">
+          Subject</div>
+        <div id="deleteModalTicketSubject"
+          style="font-size: 14px; font-weight: 600; color: var(--apple-text-primary); line-height: 1.4;">—</div>
       </div>
 
       <!-- Mandatory Confirmation Checkbox -->
@@ -538,12 +552,14 @@
         <span>I understand this ticket will be <strong>permanently deleted</strong> and cannot be restored.</span>
       </label>
 
-      <div style="display: flex; gap: 10px; justify-content: flex-end;">
-        <button type="button" class="apple-btn-secondary" onclick="closeDeleteTicketModal()" style="height: 38px; padding: 0 16px; font-size: 13px;">
-          Cancel
+      <!-- Symmetrical Modal Action Footer -->
+      <div class="modal-action-footer">
+        <button type="button" class="modal-btn modal-btn-cancel" onclick="closeDeleteTicketModal()">
+          <span>Cancel</span>
         </button>
-        <button type="button" id="confirmDeleteBtn" class="apple-btn-danger" onclick="executeDeleteTicket()" disabled style="height: 38px; padding: 0 16px; font-size: 13px;">
-          <span class="material-symbols-outlined" style="font-size: 16px;">delete_forever</span>
+        <button type="button" id="confirmDeleteBtn" class="modal-btn modal-btn-delete" onclick="executeDeleteTicket()"
+          disabled>
+          <span class="material-symbols-outlined" style="font-size: 17px;">delete_forever</span>
           <span>Delete Ticket</span>
         </button>
       </div>

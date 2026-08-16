@@ -4941,37 +4941,104 @@ body.pdf-export-active .drawing-canvas-column,
   cursor: pointer;
 }
 
-.apple-btn-danger {
-  background: var(--apple-red);
-  color: #ffffff;
-  border: none;
+.modal-action-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--apple-border);
+}
+
+.modal-btn {
+  height: 40px;
+  padding: 0 18px;
   border-radius: 10px;
+  font-size: 13.5px;
   font-weight: 700;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
   transition: var(--apple-transition);
+  border: 1px solid transparent;
+  user-select: none;
+  box-sizing: border-box;
 }
 
-.apple-btn-danger:hover:not(:disabled) {
-  background: #d32f2f;
-  box-shadow: 0 4px 14px rgba(255, 59, 48, 0.4);
+/* Symmetrical Cancel Button */
+.modal-btn-cancel {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: var(--apple-border);
+  color: var(--apple-text-primary) !important;
 }
 
-[data-theme="dark"] .apple-btn-danger {
-  background: #ff453a;
-  color: #ffffff;
+.modal-btn-cancel span {
+  color: var(--apple-text-primary) !important;
+  font-weight: 600 !important;
 }
 
-[data-theme="dark"] .apple-btn-danger:hover:not(:disabled) {
-  background: #ff6961;
+[data-theme="dark"] .modal-btn-cancel {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
 }
 
-.apple-btn-danger:disabled {
-  opacity: 0.35 !important;
+[data-theme="dark"] .modal-btn-cancel span {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.modal-btn-cancel:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .modal-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Symmetrical Delete Danger Button */
+.modal-btn-delete {
+  background: #ff3b30 !important;
+  border-color: #ff3b30 !important;
+  color: #ffffff !important;
+}
+
+.modal-btn-delete span,
+.modal-btn-delete .material-symbols-outlined {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="dark"] .modal-btn-delete {
+  background: #ff453a !important;
+  border-color: #ff453a !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .modal-btn-delete span,
+[data-theme="dark"] .modal-btn-delete .material-symbols-outlined {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.modal-btn-delete:hover:not(:disabled) {
+  background: #d32f2f !important;
+  border-color: #d32f2f !important;
+  box-shadow: 0 4px 14px rgba(255, 69, 58, 0.45);
+}
+
+.modal-btn-delete:disabled {
+  opacity: 0.4 !important;
   cursor: not-allowed !important;
   box-shadow: none !important;
+}
+
+.modal-btn-delete:disabled span,
+.modal-btn-delete:disabled .material-symbols-outlined {
+  color: #ffffff !important;
 }
 
 .icon-tool-btn .material-symbols-outlined {
