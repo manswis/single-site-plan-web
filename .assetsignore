@@ -1,7 +1,8 @@
 _worker.js
 wrangler.toml
-functions/
+schema.sql
 .git/
 .gitignore
+.assetsignore
 README.md
 LICENSE

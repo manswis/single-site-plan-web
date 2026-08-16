@@ -85,6 +85,7 @@ singleSitePlan-web/
 ├── index.html                # Google-style landing page hub & 7-step wizard
 ├── studio.html               # Live 2D CAD Workbench with interactive controls
 ├── contact.html              # Support & issue tracker with timeline conversation
+├── admin.html                # Secure Apple/Google-grade Admin support desk console
 ├── pricing.html              # Transparent free tier & pro architectural plans
 ├── legal.html                # Legally binding Terms of Service & Privacy (DPDP compliant)
 ├── faq.html                  # Interactive field-by-field guide & Sakala FAQ accordions
@@ -92,6 +93,7 @@ singleSitePlan-web/
 ├── schema.sql                # Standalone D1 database table and index definitions
 ├── wrangler.toml             # Cloudflare Workers & D1 deployment manifest
 ├── .assetsignore             # Excludes backend worker files from public static assets
+├── .gitignore                # Standard Git ignore rules for node, wrangler & OS files
 ├── favicon.svg               # Vector SVG blueprint favicon
 ├── LICENSE                   # Official MIT Open Source License
 ├── README.md                 # Project documentation (This file)
@@ -105,7 +107,8 @@ singleSitePlan-web/
     ├── renderer.js           # SVG 2D CAD vector graphics rendering engine
     ├── theme.js              # Automatic Dark/Light mode theme manager
     ├── analytics.js          # Zero-privacy session deduplicated live stats counter
-    └── contact.js            # Helpdesk controller, consent modal & timeline renderer
+    ├── contact.js            # Helpdesk controller, consent modal & timeline renderer
+    └── admin.js              # Admin triage controller, canned responses & session security
 ```
 
 ---
