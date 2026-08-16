@@ -3677,3 +3677,571 @@ body.pdf-export-active .drawing-canvas-column,
     font-size: 22px;
   }
 }
+
+/* ==========================================================================
+   Admin Console Styling — Apple HIG Glassmorphism
+   ========================================================================== */
+
+.admin-body {
+  background-color: var(--apple-bg);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Login Screen */
+.admin-login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 40px 32px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.admin-login-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--apple-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.admin-login-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--apple-text-primary);
+  margin: 0 0 8px 0;
+}
+
+.admin-login-desc {
+  font-size: 13px;
+  color: var(--apple-text-secondary);
+  line-height: 1.5;
+  margin: 0 0 24px 0;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.password-toggle-btn:hover {
+  color: var(--apple-text-primary);
+}
+
+/* Dashboard Wrapper & Navigation */
+.admin-dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.admin-top-nav {
+  height: 60px;
+  background: var(--apple-nav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--apple-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.admin-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.admin-brand-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+.admin-metrics-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.metric-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--apple-border);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+[data-theme="dark"] .metric-pill {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.metric-num {
+  font-weight: 800;
+  color: var(--apple-text-primary);
+}
+
+.metric-label {
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+}
+
+.metric-pill-open .metric-num { color: var(--apple-accent); }
+.metric-pill-progress .metric-num { color: #5856d6; }
+.metric-pill-resolved .metric-num { color: var(--apple-green); }
+
+.admin-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logout-btn {
+  height: 34px;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+/* Master-Detail Grid */
+.admin-main-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  flex: 1;
+  overflow: hidden;
+  background: var(--apple-bg);
+}
+
+/* Left Column: Inbox */
+.admin-inbox-pane {
+  border-right: 1px solid var(--apple-border);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px);
+  background: var(--apple-card-bg);
+}
+
+.inbox-controls-header {
+  padding: 16px 16px 12px 16px;
+  border-bottom: 1px solid var(--apple-border);
+  flex-shrink: 0;
+}
+
+.inbox-filter-chips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.inbox-filter-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-chip {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--apple-transition);
+}
+
+[data-theme="dark"] .filter-chip {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.filter-chip:hover {
+  color: var(--apple-text-primary);
+}
+
+.filter-chip.active {
+  background: var(--apple-accent);
+  color: #ffffff;
+}
+
+.inbox-ticket-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.inbox-item {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--apple-border);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inbox-item:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="dark"] .inbox-item:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.inbox-item.active {
+  background: rgba(0, 102, 204, 0.08);
+  border-left: 3px solid var(--apple-accent);
+}
+
+[data-theme="dark"] .inbox-item.active {
+  background: rgba(41, 151, 255, 0.12);
+}
+
+.inbox-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inbox-id-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.inbox-ticket-id {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+.inbox-type-icon {
+  font-size: 14px;
+  color: var(--apple-text-secondary);
+}
+
+.inbox-item-subject {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inbox-item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+}
+
+.inbox-requester {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 180px;
+}
+
+/* Right Column: Detail Inspector */
+.admin-detail-pane {
+  flex: 1;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  background: var(--apple-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.empty-detail-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 40px;
+  text-align: center;
+}
+
+.active-ticket-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.detail-header-card {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 16px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.detail-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.ticket-type-pill {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--apple-text-primary);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.ticket-priority-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+}
+
+.detail-ticket-id-pill {
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--apple-accent);
+}
+
+.detail-subject-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  margin: 0;
+}
+
+.detail-status-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.status-dropdown-control {
+  height: 38px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1.5px solid var(--apple-border);
+  border-radius: 10px;
+  background: var(--apple-card-bg);
+  color: var(--apple-text-primary);
+  cursor: pointer;
+  outline: none;
+}
+
+.status-dropdown-control:focus {
+  border-color: var(--apple-accent);
+}
+
+/* Requester Profile Card */
+.requester-profile-card {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 16px;
+  padding: 18px 22px;
+}
+
+.requester-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.info-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--apple-text-secondary);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.info-value-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+}
+
+.info-sub-icon {
+  font-size: 16px;
+  color: var(--apple-text-secondary);
+}
+
+.email-link {
+  color: var(--apple-accent);
+  text-decoration: none;
+}
+
+.email-link:hover {
+  text-decoration: underline;
+}
+
+/* Diagnostics Accordion */
+.diagnostics-details {
+  border-top: 1px solid var(--apple-border);
+  padding-top: 10px;
+}
+
+.diagnostics-summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.diagnostics-summary:hover {
+  color: var(--apple-accent);
+}
+
+.diagnostics-code-box {
+  margin-top: 10px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--apple-border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+[data-theme="dark"] .diagnostics-code-box {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Message & Timeline Cards */
+.user-original-message-card,
+.reply-composer-card,
+.internal-notes-card {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+
+.section-micro-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--apple-text-secondary);
+  margin-bottom: 12px;
+}
+
+.original-message-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--apple-text-primary);
+  white-space: pre-line;
+}
+
+.admin-timeline-section {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+
+.admin-timeline-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.reply-composer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.send-reply-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 20px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsive Rules for Admin Console */
+@media (max-width: 900px) {
+  .admin-main-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-inbox-pane {
+    height: auto;
+    max-height: 40vh;
+  }
+  .admin-detail-pane {
+    height: auto;
+  }
+  .admin-metrics-bar {
+    display: none;
+  }
+}
