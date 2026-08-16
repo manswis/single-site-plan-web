@@ -102,7 +102,16 @@
     <div class="contact-tab-panel active" id="tabPanel-submit">
 
       <!-- Submission Card -->
-      <div class="apple-card support-card-container" id="ticketFormCard">
+      <div class="apple-card support-card-container card-loading-stack" id="ticketFormCard">
+
+        <!-- Card-Level Frosted Loading Overlay Stack -->
+        <div id="submitCardLoadingOverlay" class="card-loading-overlay" style="display: none;">
+          <div class="loading-spinner-circle"></div>
+          <div style="text-align: center;">
+            <div class="loading-status-text">Submitting Request...</div>
+            <div class="loading-sub-text">Encrypting payload & queuing for engineering triage</div>
+          </div>
+        </div>
 
         <div class="form-section-header">
           <span class="material-symbols-outlined header-section-icon">category</span>

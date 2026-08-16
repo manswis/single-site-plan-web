@@ -918,6 +918,14 @@ function showToast(msg) {
 async function handlePriorityChange(newPriority) {
   if (!selectedTicketId) return;
 
+  const headerOverlay = document.getElementById('headerCardLoadingOverlay');
+  const prioritySelect = document.getElementById('detailPrioritySelect');
+  const statusSelect = document.getElementById('detailStatusSelect');
+
+  if (headerOverlay) headerOverlay.style.display = 'flex';
+  if (prioritySelect) prioritySelect.disabled = true;
+  if (statusSelect) statusSelect.disabled = true;
+
   try {
     const response = await fetch(`/api/admin/tickets/${encodeURIComponent(selectedTicketId)}/status`, {
       method: 'POST',
@@ -951,13 +959,24 @@ async function handlePriorityChange(newPriority) {
   } catch (err) {
     alert('Error updating priority: ' + err.message);
     const ticket = currentTickets.find(t => t.id === selectedTicketId);
-    const select = document.getElementById('detailPrioritySelect');
-    if (ticket && select) select.value = ticket.priority || 'medium';
+    if (ticket && prioritySelect) prioritySelect.value = ticket.priority || 'medium';
+  } finally {
+    if (headerOverlay) headerOverlay.style.display = 'none';
+    if (prioritySelect) prioritySelect.disabled = false;
+    if (statusSelect) statusSelect.disabled = false;
   }
 }
 
 async function handleStatusChange(newStatus) {
   if (!selectedTicketId) return;
+
+  const headerOverlay = document.getElementById('headerCardLoadingOverlay');
+  const prioritySelect = document.getElementById('detailPrioritySelect');
+  const statusSelect = document.getElementById('detailStatusSelect');
+
+  if (headerOverlay) headerOverlay.style.display = 'flex';
+  if (prioritySelect) prioritySelect.disabled = true;
+  if (statusSelect) statusSelect.disabled = true;
 
   try {
     const response = await fetch(`/api/admin/tickets/${encodeURIComponent(selectedTicketId)}/status`, {
@@ -986,8 +1005,11 @@ async function handleStatusChange(newStatus) {
   } catch (err) {
     alert('Error updating status: ' + err.message);
     const ticket = currentTickets.find(t => t.id === selectedTicketId);
-    const select = document.getElementById('detailStatusSelect');
-    if (ticket && select) select.value = ticket.status || 'open';
+    if (ticket && statusSelect) statusSelect.value = ticket.status || 'open';
+  } finally {
+    if (headerOverlay) headerOverlay.style.display = 'none';
+    if (prioritySelect) prioritySelect.disabled = false;
+    if (statusSelect) statusSelect.disabled = false;
   }
 }
 
@@ -995,18 +1017,28 @@ async function handleReplySubmit(e) {
   e.preventDefault();
   if (!selectedTicketId) return;
 
+  const replyOverlay = document.getElementById('replyCardLoadingOverlay');
+  const replyCard = document.querySelector('.reply-composer-card');
   const replyInput = document.getElementById('replyMessageInput');
   const resolveCheckbox = document.getElementById('replySetResolvedCheckbox');
   const sendBtn = document.getElementById('sendReplyBtn');
+  const cannedChips = document.querySelectorAll('.canned-chip');
 
   const text = replyInput ? replyInput.value.trim() : '';
   if (!text) return;
 
   const shouldResolve = resolveCheckbox ? resolveCheckbox.checked : false;
 
+  // Activate Frosted Glass Loading Overlay & Lock Reply Form
+  if (replyOverlay) replyOverlay.style.display = 'flex';
+  if (replyCard) replyCard.classList.add('form-locked');
+  if (replyInput) replyInput.disabled = true;
+  if (resolveCheckbox) resolveCheckbox.disabled = true;
+  cannedChips.forEach(chip => { chip.disabled = true; });
+
   if (sendBtn) {
     sendBtn.disabled = true;
-    sendBtn.innerHTML = '<span class="material-symbols-outlined spin-icon">sync</span> Posting...';
+    sendBtn.innerHTML = '<span class="material-symbols-outlined spin-icon">sync</span> <span>Posting...</span>';
   }
 
   try {
@@ -1032,7 +1064,7 @@ async function handleReplySubmit(e) {
       throw new Error(data.error || 'Failed to post reply.');
     }
 
-    replyInput.value = '';
+    if (replyInput) replyInput.value = '';
     if (resolveCheckbox) resolveCheckbox.checked = false;
     showToast('Reply published to timeline ✓');
 
@@ -1051,6 +1083,12 @@ async function handleReplySubmit(e) {
   } catch (err) {
     alert('Error posting reply: ' + err.message);
   } finally {
+    if (replyOverlay) replyOverlay.style.display = 'none';
+    if (replyCard) replyCard.classList.remove('form-locked');
+    if (replyInput) replyInput.disabled = false;
+    if (resolveCheckbox) resolveCheckbox.disabled = false;
+    cannedChips.forEach(chip => { chip.disabled = false; });
+
     if (sendBtn) {
       sendBtn.disabled = false;
       sendBtn.innerHTML = '<span class="material-symbols-outlined">send</span> <span>Post Timeline Reply</span>';
@@ -1061,13 +1099,16 @@ async function handleReplySubmit(e) {
 async function handleSaveInternalNotes() {
   if (!selectedTicketId) return;
 
+  const notesOverlay = document.getElementById('notesCardLoadingOverlay');
   const notesArea = document.getElementById('internalNotesInput');
   const saveBtn = document.getElementById('saveNotesBtn');
   const notes = notesArea ? notesArea.value.trim() : '';
 
+  if (notesOverlay) notesOverlay.style.display = 'flex';
+  if (notesArea) notesArea.disabled = true;
   if (saveBtn) {
     saveBtn.disabled = true;
-    saveBtn.textContent = 'Saving...';
+    saveBtn.innerHTML = '<span class="material-symbols-outlined spin-icon" style="font-size: 14px;">sync</span> <span>Saving...</span>';
   }
 
   try {
@@ -1083,19 +1124,22 @@ async function handleSaveInternalNotes() {
 
     if (!response.ok) throw new Error('Failed to save notes.');
 
-    saveBtn.textContent = 'Saved ✓';
+    saveBtn.innerHTML = '<span>Saved ✓</span>';
     showToast('Internal notes saved');
     setTimeout(() => {
       saveBtn.disabled = false;
-      saveBtn.textContent = 'Save Notes';
+      saveBtn.innerHTML = '<span>Save Notes</span>';
     }, 1500);
 
   } catch (err) {
     alert('Error saving notes: ' + err.message);
     if (saveBtn) {
       saveBtn.disabled = false;
-      saveBtn.textContent = 'Save Notes';
+      saveBtn.innerHTML = '<span>Save Notes</span>';
     }
+  } finally {
+    if (notesOverlay) notesOverlay.style.display = 'none';
+    if (notesArea) notesArea.disabled = false;
   }
 }
 

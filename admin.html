@@ -333,40 +333,46 @@
 
         <!-- Active Ticket Detail Workspace -->
         <div id="activeTicketWorkspace" style="display: none;" class="active-ticket-workspace">
-
-          <!-- Detail Header Card -->
-          <div class="detail-header-card">
-            <div class="detail-header-left">
-              <div class="detail-badge-row">
-                <span id="detailTicketId" class="detail-ticket-id-pill">REQ-XXXX-XXXX</span>
-                <span id="detailCategoryBadge" class="ticket-type-pill">—</span>
-                <span id="detailPriorityBadge" class="ticket-priority-tag">—</span>
-              </div>
-              <h2 id="detailSubject" class="detail-subject-title">—</h2>
+          <!-- Detail Header: Ticket ID & Status Workflow Selector -->
+          <div class="detail-header-card card-loading-stack">
+            <!-- Header Action Loading Overlay -->
+            <div id="headerCardLoadingOverlay" class="action-loading-overlay" style="display: none;">
+              <div class="loading-spinner-circle" style="width: 22px; height: 22px; border-width: 2.5px;"></div>
+              <span style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary);">Updating ticket...</span>
             </div>
 
-            <!-- Quick Action Toolbar -->
+            <div class="detail-header-info">
+              <div class="detail-id-row">
+                <span id="detailTicketType" class="ticket-type-tag type-bug">BUG</span>
+                <span id="detailTicketId" class="detail-id-code">REQ-XXXX-XXXX</span>
+                <span id="detailPriorityBadge" class="ticket-priority-tag priority-medium">MEDIUM</span>
+              </div>
+              <h2 id="detailTicketSubject" class="detail-subject-title">—</h2>
+            </div>
+
             <div class="detail-header-actions">
-              <!-- Priority Selector Dropdown -->
-              <div class="detail-priority-control">
-                <select id="detailPrioritySelect" class="priority-dropdown-control"
-                  onchange="handlePriorityChange(this.value)" title="Change Priority Level">
-                  <option value="low">🟢 Low Priority</option>
-                  <option value="medium">🟡 Medium Priority</option>
-                  <option value="high">🔴 High Priority</option>
+              <!-- Priority Changer -->
+              <div class="header-action-group">
+                <label for="detailPrioritySelect" class="header-action-label">Priority:</label>
+                <select id="detailPrioritySelect" class="status-select-control"
+                  onchange="handlePriorityChange(this.value)">
+                  <option value="low">Low Priority</option>
+                  <option value="medium">Medium Priority</option>
+                  <option value="high">High Priority</option>
                 </select>
               </div>
 
-              <!-- Status Selector Dropdown -->
-              <div class="detail-status-control">
-                <select id="detailStatusSelect" class="status-dropdown-control"
-                  onchange="handleStatusChange(this.value)" title="Change Ticket Status">
-                  <option value="open">🔵 Open / Submitted</option>
-                  <option value="in_review">🟣 Under Review</option>
-                  <option value="in_progress">🟠 In Progress</option>
-                  <option value="on_hold">🟡 On Hold</option>
-                  <option value="infeasible">🔴 Infeasible</option>
-                  <option value="resolved">🟢 Resolved</option>
+              <!-- Status Changer -->
+              <div class="header-action-group">
+                <label for="detailStatusSelect" class="header-action-label">Workflow Status:</label>
+                <select id="detailStatusSelect" class="status-select-control status-select-primary"
+                  onchange="handleStatusChange(this.value)">
+                  <option value="open">🟡 Submitted / Open</option>
+                  <option value="in_review">🔍 Under Review</option>
+                  <option value="in_progress">⚙️ In Progress</option>
+                  <option value="on_hold">⏸️ On Hold / Pending Info</option>
+                  <option value="infeasible">⛔ Infeasible / Not Supported</option>
+                  <option value="resolved">✅ Resolved</option>
                   <option value="closed">⚫ Closed</option>
                 </select>
               </div>
@@ -458,7 +464,13 @@
           </div>
 
           <!-- Reply Composer Form -->
-          <div class="reply-composer-card">
+          <div class="reply-composer-card card-loading-stack">
+            <!-- Reply Action Loading Overlay -->
+            <div id="replyCardLoadingOverlay" class="action-loading-overlay" style="display: none;">
+              <div class="loading-spinner-circle" style="width: 26px; height: 26px; border-width: 2.5px;"></div>
+              <span style="font-size: 13px; font-weight: 600; color: var(--apple-text-primary);">Posting reply to timeline...</span>
+            </div>
+
             <div class="section-micro-heading" style="margin-bottom: 10px;">
               <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">reply</span>
               <span>Post Official Response</span>
@@ -500,7 +512,13 @@
           </div>
 
           <!-- Internal Private Notes Card -->
-          <div class="internal-notes-card">
+          <div class="internal-notes-card card-loading-stack">
+            <!-- Notes Action Loading Overlay -->
+            <div id="notesCardLoadingOverlay" class="action-loading-overlay" style="display: none;">
+              <div class="loading-spinner-circle" style="width: 22px; height: 22px; border-width: 2.5px;"></div>
+              <span style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary);">Saving private notes...</span>
+            </div>
+
             <div class="section-micro-heading" style="margin-bottom: 8px;">
               <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-amber);">lock</span>
               <span>Private Developer Notes (Not Visible to User)</span>

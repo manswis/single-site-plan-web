@@ -483,6 +483,48 @@ function closeTermsModal() {
   }
 }
 
+// Set form locking and loading stack state
+function setFormLoadingState(isLoading) {
+  const overlay = document.getElementById('submitCardLoadingOverlay');
+  const form = document.getElementById('ticketSubmitForm');
+  const submitBtn = document.getElementById('ticketSubmitBtn');
+  const tiles = document.querySelectorAll('.category-tile');
+  const priorityBtns = document.querySelectorAll('.priority-btn');
+
+  if (overlay) {
+    overlay.style.display = isLoading ? 'flex' : 'none';
+  }
+
+  if (form) {
+    if (isLoading) {
+      form.classList.add('form-locked');
+    } else {
+      form.classList.remove('form-locked');
+    }
+    const inputs = form.querySelectorAll('input, textarea, button, select');
+    inputs.forEach(el => {
+      el.disabled = isLoading;
+    });
+  }
+
+  tiles.forEach(tile => {
+    tile.disabled = isLoading;
+    tile.style.pointerEvents = isLoading ? 'none' : '';
+  });
+
+  priorityBtns.forEach(btn => {
+    btn.disabled = isLoading;
+    btn.style.pointerEvents = isLoading ? 'none' : '';
+  });
+
+  if (submitBtn) {
+    submitBtn.disabled = isLoading;
+    submitBtn.innerHTML = isLoading
+      ? '<span class="material-symbols-outlined spin-icon">sync</span> Submitting Request...'
+      : '<span class="material-symbols-outlined">send</span> Submit Request';
+  }
+}
+
 // Execute confirmed submission after user accepts terms
 async function proceedConfirmedSubmit() {
   if (!pendingTicketPayload) {
@@ -492,14 +534,10 @@ async function proceedConfirmedSubmit() {
 
   closeTermsModal();
 
-  const submitBtn = document.getElementById('ticketSubmitBtn');
   const form = document.getElementById('ticketSubmitForm');
 
-  // Set Loading State
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="material-symbols-outlined spin-icon">sync</span> Submitting Request...';
-  }
+  // Activate Frosted Glass Loading Stack & Lock All Fields
+  setFormLoadingState(true);
 
   try {
     const response = await fetch('/api/tickets', {
@@ -530,15 +568,14 @@ async function proceedConfirmedSubmit() {
     // Success Display
     showSubmissionSuccess(data.ticketId, data.type);
     if (form) form.reset();
+    currentAttachments = [];
+    renderAttachmentPreviews();
     pendingTicketPayload = null;
 
   } catch (err) {
     showFormAlert(err.message || 'An error occurred. Please check your connection and try again.', 'error');
   } finally {
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span class="material-symbols-outlined">send</span> Submit Request';
-    }
+    setFormLoadingState(false);
   }
 }
 

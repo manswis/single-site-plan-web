@@ -5870,3 +5870,105 @@ body.pdf-export-active .drawing-canvas-column,
   border-radius: 980px;
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
+
+/* ============================================================================
+   PREMIUM FROSTED GLASS LOADING STACK & CIRCULAR PROGRESS INDICATOR
+   ============================================================================ */
+@keyframes spinClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-icon {
+  display: inline-block;
+  animation: spinClockwise 0.85s linear infinite;
+  transform-origin: center center;
+}
+
+/* Card-Level Frosted Loading Overlay Stack */
+.card-loading-stack {
+  position: relative;
+}
+
+.card-loading-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  animation: fadeIn 0.2s ease-out;
+  cursor: not-allowed;
+  user-select: none;
+}
+
+[data-theme="dark"] .card-loading-overlay {
+  background: rgba(28, 28, 30, 0.86);
+}
+
+.loading-spinner-circle {
+  width: 42px;
+  height: 42px;
+  border: 3.5px solid rgba(0, 113, 227, 0.18);
+  border-top-color: var(--apple-accent);
+  border-radius: 50%;
+  animation: spinClockwise 0.8s cubic-bezier(0.4, 0.15, 0.2, 0.9) infinite;
+  box-shadow: 0 4px 14px rgba(0, 113, 227, 0.2);
+}
+
+[data-theme="dark"] .loading-spinner-circle {
+  border-color: rgba(41, 151, 255, 0.2);
+  border-top-color: var(--apple-accent);
+}
+
+.loading-status-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.loading-sub-text {
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+}
+
+/* Inline Action Spinner Overlay (for cards like Reply & Notes) */
+.action-loading-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: not-allowed;
+  user-select: none;
+  animation: fadeIn 0.15s ease-out;
+}
+
+[data-theme="dark"] .action-loading-overlay {
+  background: rgba(28, 28, 30, 0.86);
+}
+
+/* Disabled Fieldset / Form Locked State */
+.form-locked {
+  pointer-events: none !important;
+  opacity: 0.65;
+  filter: grayscale(15%);
+  transition: opacity 0.25s ease, filter 0.25s ease;
+}
