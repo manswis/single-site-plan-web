@@ -1061,12 +1061,12 @@ const FIELD_HELP_DATA = {
     linkText: "Visit BBMP Property Tax Portal ↗"
   },
   adlrNo: {
-    title: "ADLR 11E Survey Sketch Number",
-    what: "Pre-mutation survey sketch reference issued by the Assistant Director of Land Records (ADLR).",
-    where: "Printed on your official Mojini 11E survey sketch map.",
-    sample: "Sketch Ref: ADLR/11E/KR-7891/2023-24",
+    title: "ADLR 11E Survey Sketch Number (Optional)",
+    what: "Government pre-mutation survey sketch reference issued by the Assistant Director of Land Records (ADLR). Note: This is NOT your Sale Deed number.",
+    where: "Printed on your official DC Conversion order or parent Mojini survey map. (Leave blank or 'N/A' if you don't have it — it is 100% optional for generating your plan).",
+    sample: "Reference: ADLR/11E/KR-7891/2023-24 (or leave blank)",
     link: "https://bhoomi.karnataka.gov.in/mojini/",
-    linkText: "Visit Bhoomi Mojini Portal ↗"
+    linkText: "Bhoomi Mojini Portal (Search by rural Sy. No, not Property ID) ↗"
   },
   dcOrderNo: {
     title: "DC Conversion Order Number & Date",
