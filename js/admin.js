@@ -12,8 +12,8 @@ const INACTIVITY_TIMEOUT_MS = 15 * 60 * 1000; // 15 Minutes
 let activePasskey = '';
 let currentTickets = [];
 let selectedTicketId = null;
-let activeStatusFilter = 'all';
-let activePriorityFilter = 'all';
+let activeStatuses = [];
+let activePriorities = [];
 let activeSearchQuery = '';
 let inactivityTimer = null;
 
@@ -219,7 +219,7 @@ function clearAdminSearch() {
 }
 
 // ============================================================================
-// 2B. FILTER POPOVER & STATUS/PRIORITY MANAGERS
+// 2B. MULTI-SELECT FILTER POPOVER & STATUS/PRIORITY MANAGERS
 // ============================================================================
 function toggleFilterMenu() {
   const menu = document.getElementById('inboxFilterDropdown');
@@ -227,8 +227,15 @@ function toggleFilterMenu() {
   if (!menu) return;
 
   const isHidden = menu.style.display === 'none' || !menu.style.display;
-  menu.style.display = isHidden ? 'flex' : 'none';
-  if (btn) btn.classList.toggle('active', isHidden);
+  if (isHidden) {
+    syncCheckboxesToActiveState();
+    updatePopoverSelectionCount();
+    menu.style.display = 'flex';
+    if (btn) btn.classList.add('active');
+  } else {
+    menu.style.display = 'none';
+    if (btn) btn.classList.remove('active');
+  }
 }
 
 function closeFilterMenu() {
@@ -238,51 +245,89 @@ function closeFilterMenu() {
   if (btn) btn.classList.remove('active');
 }
 
-function selectStatusFilter(status) {
-  activeStatusFilter = status || 'all';
+function syncCheckboxesToActiveState() {
+  const statusCbs = document.querySelectorAll('.filter-status-cb');
+  statusCbs.forEach(cb => {
+    cb.checked = activeStatuses.includes(cb.value);
+  });
+
+  const priorityCbs = document.querySelectorAll('.filter-priority-cb');
+  priorityCbs.forEach(cb => {
+    cb.checked = activePriorities.includes(cb.value);
+  });
+}
+
+function onFilterItemToggled() {
+  updatePopoverSelectionCount();
+}
+
+function updatePopoverSelectionCount() {
+  const countEl = document.getElementById('filterSelectionSummary');
+  if (!countEl) return;
+
+  const checkedStatuses = Array.from(document.querySelectorAll('.filter-status-cb:checked')).map(cb => cb.value);
+  const checkedPriorities = Array.from(document.querySelectorAll('.filter-priority-cb:checked')).map(cb => cb.value);
+  const total = checkedStatuses.length + checkedPriorities.length;
+
+  if (total === 0) {
+    countEl.textContent = 'All';
+  } else {
+    countEl.textContent = `${total} selected`;
+  }
+}
+
+function applyFilterSelections() {
+  const checkedStatuses = Array.from(document.querySelectorAll('.filter-status-cb:checked')).map(cb => cb.value);
+  const checkedPriorities = Array.from(document.querySelectorAll('.filter-priority-cb:checked')).map(cb => cb.value);
+
+  activeStatuses = checkedStatuses;
+  activePriorities = checkedPriorities;
+
   updateActiveFilterUI();
   closeFilterMenu();
   loadTickets();
 }
 
-function selectPriorityFilter(priority) {
-  activePriorityFilter = priority || 'all';
+function resetFilterSelections() {
+  const statusCbs = document.querySelectorAll('.filter-status-cb');
+  statusCbs.forEach(cb => { cb.checked = false; });
+
+  const priorityCbs = document.querySelectorAll('.filter-priority-cb');
+  priorityCbs.forEach(cb => { cb.checked = false; });
+
+  activeStatuses = [];
+  activePriorities = [];
+
   updateActiveFilterUI();
   closeFilterMenu();
+  loadTickets();
+}
+
+function removeSingleStatusFilter(statusVal) {
+  activeStatuses = activeStatuses.filter(s => s !== statusVal);
+  syncCheckboxesToActiveState();
+  updateActiveFilterUI();
+  loadTickets();
+}
+
+function removeSinglePriorityFilter(priorityVal) {
+  activePriorities = activePriorities.filter(p => p !== priorityVal);
+  syncCheckboxesToActiveState();
+  updateActiveFilterUI();
   loadTickets();
 }
 
 function resetAllFilters() {
-  activeStatusFilter = 'all';
-  activePriorityFilter = 'all';
-  updateActiveFilterUI();
-  closeFilterMenu();
-  loadTickets();
+  resetFilterSelections();
 }
 
 function updateActiveFilterUI() {
-  // Update status items active state
-  const statusItems = document.querySelectorAll('#statusFilterOptions .filter-menu-item');
-  statusItems.forEach(item => {
-    const s = item.getAttribute('data-status');
-    item.classList.toggle('active', s === activeStatusFilter);
-  });
-
-  // Update priority items active state
-  const priorityItems = document.querySelectorAll('#priorityFilterOptions .filter-menu-item');
-  priorityItems.forEach(item => {
-    const p = item.getAttribute('data-priority');
-    item.classList.toggle('active', p === activePriorityFilter);
-  });
-
-  // Active indicator dot on filter button
   const badgeDot = document.getElementById('activeFilterBadge');
-  const hasActiveFilter = (activeStatusFilter !== 'all' || activePriorityFilter !== 'all');
+  const hasActiveFilter = (activeStatuses.length > 0 || activePriorities.length > 0);
   if (badgeDot) {
     badgeDot.style.display = hasActiveFilter ? 'block' : 'none';
   }
 
-  // Active filter tags bar
   const tagsBar = document.getElementById('activeFilterTagsBar');
   const tagsList = document.getElementById('activeFilterTagsList');
   if (tagsBar && tagsList) {
@@ -293,19 +338,19 @@ function updateActiveFilterUI() {
       tagsBar.style.display = 'flex';
       tagsList.innerHTML = '';
 
-      if (activeStatusFilter !== 'all') {
+      activeStatuses.forEach(st => {
         const chip = document.createElement('span');
         chip.className = 'active-filter-tag-chip';
-        chip.innerHTML = `<span>Status: <strong>${activeStatusFilter.replace('_', ' ').toUpperCase()}</strong></span> <button type="button" class="remove-tag-btn" onclick="selectStatusFilter('all')" title="Remove status filter">×</button>`;
+        chip.innerHTML = `<span>Status: <strong>${st.replace('_', ' ').toUpperCase()}</strong></span> <button type="button" class="remove-tag-btn" onclick="removeSingleStatusFilter('${st}')" title="Remove status filter">×</button>`;
         tagsList.appendChild(chip);
-      }
+      });
 
-      if (activePriorityFilter !== 'all') {
+      activePriorities.forEach(pr => {
         const chip = document.createElement('span');
         chip.className = 'active-filter-tag-chip';
-        chip.innerHTML = `<span>Priority: <strong>${activePriorityFilter.toUpperCase()}</strong></span> <button type="button" class="remove-tag-btn" onclick="selectPriorityFilter('all')" title="Remove priority filter">×</button>`;
+        chip.innerHTML = `<span>Priority: <strong>${pr.toUpperCase()}</strong></span> <button type="button" class="remove-tag-btn" onclick="removeSinglePriorityFilter('${pr}')" title="Remove priority filter">×</button>`;
         tagsList.appendChild(chip);
-      }
+      });
     }
   }
 }
@@ -336,7 +381,9 @@ async function loadTickets() {
   }
 
   try {
-    let url = `/api/admin/tickets?status=${encodeURIComponent(activeStatusFilter)}&priority=${encodeURIComponent(activePriorityFilter)}`;
+    const statusParam = activeStatuses.length > 0 ? activeStatuses.join(',') : 'all';
+    const priorityParam = activePriorities.length > 0 ? activePriorities.join(',') : 'all';
+    let url = `/api/admin/tickets?status=${encodeURIComponent(statusParam)}&priority=${encodeURIComponent(priorityParam)}`;
     if (activeSearchQuery) {
       url += `&q=${encodeURIComponent(activeSearchQuery)}`;
     }

@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Support & Issue Tracking — e-Plan Studio</title>
-  <meta name="description" content="Submit bug reports, feature requests, drawing errors, and feedback for e-Plan Studio. Live ticket status tracking with engineering response timeline.">
+  <meta name="description"
+    content="Submit bug reports, feature requests, drawing errors, and feedback for e-Plan Studio. Live ticket status tracking with engineering response timeline.">
 
   <!-- Google Fonts & Icons: Outfit, Inter & Material Symbols -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,7 +79,8 @@
       </div>
       <h1 class="support-hero-title">Support & Issue Resolution</h1>
       <p class="support-hero-subtitle">
-        Submit bug reports, request layout drawing capabilities, or track the real-time resolution timeline of your active inquiry.
+        Submit bug reports, request layout drawing capabilities, or track the real-time resolution timeline of your
+        active inquiry.
       </p>
     </section>
 
@@ -98,10 +100,10 @@
          TAB 1: SUBMIT REQUEST PANEL
          ========================================================================= -->
     <div class="contact-tab-panel active" id="tabPanel-submit">
-      
+
       <!-- Submission Card -->
       <div class="apple-card support-card-container" id="ticketFormCard">
-        
+
         <div class="form-section-header">
           <span class="material-symbols-outlined header-section-icon">category</span>
           <div>
@@ -112,7 +114,7 @@
 
         <!-- 4 Premium Category Selector Tiles -->
         <div class="category-tiles-grid">
-          
+
           <button type="button" class="category-tile active" data-type="bug">
             <div class="tile-icon-wrapper tile-icon-bug">
               <span class="material-symbols-outlined">bug_report</span>
@@ -173,9 +175,10 @@
         <form id="ticketSubmitForm" class="support-form">
           <input type="hidden" id="ticketTypeInput" value="bug">
           <input type="hidden" id="ticketPriority" value="medium">
-          
+
           <!-- Honeypot anti-spam trap (hidden from users) -->
-          <div style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+          <div style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;"
+            aria-hidden="true">
             <input type="text" id="ticketHoneypot" tabindex="-1" autocomplete="off">
           </div>
 
@@ -233,7 +236,8 @@
               </label>
               <div class="input-with-icon">
                 <span class="material-symbols-outlined input-icon">title</span>
-                <input type="text" id="ticketSubject" required class="field-control" placeholder="e.g. Setback calculation mismatch on corner plot">
+                <input type="text" id="ticketSubject" required class="field-control"
+                  placeholder="e.g. Setback calculation mismatch on corner plot">
               </div>
             </div>
           </div>
@@ -246,11 +250,12 @@
             </label>
             <textarea id="ticketMessage" required rows="5" class="field-control textarea-control"
               placeholder="Please describe what happened, what step you were on, and what you expected to see..."></textarea>
-            
+
             <!-- Safe Diagnostics Callout -->
             <div class="diagnostics-info-badge">
               <span class="material-symbols-outlined badge-info-icon">lock</span>
-              <span>Client environment diagnostics (browser, OS, viewport) will be safely attached to assist developer triage.</span>
+              <span>Client environment diagnostics (browser, OS, viewport) will be safely attached to assist developer
+                triage.</span>
             </div>
           </div>
 
@@ -274,14 +279,15 @@
         </div>
         <h2 class="success-heading">Request Submitted Successfully</h2>
         <p class="success-subheading">
-          Your <span id="successTicketType" class="success-type-tag">BUG REPORT</span> has been logged in our engineering triage pipeline.
+          Your <span id="successTicketType" class="success-type-tag">BUG REPORT</span> has been logged in our
+          engineering triage pipeline.
         </p>
 
         <!-- Ticket ID Card -->
         <div class="ticket-id-display-card">
           <div class="ticket-id-caption">Your Unique Tracking ID</div>
           <div id="generatedTicketId" class="ticket-id-code">REQ-XXXX-XXXX</div>
-          
+
           <div class="ticket-id-actions">
             <button type="button" id="copyTicketBtn" class="apple-btn-secondary id-action-btn" onclick="copyTicketId()">
               <span class="material-symbols-outlined">content_copy</span>
@@ -307,21 +313,23 @@
          TAB 2: STATUS & TIMELINE TRACKER PANEL
          ========================================================================= -->
     <div class="contact-tab-panel" id="tabPanel-track">
-      
+
       <!-- Lookup Form Card -->
       <div class="apple-card support-card-container" style="margin-bottom: 24px;">
         <div class="form-section-header">
           <span class="material-symbols-outlined header-section-icon">search_insights</span>
           <div>
             <h2 class="form-section-title">Track Ticket Status</h2>
-            <p class="form-section-desc">Enter your 10-character Ticket ID to view live engineering progress and official responses.</p>
+            <p class="form-section-desc">Enter your 10-character Ticket ID to view live engineering progress and
+              official responses.</p>
           </div>
         </div>
 
         <form id="ticketTrackForm" class="track-lookup-form">
           <div class="input-with-icon" style="flex: 1; min-width: 240px;">
             <span class="material-symbols-outlined input-icon">confirmation_number</span>
-            <input type="text" id="trackIdInput" required placeholder="e.g. REQ-BCE5-T923" class="field-control tracking-input">
+            <input type="text" id="trackIdInput" required placeholder="e.g. REQ-BCE5-T923"
+              class="field-control tracking-input">
           </div>
           <button type="submit" id="trackLookupBtn" class="apple-btn-primary track-submit-btn">
             <span class="material-symbols-outlined">search</span>
@@ -334,7 +342,7 @@
 
       <!-- Live Tracking Results Card -->
       <div class="apple-card support-card-container" id="trackResultCard" style="display: none;">
-        
+
         <div class="track-result-header">
           <div>
             <span class="track-inquiry-tag">Active Ticket Inquiry</span>
@@ -349,7 +357,7 @@
         <!-- 4-Step Visual Progress Stepper -->
         <div class="status-stepper-container">
           <div class="stepper-track-line"></div>
-          
+
           <div class="stepper-node completed" id="stepNode-submitted">
             <div class="node-circle">
               <span class="material-symbols-outlined">task_alt</span>
@@ -420,35 +428,50 @@
       <div class="apple-modal-card alert-modal-card" style="max-width: 520px; text-align: left;">
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
           <span class="material-symbols-outlined" style="font-size: 26px; color: var(--apple-accent);">gavel</span>
-          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Submission Terms & Privacy Agreement</h3>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Submission Terms &
+            Privacy Agreement</h3>
         </div>
-        
+
         <p style="margin: 0 0 14px 0; font-size: 13px; color: var(--apple-text-secondary); line-height: 1.5;">
-          Please review and accept our standard voluntary cloud transmission terms before your request is queued in our developer triage system.
+          Please review and accept our standard voluntary cloud transmission terms before your request is queued in our
+          developer triage system.
         </p>
 
         <div class="apple-modal-body"
           style="background: var(--apple-card-bg); border: 1px solid var(--apple-border); border-radius: 12px; padding: 14px; margin-bottom: 18px; font-size: 12px; line-height: 1.6; color: var(--apple-text-primary); max-height: 160px; overflow-y: auto;">
           <ul style="margin: 0; padding-left: 18px;">
-            <li style="margin-bottom: 6px;"><strong>Voluntary Transmission:</strong> Support messages and device diagnostics are processed on third-party cloud infrastructure (Cloudflare D1) at your sole election.</li>
-            <li style="margin-bottom: 6px;"><strong>No Sensitive Property Data:</strong> You confirm you are not transmitting confidential banking, financial, or unredacted personal property deeds.</li>
-            <li style="margin-bottom: 6px;"><strong>Limitation of Liability:</strong> Developer aggregate liability for data incidents, network interruptions, or server outages is limited to INR ₹0 as defined in our <a href="legal.html" target="_blank" style="color: var(--apple-accent); font-weight: 600; text-decoration: underline;">Legal Terms & Disclaimer</a>.</li>
-            <li><strong>Open-Source AS-IS:</strong> All software and developer responses are provided AS-IS under the MIT license.</li>
+            <li style="margin-bottom: 6px;"><strong>Voluntary Transmission:</strong> Support messages and device
+              diagnostics are processed on third-party cloud infrastructure (Cloudflare D1) at your sole election.</li>
+            <li style="margin-bottom: 6px;"><strong>No Sensitive Property Data:</strong> You confirm you are not
+              transmitting confidential banking, financial, or unredacted personal property deeds.</li>
+            <li style="margin-bottom: 6px;"><strong>Limitation of Liability:</strong> Developer aggregate liability for
+              data incidents, network interruptions, or server outages is limited to INR ₹0 as defined in our <a
+                href="legal.html" target="_blank"
+                style="color: var(--apple-accent); font-weight: 600; text-decoration: underline;">Legal Terms &
+                Disclaimer</a>.</li>
+            <li><strong>Open-Source AS-IS:</strong> All software and developer responses are provided AS-IS under the
+              MIT license.</li>
           </ul>
         </div>
 
         <!-- Mandatory Checkbox Agreement -->
-        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; margin-bottom: 20px; font-size: 13px; color: var(--apple-text-primary); user-select: none;">
-          <input type="checkbox" id="modalTermsCheckbox" style="width: 18px; height: 18px; margin-top: 2px; accent-color: var(--apple-accent); cursor: pointer;">
-          <span>I have read, understood, and agree to the <a href="legal.html" target="_blank" style="color: var(--apple-accent); font-weight: 600; text-decoration: underline;">Legal Terms & Privacy Disclaimer</a>.</span>
+        <label
+          style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; margin-bottom: 20px; font-size: 13px; color: var(--apple-text-primary); user-select: none;">
+          <input type="checkbox" id="modalTermsCheckbox"
+            style="width: 18px; height: 18px; margin-top: 2px; accent-color: var(--apple-accent); cursor: pointer;">
+          <span>I have read, understood, and agree to the <a href="legal.html" target="_blank"
+              style="color: var(--apple-accent); font-weight: 600; text-decoration: underline;">Legal Terms & Privacy
+              Disclaimer</a>.</span>
         </label>
 
         <!-- Modal Action Buttons -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
           <button type="button" class="apple-btn-secondary" onclick="closeTermsModal()"
             style="height: 44px; font-weight: 700; border-radius: 10px;">Cancel</button>
-          <button type="button" id="confirmSubmitBtn" class="apple-btn-primary" onclick="proceedConfirmedSubmit()" disabled
-            style="height: 44px; font-weight: 700; border-radius: 10px; opacity: 0.5; cursor: not-allowed;">Confirm & Submit</button>
+          <button type="button" id="confirmSubmitBtn" class="apple-btn-primary" onclick="proceedConfirmedSubmit()"
+            disabled
+            style="height: 44px; font-weight: 700; border-radius: 10px; opacity: 0.5; cursor: not-allowed;">Confirm &
+            Submit</button>
         </div>
       </div>
     </div>
@@ -480,7 +503,8 @@
           GitHub
         </a>
       </p>
-      <p>© 2026 <span class="app-brand-name"></span> • v<span class="app-version"></span> • All processing performed 100% locally on client browser.</p>
+      <p>© 2026 <span class="app-brand-name"></span> • v<span class="app-version"></span> • All processing performed
+        100% locally on client browser.</p>
     </footer>
 
   </div>

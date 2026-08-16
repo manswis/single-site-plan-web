@@ -4151,12 +4151,12 @@ body.pdf-export-active .drawing-canvas-column,
   box-shadow: 0 0 6px rgba(0, 113, 227, 0.6);
 }
 
-/* Two-Section Filter Popover Dropdown */
+/* Multi-Select Filter Popover Dropdown */
 .inbox-filter-popover {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  width: 250px;
+  width: 270px;
   background: var(--apple-card-bg);
   border: 1px solid var(--apple-border);
   border-radius: 16px;
@@ -4167,13 +4167,41 @@ body.pdf-export-active .drawing-canvas-column,
   padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   animation: popoverFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes popoverFadeIn {
   from { opacity: 0; transform: translateY(-6px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.filter-popover-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--apple-border);
+}
+
+.filter-popover-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+.filter-popover-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--apple-accent);
+  background: rgba(0, 113, 227, 0.08);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+[data-theme="dark"] .filter-popover-count {
+  background: rgba(41, 151, 255, 0.16);
+  color: #2997ff;
 }
 
 .filter-popover-section {
@@ -4191,57 +4219,58 @@ body.pdf-export-active .drawing-canvas-column,
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 2px 6px 4px 6px;
+  padding: 2px 4px 4px 4px;
 }
 
 .filter-options-list {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  max-height: 220px;
+  max-height: 200px;
   overflow-y: auto;
 }
 
-.filter-menu-item {
+.filter-checkbox-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 6px 8px;
   border-radius: 8px;
-  border: none;
-  background: none;
-  color: var(--apple-text-primary);
-  font-size: 12px;
-  font-weight: 500;
   cursor: pointer;
+  user-select: none;
   transition: var(--apple-transition);
-  text-align: left;
   width: 100%;
+  box-sizing: border-box;
 }
 
-.filter-menu-item:hover {
-  background: rgba(0, 0, 0, 0.05);
+.filter-checkbox-item:hover {
+  background: rgba(0, 0, 0, 0.04);
 }
 
-[data-theme="dark"] .filter-menu-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+[data-theme="dark"] .filter-checkbox-item:hover {
+  background: rgba(255, 255, 255, 0.06);
 }
 
-.filter-menu-item.active {
-  background: rgba(0, 113, 227, 0.1);
-  color: var(--apple-accent);
-  font-weight: 700;
+.filter-checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  margin-right: 8px;
+  accent-color: var(--apple-accent);
+  cursor: pointer;
 }
 
-[data-theme="dark"] .filter-menu-item.active {
-  background: rgba(41, 151, 255, 0.18);
-  color: #2997ff;
-}
-
-.filter-menu-left {
+.filter-item-left {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
+}
+
+.filter-item-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--apple-text-primary);
 }
 
 .filter-popover-divider {
@@ -4251,34 +4280,50 @@ body.pdf-export-active .drawing-canvas-column,
 }
 
 .filter-popover-footer {
-  padding-top: 6px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding-top: 8px;
   border-top: 1px solid var(--apple-border);
 }
 
-.filter-reset-btn {
-  width: 100%;
+.filter-footer-btn {
+  height: 34px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.04);
-  color: var(--apple-text-secondary);
-  font-size: 11px;
-  font-weight: 600;
+  gap: 5px;
   cursor: pointer;
   transition: var(--apple-transition);
+  border: none;
 }
 
-[data-theme="dark"] .filter-reset-btn {
-  background: rgba(255, 255, 255, 0.06);
+.filter-footer-reset {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--apple-text-secondary);
 }
 
-.filter-reset-btn:hover {
-  background: rgba(255, 59, 48, 0.1);
+[data-theme="dark"] .filter-footer-reset {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--apple-text-secondary);
+}
+
+.filter-footer-reset:hover {
+  background: rgba(255, 59, 48, 0.12);
   color: var(--apple-red);
+}
+
+.filter-footer-apply {
+  background: var(--apple-accent);
+  color: #ffffff;
+}
+
+.filter-footer-apply:hover {
+  opacity: 0.92;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.35);
 }
 
 /* Active Filter Tags Bar */

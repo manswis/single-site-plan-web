@@ -373,23 +373,34 @@ export default {
       // 3B. GET /api/admin/tickets (Fetch ticket list with filters)
       if (pathname === '/api/admin/tickets' && request.method === 'GET') {
         try {
-          const statusFilter = url.searchParams.get('status') || 'all';
-          const priorityFilter = url.searchParams.get('priority') || 'all';
+          const statusParam = url.searchParams.get('status') || 'all';
+          const priorityParam = url.searchParams.get('priority') || 'all';
           const searchQuery = url.searchParams.get('q') || '';
           const limit = Math.min(parseInt(url.searchParams.get('limit') || '50', 10), 100);
           const offset = Math.max(parseInt(url.searchParams.get('offset') || '0', 10), 0);
 
+          const validStatuses = ['open', 'in_review', 'in_progress', 'on_hold', 'infeasible', 'resolved', 'closed'];
+          const validPriorities = ['low', 'medium', 'high'];
+
           let sql = 'SELECT id, type, priority, status, name, email, subject, message, public_response, internal_notes, client_info, created_at, updated_at FROM tickets WHERE 1=1';
           const params = [];
 
-          if (statusFilter !== 'all') {
-            sql += ' AND status = ?';
-            params.push(statusFilter);
+          if (statusParam !== 'all' && statusParam.trim().length > 0) {
+            const requestedStatuses = statusParam.split(',').map(s => s.trim()).filter(s => validStatuses.includes(s));
+            if (requestedStatuses.length > 0) {
+              const placeholders = requestedStatuses.map(() => '?').join(',');
+              sql += ` AND status IN (${placeholders})`;
+              params.push(...requestedStatuses);
+            }
           }
 
-          if (priorityFilter !== 'all') {
-            sql += ' AND priority = ?';
-            params.push(priorityFilter);
+          if (priorityParam !== 'all' && priorityParam.trim().length > 0) {
+            const requestedPriorities = priorityParam.split(',').map(p => p.trim()).filter(p => validPriorities.includes(p));
+            if (requestedPriorities.length > 0) {
+              const placeholders = requestedPriorities.map(() => '?').join(',');
+              sql += ` AND priority IN (${placeholders})`;
+              params.push(...requestedPriorities);
+            }
           }
 
           if (searchQuery.trim().length > 0) {
