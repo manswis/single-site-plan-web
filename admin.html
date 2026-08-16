@@ -147,51 +147,149 @@
 
       <!-- LEFT COLUMN: Ticket Inbox List -->
       <section class="admin-inbox-pane">
-
-        <!-- Search & Status Filter Controls -->
+        <!-- Search & Filter Controls Header -->
         <div class="inbox-controls-header">
-          <div class="input-with-icon" style="margin-bottom: 12px;">
-            <span class="material-symbols-outlined input-icon">search</span>
-            <input type="text" id="adminSearchInput" class="field-control" placeholder="Search ID, email, keyword..."
-              style="height: 38px; font-size: 12px;">
-            <button type="button" id="clearSearchBtn" class="clear-search-btn" onclick="clearAdminSearch()"
-              style="display: none;" title="Clear search">
-              <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
-            </button>
+          <!-- Top Row: Search Input + Filter Popover Button -->
+          <div class="inbox-search-filter-row">
+            <div class="input-with-icon inbox-search-wrap">
+              <span class="material-symbols-outlined input-icon">search</span>
+              <input type="text" id="adminSearchInput" class="field-control" placeholder="Search ID, email, keyword..."
+                style="height: 38px; font-size: 12px;">
+              <button type="button" id="clearSearchBtn" class="clear-search-btn" onclick="clearAdminSearch()"
+                style="display: none;" title="Clear search">
+                <span class="material-symbols-outlined" style="font-size: 16px;">close</span>
+              </button>
+            </div>
+
+            <!-- Filter Trigger Button with active indicator -->
+            <div class="inbox-filter-anchor">
+              <button type="button" id="inboxFilterBtn" class="inbox-filter-toggle-btn" onclick="toggleFilterMenu()"
+                title="Filter Tickets by Status and Priority" aria-label="Filter Tickets">
+                <span class="material-symbols-outlined" style="font-size: 19px;">filter_list</span>
+                <span id="activeFilterBadge" class="filter-active-dot" style="display: none;"></span>
+              </button>
+
+              <!-- Two-Section Filter Dropdown Popover -->
+              <div id="inboxFilterDropdown" class="inbox-filter-popover" style="display: none;">
+                <!-- Section 1: STATUS -->
+                <div class="filter-popover-section">
+                  <div class="filter-section-header">
+                    <span class="material-symbols-outlined" style="font-size: 14px;">circle</span>
+                    <span>Status</span>
+                  </div>
+                  <div class="filter-options-list" id="statusFilterOptions">
+                    <button type="button" class="filter-menu-item active" data-status="all" onclick="selectStatusFilter('all')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot dot-all" style="background: var(--apple-text-secondary);"></span>
+                        <span>All Statuses</span>
+                      </span>
+                      <span class="filter-badge" id="badgeTotal">0</span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-status="open" onclick="selectStatusFilter('open')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot dot-open"></span>
+                        <span>Open</span>
+                      </span>
+                      <span class="filter-badge badge-open" id="badgeOpen">0</span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-status="in_review" onclick="selectStatusFilter('in_review')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot dot-in_review"></span>
+                        <span>In Review</span>
+                      </span>
+                      <span class="filter-badge badge-review" id="badgeReview">0</span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-status="in_progress" onclick="selectStatusFilter('in_progress')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot dot-in_progress"></span>
+                        <span>In Progress</span>
+                      </span>
+                      <span class="filter-badge badge-progress" id="badgeProgress">0</span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-status="on_hold" onclick="selectStatusFilter('on_hold')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot dot-on_hold"></span>
+                        <span>On Hold</span>
+                      </span>
+                      <span class="filter-badge badge-hold" id="badgeHold">0</span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-status="infeasible" onclick="selectStatusFilter('infeasible')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot dot-infeasible"></span>
+                        <span>Infeasible</span>
+                      </span>
+                      <span class="filter-badge badge-infeasible" id="badgeInfeasible">0</span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-status="resolved" onclick="selectStatusFilter('resolved')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot dot-resolved"></span>
+                        <span>Resolved</span>
+                      </span>
+                      <span class="filter-badge badge-resolved" id="badgeResolved">0</span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-status="closed" onclick="selectStatusFilter('closed')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot dot-closed"></span>
+                        <span>Closed</span>
+                      </span>
+                      <span class="filter-badge badge-closed" id="badgeClosed">0</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Section Divider -->
+                <div class="filter-popover-divider"></div>
+
+                <!-- Section 2: PRIORITY -->
+                <div class="filter-popover-section">
+                  <div class="filter-section-header">
+                    <span class="material-symbols-outlined" style="font-size: 14px;">flag</span>
+                    <span>Priority</span>
+                  </div>
+                  <div class="filter-options-list" id="priorityFilterOptions">
+                    <button type="button" class="filter-menu-item active" data-priority="all" onclick="selectPriorityFilter('all')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot" style="background: var(--apple-text-secondary);"></span>
+                        <span>All Priorities</span>
+                      </span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-priority="high" onclick="selectPriorityFilter('high')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot" style="background: #e11d48;"></span>
+                        <span>High Priority</span>
+                      </span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-priority="medium" onclick="selectPriorityFilter('medium')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot" style="background: #eab308;"></span>
+                        <span>Medium Priority</span>
+                      </span>
+                    </button>
+                    <button type="button" class="filter-menu-item" data-priority="low" onclick="selectPriorityFilter('low')">
+                      <span class="filter-menu-left">
+                        <span class="status-indicator-dot" style="background: #16a34a;"></span>
+                        <span>Low Priority</span>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Popover Footer: Reset -->
+                <div class="filter-popover-footer">
+                  <button type="button" class="filter-reset-btn" onclick="resetAllFilters()">
+                    <span class="material-symbols-outlined" style="font-size: 14px;">restart_alt</span>
+                    <span>Reset All Filters</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="inbox-filter-chips" id="inboxFilterChips">
-            <button type="button" class="filter-chip active" data-status="all">
-              <span>All</span>
-              <span class="filter-badge" id="badgeTotal">0</span>
-            </button>
-            <button type="button" class="filter-chip" data-status="open">
-              <span>Open</span>
-              <span class="filter-badge badge-open" id="badgeOpen">0</span>
-            </button>
-            <button type="button" class="filter-chip" data-status="in_review">
-              <span>Review</span>
-              <span class="filter-badge" id="badgeReview">0</span>
-            </button>
-            <button type="button" class="filter-chip" data-status="in_progress">
-              <span>Progress</span>
-              <span class="filter-badge badge-progress" id="badgeProgress">0</span>
-            </button>
-            <button type="button" class="filter-chip" data-status="on_hold">
-              <span>On Hold</span>
-              <span class="filter-badge badge-hold" id="badgeHold">0</span>
-            </button>
-            <button type="button" class="filter-chip" data-status="infeasible">
-              <span>Infeasible</span>
-              <span class="filter-badge badge-infeasible" id="badgeInfeasible">0</span>
-            </button>
-            <button type="button" class="filter-chip" data-status="resolved">
-              <span>Resolved</span>
-              <span class="filter-badge badge-resolved" id="badgeResolved">0</span>
-            </button>
-            <button type="button" class="filter-chip" data-status="closed">
-              <span>Closed</span>
-              <span class="filter-badge" id="badgeClosed">0</span>
+          <!-- Active Filter Tags Bar -->
+          <div id="activeFilterTagsBar" class="active-filter-tags-bar" style="display: none;">
+            <div id="activeFilterTagsList" class="active-filter-tags-list"></div>
+            <button type="button" class="active-filter-clear-all" onclick="resetAllFilters()" title="Reset all filters">
+              <span>Reset</span>
             </button>
           </div>
         </div>

@@ -13,6 +13,7 @@ let activePasskey = '';
 let currentTickets = [];
 let selectedTicketId = null;
 let activeStatusFilter = 'all';
+let activePriorityFilter = 'all';
 let activeSearchQuery = '';
 let inactivityTimer = null;
 
@@ -153,15 +154,12 @@ function setupEventListeners() {
     });
   }
 
-  // Filter Chips Click
-  const filterChips = document.querySelectorAll('#inboxFilterChips .filter-chip');
-  filterChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      filterChips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      activeStatusFilter = chip.getAttribute('data-status') || 'all';
-      loadTickets();
-    });
+  // Close filter popover on document click outside
+  document.addEventListener('click', (e) => {
+    const filterAnchor = document.querySelector('.inbox-filter-anchor');
+    if (filterAnchor && !filterAnchor.contains(e.target)) {
+      closeFilterMenu();
+    }
   });
 
   // Search Input (Debounced with keyboard shortcuts & out-of-order cancellation)
@@ -194,6 +192,7 @@ function setupEventListeners() {
         }
       } else if (e.key === 'Escape') {
         e.preventDefault();
+        closeFilterMenu();
         clearAdminSearch();
       }
     });
@@ -216,6 +215,98 @@ function clearAdminSearch() {
   if (activeSearchQuery !== '') {
     activeSearchQuery = '';
     loadTickets();
+  }
+}
+
+// ============================================================================
+// 2B. FILTER POPOVER & STATUS/PRIORITY MANAGERS
+// ============================================================================
+function toggleFilterMenu() {
+  const menu = document.getElementById('inboxFilterDropdown');
+  const btn = document.getElementById('inboxFilterBtn');
+  if (!menu) return;
+
+  const isHidden = menu.style.display === 'none' || !menu.style.display;
+  menu.style.display = isHidden ? 'flex' : 'none';
+  if (btn) btn.classList.toggle('active', isHidden);
+}
+
+function closeFilterMenu() {
+  const menu = document.getElementById('inboxFilterDropdown');
+  const btn = document.getElementById('inboxFilterBtn');
+  if (menu) menu.style.display = 'none';
+  if (btn) btn.classList.remove('active');
+}
+
+function selectStatusFilter(status) {
+  activeStatusFilter = status || 'all';
+  updateActiveFilterUI();
+  closeFilterMenu();
+  loadTickets();
+}
+
+function selectPriorityFilter(priority) {
+  activePriorityFilter = priority || 'all';
+  updateActiveFilterUI();
+  closeFilterMenu();
+  loadTickets();
+}
+
+function resetAllFilters() {
+  activeStatusFilter = 'all';
+  activePriorityFilter = 'all';
+  updateActiveFilterUI();
+  closeFilterMenu();
+  loadTickets();
+}
+
+function updateActiveFilterUI() {
+  // Update status items active state
+  const statusItems = document.querySelectorAll('#statusFilterOptions .filter-menu-item');
+  statusItems.forEach(item => {
+    const s = item.getAttribute('data-status');
+    item.classList.toggle('active', s === activeStatusFilter);
+  });
+
+  // Update priority items active state
+  const priorityItems = document.querySelectorAll('#priorityFilterOptions .filter-menu-item');
+  priorityItems.forEach(item => {
+    const p = item.getAttribute('data-priority');
+    item.classList.toggle('active', p === activePriorityFilter);
+  });
+
+  // Active indicator dot on filter button
+  const badgeDot = document.getElementById('activeFilterBadge');
+  const hasActiveFilter = (activeStatusFilter !== 'all' || activePriorityFilter !== 'all');
+  if (badgeDot) {
+    badgeDot.style.display = hasActiveFilter ? 'block' : 'none';
+  }
+
+  // Active filter tags bar
+  const tagsBar = document.getElementById('activeFilterTagsBar');
+  const tagsList = document.getElementById('activeFilterTagsList');
+  if (tagsBar && tagsList) {
+    if (!hasActiveFilter) {
+      tagsBar.style.display = 'none';
+      tagsList.innerHTML = '';
+    } else {
+      tagsBar.style.display = 'flex';
+      tagsList.innerHTML = '';
+
+      if (activeStatusFilter !== 'all') {
+        const chip = document.createElement('span');
+        chip.className = 'active-filter-tag-chip';
+        chip.innerHTML = `<span>Status: <strong>${activeStatusFilter.replace('_', ' ').toUpperCase()}</strong></span> <button type="button" class="remove-tag-btn" onclick="selectStatusFilter('all')" title="Remove status filter">×</button>`;
+        tagsList.appendChild(chip);
+      }
+
+      if (activePriorityFilter !== 'all') {
+        const chip = document.createElement('span');
+        chip.className = 'active-filter-tag-chip';
+        chip.innerHTML = `<span>Priority: <strong>${activePriorityFilter.toUpperCase()}</strong></span> <button type="button" class="remove-tag-btn" onclick="selectPriorityFilter('all')" title="Remove priority filter">×</button>`;
+        tagsList.appendChild(chip);
+      }
+    }
   }
 }
 
@@ -245,7 +336,7 @@ async function loadTickets() {
   }
 
   try {
-    let url = `/api/admin/tickets?status=${encodeURIComponent(activeStatusFilter)}`;
+    let url = `/api/admin/tickets?status=${encodeURIComponent(activeStatusFilter)}&priority=${encodeURIComponent(activePriorityFilter)}`;
     if (activeSearchQuery) {
       url += `&q=${encodeURIComponent(activeSearchQuery)}`;
     }

@@ -374,6 +374,7 @@ export default {
       if (pathname === '/api/admin/tickets' && request.method === 'GET') {
         try {
           const statusFilter = url.searchParams.get('status') || 'all';
+          const priorityFilter = url.searchParams.get('priority') || 'all';
           const searchQuery = url.searchParams.get('q') || '';
           const limit = Math.min(parseInt(url.searchParams.get('limit') || '50', 10), 100);
           const offset = Math.max(parseInt(url.searchParams.get('offset') || '0', 10), 0);
@@ -384,6 +385,11 @@ export default {
           if (statusFilter !== 'all') {
             sql += ' AND status = ?';
             params.push(statusFilter);
+          }
+
+          if (priorityFilter !== 'all') {
+            sql += ' AND priority = ?';
+            params.push(priorityFilter);
           }
 
           if (searchQuery.trim().length > 0) {
