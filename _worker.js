@@ -37,6 +37,15 @@ function isValidEmail(email) {
   return typeof email === 'string' && re.test(email.trim()) && email.length <= 254;
 }
 
+// Sanitizes free-text inputs: strips null bytes, removes dangerous control characters, and enforces strict maximum length
+function sanitizePlainText(input, maxLength = 5000) {
+  if (!input || typeof input !== 'string') return '';
+  return input
+    .replace(/\0/g, '') // Strip null bytes
+    .trim()
+    .slice(0, maxLength);
+}
+
 // Global Security Response Builder with strict OWASP headers
 function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
@@ -244,10 +253,10 @@ export default {
           return jsonResponse({ error: 'Detailed description must be at least 10 characters.' }, 400);
         }
 
-        const cleanSubject = subject.trim().slice(0, 200);
-        const cleanMessage = message.trim().slice(0, 5000);
-        const cleanName = (name && typeof name === 'string') ? name.trim().slice(0, 100) : '';
-        const cleanEmail = email.trim().toLowerCase().slice(0, 254);
+        const cleanSubject = sanitizePlainText(subject, 200);
+        const cleanMessage = sanitizePlainText(message, 5000);
+        const cleanName = sanitizePlainText(name, 100);
+        const cleanEmail = String(email).trim().toLowerCase().slice(0, 254);
 
         // 5-Layer Security: Validate and sanitize attachments (max 2 images, max 1.5MB Base64 each)
         let sanitizedAttachments = [];
@@ -302,9 +311,24 @@ export default {
           }
         }
 
+        // Whitelist client environment diagnostics (prevents arbitrary JSON injection or bloat)
+        let sanitizedClientInfo = {};
+        if (client_info && typeof client_info === 'object' && !Array.isArray(client_info)) {
+          const allowedKeys = ['userAgent', 'platform', 'language', 'screenWidth', 'screenHeight', 'windowInnerWidth', 'windowInnerHeight', 'colorDepth', 'referrer', 'timestamp'];
+          for (const key of allowedKeys) {
+            if (client_info[key] !== undefined) {
+              if (typeof client_info[key] === 'number') {
+                sanitizedClientInfo[key] = Math.round(client_info[key]);
+              } else if (typeof client_info[key] === 'string') {
+                sanitizedClientInfo[key] = sanitizePlainText(client_info[key], 250);
+              }
+            }
+          }
+        }
+        const clientInfoStr = JSON.stringify(sanitizedClientInfo);
+
         // Generate unique ticket ID and insert with auto-recovery
         const ticketId = generateTicketId();
-        const clientInfoStr = client_info ? JSON.stringify(client_info) : '{}';
 
         try {
           await env.DB.prepare(`
@@ -380,6 +404,11 @@ export default {
         }
 
         const cleanId = decodeURIComponent(ticketId).trim().toUpperCase();
+
+        // Strict Ticket ID format whitelist (e.g. REQ-ABCD-1234)
+        if (!/^[A-Z0-9-]{4,30}$/.test(cleanId)) {
+          return jsonResponse({ error: 'Malformed Ticket ID format.' }, 400);
+        }
 
         const ticket = await env.DB.prepare(`
           SELECT id, type, priority, status, subject, message, attachments, public_response, created_at, updated_at
@@ -534,8 +563,8 @@ export default {
           let body = {};
           try { body = await request.json(); } catch (e) { }
 
-          const replyText = (body.reply || body.message || '').trim();
-          const author = (body.author || 'e-Plan Studio Engineering Team').trim();
+          const replyText = sanitizePlainText(body.reply || body.message, 5000);
+          const author = sanitizePlainText(body.author || 'e-Plan Studio Engineering Team', 100);
           const newStatus = (body.status || '').trim();
 
           if (!replyText) {
@@ -624,7 +653,7 @@ export default {
           }
           if (typeof internal_notes === 'string') {
             sql += ', internal_notes = ?';
-            params.push(internal_notes.trim());
+            params.push(sanitizePlainText(internal_notes, 10000));
           }
 
           sql += ' WHERE id = ?';
