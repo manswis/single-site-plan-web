@@ -246,7 +246,7 @@ function generatePlan() {
   // Reserved Centered Plot Box Canvas: Width 340, Height 260
   const maxDrawW = 340;
   const maxDrawH = 260;
-  const ratio = Math.min(maxDrawW / Math.max(sideE, sideW, 1), maxDrawH / Math.max(sideN, sideS, 1));
+  const ratio = Math.min(maxDrawW / Math.max(sideN, sideS, 1), maxDrawH / Math.max(sideE, sideW, 1));
 
   let offsetX, offsetY, drawW, drawH, nW, sW, eH, wH;
   let topLeft, topRight, botRight, botLeft;
@@ -301,8 +301,8 @@ function generatePlan() {
     plotRect.style.display = 'block';
     plotPoly.style.display = 'none';
 
-    drawW = (roadFace === 'north' || roadFace === 'south') ? sideN * ratio : sideE * ratio;
-    drawH = (roadFace === 'north' || roadFace === 'south') ? sideE * ratio : sideN * ratio;
+    drawW = width * ratio;
+    drawH = length * ratio;
     offsetX = 180 + (maxDrawW - drawW) / 2;
     offsetY = 100 + (maxDrawH - drawH) / 2;
 
