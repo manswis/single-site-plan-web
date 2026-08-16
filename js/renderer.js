@@ -131,7 +131,8 @@ function generatePlan() {
       }
 
       const name = nameEl && nameEl.value.trim() ? nameEl.value.trim() : (dir.toLowerCase() === roadFace ? 'PUBLIC ROAD' : 'ABUTTING ROAD');
-      return { type: 'road', text: `${name.toUpperCase()} (${formatFeetInches(w)} WIDE)`, roadW: w, name: name };
+      const meterW = (w * 0.3048).toFixed(2);
+      return { type: 'road', text: `${name.toUpperCase()} (${formatFeetInches(w)} [${meterW} M] WIDE)`, roadW: w, name: name };
     } else {
       const descEl = document.getElementById(`descPlot${dir}`);
       const desc = descEl && descEl.value.trim() ? descEl.value.trim() : getDefaultLabel(type);
@@ -168,7 +169,8 @@ function generatePlan() {
   document.getElementById('outArea').textContent = `${areaSqFt} sq.ft (${areaSqM} sq.m)`;
   document.getElementById('outSize').textContent = `N:${formatFeetInches(sideN)} × S:${formatFeetInches(sideS)} × E:${formatFeetInches(sideE)} × W:${formatFeetInches(sideW)}` + (isOdd ? ' (Irregular)' : ' (Regular)');
   document.getElementById('outRoadFace').textContent = roadFace.charAt(0).toUpperCase() + roadFace.slice(1);
-  document.getElementById('outRoadWidth').textContent = formatFeetInches(roadW) + " Wide";
+  const roadMeterW = (roadW * 0.3048).toFixed(2);
+  document.getElementById('outRoadWidth').textContent = `${formatFeetInches(roadW)} (${roadMeterW} m) Wide`;
 
   // 2. Populate ADLR 11E Header Bar
   document.getElementById('outAdlrNo').textContent = adlrNo;
@@ -275,16 +277,6 @@ function generatePlan() {
 
     plotPoly.setAttribute('points', `${topLeft.x},${topLeft.y} ${topRight.x},${topRight.y} ${botRight.x},${botRight.y} ${botLeft.x},${botLeft.y}`);
 
-    const bldgDrawW = Math.max(10, Math.min(bldgW * ratio, nW * 0.75));
-    const bldgDrawH = Math.max(10, Math.min(bldgL * ratio, eH * 0.75));
-    const bldgX = topLeft.x + (setbackL * ratio);
-    const bldgY = topLeft.y + (setbackF * ratio);
-
-    bldgRect.setAttribute('x', bldgX);
-    bldgRect.setAttribute('y', bldgY);
-    bldgRect.setAttribute('width', bldgDrawW);
-    bldgRect.setAttribute('height', bldgDrawH);
-
     // Dimension lines for Irregular Plot
     const dimY = offsetY + maxH + 35;
     document.getElementById('dimWLine').setAttribute('x1', offsetX);
@@ -324,17 +316,6 @@ function generatePlan() {
     botRight = { x: offsetX + drawW, y: offsetY + drawH };
     botLeft = { x: offsetX, y: offsetY + drawH };
 
-    // Dynamic Footprint Placement from Setbacks
-    const bldgDrawW = Math.max(15, (bldgW > 0 ? bldgW : (width - setbackL - setbackRt)) * ratio);
-    const bldgDrawH = Math.max(15, (bldgL > 0 ? bldgL : (length - setbackF - setbackR)) * ratio);
-    const bldgX = offsetX + (setbackL * ratio);
-    const bldgY = offsetY + (setbackF * ratio);
-
-    bldgRect.setAttribute('x', bldgX);
-    bldgRect.setAttribute('y', bldgY);
-    bldgRect.setAttribute('width', bldgDrawW);
-    bldgRect.setAttribute('height', bldgDrawH);
-
     // Dimension lines (Positioned cleanly on Layer 3 below & to the right)
     const dimY = offsetY + drawH + 35;
     document.getElementById('dimWLine').setAttribute('x1', offsetX);
@@ -356,7 +337,7 @@ function generatePlan() {
     document.getElementById('dimLength').textContent = formatFeetInches(length);
   }
 
-  // 8. Clean Architectural Layer 2 Callout Labels (NORTH: 40'-0", EAST: 60'-0", etc.)
+  // 8. Layer 2: Render Boundary Labels
   document.getElementById('labelSideN').style.display = 'block';
   document.getElementById('labelSideS').style.display = 'block';
   document.getElementById('labelSideE').style.display = 'block';
@@ -408,84 +389,118 @@ function generatePlan() {
     labelW = `Right Setback: ${formatFeetInches(setbackRt)}`;
   }
 
-  // Determine building rendering dimensions (width vs height) based on footprint orientation selection
-  const bldgOrient = document.getElementById('bldgOrientation')?.value || 'auto';
-  let bldgRenderW = bldgW;
-  let bldgRenderH = bldgL;
-
-  // For irregular plots, bound available drawing space by the shorter plot side
-  const availSpanW = isOdd ? Math.min(sideN, sideS) : Math.max(sideN, sideS);
-  const availSpanH = isOdd ? Math.min(sideE, sideW) : Math.max(sideE, sideW);
-
-  if (bldgOrient === 'horizontal') {
-    bldgRenderW = Math.max(bldgW, bldgL);
-    bldgRenderH = Math.min(bldgW, bldgL);
-  } else if (bldgOrient === 'vertical') {
-    bldgRenderW = Math.min(bldgW, bldgL);
-    bldgRenderH = Math.max(bldgW, bldgL);
-  } else {
-    // Auto-fit: If bldgL is larger than available height span, orient long side horizontally
-    if (bldgL > availSpanH && bldgL <= availSpanW) {
-      bldgRenderW = Math.max(bldgW, bldgL);
-      bldgRenderH = Math.min(bldgW, bldgL);
-    }
-  }
-
-  // Bound building drawing size so it never exceeds available space inside shortest plot side
-  const maxAllowedDrawH = Math.max(15, (availSpanH - sbTop - sbBottom) * ratio);
-  const maxAllowedDrawW = Math.max(15, (availSpanW - sbLeft - sbRight) * ratio);
-
-  const bldgDrawW = Math.max(15, Math.min(bldgRenderW * ratio, maxAllowedDrawW));
-  const bldgDrawH = Math.max(15, Math.min(bldgRenderH * ratio, maxAllowedDrawH));
-  const bldgX = offsetX + (sbLeft * ratio);
-  const bldgY = offsetY + (sbTop * ratio);
+  // Check Building Type (Vacant Plot vs Constructed Structure)
+  const bldgType = (document.getElementById('bldgType')?.value || '').trim();
+  const isVacant = bldgType === 'Vacant Plot' || bldgType === 'vacant';
 
   const setbackRect = document.getElementById('setbackRect');
-  if (setbackRect) {
-    setbackRect.setAttribute('x', bldgX);
-    setbackRect.setAttribute('y', bldgY);
-    setbackRect.setAttribute('width', bldgDrawW);
-    setbackRect.setAttribute('height', bldgDrawH);
-  }
-
-  bldgRect.setAttribute('x', bldgX);
-  bldgRect.setAttribute('y', bldgY);
-  bldgRect.setAttribute('width', bldgDrawW);
-  bldgRect.setAttribute('height', bldgDrawH);
-
-  // Front / Top Setback (North Side)
-  document.getElementById('setbackN').setAttribute('x', offsetX + drawW / 2);
-  document.getElementById('setbackN').setAttribute('y', offsetY + (bldgY - offsetY) / 2 + 4);
-  document.getElementById('setbackN').textContent = labelN;
-
-  // Rear / Bottom Setback (South Side)
-  document.getElementById('setbackS').setAttribute('x', offsetX + drawW / 2);
-  document.getElementById('setbackS').setAttribute('y', (offsetY + drawH) - (offsetY + drawH - (bldgY + bldgDrawH)) / 2 + 4);
-  document.getElementById('setbackS').textContent = labelS;
-
-  // Right Setback (East Side - Rotated -90 deg cleanly inside right setback band)
-  const sbEastX = (offsetX + drawW) - (offsetX + drawW - (bldgX + bldgDrawW)) / 2;
-  document.getElementById('setbackE').setAttribute('x', sbEastX);
-  document.getElementById('setbackE').setAttribute('y', offsetY + drawH / 2);
-  document.getElementById('setbackE').setAttribute('transform', `rotate(-90, ${sbEastX}, ${offsetY + drawH / 2})`);
-  document.getElementById('setbackE').textContent = labelE;
-
-  // Left Setback (West Side - Rotated -90 deg cleanly inside left setback band)
-  const sbWestX = offsetX + (bldgX - offsetX) / 2;
-  document.getElementById('setbackW').setAttribute('x', sbWestX);
-  document.getElementById('setbackW').setAttribute('y', offsetY + drawH / 2);
-  document.getElementById('setbackW').setAttribute('transform', `rotate(-90, ${sbWestX}, ${offsetY + drawH / 2})`);
-  document.getElementById('setbackW').textContent = labelW;
-
-  // Interior Building Footprint Text
   const bldgTitle = document.getElementById('bldgTitle');
   const bldgDimText = document.getElementById('bldgDimText');
-  if (bldgTitle && bldgDimText) {
-    bldgTitle.setAttribute('x', bldgX + bldgDrawW / 2);
-    bldgTitle.setAttribute('y', bldgY + bldgDrawH / 2 - 6);
-    bldgDimText.setAttribute('x', bldgX + bldgDrawW / 2);
-    bldgDimText.setAttribute('y', bldgY + bldgDrawH / 2 + 10);
-    bldgDimText.textContent = `${formatFeetInches(bldgRenderW)} × ${formatFeetInches(bldgRenderH)}`;
+
+  if (isVacant) {
+    // Vacant Plot: Clean empty site with zero building footprint or setback hatching
+    if (bldgRect) bldgRect.style.display = 'none';
+    if (setbackRect) setbackRect.style.display = 'none';
+
+    document.getElementById('setbackN').textContent = '';
+    document.getElementById('setbackS').textContent = '';
+    document.getElementById('setbackE').textContent = '';
+    document.getElementById('setbackW').textContent = '';
+
+    if (bldgTitle) {
+      bldgTitle.setAttribute('x', offsetX + drawW / 2);
+      bldgTitle.setAttribute('y', offsetY + drawH / 2 - 4);
+      bldgTitle.textContent = 'VACANT PLOT';
+    }
+    if (bldgDimText) {
+      bldgDimText.setAttribute('x', offsetX + drawW / 2);
+      bldgDimText.setAttribute('y', offsetY + drawH / 2 + 14);
+      bldgDimText.textContent = `(OPEN SITE: ${areaSqFt} SQ.FT)`;
+    }
+  } else {
+    // Constructed Structure: Render Blue Hatched Footprint strictly bounded inside plot
+    if (bldgRect) bldgRect.style.display = 'block';
+    if (setbackRect) setbackRect.style.display = 'block';
+
+    const bldgOrient = document.getElementById('bldgOrientation')?.value || 'auto';
+    let bldgRenderW = bldgW;
+    let bldgRenderH = bldgL;
+
+    // Available drawing dimensions on canvas in feet
+    const availCanvasW_ft = drawW / ratio;
+    const availCanvasH_ft = drawH / ratio;
+
+    if (bldgOrient === 'horizontal') {
+      bldgRenderW = Math.max(bldgW, bldgL);
+      bldgRenderH = Math.min(bldgW, bldgL);
+    } else if (bldgOrient === 'vertical') {
+      bldgRenderW = Math.min(bldgW, bldgL);
+      bldgRenderH = Math.max(bldgW, bldgL);
+    } else {
+      // Auto-fit: align longer building dimension with the longer canvas span
+      if (availCanvasW_ft > availCanvasH_ft) {
+        bldgRenderW = Math.max(bldgW, bldgL);
+        bldgRenderH = Math.min(bldgW, bldgL);
+      } else {
+        bldgRenderW = Math.min(bldgW, bldgL);
+        bldgRenderH = Math.max(bldgW, bldgL);
+      }
+    }
+
+    // Bound building drawing size so it never exceeds available space inside plot boundaries on screen
+    const maxAllowedDrawW_ft = Math.max(0, availCanvasW_ft - sbLeft - sbRight);
+    const maxAllowedDrawH_ft = Math.max(0, availCanvasH_ft - sbTop - sbBottom);
+
+    const bldgDrawW = Math.max(15, Math.min(bldgRenderW, maxAllowedDrawW_ft > 0 ? maxAllowedDrawW_ft : availCanvasW_ft) * ratio);
+    const bldgDrawH = Math.max(15, Math.min(bldgRenderH, maxAllowedDrawH_ft > 0 ? maxAllowedDrawH_ft : availCanvasH_ft) * ratio);
+    const bldgX = offsetX + (sbLeft * ratio);
+    const bldgY = offsetY + (sbTop * ratio);
+
+    if (setbackRect) {
+      setbackRect.setAttribute('x', bldgX);
+      setbackRect.setAttribute('y', bldgY);
+      setbackRect.setAttribute('width', bldgDrawW);
+      setbackRect.setAttribute('height', bldgDrawH);
+    }
+
+    bldgRect.setAttribute('x', bldgX);
+    bldgRect.setAttribute('y', bldgY);
+    bldgRect.setAttribute('width', bldgDrawW);
+    bldgRect.setAttribute('height', bldgDrawH);
+
+    // Front / Top Setback (North Side)
+    document.getElementById('setbackN').setAttribute('x', offsetX + drawW / 2);
+    document.getElementById('setbackN').setAttribute('y', offsetY + (bldgY - offsetY) / 2 + 4);
+    document.getElementById('setbackN').textContent = labelN;
+
+    // Rear / Bottom Setback (South Side)
+    document.getElementById('setbackS').setAttribute('x', offsetX + drawW / 2);
+    document.getElementById('setbackS').setAttribute('y', (offsetY + drawH) - (offsetY + drawH - (bldgY + bldgDrawH)) / 2 + 4);
+    document.getElementById('setbackS').textContent = labelS;
+
+    // Right Setback (East Side - Rotated -90 deg cleanly inside right setback band)
+    const sbEastX = (offsetX + drawW) - (offsetX + drawW - (bldgX + bldgDrawW)) / 2;
+    document.getElementById('setbackE').setAttribute('x', sbEastX);
+    document.getElementById('setbackE').setAttribute('y', offsetY + drawH / 2);
+    document.getElementById('setbackE').setAttribute('transform', `rotate(-90, ${sbEastX}, ${offsetY + drawH / 2})`);
+    document.getElementById('setbackE').textContent = labelE;
+
+    // Left Setback (West Side - Rotated -90 deg cleanly inside left setback band)
+    const sbWestX = offsetX + (bldgX - offsetX) / 2;
+    document.getElementById('setbackW').setAttribute('x', sbWestX);
+    document.getElementById('setbackW').setAttribute('y', offsetY + drawH / 2);
+    document.getElementById('setbackW').setAttribute('transform', `rotate(-90, ${sbWestX}, ${offsetY + drawH / 2})`);
+    document.getElementById('setbackW').textContent = labelW;
+
+    // Interior Building Footprint Text
+    if (bldgTitle && bldgDimText) {
+      bldgTitle.setAttribute('x', bldgX + bldgDrawW / 2);
+      bldgTitle.setAttribute('y', bldgY + bldgDrawH / 2 - 6);
+      bldgTitle.textContent = (bldgType && bldgType !== 'Residential' ? bldgType.toUpperCase() : 'EXISTING BUILDING');
+      bldgDimText.setAttribute('x', bldgX + bldgDrawW / 2);
+      bldgDimText.setAttribute('y', bldgY + bldgDrawH / 2 + 10);
+      bldgDimText.textContent = `${formatFeetInches(bldgRenderW)} × ${formatFeetInches(bldgRenderH)}`;
+    }
   }
 
   // 9. Render Corner Splay for 2-side Corner Plots (e.g. North & East Road access)
@@ -682,7 +697,9 @@ function updateKeyPlan() {
 
   let widthLabel = '';
   if (roadWidthFt || roadWidthIn) {
-    widthLabel = ` (${roadWidthFt || 0}'${roadWidthIn ? roadWidthIn + '"' : ''} WIDE)`;
+    const rwNum = (parseFloat(roadWidthFt) || 0) + ((parseFloat(roadWidthIn) || 0) / 12);
+    const mStr = (rwNum * 0.3048).toFixed(2);
+    widthLabel = ` (${roadWidthFt || 0}'${roadWidthIn ? roadWidthIn + '"' : ''} [${mStr}m] WIDE)`;
   }
   const roadTitle = (roadName ? roadName.toUpperCase() : 'ROAD') + widthLabel;
 

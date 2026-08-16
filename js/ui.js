@@ -167,6 +167,42 @@ function onFtInInput(fieldId) {
 }
 
 /**
+ * Handles Building Type selection change.
+ * If Vacant Plot is chosen, resets floors and built-up area and syncs with draft.
+ * 
+ * @function onBuildingTypeChange
+ * @returns {void}
+ */
+function onBuildingTypeChange() {
+  const bldgType = document.getElementById('bldgType')?.value || '';
+  const isVacant = bldgType === 'Vacant Plot' || bldgType === 'vacant';
+
+  if (isVacant) {
+    const floorsSelect = document.getElementById('noOfFloors');
+    if (floorsSelect) floorsSelect.value = 'Vacant Plot';
+
+    const builtEl = document.getElementById('builtUpArea');
+    if (builtEl) builtEl.value = '0';
+
+    // Clear explicit footprint inputs
+    ['bldgWidth', 'bldgLength', 'setbackFront', 'setbackRear', 'setbackLeft', 'setbackRight'].forEach(id => {
+      const el = document.getElementById(id);
+      const ftEl = document.getElementById(id + '_ft');
+      const inEl = document.getElementById(id + '_in');
+      if (el) el.value = '';
+      if (ftEl) ftEl.value = '';
+      if (inEl) inEl.value = '';
+    });
+  }
+
+  if (typeof validateBuildingSetbackFeasibility === 'function') {
+    validateBuildingSetbackFeasibility();
+  }
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+}
+
+/**
  * Auto-calculates Total Built-up Area (sq.ft) from Building Width, Length, and Floors multiplier.
  * Allows user to manually edit or override at any time.
  * 
@@ -352,8 +388,9 @@ function validateBuildingSetbackFeasibility() {
   if (errWidth) errWidth.style.display = 'none';
   if (errLength) errLength.style.display = 'none';
 
-  // Rule: If user removed all data (empty), navigation to next step IS ALLOWED!
-  if (widthVal === 0 && lengthVal === 0) {
+  // Rule: Vacant Plot or empty fields -> Always valid
+  const bldgType = document.getElementById('bldgType')?.value || '';
+  if (bldgType === 'Vacant Plot' || bldgType === 'vacant' || (widthVal === 0 && lengthVal === 0)) {
     return true;
   }
 
