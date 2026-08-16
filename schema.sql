@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS tickets (
     email TEXT NOT NULL,                       -- Contact email for updates
     subject TEXT NOT NULL,                     -- Summary headline
     message TEXT NOT NULL,                     -- Detailed user description
+    attachments TEXT DEFAULT '[]',             -- JSON array of sanitized client-side re-encoded images (Base64)
     public_response TEXT DEFAULT '',           -- Official admin/dev response (supports plain text or JSON array)
     internal_notes TEXT DEFAULT '',            -- Private developer triage notes
     ip_hash TEXT NOT NULL,                     -- Daily salted SHA-256 hash (Zero PII retention)

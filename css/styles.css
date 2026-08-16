@@ -5464,3 +5464,409 @@ body.pdf-export-active .drawing-canvas-column,
     font-size: 10px;
   }
 }
+
+/* ============================================================================
+   5-LAYER SECURE IMAGE ATTACHMENT DROPZONE & PREVIEWS
+   ============================================================================ */
+.attachment-dropzone {
+  border: 1.5px dashed var(--apple-border);
+  border-radius: 12px;
+  padding: 16px 14px;
+  background: rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  transition: var(--apple-transition);
+  user-select: none;
+}
+
+[data-theme="dark"] .attachment-dropzone {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.attachment-dropzone:hover,
+.attachment-dropzone.dropzone-hover {
+  border-color: var(--apple-accent);
+  background: rgba(0, 113, 227, 0.04);
+}
+
+[data-theme="dark"] .attachment-dropzone:hover,
+[data-theme="dark"] .attachment-dropzone.dropzone-hover {
+  border-color: var(--apple-accent);
+  background: rgba(41, 151, 255, 0.08);
+}
+
+.dropzone-inner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dropzone-icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(0, 113, 227, 0.1);
+  color: var(--apple-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .dropzone-icon-circle {
+  background: rgba(41, 151, 255, 0.15);
+}
+
+.dropzone-icon-circle .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.dropzone-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dropzone-primary-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+}
+
+.dropzone-primary-text kbd {
+  background: rgba(0, 0, 0, 0.08);
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: inherit;
+}
+
+[data-theme="dark"] .dropzone-primary-text kbd {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dropzone-sub-text {
+  font-size: 11.5px;
+  color: var(--apple-text-secondary);
+}
+
+/* Attachment Previews Grid */
+.attachment-previews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.attachment-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid var(--apple-border);
+  background: var(--apple-card-bg);
+  position: relative;
+  transition: var(--apple-transition);
+}
+
+.attachment-thumb-wrap {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: #000;
+}
+
+.attachment-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.attachment-zoom-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--apple-transition);
+}
+
+.attachment-thumb-wrap:hover .attachment-zoom-overlay {
+  opacity: 1;
+}
+
+.attachment-meta-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.attachment-name-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attachment-size-badge {
+  font-size: 11px;
+  color: var(--apple-text-secondary);
+}
+
+.attachment-remove-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--apple-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--apple-transition);
+  flex-shrink: 0;
+}
+
+.attachment-remove-btn:hover {
+  background: var(--apple-red);
+  color: #ffffff;
+}
+
+/* Chat Timeline & Admin Gallery Attachments */
+.chat-attachments-container {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="light"] .chat-attachments-container {
+  border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+.chat-attachments-title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--apple-text-secondary);
+  margin-bottom: 8px;
+}
+
+.chat-attachments-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chat-attachment-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid var(--apple-border);
+  background: #000;
+  transition: var(--apple-transition);
+}
+
+.chat-attachment-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.chat-attachment-thumb .thumb-zoom-badge {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--apple-transition);
+}
+
+.chat-attachment-thumb:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.chat-attachment-thumb:hover .thumb-zoom-badge {
+  opacity: 1;
+}
+
+/* Admin Detail Attached Screenshots Card */
+.user-attachments-card {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 16px;
+  padding: 16px 20px;
+}
+
+.admin-attachments-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.admin-attachment-thumb-card {
+  border-radius: 12px;
+  border: 1px solid var(--apple-border);
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  transition: var(--apple-transition);
+}
+
+[data-theme="dark"] .admin-attachment-thumb-card {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.admin-attachment-thumb-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--apple-accent);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+.admin-thumb-img-wrap {
+  width: 100%;
+  height: 90px;
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+.admin-thumb-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.admin-thumb-zoom-badge {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--apple-transition);
+}
+
+.admin-attachment-thumb-card:hover .admin-thumb-zoom-badge {
+  opacity: 1;
+}
+
+.admin-thumb-caption {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-thumb-name {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-thumb-size {
+  font-size: 10px;
+  color: var(--apple-text-secondary);
+}
+
+/* ============================================================================
+   IMAGE LIGHTBOX OVERLAY
+   ============================================================================ */
+.image-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.lightbox-content-box {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-modal-img {
+  max-width: 90vw;
+  max-height: 82vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.lightbox-close-btn {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #1c1c1e;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  transition: var(--apple-transition);
+  z-index: 10001;
+}
+
+.lightbox-close-btn:hover {
+  background: var(--apple-red);
+  transform: scale(1.08);
+}
+
+.lightbox-caption {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #f5f5f7;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 12px;
+  border-radius: 980px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}

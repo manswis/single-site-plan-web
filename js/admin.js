@@ -696,6 +696,49 @@ function renderTicketDetail(ticket) {
   // Original Message (Pure textContent)
   document.getElementById('detailOriginalMessage').textContent = ticket.message || 'No description provided.';
 
+  // Attached Screenshots Gallery
+  const attCard = document.getElementById('detailAttachmentsCard');
+  const attGallery = document.getElementById('detailAttachmentsGallery');
+  let attachments = [];
+  if (ticket.attachments) {
+    try {
+      attachments = typeof ticket.attachments === 'string' ? JSON.parse(ticket.attachments) : ticket.attachments;
+    } catch (e) { }
+  }
+
+  if (attCard && attGallery) {
+    if (Array.isArray(attachments) && attachments.length > 0) {
+      attCard.style.display = 'block';
+      attGallery.innerHTML = '';
+
+      attachments.forEach((att, idx) => {
+        const src = typeof att === 'string' ? att : att.dataUrl;
+        const name = (typeof att === 'object' && att.name) ? att.name : `Screenshot ${idx + 1}`;
+        const sizeStr = (typeof att === 'object' && att.size) ? `${(att.size / 1024).toFixed(1)} KB` : '';
+
+        const item = document.createElement('div');
+        item.className = 'admin-attachment-thumb-card';
+        item.onclick = () => openImageLightbox(src, `${name} (${sizeStr})`);
+        item.innerHTML = `
+          <div class="admin-thumb-img-wrap">
+            <img src="${src}" alt="${escapeHtml(name)}" loading="lazy">
+            <div class="admin-thumb-zoom-badge">
+              <span class="material-symbols-outlined">zoom_in</span>
+            </div>
+          </div>
+          <div class="admin-thumb-caption">
+            <span class="admin-thumb-name">${escapeHtml(name)}</span>
+            <span class="admin-thumb-size">${sizeStr}</span>
+          </div>
+        `;
+        attGallery.appendChild(item);
+      });
+    } else {
+      attCard.style.display = 'none';
+      attGallery.innerHTML = '';
+    }
+  }
+
   // Timeline Conversation Thread
   renderAdminTimeline(ticket);
 
@@ -1197,3 +1240,35 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
+
+// ============================================================================
+// 8. IMAGE LIGHTBOX VIEWER
+// ============================================================================
+function openImageLightbox(src, caption) {
+  const modal = document.getElementById('imageLightboxModal');
+  const img = document.getElementById('lightboxModalImg');
+  const captionEl = document.getElementById('lightboxCaption');
+
+  if (modal && img) {
+    img.src = src;
+    if (captionEl) captionEl.textContent = caption || 'Attached Screenshot';
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeImageLightbox() {
+  const modal = document.getElementById('imageLightboxModal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+// Global Escape listener for Lightbox
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeImageLightbox();
+  }
+});
+

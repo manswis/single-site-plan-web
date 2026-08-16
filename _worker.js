@@ -122,13 +122,13 @@ async function verifyAdminAuth(request, env) {
   return { authorized: isValid, rateLimited: false };
 }
 
-// Self-Healing Schema Migration to remove obsolete restrictive SQLite CHECK constraints
+// Self-Healing Schema Migration to ensure attachments column and lift obsolete restrictive SQLite CHECK constraints
 async function ensureSchemaUpdated(db) {
   if (!db) return;
   try {
     const tableInfo = await db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='tickets'").first();
     if (tableInfo && tableInfo.sql) {
-      // If table definition has the old CHECK constraint that blocks on_hold or infeasible
+      // 1. If table definition has the old CHECK constraint that blocks on_hold or infeasible
       if (tableInfo.sql.includes("status IN ('open'") && !tableInfo.sql.includes('on_hold')) {
         await db.batch([
           db.prepare("ALTER TABLE tickets RENAME TO tickets_old"),
@@ -142,6 +142,7 @@ async function ensureSchemaUpdated(db) {
               email TEXT NOT NULL,
               subject TEXT NOT NULL,
               message TEXT NOT NULL,
+              attachments TEXT DEFAULT '[]',
               public_response TEXT DEFAULT '',
               internal_notes TEXT DEFAULT '',
               ip_hash TEXT NOT NULL,
@@ -151,8 +152,8 @@ async function ensureSchemaUpdated(db) {
             )
           `),
           db.prepare(`
-            INSERT INTO tickets (id, type, priority, status, name, email, subject, message, public_response, internal_notes, ip_hash, client_info, created_at, updated_at)
-            SELECT id, type, priority, status, name, email, subject, message, public_response, internal_notes, ip_hash, client_info, created_at, updated_at
+            INSERT INTO tickets (id, type, priority, status, name, email, subject, message, attachments, public_response, internal_notes, ip_hash, client_info, created_at, updated_at)
+            SELECT id, type, priority, status, name, email, subject, message, '[]', public_response, internal_notes, ip_hash, client_info, created_at, updated_at
             FROM tickets_old
           `),
           db.prepare("DROP TABLE tickets_old"),
@@ -160,6 +161,9 @@ async function ensureSchemaUpdated(db) {
           db.prepare("CREATE INDEX IF NOT EXISTS idx_tickets_email ON tickets(email)"),
           db.prepare("CREATE INDEX IF NOT EXISTS idx_tickets_ip_hash_created ON tickets(ip_hash, created_at DESC)")
         ]);
+      } else if (!tableInfo.sql.includes('attachments')) {
+        // 2. Add attachments column if not yet present
+        await db.prepare("ALTER TABLE tickets ADD COLUMN attachments TEXT DEFAULT '[]'").run();
       }
     }
   } catch (err) {
@@ -206,7 +210,7 @@ export default {
           return jsonResponse({ error: 'Invalid JSON payload format.' }, 400);
         }
 
-        const { type, priority, name, email, subject, message, honeypot, client_info } = body;
+        const { type, priority, name, email, subject, message, attachments, honeypot, client_info } = body;
 
         // Anti-spam Honeypot Check
         if (honeypot && String(honeypot).trim().length > 0) {
@@ -236,6 +240,40 @@ export default {
         const cleanName = (name && typeof name === 'string') ? name.trim().slice(0, 100) : '';
         const cleanEmail = email.trim().toLowerCase().slice(0, 254);
 
+        // 5-Layer Security: Validate and sanitize attachments (max 2 images, max 350KB Base64 each)
+        let sanitizedAttachments = [];
+        if (Array.isArray(attachments)) {
+          const rawAttachments = attachments.slice(0, 2);
+          for (const item of rawAttachments) {
+            if (typeof item === 'string' && item.startsWith('data:image/') && item.length <= 350000) {
+              // Ensure it's strictly raster JPEG, WebP, or PNG (no SVG, no HTML/JS injection)
+              if (item.startsWith('data:image/jpeg;base64,') || item.startsWith('data:image/webp;base64,') || item.startsWith('data:image/png;base64,')) {
+                if (!item.includes('<script') && !item.includes('</') && !item.includes('<svg')) {
+                  sanitizedAttachments.push({
+                    name: 'screenshot.jpg',
+                    size: Math.round(item.length * 0.75),
+                    dataUrl: item
+                  });
+                }
+              }
+            } else if (item && typeof item === 'object' && typeof item.dataUrl === 'string') {
+              const dataUrl = item.dataUrl;
+              if (dataUrl.startsWith('data:image/') && dataUrl.length <= 350000) {
+                if (dataUrl.startsWith('data:image/jpeg;base64,') || dataUrl.startsWith('data:image/webp;base64,') || dataUrl.startsWith('data:image/png;base64,')) {
+                  if (!dataUrl.includes('<script') && !dataUrl.includes('</') && !dataUrl.includes('<svg')) {
+                    sanitizedAttachments.push({
+                      name: String(item.name || 'screenshot.jpg').slice(0, 50),
+                      size: Number(item.size || Math.round(dataUrl.length * 0.75)),
+                      dataUrl: dataUrl
+                    });
+                  }
+                }
+              }
+            }
+          }
+        }
+        const attachmentsJson = JSON.stringify(sanitizedAttachments);
+
         // Rate Limiting by Daily Salted IP Hash (Max 5 tickets / hour)
         const clientIp = request.headers.get('CF-Connecting-IP') || request.headers.get('x-real-ip') || '0.0.0.0';
         const ipHash = await computeIpHash(clientIp);
@@ -260,8 +298,8 @@ export default {
         const clientInfoStr = client_info ? JSON.stringify(client_info) : '{}';
 
         await env.DB.prepare(`
-          INSERT INTO tickets (id, type, priority, status, name, email, subject, message, public_response, internal_notes, ip_hash, client_info)
-          VALUES (?, ?, ?, 'open', ?, ?, ?, ?, '', '', ?, ?)
+          INSERT INTO tickets (id, type, priority, status, name, email, subject, message, attachments, public_response, internal_notes, ip_hash, client_info)
+          VALUES (?, ?, ?, 'open', ?, ?, ?, ?, ?, '', '', ?, ?)
         `).bind(
           ticketId,
           ticketType,
@@ -270,6 +308,7 @@ export default {
           cleanEmail,
           cleanSubject,
           cleanMessage,
+          attachmentsJson,
           ipHash || 'unknown',
           clientInfoStr
         ).run();
@@ -310,7 +349,7 @@ export default {
         const cleanId = decodeURIComponent(ticketId).trim().toUpperCase();
 
         const ticket = await env.DB.prepare(`
-          SELECT id, type, priority, status, subject, message, public_response, created_at, updated_at
+          SELECT id, type, priority, status, subject, message, attachments, public_response, created_at, updated_at
           FROM tickets
           WHERE id = ?
         `).bind(cleanId).first();
@@ -319,6 +358,11 @@ export default {
           return jsonResponse({
             error: `No ticket found with ID "${cleanId}". Please check the ID and try again.`
           }, 404);
+        }
+
+        let parsedAttachments = [];
+        if (ticket.attachments) {
+          try { parsedAttachments = JSON.parse(ticket.attachments); } catch (e) { }
         }
 
         return jsonResponse({
@@ -330,6 +374,7 @@ export default {
             status: ticket.status,
             subject: ticket.subject,
             message: ticket.message,
+            attachments: parsedAttachments,
             public_response: ticket.public_response || null,
             created_at: ticket.created_at,
             updated_at: ticket.updated_at
@@ -382,7 +427,7 @@ export default {
           const validStatuses = ['open', 'in_review', 'in_progress', 'on_hold', 'infeasible', 'resolved', 'closed'];
           const validPriorities = ['low', 'medium', 'high'];
 
-          let sql = 'SELECT id, type, priority, status, name, email, subject, message, public_response, internal_notes, client_info, created_at, updated_at FROM tickets WHERE 1=1';
+          let sql = 'SELECT id, type, priority, status, name, email, subject, message, attachments, public_response, internal_notes, client_info, created_at, updated_at FROM tickets WHERE 1=1';
           const params = [];
 
           if (statusParam !== 'all' && statusParam.trim().length > 0) {

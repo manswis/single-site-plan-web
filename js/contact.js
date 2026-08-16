@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupCategoryChips();
   setupTabSwitching();
   setupFormSubmission();
+  setupAttachmentHandlers();
   setupTrackingLookup();
   checkUrlParamsForTracking();
 });
@@ -203,12 +204,255 @@ function setupFormSubmission() {
       email,
       subject,
       message,
+      attachments: currentAttachments,
       honeypot,
       client_info: getClientDiagnostics()
     };
 
     openTermsModal();
   });
+}
+
+// ============================================================================
+// 5-LAYER SECURE IMAGE ATTACHMENT PIPELINE
+// ============================================================================
+let currentAttachments = []; // Array of { name, size, dataUrl }
+
+function setupAttachmentHandlers() {
+  const dropzone = document.getElementById('attachmentDropzone');
+
+  if (dropzone) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('dropzone-hover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('dropzone-hover');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const files = e.dataTransfer ? e.dataTransfer.files : [];
+      if (files && files.length > 0) {
+        processAttachmentFiles(files);
+      }
+    });
+  }
+
+  // Clipboard Paste listener (Cmd+V / Ctrl+V on message box or window)
+  window.addEventListener('paste', (e) => {
+    const items = (e.clipboardData || e.originalEvent?.clipboardData)?.items;
+    if (!items) return;
+
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
+      if (item.kind === 'file' && item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) {
+          processAttachmentFiles([file]);
+        }
+      }
+    }
+  });
+
+  // Lightbox keyboard dismissal (Escape key)
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeImageLightbox();
+    }
+  });
+}
+
+function triggerAttachmentPicker() {
+  const fileInput = document.getElementById('attachmentFileInput');
+  if (fileInput) fileInput.click();
+}
+
+function handleAttachmentFileSelect(event) {
+  const files = event.target.files;
+  if (files && files.length > 0) {
+    processAttachmentFiles(files);
+  }
+  event.target.value = '';
+}
+
+async function processAttachmentFiles(files) {
+  for (let i = 0; i < files.length; i++) {
+    if (currentAttachments.length >= 2) {
+      showFormAlert('Maximum of 2 screenshots/drawings allowed per ticket.', 'error');
+      break;
+    }
+    const file = files[i];
+    try {
+      const sanitized = await sanitizeAndCompressImage(file);
+      if (sanitized) {
+        currentAttachments.push(sanitized);
+        renderAttachmentPreviews();
+      }
+    } catch (err) {
+      showFormAlert(err.message || 'Failed to attach image.', 'error');
+    }
+  }
+}
+
+/**
+ * 5-Layer Security Sanitizer & Offscreen Canvas Compressor
+ * Discards all binary payload, EXIF metadata, and polyglots by re-encoding from pure pixel RGB data.
+ */
+function sanitizeAndCompressImage(file) {
+  return new Promise((resolve, reject) => {
+    // Layer 1: Whitelist raster formats only (strictly reject SVGs and non-images)
+    const validMimes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validMimes.includes(file.type.toLowerCase()) || file.name.toLowerCase().endsWith('.svg')) {
+      return reject(new Error('Prohibited format: Only JPG, PNG, and WebP raster images are permitted. Vector SVGs and executables are blocked for security.'));
+    }
+
+    // Layer 2: Raw size guard (max 10MB input before processing)
+    if (file.size > 10 * 1024 * 1024) {
+      return reject(new Error('File too large: Please select an image under 10 MB.'));
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    const img = new Image();
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+
+      // Layer 3: Dimension downscaling (max 1280 x 1280)
+      const MAX_DIM = 1280;
+      let width = img.naturalWidth || img.width;
+      let height = img.naturalHeight || img.height;
+
+      if (width > MAX_DIM || height > MAX_DIM) {
+        if (width > height) {
+          height = Math.round((height * MAX_DIM) / width);
+          width = MAX_DIM;
+        } else {
+          width = Math.round((width * MAX_DIM) / height);
+          height = MAX_DIM;
+        }
+      }
+
+      // Layer 4: Canvas Re-Encoding ("Digital Furnace")
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        return reject(new Error('Unable to initialize image processor.'));
+      }
+
+      // Fill transparent backgrounds with solid white (for transparent PNGs)
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+
+      // Draw pure pixel RGB data only (strips all EXIF metadata and hidden injections)
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Export as fresh, clean compressed JPEG
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+      // Calculate approximate size
+      const cleanSizeInBytes = Math.round((compressedDataUrl.length * 3) / 4);
+
+      resolve({
+        name: file.name ? file.name.replace(/[^\w\.-]/g, '_').slice(0, 40) : 'screenshot.jpg',
+        size: cleanSizeInBytes,
+        dataUrl: compressedDataUrl
+      });
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Failed to decode image file. Please ensure it is a valid raster photograph or screenshot.'));
+    };
+
+    img.src = objectUrl;
+  });
+}
+
+function renderAttachmentPreviews() {
+  const grid = document.getElementById('attachmentPreviewsGrid');
+  const countBadge = document.getElementById('attachmentCountBadge');
+  const dropzone = document.getElementById('attachmentDropzone');
+
+  if (countBadge) {
+    countBadge.textContent = `${currentAttachments.length}/2`;
+  }
+
+  if (!grid) return;
+
+  if (currentAttachments.length === 0) {
+    grid.style.display = 'none';
+    grid.innerHTML = '';
+    if (dropzone) dropzone.style.display = 'block';
+    return;
+  }
+
+  grid.style.display = 'grid';
+  grid.innerHTML = '';
+
+  currentAttachments.forEach((att, idx) => {
+    const card = document.createElement('div');
+    card.className = 'attachment-preview-card';
+    card.innerHTML = `
+      <div class="attachment-thumb-wrap" onclick="openImageLightbox('${att.dataUrl}', '${escapeHtml(att.name)}')">
+        <img src="${att.dataUrl}" alt="${escapeHtml(att.name)}" class="attachment-thumb-img">
+        <div class="attachment-zoom-overlay">
+          <span class="material-symbols-outlined">zoom_in</span>
+        </div>
+      </div>
+      <div class="attachment-meta-info">
+        <div class="attachment-name-text" title="${escapeHtml(att.name)}">${escapeHtml(att.name)}</div>
+        <div class="attachment-size-badge">${(att.size / 1024).toFixed(1)} KB</div>
+      </div>
+      <button type="button" class="attachment-remove-btn" onclick="removeAttachment(${idx})" title="Remove attachment">
+        <span class="material-symbols-outlined" style="font-size: 14px;">close</span>
+      </button>
+    `;
+    grid.appendChild(card);
+  });
+
+  if (dropzone) {
+    dropzone.style.display = currentAttachments.length >= 2 ? 'none' : 'block';
+  }
+}
+
+function removeAttachment(index) {
+  if (index >= 0 && index < currentAttachments.length) {
+    currentAttachments.splice(index, 1);
+    renderAttachmentPreviews();
+  }
+}
+
+// Lightbox Handlers
+function openImageLightbox(src, caption) {
+  const modal = document.getElementById('imageLightboxModal');
+  const img = document.getElementById('lightboxModalImg');
+  const captionEl = document.getElementById('lightboxCaption');
+
+  if (modal && img) {
+    img.src = src;
+    if (captionEl) captionEl.textContent = caption || 'Attached Screenshot';
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeImageLightbox() {
+  const modal = document.getElementById('imageLightboxModal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
 }
 
 // Open Terms & Privacy Consent Modal
@@ -534,6 +778,30 @@ function renderTimelineChat(ticket, statusInfo) {
   container.innerHTML = '';
 
   // 1. Initial User Request Message
+  let attachmentsHtml = '';
+  if (Array.isArray(ticket.attachments) && ticket.attachments.length > 0) {
+    attachmentsHtml = `
+      <div class="chat-attachments-container">
+        <div class="chat-attachments-title">
+          <span class="material-symbols-outlined" style="font-size: 14px;">attachment</span>
+          <span>Attached Screenshots (${ticket.attachments.length})</span>
+        </div>
+        <div class="chat-attachments-gallery">
+          ${ticket.attachments.map(att => {
+      const src = typeof att === 'string' ? att : att.dataUrl;
+      const name = (typeof att === 'object' && att.name) ? att.name : 'Screenshot';
+      return `
+              <div class="chat-attachment-thumb" onclick="openImageLightbox('${src}', '${escapeHtml(name)}')">
+                <img src="${src}" alt="${escapeHtml(name)}" loading="lazy">
+                <div class="thumb-zoom-badge"><span class="material-symbols-outlined">zoom_in</span></div>
+              </div>
+            `;
+    }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
   const userMsgEl = document.createElement('div');
   userMsgEl.className = 'chat-message-item user-message';
   userMsgEl.innerHTML = `
@@ -552,6 +820,7 @@ function renderTimelineChat(ticket, statusInfo) {
         <span>${escapeHtml(ticket.subject)}</span>
       </div>
       <div class="chat-message-text">${escapeHtml(ticket.message || 'No description provided.')}</div>
+      ${attachmentsHtml}
     </div>
   `;
   container.appendChild(userMsgEl);

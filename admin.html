@@ -434,6 +434,17 @@
             <div id="detailOriginalMessage" class="original-message-text">—</div>
           </div>
 
+          <!-- Attached Screenshots Card (Visible if attachments exist) -->
+          <div id="detailAttachmentsCard" class="user-attachments-card" style="display: none;">
+            <div class="section-micro-heading">
+              <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">photo_library</span>
+              <span>Attached Screenshots & Drawings</span>
+            </div>
+            <div id="detailAttachmentsGallery" class="admin-attachments-gallery">
+              <!-- Dynamically populated in js/admin.js -->
+            </div>
+          </div>
+
           <!-- Timeline Conversation Thread -->
           <div class="admin-timeline-section">
             <div class="section-micro-heading">
@@ -566,8 +577,16 @@
     </div>
   </div>
 
-  <!-- Toast Notification Pill -->
-  <div id="adminToast" class="admin-toast" style="display: none;"></div>
+  <!-- Fullscreen Image Lightbox Modal Overlay -->
+  <div id="imageLightboxModal" class="image-lightbox-overlay" style="display: none;" onclick="closeImageLightbox()">
+    <div class="lightbox-content-box" onclick="event.stopPropagation()">
+      <button type="button" class="lightbox-close-btn" onclick="closeImageLightbox()" aria-label="Close Lightbox">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <img id="lightboxModalImg" class="lightbox-modal-img" src="" alt="Enlarged Attachment">
+      <div id="lightboxCaption" class="lightbox-caption"></div>
+    </div>
+  </div>
 
   <script src="js/admin.min.js"></script>
 </body>

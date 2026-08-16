@@ -259,6 +259,30 @@
             </div>
           </div>
 
+          <!-- Attachment Dropzone Section (5-Layer Sanitized Image Attachments) -->
+          <div class="form-field-group">
+            <label class="form-field-label" style="display: flex; justify-content: space-between; align-items: center;">
+              <span>Screenshots or Drawings <span style="font-weight: normal; color: var(--apple-text-secondary);">(Optional, max 2 images)</span></span>
+              <span id="attachmentCountBadge" style="font-size: 11px; font-weight: 600; color: var(--apple-text-secondary);">0/2</span>
+            </label>
+
+            <div id="attachmentDropzone" class="attachment-dropzone" onclick="triggerAttachmentPicker()">
+              <input type="file" id="attachmentFileInput" accept="image/png, image/jpeg, image/webp" multiple style="display: none;" onchange="handleAttachmentFileSelect(event)">
+              <div class="dropzone-inner-content">
+                <div class="dropzone-icon-circle">
+                  <span class="material-symbols-outlined">add_photo_alternate</span>
+                </div>
+                <div class="dropzone-text-group">
+                  <div class="dropzone-primary-text">Click to upload, drag & drop, or paste screenshot (<kbd>Ctrl+V</kbd>)</div>
+                  <div class="dropzone-sub-text">JPG, PNG, or WebP • Auto-compressed & sanitized client-side (&lt; 150 KB)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Attached Image Previews Grid -->
+            <div id="attachmentPreviewsGrid" class="attachment-previews-grid" style="display: none;"></div>
+          </div>
+
           <!-- Form Footer Actions -->
           <div class="form-actions-bar">
             <span class="privacy-note">
@@ -507,6 +531,15 @@
         100% locally on client browser.</p>
     </footer>
 
+  <!-- Fullscreen Image Lightbox Modal Overlay -->
+  <div id="imageLightboxModal" class="image-lightbox-overlay" style="display: none;" onclick="closeImageLightbox()">
+    <div class="lightbox-content-box" onclick="event.stopPropagation()">
+      <button type="button" class="lightbox-close-btn" onclick="closeImageLightbox()" aria-label="Close Lightbox">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <img id="lightboxModalImg" class="lightbox-modal-img" src="" alt="Enlarged Attachment">
+      <div id="lightboxCaption" class="lightbox-caption"></div>
+    </div>
   </div>
 
   <script src="js/contact.min.js"></script>
