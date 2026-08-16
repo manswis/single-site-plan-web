@@ -164,20 +164,38 @@ function setupEventListeners() {
     });
   });
 
-  // Search Input (Debounced)
+  // Search Input (Debounced with keyboard shortcuts & out-of-order cancellation)
   const searchInput = document.getElementById('adminSearchInput');
   const clearBtn = document.getElementById('clearSearchBtn');
   if (searchInput) {
-    let debounceTimer;
+    let debounceTimer = null;
     searchInput.addEventListener('input', (e) => {
-      const val = e.target.value.trim();
-      if (clearBtn) clearBtn.style.display = val.length > 0 ? 'block' : 'none';
+      const val = e.target.value;
+      if (clearBtn) clearBtn.style.display = val.trim().length > 0 ? 'flex' : 'none';
 
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => {
-        activeSearchQuery = val;
-        loadTickets();
-      }, 300);
+        const trimmed = val.trim();
+        if (trimmed !== activeSearchQuery) {
+          activeSearchQuery = trimmed;
+          loadTickets();
+        }
+      }, 250);
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        clearTimeout(debounceTimer);
+        const trimmed = searchInput.value.trim();
+        if (trimmed !== activeSearchQuery) {
+          activeSearchQuery = trimmed;
+          loadTickets();
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        clearAdminSearch();
+      }
     });
   }
 
@@ -193,25 +211,38 @@ function clearAdminSearch() {
   const clearBtn = document.getElementById('clearSearchBtn');
   if (searchInput) {
     searchInput.value = '';
-    activeSearchQuery = '';
   }
   if (clearBtn) clearBtn.style.display = 'none';
-  loadTickets();
+  if (activeSearchQuery !== '') {
+    activeSearchQuery = '';
+    loadTickets();
+  }
 }
 
 // ============================================================================
 // 3. TICKET FETCHING & INBOX RENDERING
 // ============================================================================
+let activeSearchAbortController = null;
+
 async function loadTickets() {
   const container = document.getElementById('inboxTicketList');
   if (!container) return;
 
-  container.innerHTML = `
-    <div style="padding: 40px 20px; text-align: center; color: var(--apple-text-secondary);">
-      <span class="material-symbols-outlined spin-icon" style="font-size: 24px;">sync</span>
-      <div style="font-size: 12px; margin-top: 6px;">Fetching from D1...</div>
-    </div>
-  `;
+  // Cancel any stale in-flight request to prevent race conditions
+  if (activeSearchAbortController) {
+    activeSearchAbortController.abort();
+  }
+  activeSearchAbortController = new AbortController();
+
+  // If container is empty, show loading state
+  if (!container.children.length) {
+    container.innerHTML = `
+      <div style="padding: 40px 20px; text-align: center; color: var(--apple-text-secondary);">
+        <span class="material-symbols-outlined spin-icon" style="font-size: 24px;">sync</span>
+        <div style="font-size: 12px; margin-top: 6px;">Fetching from D1...</div>
+      </div>
+    `;
+  }
 
   try {
     let url = `/api/admin/tickets?status=${encodeURIComponent(activeStatusFilter)}`;
@@ -223,7 +254,8 @@ async function loadTickets() {
       headers: {
         'Authorization': `Bearer ${activePasskey}`,
         'Accept': 'application/json'
-      }
+      },
+      signal: activeSearchAbortController.signal
     });
 
     if (response.status === 401 || response.status === 429) {
@@ -251,6 +283,7 @@ async function loadTickets() {
     }
 
   } catch (err) {
+    if (err.name === 'AbortError') return; // Ignore intentionally cancelled fetches
     container.innerHTML = `
       <div style="padding: 24px; text-align: center; color: var(--apple-red); font-size: 13px;">
         <span class="material-symbols-outlined" style="font-size: 28px;">error</span>
@@ -876,7 +909,7 @@ async function executeDeleteTicket() {
     const response = await fetch(`/api/admin/tickets/${encodeURIComponent(selectedTicketId)}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${adminPasskey}`
+        'Authorization': `Bearer ${activePasskey}`
       }
     });
 
@@ -901,7 +934,7 @@ async function executeDeleteTicket() {
     }
 
     // Refresh inbox list
-    fetchTickets();
+    loadTickets();
 
   } catch (err) {
     alert('Error deleting ticket: ' + err.message);
