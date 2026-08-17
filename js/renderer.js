@@ -990,12 +990,14 @@ function updateKeyPlan() {
     const lonDir = lon >= 0 ? 'E' : 'W';
     const formattedText = `${Math.abs(lat).toFixed(4)}° ${latDir}, ${Math.abs(lon).toFixed(4)}° ${lonDir}`;
 
-    const { tileX, tileY } = getTileCoords(lat, lon, 16);
+    const zoom = parseInt(document.getElementById('gpsZoom')?.value, 10) || 16;
+    const { tileX, tileY } = getTileCoords(lat, lon, zoom);
     // Reliable, fast, high-contrast CartoDB Voyager raster tile
-    const mapUrl = `https://a.basemaps.cartocdn.com/rastertiles/voyager/16/${tileX}/${tileY}.png`;
+    const mapUrl = `https://a.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${tileX}/${tileY}.png`;
 
-    if (mapImg.getAttribute('data-loaded-coords') !== `${lat},${lon}`) {
-      mapImg.setAttribute('data-loaded-coords', `${lat},${lon}`);
+    const cacheKey = `${lat},${lon},${zoom}`;
+    if (mapImg.getAttribute('data-loaded-coords') !== cacheKey) {
+      mapImg.setAttribute('data-loaded-coords', cacheKey);
       mapImg.src = mapUrl;
     }
 

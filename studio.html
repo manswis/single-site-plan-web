@@ -415,6 +415,22 @@
                 </button>
               </div>
             </div>
+
+            <!-- Inline Map Zoom Adjustment Slider (Option A) -->
+            <div id="gpsZoomControlWrap" style="display: none; margin-top: 10px; padding: 10px 14px; background: var(--apple-card-bg); border: 1px solid var(--apple-border); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; font-weight: 600;">
+                <span style="display: inline-flex; align-items: center; gap: 4px; color: var(--apple-text-primary);">
+                  <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">zoom_in</span>
+                  Map Zoom Level: <span id="gpsZoomValLabel" style="color: var(--apple-accent); font-weight: 700;">16 (Standard Layout & Cross Roads)</span>
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 11px; color: var(--apple-text-secondary); white-space: nowrap;">Wide (14)</span>
+                <input id="gpsZoom" type="range" min="14" max="18" step="1" value="16" style="flex: 1; accent-color: var(--apple-accent); cursor: pointer;" oninput="onGpsZoomInput(this.value)">
+                <span style="font-size: 11px; color: var(--apple-text-secondary); white-space: nowrap;">Close (18)</span>
+              </div>
+            </div>
+
             <p style="margin: 6px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Auto-embeds a locational
               map tile into Key Plan Panel 2 on the layout sheet.</p>
           </div>

@@ -30,7 +30,7 @@ const STEP_METADATA = {
 const DRAFT_FIELD_IDS = [
   'ownerName', 'epId', 'pidNo', 'adlrNo',
   'dcOrderNo', 'dcOrderDate', 'dcAuthority',
-  'surveyNo', 'plotNo', 'bbmpZone', 'wardNo', 'wardName', 'address', 'gpsCoords',
+  'surveyNo', 'plotNo', 'bbmpZone', 'wardNo', 'wardName', 'address', 'gpsCoords', 'gpsZoom',
   'plotArea', 'roadWidth', 'roadFacing', 'scale',
   'bldgType', 'noOfFloors', 'bldgOrientation',
   'regNorthSouth', 'regEastWest',
@@ -214,6 +214,7 @@ function restoreDraft(hideModal = true) {
     if (typeof calculateBuiltUpArea === 'function') calculateBuiltUpArea();
     if (typeof autoCalculateSetbacks === 'function') autoCalculateSetbacks(false);
     if (typeof validateBuildingSetbackFeasibility === 'function') validateBuildingSetbackFeasibility();
+    if (typeof syncGpsZoomControls === 'function') syncGpsZoomControls();
 
     // Mark active session flag
     sessionStorage.setItem(SESSION_FLAG_KEY, 'true');

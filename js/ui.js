@@ -220,6 +220,56 @@ function resetToBangaloreCenter() {
   }
 }
 
+const ZOOM_DESCRIPTIONS = {
+  14: '14 (Wide Locality & Arterials)',
+  15: '15 (Neighborhood & Main Roads)',
+  16: '16 (Standard Layout & Cross Roads)',
+  17: '17 (Close Plot & Street Level)',
+  18: '18 (Ultra-Close Site View)'
+};
+
+/**
+ * Handles slider adjustments for Map Zoom Level.
+ * 
+ * @function onGpsZoomInput
+ * @param {string|number} val - Zoom level (14 to 18).
+ * @returns {void}
+ */
+function onGpsZoomInput(val) {
+  const num = parseInt(val, 10) || 16;
+  const label = document.getElementById('gpsZoomValLabel');
+  if (label && ZOOM_DESCRIPTIONS[num]) {
+    label.textContent = ZOOM_DESCRIPTIONS[num];
+  }
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+}
+
+/**
+ * Synchronizes visibility and labels of the GPS Zoom Control Wrap.
+ * 
+ * @function syncGpsZoomControls
+ * @returns {void}
+ */
+function syncGpsZoomControls() {
+  const rawGps = (document.getElementById('gpsCoords')?.value || '').trim();
+  const wrap = document.getElementById('gpsZoomControlWrap');
+  const zoomInput = document.getElementById('gpsZoom');
+  const zoomLabel = document.getElementById('gpsZoomValLabel');
+
+  if (!wrap) return;
+
+  if (rawGps && typeof parseCoordinates === 'function' && parseCoordinates(rawGps)) {
+    wrap.style.display = 'block';
+    if (zoomInput && zoomLabel) {
+      const z = parseInt(zoomInput.value, 10) || 16;
+      if (ZOOM_DESCRIPTIONS[z]) zoomLabel.textContent = ZOOM_DESCRIPTIONS[z];
+    }
+  } else {
+    wrap.style.display = 'none';
+  }
+}
+
 /**
  * Applies the chosen coordinates to the Step 2 input, saves draft, and updates the Key Plan.
  * @function applyPickerLocation
@@ -227,12 +277,23 @@ function resetToBangaloreCenter() {
  */
 function applyPickerLocation() {
   const gpsInput = document.getElementById('gpsCoords');
+  const zoomInput = document.getElementById('gpsZoom');
   if (gpsInput && currentPickerCoords) {
     gpsInput.value = `${currentPickerCoords.lat.toFixed(5)}, ${currentPickerCoords.lon.toFixed(5)}`;
     if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
   }
 
+  if (zoomInput && pickerMapInstance) {
+    const currentZoom = Math.min(18, Math.max(14, pickerMapInstance.getZoom()));
+    zoomInput.value = currentZoom;
+    const zoomLabel = document.getElementById('gpsZoomValLabel');
+    if (zoomLabel && ZOOM_DESCRIPTIONS[currentZoom]) {
+      zoomLabel.textContent = ZOOM_DESCRIPTIONS[currentZoom];
+    }
+  }
+
   closeLocationPickerModal();
+  syncGpsZoomControls();
 
   if (typeof saveDraft === 'function') saveDraft();
   if (typeof generatePlan === 'function') generatePlan();
@@ -273,6 +334,7 @@ function detectGPSLocation() {
           btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">my_location</span> <span>Locate Me</span>';
         }, 3000);
       }
+      syncGpsZoomControls();
       if (typeof saveDraft === 'function') saveDraft();
       if (typeof generatePlan === 'function') generatePlan();
     },
@@ -296,6 +358,7 @@ function detectGPSLocation() {
  */
 function onGpsCoordsInput() {
   if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
+  syncGpsZoomControls();
   if (typeof saveDraft === 'function') saveDraft();
   if (typeof generatePlan === 'function') generatePlan();
 }
