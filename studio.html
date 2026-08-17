@@ -115,10 +115,12 @@
     onclick="if(event.target===this)closeLocationPickerModal()">
     <div class="apple-modal-card alert-modal-card"
       style="max-width: 680px; width: 94%; text-align: left; padding: 20px; border-radius: 20px; max-height: 92vh; display: flex; flex-direction: column;">
-      
+
       <!-- Modal Header -->
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--apple-border); padding-bottom: 10px;">
-        <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 8px;">
+      <div
+        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--apple-border); padding-bottom: 10px;">
+        <h3
+          style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 8px;">
           <span class="material-symbols-outlined" style="font-size: 20px; color: var(--apple-accent);">pin_drop</span>
           Pinpoint Property Location on Map
         </h3>
@@ -127,7 +129,8 @@
       </div>
 
       <!-- Search & Quick Navigation Toolbar -->
-      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+      <div
+        style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 12px;">
         <div style="display: flex; gap: 6px; flex: 1; min-width: 220px;">
           <input id="mapSearchInput" type="text" placeholder="Search Bangalore area (e.g. Indiranagar, Whitefield)..."
             style="padding: 7px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--apple-border); flex: 1; background: var(--apple-bg); color: var(--apple-text-primary);"
@@ -139,12 +142,14 @@
           </button>
         </div>
         <div style="display: flex; gap: 6px;">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="locateOnPickerMap()" title="Fly to my current location"
+          <button type="button" class="btn btn-secondary btn-sm" onclick="locateOnPickerMap()"
+            title="Fly to my current location"
             style="padding: 7px 10px; font-size: 12px; gap: 4px; display: inline-flex; align-items: center; border-radius: 8px;">
             <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">near_me</span>
             <span>My Location</span>
           </button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="resetToBangaloreCenter()" title="Center on Bangalore"
+          <button type="button" class="btn btn-secondary btn-sm" onclick="resetToBangaloreCenter()"
+            title="Center on Bangalore"
             style="padding: 7px 10px; font-size: 12px; gap: 4px; display: inline-flex; align-items: center; border-radius: 8px;">
             <span class="material-symbols-outlined" style="font-size: 16px;">apartment</span>
             <span>Bangalore Center</span>
@@ -153,19 +158,25 @@
       </div>
 
       <!-- Map Viewport Frame -->
-      <div style="position: relative; width: 100%; height: 350px; border-radius: 12px; overflow: hidden; border: 1px solid var(--apple-border); background: #e2e8f0;">
+      <div
+        style="position: relative; width: 100%; height: 350px; border-radius: 12px; overflow: hidden; border: 1px solid var(--apple-border); background: #e2e8f0;">
         <div id="pickerMapContainer" style="width: 100%; height: 100%;"></div>
-        <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(15, 23, 42, 0.82); color: #ffffff; padding: 4px 12px; border-radius: 20px; font-size: 11px; pointer-events: none; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: inline-flex; align-items: center; gap: 6px;">
+        <div
+          style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(15, 23, 42, 0.82); color: #ffffff; padding: 4px 12px; border-radius: 20px; font-size: 11px; pointer-events: none; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: inline-flex; align-items: center; gap: 6px;">
           <span class="material-symbols-outlined" style="font-size: 14px;">touch_app</span>
           Drag marker or click anywhere on map to drop pin
         </div>
       </div>
 
       <!-- Footer Action & Coordinate Status -->
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--apple-border);">
-        <div style="font-size: 12px; color: var(--apple-text-primary); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
-          <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">location_on</span>
-          Selected: <span id="pickerCoordsDisplay" style="color: var(--apple-accent); font-family: monospace; font-size: 13px;">12.9716, 77.5946</span>
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--apple-border);">
+        <div
+          style="font-size: 12px; color: var(--apple-text-primary); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+          <span class="material-symbols-outlined"
+            style="font-size: 16px; color: var(--apple-accent);">location_on</span>
+          Selected: <span id="pickerCoordsDisplay"
+            style="color: var(--apple-accent); font-family: monospace; font-size: 13px;">12.9716, 77.5946</span>
         </div>
         <div style="display: flex; gap: 8px;">
           <button type="button" class="apple-btn-secondary" onclick="closeLocationPickerModal()"
@@ -383,11 +394,13 @@
               <input id="gpsCoords" type="text" placeholder="e.g. 12.9716, 77.5946" oninput="onGpsCoordsInput()">
               <div class="gps-action-buttons">
                 <button type="button" class="gps-action-btn" id="btnOpenMapPicker" onclick="openLocationPickerModal()">
-                  <span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">map</span>
+                  <span class="material-symbols-outlined"
+                    style="font-size: 18px; color: var(--apple-accent);">map</span>
                   <span>Pick on Map</span>
                 </button>
                 <button type="button" class="gps-action-btn" id="btnLocateMe" onclick="detectGPSLocation()">
-                  <span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">my_location</span>
+                  <span class="material-symbols-outlined"
+                    style="font-size: 18px; color: var(--apple-accent);">my_location</span>
                   <span>Locate Me</span>
                 </button>
               </div>
@@ -1360,7 +1373,7 @@
 
             <!-- Panel 2: Key Plan (Locational Thumbnail) -->
             <div class="sidebar-panel">
-              <div class="sidebar-panel-header">2. KEY PLAN (LOCATIONAL SKETCH)</div>
+              <div class="sidebar-panel-header" id="keyPlanHeader">2. KEY PLAN (LOCATIONAL SKETCH)</div>
               <div class="sidebar-panel-body key-plan-box" id="keyPlanContainer"
                 style="padding: 4px; text-align: center; overflow: hidden;">
                 <div id="keyPlanMapWrapper"

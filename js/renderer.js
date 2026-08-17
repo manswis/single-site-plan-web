@@ -937,6 +937,8 @@ function updateKeyPlan() {
   const rawGps = (document.getElementById('gpsCoords')?.value || '').trim();
   const coords = parseCoordinates(rawGps);
 
+  const headerEl = document.getElementById('keyPlanHeader');
+
   if (coords && mapWrapper && mapImg && gpsBadge) {
     const lat = coords.lat;
     const lon = coords.lon;
@@ -956,10 +958,12 @@ function updateKeyPlan() {
     gpsBadge.textContent = `📍 GPS: ${formattedText}`;
     mapWrapper.style.display = 'block';
     if (svg) svg.style.display = 'none';
+    if (headerEl) headerEl.textContent = '2. KEY PLAN (GPS LOCATION MAP)';
     return;
   }
 
   // Fallback: If no GPS coordinates or map is offline, show CAD schematic vector SVG
+  if (headerEl) headerEl.textContent = '2. KEY PLAN (LOCATIONAL SKETCH)';
   if (mapWrapper) mapWrapper.style.display = 'none';
   if (!svg) return;
   svg.style.display = 'block';

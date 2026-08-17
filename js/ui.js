@@ -297,8 +297,10 @@ function onGpsCoordsInput() {
 function onKeyPlanMapError() {
   const mapWrapper = document.getElementById('keyPlanMapWrapper');
   const svg = document.getElementById('keyPlanSvg');
+  const headerEl = document.getElementById('keyPlanHeader');
   if (mapWrapper) mapWrapper.style.display = 'none';
   if (svg) svg.style.display = 'block';
+  if (headerEl) headerEl.textContent = '2. KEY PLAN (LOCATIONAL SKETCH)';
 }
 
 /**
