@@ -217,7 +217,9 @@ function generatePlan() {
   const outGpsWrap = document.getElementById('outGpsWrap');
   const outGps = document.getElementById('outGps');
   if (parsedGps && outGpsWrap && outGps) {
-    outGps.textContent = `${parsedGps.lat.toFixed(4)}° N, ${parsedGps.lon.toFixed(4)}° E`;
+    const latDir = parsedGps.lat >= 0 ? 'N' : 'S';
+    const lonDir = parsedGps.lon >= 0 ? 'E' : 'W';
+    outGps.textContent = `${Math.abs(parsedGps.lat).toFixed(4)}° ${latDir}, ${Math.abs(parsedGps.lon).toFixed(4)}° ${lonDir}`;
     outGpsWrap.style.display = 'inline';
   } else if (outGpsWrap) {
     outGpsWrap.style.display = 'none';
@@ -901,6 +903,25 @@ function parseCoordinates(str) {
 }
 
 /**
+ * Calculates Slippy map tile coordinate numbers from latitude and longitude.
+ * @function getTileCoords
+ * @param {number} lat - Latitude in degrees.
+ * @param {number} lon - Longitude in degrees.
+ * @param {number} [zoom=16] - Map zoom level.
+ * @returns {{tileX: number, tileY: number}} Tile numbers.
+ */
+function getTileCoords(lat, lon, zoom = 16) {
+  const n = Math.pow(2, zoom);
+  const x = (lon + 180) / 360 * n;
+  const latRad = lat * Math.PI / 180;
+  const y = (1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * n;
+  return {
+    tileX: Math.floor(x),
+    tileY: Math.floor(y)
+  };
+}
+
+/**
  * Dynamically renders the Key Plan (Locational Sketch) in Panel 2 based on actual road facing direction,
  * road name, road width, ward location, and GPS coordinates.
  * 
@@ -919,10 +940,14 @@ function updateKeyPlan() {
   if (coords && mapWrapper && mapImg && gpsBadge) {
     const lat = coords.lat;
     const lon = coords.lon;
-    const formattedText = `${lat.toFixed(4)}° N, ${lon.toFixed(4)}° E`;
+    const latDir = lat >= 0 ? 'N' : 'S';
+    const lonDir = lon >= 0 ? 'E' : 'W';
+    const formattedText = `${Math.abs(lat).toFixed(4)}° ${latDir}, ${Math.abs(lon).toFixed(4)}° ${lonDir}`;
 
-    // High-resolution static map tile with red pin marker
-    const mapUrl = `https://staticmap.openstreetmap.de/staticmap.php?center=${lat},${lon}&zoom=16&size=360x184&markers=${lat},${lon},red-pushpin`;
+    const { tileX, tileY } = getTileCoords(lat, lon, 16);
+    // Reliable, fast, high-contrast CartoDB Voyager raster tile
+    const mapUrl = `https://a.basemaps.cartocdn.com/rastertiles/voyager/16/${tileX}/${tileY}.png`;
+
     if (mapImg.getAttribute('data-loaded-coords') !== `${lat},${lon}`) {
       mapImg.setAttribute('data-loaded-coords', `${lat},${lon}`);
       mapImg.src = mapUrl;
