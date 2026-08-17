@@ -6307,50 +6307,15 @@ body.pdf-export-active .drawing-canvas-column,
   }
 }
 
-/* Cardinal Orientation Badges on Map Picker Modal */
-.cardinal-edge-tag {
-  position: absolute;
-  z-index: 1000;
-  pointer-events: none;
-  user-select: none;
-  font-size: 9px;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 5px;
-  background: rgba(15, 23, 42, 0.78);
-  color: #ffffff;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  letter-spacing: 0.5px;
-}
-
-.cardinal-north {
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #fca5a5 !important;
-  border: 1px solid rgba(239, 68, 68, 0.4);
-}
-
-.cardinal-south {
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.cardinal-east {
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-.cardinal-west {
-  left: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+/* Floating Architectural North Compass Widget on Map Picker Modal */
+.map-compass-widget {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 5px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme="dark"] .map-compass-widget {
