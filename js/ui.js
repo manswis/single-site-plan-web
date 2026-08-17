@@ -38,6 +38,18 @@ function openLocationPickerModal() {
   setTimeout(() => {
     initOrUpdatePickerMap(currentPickerCoords.lat, currentPickerCoords.lon);
   }, 100);
+  setTimeout(() => {
+    if (pickerMapInstance) pickerMapInstance.invalidateSize();
+  }, 350);
+
+  // Keyboard accessibility: Close on Escape
+  const onEscKey = (e) => {
+    if (e.key === 'Escape') {
+      closeLocationPickerModal();
+      document.removeEventListener('keydown', onEscKey);
+    }
+  };
+  document.addEventListener('keydown', onEscKey);
 }
 
 /**

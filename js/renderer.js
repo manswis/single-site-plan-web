@@ -890,15 +890,59 @@ function generatePlan() {
  */
 function parseCoordinates(str) {
   if (!str || typeof str !== 'string') return null;
-  const clean = str.replace(/[°NSEWnsew]/g, '').trim();
-  const parts = clean.split(/[,\s]+/).filter(Boolean);
-  if (parts.length >= 2) {
-    const lat = parseFloat(parts[0]);
-    const lon = parseFloat(parts[1]);
+  const trimmed = str.trim();
+
+  // 1. Google Maps URL or query parameter extraction
+  const urlMatch = trimmed.match(/[@=](-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (urlMatch) {
+    const lat = parseFloat(urlMatch[1]);
+    const lon = parseFloat(urlMatch[2]);
     if (!isNaN(lat) && !isNaN(lon) && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
       return { lat, lon };
     }
   }
+
+  // 2. DMS parsing (Degrees Minutes Seconds, e.g., 12°58'17.8"N 77°35'40.4"E)
+  const dmsRegex = /(\d+)[°\s]+(\d+)['\s]+([\d.]+)"?\s*([NSEWnsew])/g;
+  const dmsMatches = [...trimmed.matchAll(dmsRegex)];
+  if (dmsMatches.length >= 2) {
+    const parseDmsPart = (m) => {
+      const deg = parseFloat(m[1]) || 0;
+      const min = parseFloat(m[2]) || 0;
+      const sec = parseFloat(m[3]) || 0;
+      const dir = m[4].toUpperCase();
+      let val = deg + (min / 60) + (sec / 3600);
+      if (dir === 'S' || dir === 'W') val = -val;
+      return { val, dir };
+    };
+    const p1 = parseDmsPart(dmsMatches[0]);
+    const p2 = parseDmsPart(dmsMatches[1]);
+    const lat = (p1.dir === 'N' || p1.dir === 'S') ? p1.val : p2.val;
+    const lon = (p1.dir === 'E' || p1.dir === 'W') ? p1.val : p2.val;
+    if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
+      return { lat, lon };
+    }
+  }
+
+  // 3. Decimal Degrees with Optional Direction (e.g. 43.4418 N, 80.5115 W or 12.9716, 77.5946)
+  const decDirRegex = /(-?\d+(?:\.\d+)?)\s*([°\s]*([NSEWnsew]))?/g;
+  const decMatches = [...trimmed.matchAll(decDirRegex)].filter(m => m[1] !== '');
+  if (decMatches.length >= 2) {
+    let lat = parseFloat(decMatches[0][1]);
+    let lon = parseFloat(decMatches[1][1]);
+    const dir1 = decMatches[0][3] ? decMatches[0][3].toUpperCase() : null;
+    const dir2 = decMatches[1][3] ? decMatches[1][3].toUpperCase() : null;
+
+    if (dir1 === 'S' && lat > 0) lat = -lat;
+    if (dir1 === 'W' && lat > 0) lat = -lat;
+    if (dir2 === 'S' && lon > 0) lon = -lon;
+    if (dir2 === 'W' && lon > 0) lon = -lon;
+
+    if (!isNaN(lat) && !isNaN(lon) && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
+      return { lat, lon };
+    }
+  }
+
   return null;
 }
 
