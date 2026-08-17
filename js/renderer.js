@@ -964,6 +964,77 @@ function getTileCoords(lat, lon, zoom = 16) {
     tileY: Math.floor(y)
   };
 }
+/**
+ * Renders a perfectly centered multi-tile slippy map onto an offscreen canvas
+ * so the GPS coordinate is guaranteed to sit precisely in the center of the image at all zoom levels.
+ * 
+ * @function renderCenteredKeyPlanMap
+ * @param {number} lat - Latitude in decimal degrees.
+ * @param {number} lon - Longitude in decimal degrees.
+ * @param {number} zoom - Zoom level (14 to 18).
+ * @param {number} width - Output image width in pixels.
+ * @param {number} height - Output image height in pixels.
+ * @param {Function} callback - Callback(err, dataUrl).
+ * @returns {void}
+ */
+function renderCenteredKeyPlanMap(lat, lon, zoom, width, height, callback) {
+  const n = Math.pow(2, zoom);
+  const worldX = (lon + 180) / 360 * n * 256;
+  const latRad = lat * Math.PI / 180;
+  const worldY = (1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2 * n * 256;
+
+  const minX = worldX - width / 2;
+  const minY = worldY - height / 2;
+  const maxX = worldX + width / 2;
+  const maxY = worldY + height / 2;
+
+  const minTileX = Math.floor(minX / 256);
+  const maxTileX = Math.floor(maxX / 256);
+  const minTileY = Math.floor(minY / 256);
+  const maxTileY = Math.floor(maxY / 256);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+
+  const tiles = [];
+  for (let tx = minTileX; tx <= maxTileX; tx++) {
+    for (let ty = minTileY; ty <= maxTileY; ty++) {
+      tiles.push({ tx, ty });
+    }
+  }
+
+  let loaded = 0;
+  let failed = false;
+
+  tiles.forEach(({ tx, ty }) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      if (failed) return;
+      const destX = tx * 256 - minX;
+      const destY = ty * 256 - minY;
+      ctx.drawImage(img, destX, destY, 256, 256);
+      loaded++;
+      if (loaded === tiles.length) {
+        try {
+          const dataUrl = canvas.toDataURL('image/png');
+          callback(null, dataUrl);
+        } catch (e) {
+          callback(e);
+        }
+      }
+    };
+    img.onerror = () => {
+      if (!failed) {
+        failed = true;
+        callback(new Error('Tile load error'));
+      }
+    };
+    img.src = `https://a.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${tx}/${ty}.png`;
+  });
+}
 
 /**
  * Dynamically renders the Key Plan (Locational Sketch) in Panel 2 based on actual road facing direction,
@@ -991,21 +1062,23 @@ function updateKeyPlan() {
     const formattedText = `${Math.abs(lat).toFixed(4)}° ${latDir}, ${Math.abs(lon).toFixed(4)}° ${lonDir}`;
 
     const zoom = parseInt(document.getElementById('gpsZoom')?.value, 10) || 16;
-    const { tileX, tileY } = getTileCoords(lat, lon, zoom);
-    // Reliable, fast, high-contrast CartoDB Voyager raster tile
-    const mapUrl = `https://a.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${tileX}/${tileY}.png`;
+    const cacheKey = `${lat.toFixed(5)},${lon.toFixed(5)},${zoom}`;
 
-    const cacheKey = `${lat},${lon},${zoom}`;
     if (mapImg.getAttribute('data-loaded-coords') !== cacheKey) {
       mapImg.setAttribute('data-loaded-coords', cacheKey);
-      mapImg.src = mapUrl;
-    }
-
-    const step2PreviewImg = document.getElementById('step2MapPreviewImg');
-    if (step2PreviewImg && step2PreviewImg.getAttribute('data-loaded-coords') !== cacheKey) {
-      step2PreviewImg.setAttribute('data-loaded-coords', cacheKey);
-      step2PreviewImg.style.display = 'block';
-      step2PreviewImg.src = mapUrl;
+      renderCenteredKeyPlanMap(lat, lon, zoom, 400, 200, (err, dataUrl) => {
+        if (err) {
+          if (typeof onKeyPlanMapError === 'function') onKeyPlanMapError();
+          return;
+        }
+        mapImg.src = dataUrl;
+        const step2PreviewImg = document.getElementById('step2MapPreviewImg');
+        if (step2PreviewImg) {
+          step2PreviewImg.setAttribute('data-loaded-coords', cacheKey);
+          step2PreviewImg.style.display = 'block';
+          step2PreviewImg.src = dataUrl;
+        }
+      });
     }
 
     gpsBadge.textContent = `📍 GPS: ${formattedText}`;
