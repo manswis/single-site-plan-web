@@ -214,8 +214,8 @@
           <div class="field">
             <label>DC Conversion Order No <span
                 style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
-                type="button" class="field-help-btn" onclick="showFieldHelp('dcOrderNo')" title="Help & Where to find"><svg
-                  viewBox="0 0 24 24">
+                type="button" class="field-help-btn" onclick="showFieldHelp('dcOrderNo')"
+                title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
@@ -252,7 +252,8 @@
             <div class="error-msg" id="err-surveyNo">⚠ Survey number is required</div>
           </div>
           <div class="field">
-            <label>Site / Plot Number <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
+            <label>Site / Plot Number <span
+                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
             <input id="plotNo" type="text" placeholder="e.g. 39 or Site No. 42"
               oninput="clearFieldError('plotNo', 'err-plotNo')">
           </div>
@@ -299,6 +300,19 @@
             <input id="address" type="text" placeholder="e.g. No. 12, 3rd Cross, Rajajinagar, Bangalore - 560010"
               oninput="clearFieldError('address', 'err-address')">
             <div class="error-msg" id="err-address">⚠ Site address is required</div>
+          </div>
+          <div class="field" style="grid-column: span 2;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="margin-bottom: 0;">GPS Coordinates (Latitude, Longitude) <span
+                  style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnLocateMe" onclick="detectGPSLocation()"
+                style="padding: 4px 10px; font-size: 11px; gap: 4px; display: inline-flex; align-items: center; border-radius: 6px; cursor: pointer;">
+                📍 Locate Me
+              </button>
+            </div>
+            <input id="gpsCoords" type="text" placeholder="e.g. 12.9716, 77.5946" oninput="onGpsCoordsInput()">
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Auto-embeds a locational
+              map tile into Key Plan Panel 2 on the layout sheet.</p>
           </div>
         </div>
       </div>
@@ -400,7 +414,8 @@
               <input id="regEastWest" type="hidden">
             </div>
             <div class="error-msg" id="err-regEastWest">⚠ East & West side measurement is required</div>
-            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Horizontal span (depth): Applies to both North & South boundary lines.</p>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Horizontal span (depth):
+              Applies to both North & South boundary lines.</p>
           </div>
           <div class="field">
             <label>↕️ North–South (ಉತ್ತರ-ದಕ್ಷಿಣ) Span <span class="required">*</span> <button type="button"
@@ -423,7 +438,8 @@
               <input id="regNorthSouth" type="hidden">
             </div>
             <div class="error-msg" id="err-regNorthSouth">⚠ North & South side measurement is required</div>
-            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Vertical span / frontage: Applies to both East & West boundary lines.</p>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Vertical span / frontage:
+              Applies to both East & West boundary lines.</p>
           </div>
         </div>
 
@@ -514,7 +530,8 @@
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <select id="bldgType" onchange="if(typeof onBuildingTypeChange === 'function') onBuildingTypeChange(); else if(typeof generatePlan === 'function') generatePlan();">
+            <select id="bldgType"
+              onchange="if(typeof onBuildingTypeChange === 'function') onBuildingTypeChange(); else if(typeof generatePlan === 'function') generatePlan();">
               <option value="" selected>-- Select Type --</option>
               <option value="Vacant Plot">Vacant Land / Open Plot (No Structure)</option>
               <option value="Residential">Residential Building</option>
@@ -944,16 +961,16 @@
             <input id="challanFee" type="number" placeholder="e.g. 48000">
           </div>
           <div class="field">
-            <label>Challan Number <button type="button" class="field-help-btn"
-                onclick="showFieldHelp('challanDetails')" title="Help & Where to find"><svg viewBox="0 0 24 24">
+            <label>Challan Number <button type="button" class="field-help-btn" onclick="showFieldHelp('challanDetails')"
+                title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
             <input id="challanNo" type="text" placeholder="e.g. CH-2024-99881">
           </div>
           <div class="field">
-            <label>Challan Date <button type="button" class="field-help-btn"
-                onclick="showFieldHelp('challanDetails')" title="Help & Where to find"><svg viewBox="0 0 24 24">
+            <label>Challan Date <button type="button" class="field-help-btn" onclick="showFieldHelp('challanDetails')"
+                title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
@@ -1086,7 +1103,9 @@
               </tr>
               <tr>
                 <td class="label">Site Address</td>
-                <td colspan="3" id="outAddress">—</td>
+                <td colspan="3"><span id="outAddress">—</span><span id="outGpsWrap"
+                    style="display:none; color: var(--apple-text-secondary); margin-left: 8px; font-weight: 500;">(📍
+                    <span id="outGps"></span>)</span></td>
               </tr>
               <tr>
                 <td class="label">Plot Area</td>
@@ -1261,7 +1280,25 @@
             <!-- Panel 2: Key Plan (Locational Thumbnail) -->
             <div class="sidebar-panel">
               <div class="sidebar-panel-header">2. KEY PLAN (LOCATIONAL SKETCH)</div>
-              <div class="sidebar-panel-body key-plan-box" style="padding: 4px; text-align: center;">
+              <div class="sidebar-panel-body key-plan-box" id="keyPlanContainer"
+                style="padding: 4px; text-align: center; overflow: hidden;">
+                <div id="keyPlanMapWrapper"
+                  style="display: none; position: relative; width: 100%; height: 92px; border-radius: 4px; overflow: hidden; background: #e2e8f0; border: 1px solid #cbd5e1;">
+                  <img id="keyPlanMapImg" src="" alt="Location Map"
+                    style="width: 100%; height: 100%; object-fit: cover; display: block;"
+                    onerror="onKeyPlanMapError()" />
+                  <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -100%); pointer-events: none;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#dc2626"
+                      style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
+                      <path
+                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                    </svg>
+                  </div>
+                  <div id="keyPlanGpsBadge"
+                    style="position: absolute; bottom: 2px; left: 2px; right: 2px; background: rgba(15, 23, 42, 0.78); color: #ffffff; font-size: 7.5px; font-weight: 600; padding: 2px 4px; border-radius: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center;">
+                  </div>
+                </div>
                 <svg id="keyPlanSvg" width="180" height="90" viewBox="0 0 180 90">
                 </svg>
               </div>
@@ -1635,7 +1672,8 @@
         <a href="legal.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 8px;">Legal
           Terms & Privacy</a> •
         <a href="faq.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 8px;">FAQ</a> •
-        <a href="contact.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 8px;">Contact & Support</a> •
+        <a href="contact.html" style="color: var(--apple-text-secondary); text-decoration: none; margin: 0 8px;">Contact
+          & Support</a> •
         <a href="https://github.com/manswis/singleSitePlan-web" target="_blank" rel="noopener noreferrer"
           style="color: var(--apple-text-secondary); text-decoration: none; font-weight: 600; margin: 0 8px; display: inline-flex; align-items: center; gap: 5px;">
           <svg height="14" width="14" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: text-bottom;">
@@ -1645,7 +1683,8 @@
           GitHub
         </a>
       </p>
-      <p>© 2026 <span class="app-brand-name"></span> • v<span class="app-version"></span> • All processing performed 100% locally on client browser.</p>
+      <p>© 2026 <span class="app-brand-name"></span> • v<span class="app-version"></span> • All processing performed
+        100% locally on client browser.</p>
     </footer>
 
   </div> <!-- End Container -->

@@ -30,7 +30,7 @@ const STEP_METADATA = {
 const DRAFT_FIELD_IDS = [
   'ownerName', 'epId', 'pidNo', 'adlrNo',
   'dcOrderNo', 'dcOrderDate', 'dcAuthority',
-  'surveyNo', 'plotNo', 'bbmpZone', 'wardNo', 'wardName', 'address',
+  'surveyNo', 'plotNo', 'bbmpZone', 'wardNo', 'wardName', 'address', 'gpsCoords',
   'plotArea', 'roadWidth', 'roadFacing', 'scale',
   'bldgType', 'noOfFloors', 'bldgOrientation',
   'regNorthSouth', 'regEastWest',

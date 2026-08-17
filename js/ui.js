@@ -6,6 +6,79 @@
  */
 
 /**
+ * Uses HTML5 Geolocation API to auto-detect the user's GPS coordinates.
+ * Populates gpsCoords input and refreshes the Key Plan map thumbnail.
+ * 
+ * @function detectGPSLocation
+ * @returns {void}
+ */
+function detectGPSLocation() {
+  const btn = document.getElementById('btnLocateMe');
+  const gpsInput = document.getElementById('gpsCoords');
+  if (!navigator.geolocation) {
+    alert('Geolocation is not supported by your browser.');
+    return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '📍 Locating...';
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude.toFixed(5);
+      const lon = position.coords.longitude.toFixed(5);
+      if (gpsInput) {
+        gpsInput.value = `${lat}, ${lon}`;
+        if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
+      }
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '✓ Located';
+        setTimeout(() => { btn.textContent = '📍 Locate Me'; }, 3000);
+      }
+      if (typeof saveDraft === 'function') saveDraft();
+      if (typeof generatePlan === 'function') generatePlan();
+    },
+    (err) => {
+      console.warn('Geolocation error:', err.message);
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = '📍 Locate Me';
+      }
+      alert('Could not detect location. Please enter Latitude & Longitude manually (e.g. 12.9716, 77.5946).');
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+  );
+}
+
+/**
+ * Handles real-time input on GPS Coordinates field.
+ * 
+ * @function onGpsCoordsInput
+ * @returns {void}
+ */
+function onGpsCoordsInput() {
+  if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+}
+
+/**
+ * Handles fallback when remote map tile fails to load.
+ * 
+ * @function onKeyPlanMapError
+ * @returns {void}
+ */
+function onKeyPlanMapError() {
+  const mapWrapper = document.getElementById('keyPlanMapWrapper');
+  const svg = document.getElementById('keyPlanSvg');
+  if (mapWrapper) mapWrapper.style.display = 'none';
+  if (svg) svg.style.display = 'block';
+}
+
+/**
  * Toggles visibility between regular rectangular plot mode (2-field N/S & E/W inputs)
  * and odd/irregular quadrilateral plot mode (independent 4-side inputs).
  * 
@@ -812,6 +885,7 @@ function buildReviewSummary() {
       fields: [
         { id: 'address', label: 'Property Address' },
         { id: 'plotNo', label: 'Site / Plot Number' },
+        { id: 'gpsCoords', label: 'GPS Co-ordinates' },
         { id: 'wardName', label: 'Ward / Area Name' },
         { id: 'bbmpZone', label: 'BBMP Zone' }
       ]

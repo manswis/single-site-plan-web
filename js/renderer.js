@@ -210,6 +210,19 @@ function generatePlan() {
   document.getElementById('outSurvey').textContent = survey;
   document.getElementById('outWard').textContent = `Ward ${wardNo} — ${wardName}`;
   document.getElementById('outAddress').textContent = address;
+
+  // Populate GPS Coordinates if present
+  const rawGps = (document.getElementById('gpsCoords')?.value || '').trim();
+  const parsedGps = parseCoordinates(rawGps);
+  const outGpsWrap = document.getElementById('outGpsWrap');
+  const outGps = document.getElementById('outGps');
+  if (parsedGps && outGpsWrap && outGps) {
+    outGps.textContent = `${parsedGps.lat.toFixed(4)}° N, ${parsedGps.lon.toFixed(4)}° E`;
+    outGpsWrap.style.display = 'inline';
+  } else if (outGpsWrap) {
+    outGpsWrap.style.display = 'none';
+  }
+
   document.getElementById('outArea').textContent = `${areaSqFt} sq.ft (${areaSqM} sq.m)`;
   document.getElementById('outSize').textContent = `N:${formatFeetInches(sideN)} × S:${formatFeetInches(sideS)} × E:${formatFeetInches(sideE)} × W:${formatFeetInches(sideW)}` + (isOdd ? ' (Irregular)' : ' (Regular)');
   document.getElementById('outRoadFace').textContent = roadFace.charAt(0).toUpperCase() + roadFace.slice(1);
@@ -866,15 +879,65 @@ function generatePlan() {
 }
 
 /**
+ * Parses raw GPS coordinate string into numeric latitude and longitude.
+ * Supports decimal (12.9716, 77.5946), degrees (12.9716° N, 77.5946° E), and space-separated formats.
+ * 
+ * @function parseCoordinates
+ * @param {string} str - Raw coordinate string.
+ * @returns {{lat: number, lon: number}|null} Parsed coordinate object or null.
+ */
+function parseCoordinates(str) {
+  if (!str || typeof str !== 'string') return null;
+  const clean = str.replace(/[°NSEWnsew]/g, '').trim();
+  const parts = clean.split(/[,\s]+/).filter(Boolean);
+  if (parts.length >= 2) {
+    const lat = parseFloat(parts[0]);
+    const lon = parseFloat(parts[1]);
+    if (!isNaN(lat) && !isNaN(lon) && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
+      return { lat, lon };
+    }
+  }
+  return null;
+}
+
+/**
  * Dynamically renders the Key Plan (Locational Sketch) in Panel 2 based on actual road facing direction,
- * road name, road width, and ward location.
+ * road name, road width, ward location, and GPS coordinates.
  * 
  * @function updateKeyPlan
  * @returns {void}
  */
 function updateKeyPlan() {
   const svg = document.getElementById('keyPlanSvg');
+  const mapWrapper = document.getElementById('keyPlanMapWrapper');
+  const mapImg = document.getElementById('keyPlanMapImg');
+  const gpsBadge = document.getElementById('keyPlanGpsBadge');
+
+  const rawGps = (document.getElementById('gpsCoords')?.value || '').trim();
+  const coords = parseCoordinates(rawGps);
+
+  if (coords && mapWrapper && mapImg && gpsBadge) {
+    const lat = coords.lat;
+    const lon = coords.lon;
+    const formattedText = `${lat.toFixed(4)}° N, ${lon.toFixed(4)}° E`;
+
+    // High-resolution static map tile with red pin marker
+    const mapUrl = `https://staticmap.openstreetmap.de/staticmap.php?center=${lat},${lon}&zoom=16&size=360x184&markers=${lat},${lon},red-pushpin`;
+    if (mapImg.getAttribute('data-loaded-coords') !== `${lat},${lon}`) {
+      mapImg.setAttribute('data-loaded-coords', `${lat},${lon}`);
+      mapImg.src = mapUrl;
+    }
+
+    gpsBadge.textContent = `📍 GPS: ${formattedText}`;
+    mapWrapper.style.display = 'block';
+    if (svg) svg.style.display = 'none';
+    return;
+  }
+
+  // Fallback: If no GPS coordinates or map is offline, show CAD schematic vector SVG
+  if (mapWrapper) mapWrapper.style.display = 'none';
   if (!svg) return;
+  svg.style.display = 'block';
 
   const roadFace = (document.getElementById('roadFacing')?.value || 'north').toLowerCase();
   const roadWidthFt = document.getElementById('roadWidth_ft')?.value || '';
