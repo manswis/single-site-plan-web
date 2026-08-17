@@ -25,6 +25,10 @@
   <!-- html2canvas and jsPDF for Direct Client-Side PDF File Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Leaflet.js Interactive Map Engine for Location Pin Picking -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
 <body class="wizard-mode">
@@ -103,6 +107,66 @@
         <button type="button" class="apple-btn-secondary" onclick="closeFieldHelp()"
           style="padding: 8px 20px; font-size: 13px; font-weight: 600;">Got It</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Interactive Map Location Picker Modal (Leaflet Engine) -->
+  <div id="locationPickerModal" class="apple-modal-overlay no-print" style="display: none;"
+    onclick="if(event.target===this)closeLocationPickerModal()">
+    <div class="apple-modal-card alert-modal-card"
+      style="max-width: 680px; width: 94%; text-align: left; padding: 20px; border-radius: 20px; max-height: 92vh; display: flex; flex-direction: column;">
+      
+      <!-- Modal Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--apple-border); padding-bottom: 10px;">
+        <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 6px;">
+          <span>🗺️</span> Pinpoint Property Location on Map
+        </h3>
+        <button type="button" onclick="closeLocationPickerModal()"
+          style="background: none; border: none; font-size: 20px; font-weight: 700; color: var(--apple-text-secondary); cursor: pointer; padding: 0 4px;">✕</button>
+      </div>
+
+      <!-- Search & Quick Navigation Toolbar -->
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div style="display: flex; gap: 6px; flex: 1; min-width: 220px;">
+          <input id="mapSearchInput" type="text" placeholder="Search Bangalore area (e.g. Indiranagar, Whitefield)..."
+            style="padding: 7px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--apple-border); flex: 1; background: var(--apple-bg); color: var(--apple-text-primary);"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();searchMapLocation();}">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="searchMapLocation()"
+            style="padding: 7px 12px; font-size: 12px; border-radius: 8px;">Search</button>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="locateOnPickerMap()" title="Fly to my current location"
+            style="padding: 7px 10px; font-size: 12px; gap: 4px; display: inline-flex; align-items: center; border-radius: 8px;">
+            🎯 My Location
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="resetToBangaloreCenter()" title="Center on Bangalore"
+            style="padding: 7px 10px; font-size: 12px; border-radius: 8px;">
+            🏛️ Bangalore Center
+          </button>
+        </div>
+      </div>
+
+      <!-- Map Viewport Frame -->
+      <div style="position: relative; width: 100%; height: 350px; border-radius: 12px; overflow: hidden; border: 1px solid var(--apple-border); background: #e2e8f0;">
+        <div id="pickerMapContainer" style="width: 100%; height: 100%;"></div>
+        <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(15, 23, 42, 0.82); color: #ffffff; padding: 4px 12px; border-radius: 20px; font-size: 11px; pointer-events: none; backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+          👆 Drag marker or click anywhere on map to drop pin
+        </div>
+      </div>
+
+      <!-- Footer Action & Coordinate Status -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--apple-border);">
+        <div style="font-size: 12px; color: var(--apple-text-primary); font-weight: 600;">
+          Selected: <span id="pickerCoordsDisplay" style="color: var(--apple-accent); font-family: monospace; font-size: 13px;">12.9716, 77.5946</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="apple-btn-secondary" onclick="closeLocationPickerModal()"
+            style="padding: 8px 16px; font-size: 13px; font-weight: 600;">Cancel</button>
+          <button type="button" class="apple-btn-primary" onclick="applyPickerLocation()"
+            style="padding: 8px 20px; font-size: 13px; font-weight: 700;">✅ Use This Location</button>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -302,13 +366,19 @@
             <div class="error-msg" id="err-address">⚠ Site address is required</div>
           </div>
           <div class="field" style="grid-column: span 2;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
               <label style="margin-bottom: 0;">GPS Coordinates (Latitude, Longitude) <span
                   style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
-              <button type="button" class="btn btn-secondary btn-sm" id="btnLocateMe" onclick="detectGPSLocation()"
-                style="padding: 4px 10px; font-size: 11px; gap: 4px; display: inline-flex; align-items: center; border-radius: 6px; cursor: pointer;">
-                📍 Locate Me
-              </button>
+              <div style="display: inline-flex; gap: 6px;">
+                <button type="button" class="btn btn-secondary btn-sm" id="btnOpenMapPicker" onclick="openLocationPickerModal()"
+                  style="padding: 4px 10px; font-size: 11px; gap: 4px; display: inline-flex; align-items: center; border-radius: 6px; cursor: pointer;">
+                  🗺️ Pick on Map
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" id="btnLocateMe" onclick="detectGPSLocation()"
+                  style="padding: 4px 10px; font-size: 11px; gap: 4px; display: inline-flex; align-items: center; border-radius: 6px; cursor: pointer;">
+                  📍 Locate Me
+                </button>
+              </div>
             </div>
             <input id="gpsCoords" type="text" placeholder="e.g. 12.9716, 77.5946" oninput="onGpsCoordsInput()">
             <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Auto-embeds a locational

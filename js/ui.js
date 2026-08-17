@@ -5,6 +5,227 @@
  * @author Senior Systems Architect
  */
 
+let pickerMapInstance = null;
+let pickerMarkerInstance = null;
+let currentPickerCoords = { lat: 12.9716, lon: 77.5946 };
+
+const BANGALORE_CENTER = { lat: 12.9716, lon: 77.5946 };
+
+/**
+ * Opens the interactive map location picker modal and initializes Leaflet.
+ * @function openLocationPickerModal
+ * @returns {void}
+ */
+function openLocationPickerModal() {
+  const modal = document.getElementById('locationPickerModal');
+  if (!modal) return;
+
+  modal.style.display = 'flex';
+  modal.classList.add('active');
+
+  // Determine starting coordinates
+  const rawGps = (document.getElementById('gpsCoords')?.value || '').trim();
+  let startCoords = BANGALORE_CENTER;
+  if (typeof parseCoordinates === 'function') {
+    const parsed = parseCoordinates(rawGps);
+    if (parsed) startCoords = parsed;
+  }
+
+  currentPickerCoords = { ...startCoords };
+  updatePickerCoordsDisplay(currentPickerCoords.lat, currentPickerCoords.lon);
+
+  // Initialize or re-invalidate Leaflet map after DOM display transition
+  setTimeout(() => {
+    initOrUpdatePickerMap(currentPickerCoords.lat, currentPickerCoords.lon);
+  }, 100);
+}
+
+/**
+ * Closes the location picker modal.
+ * @function closeLocationPickerModal
+ * @returns {void}
+ */
+function closeLocationPickerModal() {
+  const modal = document.getElementById('locationPickerModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
+}
+
+/**
+ * Initializes or moves the Leaflet map and marker.
+ * @function initOrUpdatePickerMap
+ * @param {number} lat - Latitude.
+ * @param {number} lon - Longitude.
+ * @returns {void}
+ */
+function initOrUpdatePickerMap(lat, lon) {
+  const container = document.getElementById('pickerMapContainer');
+  if (!container || typeof L === 'undefined') return;
+
+  if (!pickerMapInstance) {
+    pickerMapInstance = L.map('pickerMapContainer', {
+      center: [lat, lon],
+      zoom: 15,
+      zoomControl: true
+    });
+
+    // High-performance CartoDB Voyager raster tiles
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(pickerMapInstance);
+
+    // Draggable red marker
+    const redPinIcon = L.divIcon({
+      className: 'custom-map-pin',
+      html: `<svg width="32" height="32" viewBox="0 0 24 24" fill="#dc2626" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); transform: translate(-8px, -24px);">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>`,
+      iconSize: [24, 24],
+      iconAnchor: [12, 24]
+    });
+
+    pickerMarkerInstance = L.marker([lat, lon], {
+      draggable: true,
+      icon: redPinIcon
+    }).addTo(pickerMapInstance);
+
+    // Update coordinates when marker is dragged
+    pickerMarkerInstance.on('dragend', function (e) {
+      const pos = e.target.getLatLng();
+      currentPickerCoords = { lat: pos.lat, lon: pos.lng };
+      updatePickerCoordsDisplay(pos.lat, pos.lng);
+    });
+
+    // Click anywhere on map to move marker
+    pickerMapInstance.on('click', function (e) {
+      pickerMarkerInstance.setLatLng(e.latlng);
+      currentPickerCoords = { lat: e.latlng.lat, lon: e.latlng.lng };
+      updatePickerCoordsDisplay(e.latlng.lat, e.latlng.lng);
+    });
+  } else {
+    pickerMapInstance.invalidateSize();
+    pickerMapInstance.setView([lat, lon], 15);
+    pickerMarkerInstance.setLatLng([lat, lon]);
+  }
+}
+
+/**
+ * Updates the footer coordinate display badge inside the modal.
+ * @function updatePickerCoordsDisplay
+ * @param {number} lat - Latitude.
+ * @param {number} lon - Longitude.
+ * @returns {void}
+ */
+function updatePickerCoordsDisplay(lat, lon) {
+  const displayEl = document.getElementById('pickerCoordsDisplay');
+  if (displayEl) {
+    const latDir = lat >= 0 ? 'N' : 'S';
+    const lonDir = lon >= 0 ? 'E' : 'W';
+    displayEl.textContent = `${Math.abs(lat).toFixed(5)}° ${latDir}, ${Math.abs(lon).toFixed(5)}° ${lonDir} (${lat.toFixed(5)}, ${lon.toFixed(5)})`;
+  }
+}
+
+/**
+ * Searches a location in Bangalore using OpenStreetMap Nominatim API with fallback.
+ * @function searchMapLocation
+ * @returns {void}
+ */
+function searchMapLocation() {
+  const input = document.getElementById('mapSearchInput');
+  if (!input || !input.value.trim()) return;
+
+  const query = input.value.trim();
+  const fullQuery = query.toLowerCase().includes('bangalore') || query.toLowerCase().includes('bengaluru')
+    ? query
+    : `${query}, Bengaluru, Karnataka`;
+
+  fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullQuery)}&limit=1`)
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        const lat = parseFloat(data[0].lat);
+        const lon = parseFloat(data[0].lon);
+        currentPickerCoords = { lat, lon };
+        updatePickerCoordsDisplay(lat, lon);
+        if (pickerMapInstance && pickerMarkerInstance) {
+          pickerMapInstance.flyTo([lat, lon], 16, { duration: 1 });
+          pickerMarkerInstance.setLatLng([lat, lon]);
+        }
+      } else {
+        alert(`Location "${query}" not found. Try entering a nearby landmark or ward name.`);
+      }
+    })
+    .catch(err => {
+      console.warn('Geocoding search failed:', err);
+      alert('Search service currently unavailable. Please pan and drop the pin manually.');
+    });
+}
+
+/**
+ * Flies map to user's physical GPS location (for users who are near the site).
+ * @function locateOnPickerMap
+ * @returns {void}
+ */
+function locateOnPickerMap() {
+  if (!navigator.geolocation) {
+    alert('Geolocation not supported by your browser.');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      currentPickerCoords = { lat, lon };
+      updatePickerCoordsDisplay(lat, lon);
+      if (pickerMapInstance && pickerMarkerInstance) {
+        pickerMapInstance.flyTo([lat, lon], 17, { duration: 1.2 });
+        pickerMarkerInstance.setLatLng([lat, lon]);
+      }
+    },
+    (err) => {
+      alert('Could not access current location. Please pan or search manually.');
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+/**
+ * Resets picker map view to Central Bangalore (Vidhana Soudha).
+ * @function resetToBangaloreCenter
+ * @returns {void}
+ */
+function resetToBangaloreCenter() {
+  currentPickerCoords = { ...BANGALORE_CENTER };
+  updatePickerCoordsDisplay(BANGALORE_CENTER.lat, BANGALORE_CENTER.lon);
+  if (pickerMapInstance && pickerMarkerInstance) {
+    pickerMapInstance.flyTo([BANGALORE_CENTER.lat, BANGALORE_CENTER.lon], 14, { duration: 1 });
+    pickerMarkerInstance.setLatLng([BANGALORE_CENTER.lat, BANGALORE_CENTER.lon]);
+  }
+}
+
+/**
+ * Applies the chosen coordinates to the Step 2 input, saves draft, and updates the Key Plan.
+ * @function applyPickerLocation
+ * @returns {void}
+ */
+function applyPickerLocation() {
+  const gpsInput = document.getElementById('gpsCoords');
+  if (gpsInput && currentPickerCoords) {
+    gpsInput.value = `${currentPickerCoords.lat.toFixed(5)}, ${currentPickerCoords.lon.toFixed(5)}`;
+    if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
+  }
+
+  closeLocationPickerModal();
+
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+}
+
 /**
  * Uses HTML5 Geolocation API to auto-detect the user's GPS coordinates.
  * Populates gpsCoords input and refreshes the Key Plan map thumbnail.
