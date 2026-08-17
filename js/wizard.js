@@ -516,6 +516,15 @@ function validateStep(stepNum, showErrors = true) {
       isValid = checkRequired('wardNo', 'err-wardNo', showErrors) && isValid;
       isValid = checkRequired('wardName', 'err-wardName', showErrors) && isValid;
       isValid = checkRequired('address', 'err-address', showErrors) && isValid;
+
+      const rawGps = (document.getElementById('gpsCoords')?.value || '').trim();
+      if (rawGps && typeof parseCoordinates === 'function' && !parseCoordinates(rawGps)) {
+        const errEl = document.getElementById('err-gpsCoords');
+        if (errEl && showErrors) errEl.style.display = 'block';
+        const inp = document.getElementById('gpsCoords');
+        if (inp && showErrors) inp.classList.add('error');
+        isValid = false;
+      }
       break;
     case 3:
       isValid = checkRequired('plotArea', 'err-plotArea', showErrors) && isValid;

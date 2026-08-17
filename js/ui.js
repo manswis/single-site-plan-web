@@ -357,7 +357,24 @@ function detectGPSLocation() {
  * @returns {void}
  */
 function onGpsCoordsInput() {
-  if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
+  const rawGps = (document.getElementById('gpsCoords')?.value || '').trim();
+  const errEl = document.getElementById('err-gpsCoords');
+  const inp = document.getElementById('gpsCoords');
+
+  if (rawGps) {
+    const coords = typeof parseCoordinates === 'function' ? parseCoordinates(rawGps) : null;
+    if (!coords && rawGps.length >= 3) {
+      if (errEl) errEl.style.display = 'block';
+      if (inp) inp.classList.add('error');
+    } else {
+      if (errEl) errEl.style.display = 'none';
+      if (inp) inp.classList.remove('error');
+    }
+  } else {
+    if (errEl) errEl.style.display = 'none';
+    if (inp) inp.classList.remove('error');
+  }
+
   syncGpsZoomControls();
   if (typeof saveDraft === 'function') saveDraft();
   if (typeof generatePlan === 'function') generatePlan();
