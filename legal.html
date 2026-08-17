@@ -179,10 +179,14 @@
               <strong>Zero Automated Background Storage:</strong> e-Plan Studio operates on a strict zero-telemetry and
               offline-first architectural paradigm. Under no circumstances does the application automatically collect,
               ingest, track, scrape, or transmit property survey numbers, eKhata identifiers, owner names, site
-              dimensions, CAD geometry coordinates, or session drafts. All computational drafting, mathematical setback
+              dimensions, GPS coordinates, CAD geometry coordinates, or session drafts. All computational drafting, mathematical setback
               evaluations, session draft persistence, and PDF rendering executions occur entirely within the
               <strong>local client-side storage (device LocalStorage and browser cache memory)</strong> of your own
               device, strictly isolated from remote servers.
+            </p>
+            <p style="margin: 0 0 10px 0; color: var(--apple-text-primary);">
+              <strong>Client-Side Geolocation & Map Imagery Privacy:</strong> Use of GPS coordinates, HTML5 browser geolocation ("Locate Me"),
+              and the interactive map picker ("Pick on Map") is entirely optional. When activated by the user, coordinate calculations and Web Mercator tile index conversions are executed 100% locally within your browser sandbox. Public map tiles are requested directly by the client browser from OpenStreetMap / CartoDB tile CDNs solely to render the visual Key Plan thumbnail. No location histories, device GPS readings, or site coordinates are logged, retained, or transmitted to any developer server or centralized database.
             </p>
             <p style="margin: 0; color: var(--apple-text-primary);">
               <strong>Strictly Manual Voluntary Helpdesk Transmission:</strong> Remote cloud database retention occurs
