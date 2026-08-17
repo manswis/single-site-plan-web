@@ -1001,6 +1001,13 @@ function updateKeyPlan() {
       mapImg.src = mapUrl;
     }
 
+    const step2PreviewImg = document.getElementById('step2MapPreviewImg');
+    if (step2PreviewImg && step2PreviewImg.getAttribute('data-loaded-coords') !== cacheKey) {
+      step2PreviewImg.setAttribute('data-loaded-coords', cacheKey);
+      step2PreviewImg.style.display = 'block';
+      step2PreviewImg.src = mapUrl;
+    }
+
     gpsBadge.textContent = `📍 GPS: ${formattedText}`;
     mapWrapper.style.display = 'block';
     if (svg) svg.style.display = 'none';
