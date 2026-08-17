@@ -62,15 +62,15 @@ function generatePlan() {
   if (!isOdd) {
     const regNS = parseFloat(document.getElementById('regNorthSouth')?.value) || 30;
     const regEW = parseFloat(document.getElementById('regEastWest')?.value) || 40;
-    if (sideN <= 0) sideN = regNS;
-    if (sideS <= 0) sideS = regNS;
-    if (sideE <= 0) sideE = regEW;
-    if (sideW <= 0) sideW = regEW;
+    if (sideN <= 0) sideN = regEW;
+    if (sideS <= 0) sideS = regEW;
+    if (sideE <= 0) sideE = regNS;
+    if (sideW <= 0) sideW = regNS;
   } else {
-    if (sideN <= 0) sideN = 30;
-    if (sideS <= 0) sideS = 30;
-    if (sideE <= 0) sideE = 40;
-    if (sideW <= 0) sideW = 40;
+    if (sideN <= 0) sideN = 40;
+    if (sideS <= 0) sideS = 40;
+    if (sideE <= 0) sideE = 30;
+    if (sideW <= 0) sideW = 30;
   }
 
   const width = (sideN + sideS) / 2;
@@ -79,6 +79,13 @@ function generatePlan() {
   const roadW = parseFloat(document.getElementById('roadWidth')?.value) || 30;
   const roadFace = (document.getElementById('roadFacing')?.value || '').trim() || 'north';
   const scale = document.getElementById('scale')?.value || '1:100';
+
+  // Read Site / Plot Number
+  const rawPlotNo = (document.getElementById('plotNo')?.value || '').trim();
+  let displayPlotNo = '';
+  if (rawPlotNo) {
+    displayPlotNo = /^(site|plot)\b/i.test(rawPlotNo) ? rawPlotNo.toUpperCase() : `SITE NO. ${rawPlotNo.toUpperCase()}`;
+  }
 
   // Read Custom Building Setback Values (ft)
   const setbackF = parseFloat(document.getElementById('setbackFront')?.value) || 0;
@@ -108,6 +115,42 @@ function generatePlan() {
   };
 
   /**
+   * Formats adjacent plot/property description with clean, professional labels.
+   * @param {string} desc - Raw user-entered text.
+   * @param {string} type - Boundary category type.
+   * @returns {string} Formatted boundary callout text.
+   */
+  function formatAdjacentBoundaryText(desc, type) {
+    if (!desc) {
+      return `Adjacent: ${getDefaultLabel(type)}`;
+    }
+    const trimmed = desc.trim();
+    if (type === 'plot') {
+      // If user entered only digits or alphanumeric plot identifiers (e.g. "40", "40/A", "40-B")
+      if (/^[\d]+[\w\/-]*$/.test(trimmed)) {
+        return `Adjacent Plot No. ${trimmed}`;
+      }
+      if (/^(plot|site|plot no|site no|plot no\.|site no\.)\b/i.test(trimmed)) {
+        return `Adjacent ${trimmed}`;
+      }
+      if (/^adjacent\b/i.test(trimmed)) {
+        return trimmed;
+      }
+      return `Adjacent Plot: ${trimmed}`;
+    } else if (type === 'private') {
+      if (/^[\d]+[\w\/-]*$/.test(trimmed)) {
+        return `Adjacent Private Property No. ${trimmed}`;
+      }
+      if (/^adjacent\b/i.test(trimmed)) {
+        return trimmed;
+      }
+      return `Adjacent: ${trimmed}`;
+    }
+    if (/^adjacent\b/i.test(trimmed)) return trimmed;
+    return `Adjacent: ${trimmed}`;
+  }
+
+  /**
    * Helper function to extract boundary metadata.
    * @param {string} dir - Direction key ('North', 'South', 'East', 'West').
    * @returns {Object} Boundary information object.
@@ -135,8 +178,9 @@ function generatePlan() {
       return { type: 'road', text: `${name.toUpperCase()} (${formatFeetInches(w)} [${meterW} M] WIDE)`, roadW: w, name: name };
     } else {
       const descEl = document.getElementById(`descPlot${dir}`);
-      const desc = descEl && descEl.value.trim() ? descEl.value.trim() : getDefaultLabel(type);
-      return { type: type, text: `Adjacent: ${desc}` };
+      const rawDesc = descEl && descEl.value.trim() ? descEl.value.trim() : '';
+      const formattedText = formatAdjacentBoundaryText(rawDesc, type);
+      return { type: type, text: formattedText };
     }
   }
 
@@ -233,6 +277,8 @@ function generatePlan() {
   document.getElementById('luTotalArea').textContent = totalAreaSqM.toFixed(2);
 
   // 6. Populate Sidebar Panel 8: Title Block
+  const tbPlotEl = document.getElementById('tbPlotNo');
+  if (tbPlotEl) tbPlotEl.textContent = displayPlotNo || rawPlotNo || '—';
   document.getElementById('tbPidNo').textContent = pidNo;
   document.getElementById('tbWard').textContent = `Ward ${wardNo} (${wardName})`;
   document.getElementById('tbZone').textContent = `${zone} Zone`;
@@ -397,6 +443,7 @@ function generatePlan() {
   const setbackRect = document.getElementById('setbackRect');
   const bldgTitle = document.getElementById('bldgTitle');
   const bldgDimText = document.getElementById('bldgDimText');
+  const plotNoCenterEl = document.getElementById('plotNoCenterText');
 
   if (!hasBuilding) {
     // Vacant Plot / Open Site: Zero setbacks, zero building footprint
@@ -408,15 +455,42 @@ function generatePlan() {
     document.getElementById('setbackE').textContent = '';
     document.getElementById('setbackW').textContent = '';
 
-    if (bldgTitle) {
-      bldgTitle.setAttribute('x', offsetX + drawW / 2);
-      bldgTitle.setAttribute('y', offsetY + drawH / 2 - 4);
-      bldgTitle.textContent = 'VACANT PLOT';
-    }
-    if (bldgDimText) {
-      bldgDimText.setAttribute('x', offsetX + drawW / 2);
-      bldgDimText.setAttribute('y', offsetY + drawH / 2 + 14);
-      bldgDimText.textContent = `(OPEN SITE: ${areaSqFt} SQ.FT)`;
+    if (displayPlotNo && plotNoCenterEl) {
+      plotNoCenterEl.style.display = 'block';
+      plotNoCenterEl.setAttribute('x', offsetX + drawW / 2);
+      plotNoCenterEl.setAttribute('y', offsetY + drawH / 2 - 14);
+      plotNoCenterEl.setAttribute('font-size', '13');
+      plotNoCenterEl.textContent = displayPlotNo;
+
+      if (bldgTitle) {
+        bldgTitle.setAttribute('x', offsetX + drawW / 2);
+        bldgTitle.setAttribute('y', offsetY + drawH / 2 + 3);
+        bldgTitle.setAttribute('font-size', '11');
+        bldgTitle.textContent = 'VACANT PLOT';
+      }
+      if (bldgDimText) {
+        bldgDimText.setAttribute('x', offsetX + drawW / 2);
+        bldgDimText.setAttribute('y', offsetY + drawH / 2 + 18);
+        bldgDimText.setAttribute('font-size', '9.5');
+        bldgDimText.textContent = `(OPEN SITE: ${areaSqFt} SQ.FT)`;
+      }
+    } else {
+      if (plotNoCenterEl) {
+        plotNoCenterEl.style.display = 'none';
+        plotNoCenterEl.textContent = '';
+      }
+      if (bldgTitle) {
+        bldgTitle.setAttribute('x', offsetX + drawW / 2);
+        bldgTitle.setAttribute('y', offsetY + drawH / 2 - 4);
+        bldgTitle.setAttribute('font-size', '13');
+        bldgTitle.textContent = 'VACANT PLOT';
+      }
+      if (bldgDimText) {
+        bldgDimText.setAttribute('x', offsetX + drawW / 2);
+        bldgDimText.setAttribute('y', offsetY + drawH / 2 + 14);
+        bldgDimText.setAttribute('font-size', '11');
+        bldgDimText.textContent = `(OPEN SITE: ${areaSqFt} SQ.FT)`;
+      }
     }
   } else {
     // Constructed Structure: Render Blue Hatched Footprint strictly bounded inside plot
@@ -512,14 +586,37 @@ function generatePlan() {
     // Interior Building Footprint Text
     if (bldgTitle && bldgDimText) {
       const isNarrow = Math.min(sideN, sideS) < 25;
-      bldgTitle.setAttribute('x', bldgX + bldgDrawW / 2);
-      bldgTitle.setAttribute('y', bldgY + bldgDrawH / 2 - 6);
-      bldgTitle.setAttribute('font-size', isNarrow ? '10' : '13');
-      bldgTitle.textContent = (bldgType && bldgType !== 'Residential' ? bldgType.toUpperCase() : 'EXISTING BUILDING');
-      bldgDimText.setAttribute('x', bldgX + bldgDrawW / 2);
-      bldgDimText.setAttribute('y', bldgY + bldgDrawH / 2 + 10);
-      bldgDimText.setAttribute('font-size', isNarrow ? '9' : '11');
-      bldgDimText.textContent = `${formatFeetInches(bldgRenderW)} × ${formatFeetInches(bldgRenderH)}`;
+      if (displayPlotNo && plotNoCenterEl) {
+        plotNoCenterEl.style.display = 'block';
+        plotNoCenterEl.setAttribute('x', bldgX + bldgDrawW / 2);
+        plotNoCenterEl.setAttribute('y', bldgY + bldgDrawH / 2 - 15);
+        plotNoCenterEl.setAttribute('font-size', isNarrow ? '9' : '11');
+        plotNoCenterEl.textContent = displayPlotNo;
+
+        bldgTitle.setAttribute('x', bldgX + bldgDrawW / 2);
+        bldgTitle.setAttribute('y', bldgY + bldgDrawH / 2 + 1);
+        bldgTitle.setAttribute('font-size', isNarrow ? '8.5' : '10.5');
+        bldgTitle.textContent = (bldgType && bldgType !== 'Residential' ? bldgType.toUpperCase() : 'EXISTING BUILDING');
+
+        bldgDimText.setAttribute('x', bldgX + bldgDrawW / 2);
+        bldgDimText.setAttribute('y', bldgY + bldgDrawH / 2 + 16);
+        bldgDimText.setAttribute('font-size', isNarrow ? '8' : '9.5');
+        bldgDimText.textContent = `${formatFeetInches(bldgRenderW)} × ${formatFeetInches(bldgRenderH)}`;
+      } else {
+        if (plotNoCenterEl) {
+          plotNoCenterEl.style.display = 'none';
+          plotNoCenterEl.textContent = '';
+        }
+        bldgTitle.setAttribute('x', bldgX + bldgDrawW / 2);
+        bldgTitle.setAttribute('y', bldgY + bldgDrawH / 2 - 6);
+        bldgTitle.setAttribute('font-size', isNarrow ? '10' : '13');
+        bldgTitle.textContent = (bldgType && bldgType !== 'Residential' ? bldgType.toUpperCase() : 'EXISTING BUILDING');
+
+        bldgDimText.setAttribute('x', bldgX + bldgDrawW / 2);
+        bldgDimText.setAttribute('y', bldgY + bldgDrawH / 2 + 10);
+        bldgDimText.setAttribute('font-size', isNarrow ? '9' : '11');
+        bldgDimText.textContent = `${formatFeetInches(bldgRenderW)} × ${formatFeetInches(bldgRenderH)}`;
+      }
     }
   }
 

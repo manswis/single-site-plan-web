@@ -31,18 +31,18 @@ function toggleOddSite() {
     if (irregControls) irregControls.style.display = 'grid';
     if (hintEl) hintEl.textContent = '🔷 Irregular Site Mode: Enter exact independent measurements for all 4 sides.';
 
-    if (nEl && !nEl.value && regNS) nEl.value = regNS.value;
-    if (sEl && !sEl.value && regNS) sEl.value = regNS.value;
-    if (eEl && !eEl.value && regEW) eEl.value = regEW.value;
-    if (wEl && !wEl.value && regEW) wEl.value = regEW.value;
+    if (nEl && !nEl.value && regEW) nEl.value = regEW.value;
+    if (sEl && !sEl.value && regEW) sEl.value = regEW.value;
+    if (eEl && !eEl.value && regNS) eEl.value = regNS.value;
+    if (wEl && !wEl.value && regNS) wEl.value = regNS.value;
   } else {
-    // Regular Mode: Show 2 clean fields (North/South & East/West)
+    // Regular Mode: Show 2 clean fields (East/West Depth & North/South Frontage)
     if (regControls) regControls.style.display = 'grid';
     if (irregControls) irregControls.style.display = 'none';
-    if (hintEl) hintEl.textContent = 'Rectangular Mode (Default): Enter North/South width and East/West length.';
+    if (hintEl) hintEl.textContent = 'Rectangular Mode (Default): Enter East/West depth and North/South frontage.';
 
-    if (regNS && nEl) regNS.value = nEl.value || (sEl ? sEl.value : '');
-    if (regEW && eEl) regEW.value = eEl.value || (wEl ? wEl.value : '');
+    if (regEW && nEl) regEW.value = nEl.value || (sEl ? sEl.value : '');
+    if (regNS && eEl) regNS.value = eEl.value || (wEl ? wEl.value : '');
 
     onRegularDimensionInput();
   }
@@ -70,10 +70,13 @@ function onRegularDimensionInput() {
   const eEl = document.getElementById('sideEast');
   const wEl = document.getElementById('sideWest');
 
-  if (nEl) nEl.value = nsVal;
-  if (sEl) sEl.value = nsVal;
-  if (eEl) eEl.value = ewVal;
-  if (wEl) wEl.value = ewVal;
+  // East-to-West measurement sets the length of North and South boundary lines (horizontal depth)
+  if (nEl) nEl.value = ewVal;
+  if (sEl) sEl.value = ewVal;
+
+  // North-to-South measurement sets the length of East and West boundary lines (vertical frontage)
+  if (eEl) eEl.value = nsVal;
+  if (wEl) wEl.value = nsVal;
 
   // Auto-calculate plot area if non-empty and user hasn't explicitly overridden it
   const areaInput = document.getElementById('plotArea');
@@ -259,13 +262,13 @@ function autoCalculateSetbacks(force = false) {
     east = parseFloat(document.getElementById('sideEast')?.value) || 0;
     west = parseFloat(document.getElementById('sideWest')?.value) || 0;
   } else {
-    north = south = parseFloat(document.getElementById('regNorthSouth')?.value) || 0;
-    east = west = parseFloat(document.getElementById('regEastWest')?.value) || 0;
+    east = west = parseFloat(document.getElementById('regNorthSouth')?.value) || 0;
+    north = south = parseFloat(document.getElementById('regEastWest')?.value) || 0;
   }
 
   // For irregular plots, use the shorter side measurement to bound setback clearance
-  const spanNS = isOdd ? Math.min(north, south) : Math.max(north, south);
-  const spanEW = isOdd ? Math.min(east, west) : Math.max(east, west);
+  const spanNS = isOdd ? Math.min(east, west) : Math.max(east, west);
+  const spanEW = isOdd ? Math.min(north, south) : Math.max(north, south);
 
   if (spanNS <= 0 && spanEW <= 0) return;
 
@@ -404,12 +407,12 @@ function validateBuildingSetbackFeasibility() {
     east = parseFloat(document.getElementById('sideEast')?.value) || 0;
     west = parseFloat(document.getElementById('sideWest')?.value) || 0;
   } else {
-    north = south = parseFloat(document.getElementById('regNorthSouth')?.value) || 0;
-    east = west = parseFloat(document.getElementById('regEastWest')?.value) || 0;
+    east = west = parseFloat(document.getElementById('regNorthSouth')?.value) || 0;
+    north = south = parseFloat(document.getElementById('regEastWest')?.value) || 0;
   }
 
-  const spanNS = isOdd ? Math.min(north, south) : Math.max(north, south);
-  const spanEW = isOdd ? Math.min(east, west) : Math.max(east, west);
+  const spanNS = isOdd ? Math.min(east, west) : Math.max(east, west);
+  const spanEW = isOdd ? Math.min(north, south) : Math.max(north, south);
 
   const maxPlotSpan = Math.max(spanNS, spanEW);
 
@@ -808,6 +811,7 @@ function buildReviewSummary() {
       step: 2,
       fields: [
         { id: 'address', label: 'Property Address' },
+        { id: 'plotNo', label: 'Site / Plot Number' },
         { id: 'wardName', label: 'Ward / Area Name' },
         { id: 'bbmpZone', label: 'BBMP Zone' }
       ]
@@ -827,8 +831,8 @@ function buildReviewSummary() {
           { id: 'sideEast', label: 'East Side Dimension', isFtIn: true },
           { id: 'sideWest', label: 'West Side Dimension', isFtIn: true }
         ] : [
-          { id: 'regNorthSouth', label: 'North-South Dimension', isFtIn: true },
-          { id: 'regEastWest', label: 'East-West Dimension', isFtIn: true }
+          { id: 'regEastWest', label: 'East–West Span (North & South Boundaries)', isFtIn: true },
+          { id: 'regNorthSouth', label: 'North–South Span (East & West Boundaries / Frontage)', isFtIn: true }
         ])
       ]
     },

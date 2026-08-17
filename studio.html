@@ -252,6 +252,11 @@
             <div class="error-msg" id="err-surveyNo">⚠ Survey number is required</div>
           </div>
           <div class="field">
+            <label>Site / Plot Number <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
+            <input id="plotNo" type="text" placeholder="e.g. 39 or Site No. 42"
+              oninput="clearFieldError('plotNo', 'err-plotNo')">
+          </div>
+          <div class="field">
             <label>BBMP Zone <span class="required">*</span> <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('zoneName')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
@@ -372,10 +377,33 @@
           </div>
         </div>
 
-        <!-- Regular Site Mode: 2 Clean Fields (North/South & East/West) -->
+        <!-- Regular Site Mode: 2 Clean Fields (East/West Depth & North/South Frontage) -->
         <div id="regularSiteControls" class="grid" style="margin-top: 16px;">
           <div class="field">
-            <label>↔️ North & South Side (Width) <span class="required">*</span> <button type="button"
+            <label>↔️ East–West (ಪೂರ್ವ-ಪಶ್ಚಿಮ) Span <span class="required">*</span> <button type="button"
+                class="field-help-btn" onclick="showFieldHelp('plotDimensions')" title="Help & Where to find"><svg
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+                </svg></button></label>
+            <div class="ft-in-wrapper">
+              <div class="ft-segment">
+                <input id="regEastWest_ft" type="number" min="0" placeholder="50" class="ft-num-input"
+                  oninput="onFtInInput('regEastWest')">
+                <span class="unit-symbol">ft</span>
+              </div>
+              <div class="in-segment">
+                <input id="regEastWest_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
+                  oninput="onFtInInput('regEastWest')">
+                <span class="unit-symbol">in</span>
+              </div>
+              <input id="regEastWest" type="hidden">
+            </div>
+            <div class="error-msg" id="err-regEastWest">⚠ East & West side measurement is required</div>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Horizontal span (depth): Applies to both North & South boundary lines.</p>
+          </div>
+          <div class="field">
+            <label>↕️ North–South (ಉತ್ತರ-ದಕ್ಷಿಣ) Span <span class="required">*</span> <button type="button"
                 class="field-help-btn" onclick="showFieldHelp('plotDimensions')" title="Help & Where to find"><svg
                   viewBox="0 0 24 24">
                   <path
@@ -395,32 +423,7 @@
               <input id="regNorthSouth" type="hidden">
             </div>
             <div class="error-msg" id="err-regNorthSouth">⚠ North & South side measurement is required</div>
-            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both
-              North & South boundaries (2-side regular plot).</p>
-          </div>
-          <div class="field">
-            <label>↕️ East & West Side (Length) <span class="required">*</span> <button type="button"
-                class="field-help-btn" onclick="showFieldHelp('plotDimensions')" title="Help & Where to find"><svg
-                  viewBox="0 0 24 24">
-                  <path
-                    d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
-                </svg></button></label>
-            <div class="ft-in-wrapper">
-              <div class="ft-segment">
-                <input id="regEastWest_ft" type="number" min="0" placeholder="40" class="ft-num-input"
-                  oninput="onFtInInput('regEastWest')">
-                <span class="unit-symbol">ft</span>
-              </div>
-              <div class="in-segment">
-                <input id="regEastWest_in" type="number" min="0" max="11" placeholder="0" class="in-num-input"
-                  oninput="onFtInInput('regEastWest')">
-                <span class="unit-symbol">in</span>
-              </div>
-              <input id="regEastWest" type="hidden">
-            </div>
-            <div class="error-msg" id="err-regEastWest">⚠ East & West side measurement is required</div>
-            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Applies equally to both
-              East & West boundaries (2-side regular plot).</p>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Vertical span / frontage: Applies to both East & West boundary lines.</p>
           </div>
         </div>
 
@@ -1177,6 +1180,10 @@
                 <text id="labelSideW" x="164" y="230" text-anchor="middle" font-size="10" fill="#1e3a5f"
                   font-weight="700" transform="rotate(-90, 164, 230)" style="display:none;">WEST: 60'-0"</text>
 
+                <!-- Plot Site Number Center Label -->
+                <text id="plotNoCenterText" x="330" y="205" text-anchor="middle" font-size="12" fill="#0f172a"
+                  font-weight="800" letter-spacing="0.5" style="display:none;"></text>
+
                 <!-- Building Interior Footprint Text -->
                 <text id="bldgTitle" x="330" y="220" text-anchor="middle" font-size="10" fill="#1d4ed8"
                   font-weight="700">EXISTING BUILDING</text>
@@ -1398,6 +1405,10 @@
                   <tr>
                     <td class="tb-label">Plan Title</td>
                     <td>Single Plot Layout Plan</td>
+                  </tr>
+                  <tr>
+                    <td class="tb-label">Plot / Site No</td>
+                    <td id="tbPlotNo">—</td>
                   </tr>
                   <tr>
                     <td class="tb-label">PID No</td>
