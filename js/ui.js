@@ -243,7 +243,7 @@ function detectGPSLocation() {
 
   if (btn) {
     btn.disabled = true;
-    btn.textContent = '📍 Locating...';
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; animation: spin 1s linear infinite;">sync</span> <span>Locating...</span>';
   }
 
   navigator.geolocation.getCurrentPosition(
@@ -256,8 +256,10 @@ function detectGPSLocation() {
       }
       if (btn) {
         btn.disabled = false;
-        btn.textContent = '✓ Located';
-        setTimeout(() => { btn.textContent = '📍 Locate Me'; }, 3000);
+        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: #10b981;">check</span> <span>Located</span>';
+        setTimeout(() => {
+          btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">my_location</span> <span>Locate Me</span>';
+        }, 3000);
       }
       if (typeof saveDraft === 'function') saveDraft();
       if (typeof generatePlan === 'function') generatePlan();
@@ -266,7 +268,7 @@ function detectGPSLocation() {
       console.warn('Geolocation error:', err.message);
       if (btn) {
         btn.disabled = false;
-        btn.textContent = '📍 Locate Me';
+        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">my_location</span> <span>Locate Me</span>';
       }
       alert('Could not detect location. Please enter Latitude & Longitude manually (e.g. 12.9716, 77.5946).');
     },

@@ -6157,3 +6157,91 @@ body.pdf-export-active .drawing-canvas-column,
   filter: grayscale(15%);
   transition: opacity 0.25s ease, filter 0.25s ease;
 }
+
+/* ==========================================================================
+   Responsive GPS Coordinates Input & Action Buttons
+   ========================================================================== */
+.gps-input-group {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.gps-input-group input {
+  flex: 1;
+  min-width: 0;
+  height: 42px;
+  border-radius: 10px;
+}
+
+.gps-action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.gps-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 42px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.gps-action-btn:hover {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: var(--apple-accent);
+  color: var(--apple-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.12);
+}
+
+.gps-action-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+[data-theme="dark"] .gps-action-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .gps-action-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+  color: #60a5fa;
+}
+
+/* Mobile Layout (< 640px) */
+@media (max-width: 639px) {
+  .gps-input-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .gps-action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    gap: 8px;
+  }
+  .gps-action-btn {
+    width: 100%;
+    height: 44px;
+    font-size: 13px;
+    border-radius: 12px;
+    padding: 0 10px;
+  }
+}
