@@ -339,7 +339,12 @@
           </div>
           <div class="field">
             <label>Site / Plot Number <span
-                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
+                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
+                type="button" class="field-help-btn" onclick="showFieldHelp('plotNo')" title="Help & Where to find"><svg
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+                </svg></button></label>
             <input id="plotNo" type="text" placeholder="e.g. 39 or Site No. 42"
               oninput="clearFieldError('plotNo', 'err-plotNo')">
           </div>
@@ -389,7 +394,12 @@
           </div>
           <div class="field" style="grid-column: span 2;">
             <label style="margin-bottom: 6px;">GPS Coordinates (Latitude, Longitude) <span
-                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
+                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
+                type="button" class="field-help-btn" onclick="showFieldHelp('gpsCoords')" title="Help & Where to find"><svg
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+                </svg></button></label>
             <div class="gps-input-group">
               <input id="gpsCoords" type="text" placeholder="e.g. 12.9716, 77.5946" oninput="onGpsCoordsInput()">
               <div class="gps-action-buttons">

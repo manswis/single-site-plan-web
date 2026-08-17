@@ -1404,6 +1404,19 @@ const FIELD_HELP_DATA = {
     what: "The full physical street address of your property.",
     where: "Type the address exactly as written under the Schedule of Property in your registered Sale Deed."
   },
+  plotNo: {
+    title: "Site / Plot Number (Optional)",
+    what: "The specific residential or commercial site number assigned to your plot within the approved layout or revenue sub-division.",
+    where: "Printed in the Schedule of Property in your registered Sale Deed or layout sanction plan (e.g. Site No. 38, Plot #12).",
+    sample: "Site No: 38 (or Plot No. 12B)"
+  },
+  gpsCoords: {
+    title: "Site GPS Coordinates & Locational Key Plan",
+    what: "The geographic latitude and longitude of your property in Bengaluru. Automatically embeds a high-resolution locational map thumbnail with a dropped pin marker into Key Plan Panel 2.",
+    where: "Click 'Pick on Map' to search/drag pin anywhere in Bengaluru, click 'Locate Me' to auto-detect if on-site, or copy-paste decimal coordinates/Google Maps links.",
+    sample: "Coordinates: 12.9716, 77.5946 (or 12°58'17.8\"N 77°35'40.4\"E)",
+    note: "100% Optional. If left blank, the drawing automatically renders a classic CAD vector schematic sketch."
+  },
   surveyNo: {
     title: "Survey Number / Sy No",
     what: "The official revenue survey number or site/house number of your plot.",
