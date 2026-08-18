@@ -457,37 +457,68 @@ function validateProjectFilePayload(data) {
     return { isValid: false, errors: ['Missing formData configuration in project file.'] };
   }
 
-  // 1. Plot Area Validation (must be positive number if provided)
-  if (formData.plotArea !== undefined && formData.plotArea !== '') {
+  // 1. Mandatory Core Identity & Revenue Fields
+  if (!formData.ownerName || String(formData.ownerName).trim() === '') {
+    errors.push("Missing mandatory field 'ownerName': Owner Name is required.");
+  }
+  if (!formData.epId || String(formData.epId).trim() === '') {
+    errors.push("Missing mandatory field 'epId': eKhata ID (ePID) is required.");
+  }
+
+  // 2. Mandatory Location & Property Administration Fields
+  if (!formData.surveyNo || String(formData.surveyNo).trim() === '') {
+    errors.push("Missing mandatory field 'surveyNo': Survey / Sy No is required.");
+  }
+  if (!formData.bbmpZone || String(formData.bbmpZone).trim() === '') {
+    errors.push("Missing mandatory field 'bbmpZone': BBMP Administrative Zone is required.");
+  }
+  if (!formData.wardNo || String(formData.wardNo).trim() === '') {
+    errors.push("Missing mandatory field 'wardNo': Ward Number is required.");
+  }
+  if (!formData.wardName || String(formData.wardName).trim() === '') {
+    errors.push("Missing mandatory field 'wardName': Ward / Area Name is required.");
+  }
+  if (!formData.address || String(formData.address).trim() === '') {
+    errors.push("Missing mandatory field 'address': Property Site Address is required.");
+  }
+
+  // 3. Mandatory Plot Measurements & Geometry
+  if (formData.plotArea === undefined || formData.plotArea === '' || String(formData.plotArea).trim() === '') {
+    errors.push("Missing mandatory field 'plotArea': Total Plot Area is required.");
+  } else {
     const area = parseFloat(formData.plotArea);
     if (isNaN(area) || area <= 0) {
       errors.push("Invalid parameter 'plotArea': Total Plot Area must be a positive number (> 0 sq.ft).");
     } else if (area > 500000) {
-      errors.push("Invalid parameter 'plotArea': Total Plot Area exceeds single-plot limit (500,000 sq.ft).");
+      errors.push("Invalid parameter 'plotArea': Total Plot Area exceeds single-plot threshold (500,000 sq.ft).");
     }
   }
 
-  // 2. Road Width Validation
-  if (formData.roadWidth !== undefined && formData.roadWidth !== '') {
+  if (formData.roadWidth === undefined || formData.roadWidth === '' || String(formData.roadWidth).trim() === '') {
+    errors.push("Missing mandatory field 'roadWidth': Road Width is required.");
+  } else {
     const rw = parseFloat(formData.roadWidth);
     if (isNaN(rw) || rw <= 0) {
       errors.push("Invalid parameter 'roadWidth': Road Width must be a positive number (> 0 ft).");
     }
   }
 
-  // 3. Road Facing Direction Validation
-  if (formData.roadFacing) {
+  if (!formData.roadFacing || String(formData.roadFacing).trim() === '') {
+    errors.push("Missing mandatory field 'roadFacing': Road Facing Direction is required.");
+  } else {
     const validFacings = ['North', 'South', 'East', 'West', 'NORTH', 'SOUTH', 'EAST', 'WEST'];
     if (!validFacings.includes(formData.roadFacing)) {
       errors.push(`Invalid parameter 'roadFacing': received '${formData.roadFacing}', expected one of [North, South, East, West].`);
     }
   }
 
-  // 4. Plot Dimensions Validation (Odd vs Regular)
+  // 4. Mandatory Plot Dimensions (Regular vs Odd site)
   const isOdd = !!formData.oddSiteCheck;
   if (isOdd) {
     ['sideNorth', 'sideSouth', 'sideEast', 'sideWest'].forEach(side => {
-      if (formData[side] !== undefined && formData[side] !== '') {
+      if (formData[side] === undefined || formData[side] === '' || String(formData[side]).trim() === '') {
+        errors.push(`Missing mandatory parameter '${side}': 4-side irregular plot dimension is required.`);
+      } else {
         const val = parseFloat(formData[side]);
         if (isNaN(val) || val <= 0) {
           errors.push(`Invalid parameter '${side}': Dimension measurement must be greater than 0 ft.`);
@@ -496,7 +527,9 @@ function validateProjectFilePayload(data) {
     });
   } else {
     ['regNorthSouth', 'regEastWest'].forEach(dim => {
-      if (formData[dim] !== undefined && formData[dim] !== '') {
+      if (formData[dim] === undefined || formData[dim] === '' || String(formData[dim]).trim() === '') {
+        errors.push(`Missing mandatory parameter '${dim}': Plot length/width measurement is required for regular plots.`);
+      } else {
         const val = parseFloat(formData[dim]);
         if (isNaN(val) || val <= 0) {
           errors.push(`Invalid parameter '${dim}': Plot length/width measurement must be greater than 0 ft.`);
@@ -505,7 +538,33 @@ function validateProjectFilePayload(data) {
     });
   }
 
-  // 5. Building Setbacks Validation
+  // 5. Mandatory Boundary Types
+  ['typeNorth', 'typeSouth', 'typeEast', 'typeWest'].forEach(dir => {
+    if (!formData[dir] || String(formData[dir]).trim() === '') {
+      errors.push(`Missing mandatory boundary '${dir}': Abutting boundary type is required.`);
+    }
+  });
+
+  // 6. Conditional Road Widening & Buffer Zone
+  if (formData.roadWideningCheck) {
+    if (!formData.proposedRoadWidth || parseFloat(formData.proposedRoadWidth) <= 0) {
+      errors.push("Missing or invalid parameter 'proposedRoadWidth': Proposed Road Width must be > 0 ft when Road Widening is enabled.");
+    }
+    if (formData.roadWideningStripWidth === undefined || parseFloat(formData.roadWideningStripWidth) < 0) {
+      errors.push("Missing or invalid parameter 'roadWideningStripWidth': Widening Strip Width is required and cannot be negative.");
+    }
+  }
+
+  if (formData.bufferCheck) {
+    if (!formData.bufferType || String(formData.bufferType).trim() === '') {
+      errors.push("Missing mandatory field 'bufferType': Buffer Type is required when Buffer Zone is enabled.");
+    }
+    if (!formData.bufferWidth || parseFloat(formData.bufferWidth) <= 0) {
+      errors.push("Missing or invalid parameter 'bufferWidth': Buffer Width must be > 0 ft when Buffer Zone is enabled.");
+    }
+  }
+
+  // 7. Building Setbacks (Optional custom override values must be non-negative)
   ['setbackFront', 'setbackRear', 'setbackLeft', 'setbackRight'].forEach(sb => {
     if (formData[sb] !== undefined && formData[sb] !== '') {
       const val = parseFloat(formData[sb]);
@@ -515,7 +574,7 @@ function validateProjectFilePayload(data) {
     }
   });
 
-  // 6. Number of Floors
+  // 8. Number of Floors
   if (formData.noOfFloors !== undefined && formData.noOfFloors !== '') {
     const floors = parseInt(formData.noOfFloors, 10);
     if (isNaN(floors) || floors < 1 || floors > 25) {
@@ -523,35 +582,11 @@ function validateProjectFilePayload(data) {
     }
   }
 
-  // 7. GPS Coordinates Validation (if supplied)
+  // 9. GPS Coordinates Validation (if supplied)
   if (formData.gpsCoords && typeof parseCoordinates === 'function') {
     const coords = parseCoordinates(String(formData.gpsCoords).trim());
     if (!coords) {
       errors.push(`Invalid parameter 'gpsCoords': '${formData.gpsCoords}' is not a recognized GPS coordinate or Google Maps link.`);
-    }
-  }
-
-  // 8. Road Widening Validation
-  if (formData.roadWideningCheck) {
-    if (formData.proposedRoadWidth) {
-      const prw = parseFloat(formData.proposedRoadWidth);
-      if (isNaN(prw) || prw <= 0) {
-        errors.push("Invalid parameter 'proposedRoadWidth': Proposed Road Width must be a positive number (> 0 ft).");
-      }
-    }
-    if (formData.roadWideningStripWidth) {
-      const strip = parseFloat(formData.roadWideningStripWidth);
-      if (isNaN(strip) || strip < 0) {
-        errors.push("Invalid parameter 'roadWideningStripWidth': Widening Strip Width cannot be negative.");
-      }
-    }
-  }
-
-  // 9. Buffer Zone Validation
-  if (formData.bufferCheck && formData.bufferWidth) {
-    const bw = parseFloat(formData.bufferWidth);
-    if (isNaN(bw) || bw <= 0) {
-      errors.push("Invalid parameter 'bufferWidth': Buffer Zone Width must be a positive number (> 0 ft).");
     }
   }
 
