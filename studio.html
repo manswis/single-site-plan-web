@@ -1385,20 +1385,26 @@
             </div>
           </div>
 
-          <!-- The 3 Core Action Buttons Hub (Icons Removed) -->
+          <!-- The 4 Core Action Buttons Hub -->
           <div class="package-action-buttons-hub"
-            style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
             <button id="generatePlanBtn" class="apple-btn-primary" disabled onclick="onGeneratePlanClick()"
-              style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+              style="height: 46px; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
               <span>Generate Plan</span>
             </button>
             <button id="downloadPdfBtn" class="apple-btn-secondary" disabled onclick="downloadPDFPackage()"
-              style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+              style="height: 46px; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
               <span>Export PDF</span>
             </button>
             <button id="printBtn" class="apple-btn-secondary" disabled onclick="printPlanPackage()"
-              style="height: 46px; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+              style="height: 46px; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
               <span>Print Drawing</span>
+            </button>
+            <button id="reportDrawingBtn" class="apple-btn-secondary" disabled onclick="reportDrawingIssue()"
+              style="height: 46px; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; color: #d97706; border-color: rgba(217, 119, 6, 0.35);">
+              <span class="material-symbols-outlined"
+                style="font-size: 18px; margin-right: 4px; color: #d97706;">flag</span>
+              <span>Report Drawing</span>
             </button>
           </div>
         </div>

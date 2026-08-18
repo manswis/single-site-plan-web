@@ -37,7 +37,59 @@ document.addEventListener('DOMContentLoaded', () => {
   setupTrackingLookup();
   setupSavedTicketsVault();
   checkUrlParamsForTracking();
+  checkDrawingReportPayload();
 });
+
+/**
+ * Checks for drawing report payload sent from Studio Workbench.
+ * Pre-fills the Bug Report form and automatically attaches the sanitized drawing snapshot.
+ */
+function checkDrawingReportPayload() {
+  try {
+    const raw = sessionStorage.getItem('bbmp_drawing_report');
+    if (!raw) return;
+    const payload = JSON.parse(raw);
+    sessionStorage.removeItem('bbmp_drawing_report');
+
+    // 1. Switch to submit tab and activate Bug Report category tile
+    switchTab('submit');
+    const bugTile = document.querySelector('.category-tile[data-type="bug"]');
+    if (bugTile) bugTile.click();
+
+    // 2. Pre-fill Subject
+    const subjInput = document.getElementById('ticketSubject');
+    if (subjInput && payload.subject) {
+      subjInput.value = payload.subject;
+    }
+
+    // 3. Pre-fill Technical Specifications in Description Area
+    const msgArea = document.getElementById('ticketMessage');
+    if (msgArea && payload.techSpecs) {
+      msgArea.value = `[TECHNICAL DRAWING SPECIFICATIONS]\n${payload.techSpecs}\n\n[DESCRIBE THE ISSUE / FEEDBACK]\nPlease explain what is incorrect or what behavior you expected in the drawing:\n`;
+    }
+
+    // 4. Attach Sanitized Drawing Snapshot Image
+    if (payload.sanitizedImage) {
+      const approxByteSize = Math.round((payload.sanitizedImage.length * 3) / 4);
+      currentAttachments.push({
+        name: 'sanitized_drawing_report.png',
+        size: approxByteSize,
+        dataUrl: payload.sanitizedImage
+      });
+      renderAttachmentPreviews();
+    }
+
+    // 5. Scroll smoothly into form
+    setTimeout(() => {
+      const formCard = document.getElementById('ticketFormCard');
+      if (formCard) {
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 150);
+  } catch (err) {
+    console.warn('Error processing drawing report payload:', err);
+  }
+}
 
 // 1. Category Tiles Selection
 function setupCategoryChips() {

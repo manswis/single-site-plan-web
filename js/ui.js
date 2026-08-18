@@ -1459,6 +1459,7 @@ function toggleLegalConsent() {
   const genBtn = document.getElementById('generatePlanBtn');
   const exportBtn = document.getElementById('downloadPdfBtn');
   const printBtn = document.getElementById('printBtn');
+  const reportBtn = document.getElementById('reportDrawingBtn');
   const errConsent = document.getElementById('err-legalConsent');
 
   const isChecked = consent && consent.checked;
@@ -1466,17 +1467,19 @@ function toggleLegalConsent() {
   if (errConsent) errConsent.style.display = 'none';
 
   if (!isChecked) {
-    // Unchecked -> Delete generated plan state and disable all 3 buttons!
+    // Unchecked -> Delete generated plan state and disable all buttons!
     isPlanGenerated = false;
     if (genBtn) genBtn.disabled = true;
     if (exportBtn) exportBtn.disabled = true;
     if (printBtn) printBtn.disabled = true;
+    if (reportBtn) reportBtn.disabled = true;
 
     const viewport = document.getElementById('exportViewportSection');
     if (viewport) viewport.style.display = 'none';
   } else {
-    // Checked -> Enable "Generate Plan", keep Export & Print disabled until plan is generated!
+    // Checked -> Enable "Generate Plan" & "Report Drawing", keep Export & Print disabled until plan is generated!
     if (genBtn) genBtn.disabled = false;
+    if (reportBtn) reportBtn.disabled = false;
     if (exportBtn) exportBtn.disabled = !isPlanGenerated;
     if (printBtn) printBtn.disabled = !isPlanGenerated;
   }
@@ -1511,15 +1514,156 @@ function onGeneratePlanClick() {
   const viewport = document.getElementById('exportViewportSection');
   if (viewport) viewport.style.display = 'block';
 
-  // Enable Export PDF and Print buttons
+  // Enable Export PDF, Print, and Report buttons
   const exportBtn = document.getElementById('downloadPdfBtn');
   const printBtn = document.getElementById('printBtn');
+  const reportBtn = document.getElementById('reportDrawingBtn');
   if (exportBtn) exportBtn.disabled = false;
   if (printBtn) printBtn.disabled = false;
+  if (reportBtn) reportBtn.disabled = false;
 
   // Scroll to drawing preview smoothly
   if (viewport) {
     viewport.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+/**
+ * Sanitizes drawing data (redacts all PII), captures an anonymized drawing snapshot,
+ * compiles technical drawing specifications, and navigates to contact.html to create a support ticket.
+ * 
+ * @function reportDrawingIssue
+ * @returns {Promise<void>}
+ */
+async function reportDrawingIssue() {
+  const btn = document.getElementById('reportDrawingBtn');
+  const originalHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.innerHTML = '<span>⏳ Sanitizing...</span>';
+    btn.disabled = true;
+  }
+
+  try {
+    // 1. Ensure plan is generated in DOM
+    if (typeof generatePlan === 'function') generatePlan();
+
+    // 2. Clone the drawing frame for offscreen sanitization
+    const planFrame = document.querySelector('#planOutput .plan-sheet-frame');
+    if (!planFrame) throw new Error('Drawing frame is not yet initialized.');
+
+    const clone = planFrame.cloneNode(true);
+    clone.style.position = 'fixed';
+    clone.style.left = '-9999px';
+    clone.style.top = '-9999px';
+    clone.style.width = `${planFrame.offsetWidth || 850}px`;
+    clone.style.zIndex = '-1000';
+    document.body.appendChild(clone);
+
+    // 3. Strict PII Redaction Pipeline in clone:
+    // (If field was filled by user -> "[REDACTED]", if empty -> "—")
+    const redactIds = [
+      'outOwner', 'outEpId', 'outSurvey', 'outWard', 'outAddress',
+      'outAdlrNo', 'outHeaderSurvey', 'sbAdlrNo', 'sbMojiniRef',
+      'sbDcOrderNo', 'sbDcOrderDate', 'sbDcAuthority', 'tbPidNo',
+      'tbSurveyNo', 'tbWardNo'
+    ];
+
+    redactIds.forEach(id => {
+      const el = clone.querySelector(`#${id}`);
+      if (el) {
+        const txt = (el.textContent || '').trim();
+        el.textContent = (txt && txt !== '—' && txt !== '-') ? '[REDACTED]' : '—';
+      }
+    });
+
+    const outGpsWrap = clone.querySelector('#outGpsWrap');
+    if (outGpsWrap) outGpsWrap.style.display = 'none';
+
+    // Strip digital signatures and architect seals in clone
+    const panelOwnerImg = clone.querySelector('#panelOwnerSigImg');
+    if (panelOwnerImg) panelOwnerImg.style.display = 'none';
+    const panelArchImg = clone.querySelector('#panelArchSigImg');
+    if (panelArchImg) panelArchImg.style.display = 'none';
+    const panelArchDetails = clone.querySelector('#panelArchDetails');
+    if (panelArchDetails) panelArchDetails.style.display = 'none';
+    const panelArchTitle = clone.querySelector('#panelArchTitle');
+    if (panelArchTitle) panelArchTitle.textContent = 'Architect Seal';
+
+    // 4. Capture sanitized raster image using html2canvas
+    if (!window.html2canvas) throw new Error('html2canvas library is unavailable.');
+
+    const canvas = await html2canvas(clone, {
+      scale: 1.5,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false
+    });
+
+    document.body.removeChild(clone);
+
+    const sanitizedImage = canvas.toDataURL('image/png');
+
+    // 5. Compile Technical Drawing Specifications
+    const isOdd = document.getElementById('oddSiteCheck')?.checked;
+    const plotArea = document.getElementById('plotArea')?.value || '—';
+    const roadWidth = document.getElementById('roadWidth')?.value || '—';
+    const roadFacing = (document.getElementById('roadFacing')?.value || 'North').toUpperCase();
+    const scale = document.getElementById('scale')?.value || '1:100';
+
+    let dims = '';
+    if (isOdd) {
+      const n = document.getElementById('sideNorth')?.value || '0';
+      const s = document.getElementById('sideSouth')?.value || '0';
+      const e = document.getElementById('sideEast')?.value || '0';
+      const w = document.getElementById('sideWest')?.value || '0';
+      dims = `North: ${n}', South: ${s}', East: ${e}', West: ${w}' (Irregular Plot)`;
+    } else {
+      const ew = document.getElementById('regEastWest')?.value || '0';
+      const ns = document.getElementById('regNorthSouth')?.value || '0';
+      dims = `East–West: ${ew}', North–South: ${ns}' (Regular Plot)`;
+    }
+
+    const sbF = document.getElementById('setbackFront')?.value || '0';
+    const sbR = document.getElementById('setbackRear')?.value || '0';
+    const sbL = document.getElementById('setbackLeft')?.value || '0';
+    const sbRt = document.getElementById('setbackRight')?.value || '0';
+
+    const bldgW = document.getElementById('bldgWidth')?.value || '0';
+    const bldgL = document.getElementById('bldgLength')?.value || '0';
+    const bldgArea = document.getElementById('builtUpArea')?.value || '0';
+
+    const isRw = document.getElementById('roadWideningCheck')?.checked;
+    const isBuf = document.getElementById('bufferCheck')?.checked;
+
+    const techSpecs = [
+      `• Plot Dimensions: ${dims}`,
+      `• Plot Area: ${plotArea} sq.ft | Scale: ${scale}`,
+      `• Road Facing: ${roadFacing} (${roadWidth} ft wide road)`,
+      `• Setbacks: Front: ${sbF} ft, Rear: ${sbR} ft, Left: ${sbL} ft, Right: ${sbRt} ft`,
+      `• Building Footprint: ${bldgW} ft × ${bldgL} ft (Built-up Area: ${bldgArea} sq.ft)`,
+      `• Abutting Boundaries: N: ${document.getElementById('typeNorth')?.value || 'plot'}, S: ${document.getElementById('typeSouth')?.value || 'plot'}, E: ${document.getElementById('typeEast')?.value || 'plot'}, W: ${document.getElementById('typeWest')?.value || 'plot'}`,
+      isRw ? `• Road Widening: Proposed ${document.getElementById('proposedRoadWidth')?.value || '0'} ft (Strip: ${document.getElementById('roadWideningStripWidth')?.value || '0'} ft)` : '',
+      isBuf ? `• Buffer Zone: ${document.getElementById('bufferType')?.value || 'Buffer'} (${document.getElementById('bufferWidth')?.value || '0'} ft)` : ''
+    ].filter(Boolean).join('\n');
+
+    // 6. Store sanitized payload in sessionStorage and navigate to Support Desk
+    const reportPayload = {
+      type: 'drawing_report',
+      timestamp: Date.now(),
+      subject: `[Drawing Report] ${plotArea} sq.ft (${roadFacing} Facing Layout)`,
+      techSpecs,
+      sanitizedImage
+    };
+
+    sessionStorage.setItem('bbmp_drawing_report', JSON.stringify(reportPayload));
+    window.location.href = 'contact.html?src=drawing_report';
+  } catch (err) {
+    console.error('Report drawing error:', err);
+    alert('Could not prepare drawing report: ' + err.message);
+    if (btn) {
+      btn.innerHTML = originalHtml;
+      btn.disabled = false;
+    }
   }
 }
 
