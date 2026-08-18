@@ -515,8 +515,9 @@ function validateProjectFilePayload(data) {
   if (!formData.roadFacing || String(formData.roadFacing).trim() === '') {
     errors.push("Missing mandatory field 'roadFacing': Road Facing Direction is required.");
   } else {
-    const validFacings = ['North', 'South', 'East', 'West', 'NORTH', 'SOUTH', 'EAST', 'WEST'];
-    if (!validFacings.includes(formData.roadFacing)) {
+    const facing = String(formData.roadFacing).trim().toLowerCase();
+    const validFacings = ['north', 'south', 'east', 'west'];
+    if (!validFacings.includes(facing)) {
       errors.push(`Invalid parameter 'roadFacing': received '${formData.roadFacing}', expected one of [North, South, East, West].`);
     }
   }
@@ -584,10 +585,13 @@ function validateProjectFilePayload(data) {
   });
 
   // 8. Number of Floors
-  if (formData.noOfFloors !== undefined && formData.noOfFloors !== '') {
-    const floors = parseInt(formData.noOfFloors, 10);
-    if (isNaN(floors) || floors < 1 || floors > 25) {
-      errors.push("Invalid parameter 'noOfFloors': Number of floors must be an integer between 1 and 25.");
+  if (formData.noOfFloors !== undefined && formData.noOfFloors !== null && String(formData.noOfFloors).trim() !== '') {
+    const floorsStr = String(formData.noOfFloors).trim();
+    const validPresets = ['vacant plot', 'stilt + ground', 'g+1', 'g+2', 'g+3', 'g+4', 'g', 'ground', 'stilt', 'none', 'n/a', 'na'];
+    const parsedNum = parseInt(floorsStr, 10);
+    const isNumericValid = !isNaN(parsedNum) && parsedNum >= 0 && parsedNum <= 50;
+    if (!validPresets.includes(floorsStr.toLowerCase()) && !isNumericValid) {
+      errors.push(`Invalid parameter 'noOfFloors': received '${floorsStr}', expected a valid floor configuration (e.g. Vacant Plot, Stilt + Ground, G+1, G+2, etc.).`);
     }
   }
 
@@ -614,11 +618,30 @@ function validateProjectFilePayload(data) {
  * @returns {void}
  */
 function hydrateProjectFormData(formData, targetStep = 7) {
-  // 1. Hydrate text, number, and select fields
+  // 1. Hydrate text, number, and select fields & custom ft-in inputs
   DRAFT_FIELD_IDS.forEach(id => {
     const el = document.getElementById(id);
     if (el && formData[id] !== undefined) {
       el.value = formData[id];
+
+      const ftEl = document.getElementById(id + '_ft');
+      const inEl = document.getElementById(id + '_in');
+      if (ftEl) {
+        const val = formData[id];
+        if (val !== undefined && val !== null && val !== '') {
+          const num = parseFloat(val);
+          if (!isNaN(num) && num >= 0) {
+            const ft = Math.floor(num);
+            const inchesDecimal = (num - ft) * 12;
+            const inches = Math.round(inchesDecimal);
+            ftEl.value = ft;
+            if (inEl) inEl.value = inches > 0 ? inches : '';
+          } else {
+            ftEl.value = '';
+            if (inEl) inEl.value = '';
+          }
+        }
+      }
     }
   });
 
