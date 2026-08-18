@@ -1171,6 +1171,25 @@ function formatBoundarySummary(dir) {
 }
 
 /**
+ * Formats raw GPS input (including Google Maps URLs) into a clean, professional lat/lon string.
+ * @function formatGpsSummary
+ * @returns {string}
+ */
+function formatGpsSummary() {
+  const rawGps = (document.getElementById('gpsCoords')?.value || '').trim();
+  if (!rawGps) return '—';
+  if (typeof parseCoordinates === 'function') {
+    const coords = parseCoordinates(rawGps);
+    if (coords) {
+      const latDir = coords.lat >= 0 ? 'N' : 'S';
+      const lonDir = coords.lon >= 0 ? 'E' : 'W';
+      return `${Math.abs(coords.lat).toFixed(5)}° ${latDir}, ${Math.abs(coords.lon).toFixed(5)}° ${lonDir}`;
+    }
+  }
+  return rawGps;
+}
+
+/**
  * Dynamically builds the formatted property data summary grid for Step 7.
  * 
  * @function buildReviewSummary
@@ -1207,7 +1226,7 @@ function buildReviewSummary() {
       fields: [
         { id: 'address', label: 'Property Address' },
         { id: 'plotNo', label: 'Site / Plot Number' },
-        { id: 'gpsCoords', label: 'GPS Co-ordinates' },
+        { id: 'gpsCoords', label: 'GPS Co-ordinates', customVal: formatGpsSummary() },
         { id: 'wardName', label: 'Ward / Area Name' },
         { id: 'bbmpZone', label: 'BBMP Zone' }
       ]
