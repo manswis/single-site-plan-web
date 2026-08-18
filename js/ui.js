@@ -1038,7 +1038,7 @@ async function downloadPDFPackage() {
     // Ensure all signature & map images are fully decoded before html2canvas captures
     const activeImages = Array.from(document.querySelectorAll('#planOutput img, #legendSheetOutput img'))
       .filter(img => img && img.style.display !== 'none' && img.src);
-    await Promise.all(activeImages.map(img => (img.decode ? img.decode().catch(() => {}) : Promise.resolve())));
+    await Promise.all(activeImages.map(img => (img.decode ? img.decode().catch(() => { }) : Promise.resolve())));
 
     if (!window.jspdf || !window.html2canvas) {
       throw new Error('PDF Export libraries unavailable');
@@ -1578,6 +1578,17 @@ async function reportDrawingIssue() {
 
     const outGpsWrap = clone.querySelector('#outGpsWrap');
     if (outGpsWrap) outGpsWrap.style.display = 'none';
+
+    // Redact Key Plan Map & Location Sketch in clone
+    const keyPlanContainer = clone.querySelector('#keyPlanContainer');
+    if (keyPlanContainer) {
+      keyPlanContainer.innerHTML = `
+        <div style="width: 100%; height: 92px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #64748b; font-size: 8.5px; font-weight: 700; gap: 3px;">
+          <span class="material-symbols-outlined" style="font-size: 18px; color: #94a3b8;">location_off</span>
+          <span>[MAP & GPS LOCATION REDACTED]</span>
+        </div>
+      `;
+    }
 
     // Strip digital signatures and architect seals in clone
     const panelOwnerImg = clone.querySelector('#panelOwnerSigImg');
