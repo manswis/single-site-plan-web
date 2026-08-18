@@ -1035,6 +1035,11 @@ async function downloadPDFPackage() {
     if (typeof generatePlan === 'function') generatePlan();
     toggleLegendSheetPage();
 
+    // Ensure all signature & map images are fully decoded before html2canvas captures
+    const activeImages = Array.from(document.querySelectorAll('#planOutput img, #legendSheetOutput img'))
+      .filter(img => img && img.style.display !== 'none' && img.src);
+    await Promise.all(activeImages.map(img => (img.decode ? img.decode().catch(() => {}) : Promise.resolve())));
+
     if (!window.jspdf || !window.html2canvas) {
       throw new Error('PDF Export libraries unavailable');
     }
@@ -1632,6 +1637,12 @@ let dragStartX = 0;
 let dragStartY = 0;
 let initialPanX = 0;
 let initialPanY = 0;
+let initialPinchDistance = 0;
+let initialPinchZoom = 1.0;
+
+// In-memory raw uncropped image caches to prevent lossy re-cropping
+let rawOwnerSigSrc = '';
+let rawArchSigSrc = '';
 
 /**
  * Handles file selection from file input.
@@ -1641,7 +1652,13 @@ function onSignatureFileSelected(type, input) {
   const file = input.files[0];
   const reader = new FileReader();
   reader.onload = (e) => {
-    openSignatureCropModal(type, e.target.result);
+    const dataUrl = e.target.result;
+    if (type === 'owner') {
+      rawOwnerSigSrc = dataUrl;
+    } else {
+      rawArchSigSrc = dataUrl;
+    }
+    openSignatureCropModal(type, dataUrl);
   };
   reader.readAsDataURL(file);
   input.value = ''; // Reset so same file can be selected again
@@ -1739,20 +1756,40 @@ function initCropInteractionListeners() {
   window.addEventListener('mousemove', (e) => onPointerMove(e.clientX, e.clientY));
   window.addEventListener('mouseup', onPointerUp);
 
-  // Touch events (Mobile support)
+  // Helper for touch distance (pinch-to-zoom)
+  const getTouchDist = (t1, t2) => Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+
+  // Touch events (Mobile support with scroll lock & pinch zoom)
   wrapper.addEventListener('touchstart', (e) => {
-    if (e.touches && e.touches[0]) {
+    if (e.touches.length === 1) {
       onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
+    } else if (e.touches.length === 2) {
+      isDraggingSig = false;
+      initialPinchDistance = getTouchDist(e.touches[0], e.touches[1]);
+      initialPinchZoom = sigZoom;
     }
-  }, { passive: true });
+  }, { passive: false });
 
-  window.addEventListener('touchmove', (e) => {
-    if (e.touches && e.touches[0]) {
+  wrapper.addEventListener('touchmove', (e) => {
+    e.preventDefault(); // Prevent modal and window scrolling while dragging
+    if (e.touches.length === 1 && isDraggingSig) {
       onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+    } else if (e.touches.length === 2 && initialPinchDistance > 0) {
+      const dist = getTouchDist(e.touches[0], e.touches[1]);
+      const factor = dist / initialPinchDistance;
+      sigZoom = Math.min(3.0, Math.max(0.4, initialPinchZoom * factor));
+      const zoomSlider = document.getElementById('sigCropZoom');
+      if (zoomSlider) zoomSlider.value = sigZoom.toFixed(2);
+      redrawCropCanvas();
     }
-  }, { passive: true });
+  }, { passive: false });
 
-  window.addEventListener('touchend', onPointerUp);
+  wrapper.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) {
+      onPointerUp();
+      initialPinchDistance = 0;
+    }
+  });
 }
 
 /**
@@ -1802,7 +1839,7 @@ function resetCropTransform() {
 }
 
 /**
- * Crops the 280x112 target box area, performs optional contrast auto-clean,
+ * Crops the 280x112 target box area, performs color-preserving chromaticity contrast auto-clean,
  * and updates the state, thumbnails, and CAD drawing sheet.
  */
 function applySignatureCrop() {
@@ -1833,7 +1870,7 @@ function applySignatureCrop() {
   outCtx.fillRect(0, 0, outCanvas.width, outCanvas.height);
   outCtx.drawImage(sigImageObj, drawX, drawY, drawW, drawH);
 
-  // Auto-clean background to pure white / transparent if checked
+  // Auto-clean background with chromaticity preservation (protects blue ink, purple stamps, red seals)
   const cleanBg = document.getElementById('sigCleanBgCheck')?.checked;
   if (cleanBg) {
     try {
@@ -1843,15 +1880,25 @@ function applySignatureCrop() {
         const r = data[i];
         const g = data[i + 1];
         const b = data[i + 2];
-        // If pixel is light grey or off-white paper background, make it transparent
+
+        // Color saturation (chroma) protects blue ballpoint ink, purple stamps, and red seals
+        const maxC = Math.max(r, g, b);
+        const minC = Math.min(r, g, b);
+        const chroma = maxC - minC;
         const brightness = (r * 0.299 + g * 0.587 + b * 0.114);
-        if (brightness > 200) {
-          data[i + 3] = 0; // Transparent
+
+        if (chroma < 25 && brightness > 195) {
+          // Neutral off-white or grey paper background -> Make Transparent
+          data[i + 3] = 0;
+        } else if (chroma >= 25) {
+          // Colored ink (blue/purple/red stamp or signature) -> Keep 100% opaque
+          data[i + 3] = 255;
         } else {
-          // Increase ink contrast
+          // Black / dark ink -> Boost contrast
           data[i] = Math.max(0, r - 30);
           data[i + 1] = Math.max(0, g - 30);
           data[i + 2] = Math.max(0, b - 30);
+          data[i + 3] = 255;
         }
       }
       outCtx.putImageData(imgData, 0, 0);
@@ -1884,9 +1931,11 @@ function removeSignature(type) {
   if (type === 'owner') {
     const dataInp = document.getElementById('ownerSigData');
     if (dataInp) dataInp.value = '';
+    rawOwnerSigSrc = '';
   } else {
     const dataInp = document.getElementById('archSigData');
     if (dataInp) dataInp.value = '';
+    rawArchSigSrc = '';
   }
 
   syncSignaturePreviews();
@@ -1895,12 +1944,15 @@ function removeSignature(type) {
 }
 
 /**
- * Re-opens crop modal for an existing signature.
+ * Re-opens crop modal for an existing signature using the uncropped original photo if available.
  */
 function reopenSignatureCrop(type) {
-  const dataInp = document.getElementById(type === 'owner' ? 'ownerSigData' : 'archSigData');
-  if (dataInp && dataInp.value) {
-    openSignatureCropModal(type, dataInp.value);
+  const rawSrc = type === 'owner' ? rawOwnerSigSrc : rawArchSigSrc;
+  const fallbackDataInp = document.getElementById(type === 'owner' ? 'ownerSigData' : 'archSigData');
+  const srcToUse = rawSrc || (fallbackDataInp ? fallbackDataInp.value : '');
+
+  if (srcToUse) {
+    openSignatureCropModal(type, srcToUse);
   }
 }
 

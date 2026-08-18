@@ -309,7 +309,21 @@ function saveDraft() {
     formData
   };
 
-  localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
+  try {
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
+  } catch (err) {
+    console.warn('LocalStorage save failed, attempting fallback without signature data:', err);
+    try {
+      // Fallback: save all critical property text & measurements excluding large data URLs
+      const safeFormData = { ...formData };
+      delete safeFormData.ownerSigData;
+      delete safeFormData.archSigData;
+      payload.formData = safeFormData;
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
+    } catch (innerErr) {
+      console.warn('LocalStorage completely full:', innerErr);
+    }
+  }
   sessionStorage.setItem(SESSION_FLAG_KEY, 'true');
 }
 
