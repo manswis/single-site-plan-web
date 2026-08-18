@@ -126,8 +126,7 @@
           style="background: none; border: none; font-size: 20px; font-weight: 700; color: var(--apple-text-secondary); cursor: pointer; padding: 0 4px;">✕</button>
       </div>
       <p style="margin: 0 0 12px 0; font-size: 13px; color: var(--apple-text-secondary); line-height: 1.45;">
-        The uploaded project file (.eplan / .json) contains invalid or corrupted parameters and could not be loaded
-        safely:
+        The uploaded .eplan project file contains invalid or corrupted parameters and could not be loaded safely:
       </p>
       <div id="projectImportErrorList"
         style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 10px; padding: 12px 14px; max-height: 220px; overflow-y: auto; font-size: 12px; color: #b91c1c; line-height: 1.5;">
@@ -377,12 +376,13 @@
               <span class="material-symbols-outlined" style="font-size: 18px;">folder_open</span>
             </div>
             <div class="portability-text-wrap">
-              <div class="portability-title">Have a saved project file?</div>
-              <div class="portability-desc">Load a .eplan or .json backup to resume on this device.</div>
+              <div class="portability-title">Have a saved .eplan project file?</div>
+              <div class="portability-desc">Upload a previously saved .eplan file (downloaded from Step 7) to
+                automatically restore all your property measurements on this device.</div>
             </div>
           </div>
           <button type="button" class="portability-btn" onclick="triggerProjectImport()"
-            title="Open existing project file">
+            title="Open existing .eplan project file">
             <span class="material-symbols-outlined" style="font-size: 16px;">upload_file</span>
             <span>Open Project</span>
           </button>

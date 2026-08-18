@@ -421,7 +421,7 @@ function handleProjectFileImport(event) {
         parsedData = JSON.parse(content);
       } catch (jsonErr) {
         showProjectImportErrorModal([
-          "Syntax Error: The selected file is not a valid JSON or .eplan file format."
+          "Syntax Error: The selected file is not a valid .eplan project file format."
         ]);
         return;
       }
