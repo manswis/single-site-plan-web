@@ -327,6 +327,372 @@ function saveDraft() {
   sessionStorage.setItem(SESSION_FLAG_KEY, 'true');
 }
 
+/* ==========================================================================
+   PORTABLE PROJECT FILE (.eplan / .json) EXPORT & IMPORT ENGINE
+   ========================================================================== */
+
+/**
+ * Exports all current wizard fields, checkboxes, measurements, and signatures
+ * into a downloadable .eplan project file for cross-device portability.
+ * 
+ * @function exportProjectFile
+ * @returns {void}
+ */
+function exportProjectFile() {
+  const formData = {};
+
+  DRAFT_FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) formData[id] = el.value;
+  });
+
+  DRAFT_CHECKBOX_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) formData[id] = el.checked;
+  });
+
+  const pid = (document.getElementById('pidNo')?.value || '').trim();
+  const epId = (document.getElementById('epId')?.value || '').trim();
+  const survey = (document.getElementById('surveyNo')?.value || '').trim().replace(/[/\\?%*:|"<>]/g, '-');
+  const fileIdentifier = pid || epId || survey || 'Project';
+
+  const exportPayload = {
+    app: 'e-Plan Studio BBMP',
+    format: 'eplan',
+    schemaVersion: '1.2.0',
+    exportedAt: new Date().toISOString(),
+    currentStep,
+    formData
+  };
+
+  const jsonString = JSON.stringify(exportPayload, null, 2);
+  const blob = new Blob([jsonString], { type: 'application/json' });
+  const downloadUrl = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = downloadUrl;
+  a.download = `BBMP_Plan_${fileIdentifier}.eplan`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(downloadUrl);
+}
+
+/**
+ * Triggers the hidden file picker input for importing an existing .eplan / .json file.
+ * 
+ * @function triggerProjectImport
+ * @returns {void}
+ */
+function triggerProjectImport() {
+  const fileInput = document.getElementById('projectFileInput');
+  if (fileInput) {
+    fileInput.value = ''; // Reset so the same file can be picked again
+    fileInput.click();
+  }
+}
+
+/**
+ * Handles project file selection, reads JSON content, validates parameters, and hydrates the application state.
+ * 
+ * @function handleProjectFileImport
+ * @param {Event} event - File input change event.
+ * @returns {void}
+ */
+function handleProjectFileImport(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const content = e.target.result;
+      let parsedData;
+      try {
+        parsedData = JSON.parse(content);
+      } catch (jsonErr) {
+        showProjectImportErrorModal([
+          "Syntax Error: The selected file is not a valid JSON or .eplan file format."
+        ]);
+        return;
+      }
+
+      // Validate schema and parameters thoroughly
+      const validationResult = validateProjectFilePayload(parsedData);
+      if (!validationResult.isValid) {
+        showProjectImportErrorModal(validationResult.errors);
+        return;
+      }
+
+      // Safe hydration of form data
+      const formData = parsedData.formData || parsedData;
+      hydrateProjectFormData(formData, parsedData.currentStep);
+    } catch (err) {
+      console.error('Project import error:', err);
+      showProjectImportErrorModal([
+        `Unexpected import error: ${err.message || 'Corrupted file contents.'}`
+      ]);
+    }
+  };
+
+  reader.readAsText(file);
+}
+
+/**
+ * Rigorously validates the imported project file payload against schema, data types, and logical constraints.
+ * 
+ * @function validateProjectFilePayload
+ * @param {Object} data - Parsed JSON object.
+ * @returns {{ isValid: boolean, errors: string[] }}
+ */
+function validateProjectFilePayload(data) {
+  const errors = [];
+
+  if (!data || typeof data !== 'object') {
+    return { isValid: false, errors: ['File does not contain a valid JSON object.'] };
+  }
+
+  const formData = data.formData || data;
+  if (!formData || typeof formData !== 'object') {
+    return { isValid: false, errors: ['Missing formData configuration in project file.'] };
+  }
+
+  // 1. Plot Area Validation (must be positive number if provided)
+  if (formData.plotArea !== undefined && formData.plotArea !== '') {
+    const area = parseFloat(formData.plotArea);
+    if (isNaN(area) || area <= 0) {
+      errors.push("Invalid parameter 'plotArea': Total Plot Area must be a positive number (> 0 sq.ft).");
+    } else if (area > 500000) {
+      errors.push("Invalid parameter 'plotArea': Total Plot Area exceeds single-plot limit (500,000 sq.ft).");
+    }
+  }
+
+  // 2. Road Width Validation
+  if (formData.roadWidth !== undefined && formData.roadWidth !== '') {
+    const rw = parseFloat(formData.roadWidth);
+    if (isNaN(rw) || rw <= 0) {
+      errors.push("Invalid parameter 'roadWidth': Road Width must be a positive number (> 0 ft).");
+    }
+  }
+
+  // 3. Road Facing Direction Validation
+  if (formData.roadFacing) {
+    const validFacings = ['North', 'South', 'East', 'West', 'NORTH', 'SOUTH', 'EAST', 'WEST'];
+    if (!validFacings.includes(formData.roadFacing)) {
+      errors.push(`Invalid parameter 'roadFacing': received '${formData.roadFacing}', expected one of [North, South, East, West].`);
+    }
+  }
+
+  // 4. Plot Dimensions Validation (Odd vs Regular)
+  const isOdd = !!formData.oddSiteCheck;
+  if (isOdd) {
+    ['sideNorth', 'sideSouth', 'sideEast', 'sideWest'].forEach(side => {
+      if (formData[side] !== undefined && formData[side] !== '') {
+        const val = parseFloat(formData[side]);
+        if (isNaN(val) || val <= 0) {
+          errors.push(`Invalid parameter '${side}': Dimension measurement must be greater than 0 ft.`);
+        }
+      }
+    });
+  } else {
+    ['regNorthSouth', 'regEastWest'].forEach(dim => {
+      if (formData[dim] !== undefined && formData[dim] !== '') {
+        const val = parseFloat(formData[dim]);
+        if (isNaN(val) || val <= 0) {
+          errors.push(`Invalid parameter '${dim}': Plot length/width measurement must be greater than 0 ft.`);
+        }
+      }
+    });
+  }
+
+  // 5. Building Setbacks Validation
+  ['setbackFront', 'setbackRear', 'setbackLeft', 'setbackRight'].forEach(sb => {
+    if (formData[sb] !== undefined && formData[sb] !== '') {
+      const val = parseFloat(formData[sb]);
+      if (isNaN(val) || val < 0) {
+        errors.push(`Invalid parameter '${sb}': Setback distance cannot be negative.`);
+      }
+    }
+  });
+
+  // 6. Number of Floors
+  if (formData.noOfFloors !== undefined && formData.noOfFloors !== '') {
+    const floors = parseInt(formData.noOfFloors, 10);
+    if (isNaN(floors) || floors < 1 || floors > 25) {
+      errors.push("Invalid parameter 'noOfFloors': Number of floors must be an integer between 1 and 25.");
+    }
+  }
+
+  // 7. GPS Coordinates Validation (if supplied)
+  if (formData.gpsCoords && typeof parseCoordinates === 'function') {
+    const coords = parseCoordinates(String(formData.gpsCoords).trim());
+    if (!coords) {
+      errors.push(`Invalid parameter 'gpsCoords': '${formData.gpsCoords}' is not a recognized GPS coordinate or Google Maps link.`);
+    }
+  }
+
+  // 8. Road Widening Validation
+  if (formData.roadWideningCheck) {
+    if (formData.proposedRoadWidth) {
+      const prw = parseFloat(formData.proposedRoadWidth);
+      if (isNaN(prw) || prw <= 0) {
+        errors.push("Invalid parameter 'proposedRoadWidth': Proposed Road Width must be a positive number (> 0 ft).");
+      }
+    }
+    if (formData.roadWideningStripWidth) {
+      const strip = parseFloat(formData.roadWideningStripWidth);
+      if (isNaN(strip) || strip < 0) {
+        errors.push("Invalid parameter 'roadWideningStripWidth': Widening Strip Width cannot be negative.");
+      }
+    }
+  }
+
+  // 9. Buffer Zone Validation
+  if (formData.bufferCheck && formData.bufferWidth) {
+    const bw = parseFloat(formData.bufferWidth);
+    if (isNaN(bw) || bw <= 0) {
+      errors.push("Invalid parameter 'bufferWidth': Buffer Zone Width must be a positive number (> 0 ft).");
+    }
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+}
+
+/**
+ * Hydrates DOM inputs and updates CAD renderer after successful project file validation.
+ * 
+ * @function hydrateProjectFormData
+ * @param {Object} formData - Validated form field key-value pairs.
+ * @param {number} [targetStep] - Optional step index to navigate to.
+ * @returns {void}
+ */
+function hydrateProjectFormData(formData, targetStep = 7) {
+  // 1. Hydrate text, number, and select fields
+  DRAFT_FIELD_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && formData[id] !== undefined) {
+      el.value = formData[id];
+    }
+  });
+
+  // 2. Hydrate checkboxes and trigger change events for UI toggles
+  DRAFT_CHECKBOX_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && formData[id] !== undefined) {
+      el.checked = !!formData[id];
+    }
+  });
+
+  // 3. Trigger structural conditional toggles
+  if (typeof toggleOddSite === 'function') toggleOddSite();
+  if (typeof toggleRoadWidening === 'function') toggleRoadWidening();
+  if (typeof toggleBufferZone === 'function') toggleBufferZone();
+  if (typeof toggleLegendSheetPage === 'function') toggleLegendSheetPage();
+
+  // 4. Trigger boundary field visibilities
+  ['North', 'South', 'East', 'West'].forEach(dir => {
+    if (typeof toggleBoundaryType === 'function') toggleBoundaryType(dir);
+  });
+
+  // 5. Sync digital signatures and previews
+  if (typeof syncSignaturePreviews === 'function') syncSignaturePreviews();
+  if (typeof updateKeyPlan === 'function') updateKeyPlan();
+
+  // 6. Recalculate setbacks & geometry
+  if (typeof recalculateSetbacks === 'function') recalculateSetbacks();
+  if (typeof recalculateGeometry === 'function') recalculateGeometry();
+  if (typeof generatePlan === 'function') generatePlan();
+
+  // 7. Save to local storage as active draft
+  saveDraft();
+
+  // 8. Navigate to target step (Step 7 for immediate review, or Step 1)
+  const navStep = (targetStep >= 1 && targetStep <= TOTAL_STEPS) ? targetStep : 7;
+  goToStep(navStep);
+
+  // 9. Show brief success confirmation toast
+  showImportSuccessToast();
+}
+
+/**
+ * Displays error modal with specific list of failed parameters.
+ * 
+ * @function showProjectImportErrorModal
+ * @param {string[]} errorList - Array of validation error descriptions.
+ * @returns {void}
+ */
+function showProjectImportErrorModal(errorList) {
+  const modal = document.getElementById('projectImportErrorModal');
+  const listEl = document.getElementById('projectImportErrorList');
+  if (listEl) {
+    listEl.innerHTML = `<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px;">` +
+      errorList.map(err => `<li><strong>${escapeWizardHtml(err)}</strong></li>`).join('') +
+      `</ul>`;
+  }
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+/**
+ * Closes the project import error modal.
+ * 
+ * @function closeProjectImportErrorModal
+ * @returns {void}
+ */
+function closeProjectImportErrorModal() {
+  const modal = document.getElementById('projectImportErrorModal');
+  if (modal) modal.style.display = 'none';
+}
+
+/**
+ * HTML escaper helper for modal rendering.
+ */
+function escapeWizardHtml(str) {
+  return str ? String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;') : '';
+}
+
+/**
+ * Displays a brief floating toast notification upon successful project import.
+ * 
+ * @function showImportSuccessToast
+ * @returns {void}
+ */
+function showImportSuccessToast() {
+  const existingToast = document.getElementById('projectImportToast');
+  if (existingToast) existingToast.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'projectImportToast';
+  toast.style.position = 'fixed';
+  toast.style.bottom = '24px';
+  toast.style.left = '50%';
+  toast.style.transform = 'translateX(-50%)';
+  toast.style.background = '#0f172a';
+  toast.style.color = '#ffffff';
+  toast.style.padding = '12px 24px';
+  toast.style.borderRadius = '980px';
+  toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.3)';
+  toast.style.fontSize = '13px';
+  toast.style.fontWeight = '600';
+  toast.style.zIndex = '10000';
+  toast.style.display = 'flex';
+  toast.style.alignItems = 'center';
+  toast.style.gap = '8px';
+  toast.style.border = '1px solid rgba(255,255,255,0.15)';
+  toast.innerHTML = `<span style="color: #4ade80;">✓</span><span>Project Loaded Successfully</span>`;
+
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.transition = 'opacity 0.4s ease';
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 400);
+  }, 3500);
+}
+
 /**
  * Navigates to a specific step index with smart lazy validation and draft saving.
  * 
