@@ -4405,8 +4405,15 @@ body.pdf-export-active .drawing-canvas-column,
 }
 
 @keyframes popoverFadeIn {
-  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .filter-popover-top {
@@ -6111,6 +6118,7 @@ body.pdf-export-active .drawing-canvas-column,
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -6324,6 +6332,7 @@ body.pdf-export-active .drawing-canvas-column,
     gap: 10px !important;
     width: 100% !important;
   }
+
   .gps-field-layout input[type="text"]#gpsCoords {
     width: 100% !important;
     height: 42px !important;
@@ -6333,16 +6342,19 @@ body.pdf-export-active .drawing-canvas-column,
     box-sizing: border-box !important;
     border: 1px solid var(--apple-border) !important;
   }
+
   [data-theme="dark"] .gps-field-layout input[type="text"]#gpsCoords {
     border-color: rgba(255, 255, 255, 0.18) !important;
     background-color: #2c2c2e !important;
   }
+
   .gps-action-buttons {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     width: 100% !important;
     gap: 10px !important;
   }
+
   .gps-action-btn {
     width: 100% !important;
     height: 46px !important;
@@ -6350,6 +6362,7 @@ body.pdf-export-active .drawing-canvas-column,
     border-radius: 12px !important;
     padding: 0 10px !important;
   }
+
   .gps-action-btn span {
     font-size: 14px !important;
   }
@@ -6528,9 +6541,9 @@ body.pdf-export-active .drawing-canvas-column,
 }
 
 .portability-btn {
-  background: rgba(0, 102, 204, 0.1);
-  border: 1px solid rgba(0, 102, 204, 0.25);
-  color: var(--apple-accent);
+  background: rgba(0, 102, 204, 0.08);
+  border: 1px solid rgba(0, 102, 204, 0.28);
+  color: #0066cc;
   font-size: 12px;
   font-weight: 700;
   padding: 6px 14px;
@@ -6551,10 +6564,19 @@ body.pdf-export-active .drawing-canvas-column,
   transform: translateY(-1px);
 }
 
+.portability-btn:disabled,
+.portability-btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 .portability-btn-primary {
-  background: var(--apple-accent);
-  color: #ffffff;
-  border: 1px solid var(--apple-accent);
+  background: #0066cc;
+  color: #ffffff !important;
+  border: 1px solid #0066cc;
 }
 
 .portability-btn-primary:hover {
@@ -6587,24 +6609,43 @@ body.pdf-export-active .drawing-canvas-column,
 /* Dark Mode Overrides */
 [data-theme="dark"] .project-portability-banner {
   background: rgba(41, 151, 255, 0.08);
-  border-color: rgba(41, 151, 255, 0.25);
+  border-color: rgba(41, 151, 255, 0.3);
+}
+
+[data-theme="dark"] .portability-title {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .portability-desc {
+  color: #94a3b8;
 }
 
 [data-theme="dark"] .portability-icon-circle {
-  background: rgba(41, 151, 255, 0.18);
-  color: #2997ff;
+  background: rgba(41, 151, 255, 0.2);
+  color: #60a5fa;
 }
 
 [data-theme="dark"] .portability-btn {
-  background: rgba(41, 151, 255, 0.15);
-  border-color: rgba(41, 151, 255, 0.35);
-  color: #2997ff;
+  background: rgba(41, 151, 255, 0.2);
+  border-color: rgba(41, 151, 255, 0.45);
+  color: #ffffff !important;
 }
 
 [data-theme="dark"] .portability-btn:hover {
-  background: #2997ff;
-  color: #000000;
-  border-color: #2997ff;
+  background: #2563eb;
+  color: #ffffff !important;
+  border-color: #3b82f6;
+}
+
+[data-theme="dark"] .portability-btn-primary {
+  background: #2563eb;
+  border-color: #3b82f6;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .portability-btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #2563eb;
 }
 
 @media (max-width: 640px) {
@@ -6631,12 +6672,11 @@ body.pdf-export-active .drawing-canvas-column,
 
   .project-backup-actions {
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
   }
 
   .project-backup-actions .portability-btn {
     width: 100%;
+    justify-content: center;
+    padding: 8px 14px;
   }
 }

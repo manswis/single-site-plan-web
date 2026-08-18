@@ -339,6 +339,15 @@ function saveDraft() {
  * @returns {void}
  */
 function exportProjectFile() {
+  const legalCheck = document.getElementById('legalConsentCheck');
+  if (legalCheck && !legalCheck.checked) {
+    if (typeof goToStep === 'function') goToStep(7);
+    const errLegal = document.getElementById('err-legalConsent');
+    if (errLegal) errLegal.style.display = 'block';
+    alert('⚖️ Legal Consent Required:\n\nPlease check the "I Agree to Terms of Service, Privacy Policy & Zero Liability Disclaimer" checkbox in Step 7 before saving your project file.');
+    return;
+  }
+
   const formData = {};
 
   DRAFT_FIELD_IDS.forEach(id => {

@@ -126,7 +126,8 @@
           style="background: none; border: none; font-size: 20px; font-weight: 700; color: var(--apple-text-secondary); cursor: pointer; padding: 0 4px;">✕</button>
       </div>
       <p style="margin: 0 0 12px 0; font-size: 13px; color: var(--apple-text-secondary); line-height: 1.45;">
-        The uploaded project file (.eplan / .json) contains invalid or corrupted parameters and could not be loaded safely:
+        The uploaded project file (.eplan / .json) contains invalid or corrupted parameters and could not be loaded
+        safely:
       </p>
       <div id="projectImportErrorList"
         style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 10px; padding: 12px 14px; max-height: 220px; overflow-y: auto; font-size: 12px; color: #b91c1c; line-height: 1.5;">
@@ -380,11 +381,13 @@
               <div class="portability-desc">Load a .eplan or .json backup to resume on this device.</div>
             </div>
           </div>
-          <button type="button" class="portability-btn" onclick="triggerProjectImport()" title="Open existing project file">
+          <button type="button" class="portability-btn" onclick="triggerProjectImport()"
+            title="Open existing project file">
             <span class="material-symbols-outlined" style="font-size: 16px;">upload_file</span>
-            <span>Open Plan</span>
+            <span>Open Project</span>
           </button>
-          <input type="file" id="projectFileInput" accept=".eplan,.json" style="display: none;" onchange="handleProjectFileImport(event)" />
+          <input type="file" id="projectFileInput" accept=".eplan,.json" style="display: none;"
+            onchange="handleProjectFileImport(event)" />
         </div>
 
         <div class="info-tooltip-box">
@@ -550,7 +553,8 @@
                 </button>
               </div>
             </div>
-            <div class="error-msg" id="err-gpsCoords">⚠ Please enter valid GPS coordinates (e.g. 12.9716, 77.5946 or Google Maps link)</div>
+            <div class="error-msg" id="err-gpsCoords">⚠ Please enter valid GPS coordinates (e.g. 12.9716, 77.5946 or
+              Google Maps link)</div>
 
             <!-- Inline Live Map Preview & Zoom Adjustment (Step 2) -->
             <div id="gpsZoomControlWrap"
@@ -1305,7 +1309,8 @@
                 onclick="document.getElementById('ownerSigFileInput').click()">
                 <span class="material-symbols-outlined"
                   style="font-size: 24px; color: var(--apple-accent);">ink_pen</span>
-                <span style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary); margin-top: 4px;">Upload
+                <span
+                  style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary); margin-top: 4px;">Upload
                   Owner Signature</span>
                 <span style="font-size: 10px; color: var(--apple-text-secondary);">PNG, JPG (Tap to crop & align)</span>
               </div>
@@ -1327,8 +1332,7 @@
             <!-- Architect Seal / Signature Card -->
             <div class="sig-upload-card" id="archSigCard">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <label
-                  style="margin: 0; font-size: 12px; font-weight: 600; color: var(--apple-text-primary);">Architect
+                <label style="margin: 0; font-size: 12px; font-weight: 600; color: var(--apple-text-primary);">Architect
                   Seal / Signature</label>
                 <button type="button" class="sig-remove-btn" id="btnRemoveArchSig" style="display: none;"
                   onclick="removeSignature('arch')" title="Remove Seal">✕ Remove</button>
@@ -1448,20 +1452,19 @@
         <!-- Project Backup & Portability Card (Step 7) -->
         <div class="project-backup-card">
           <div class="portability-banner-left">
-            <div class="portability-icon-circle" style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px;">
+            <div class="portability-icon-circle"
+              style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px;">
               <span class="material-symbols-outlined" style="font-size: 20px;">save</span>
             </div>
             <div class="portability-text-wrap">
               <div class="portability-title">Save Project File (.eplan)</div>
-              <div class="portability-desc">Download complete plan backup to continue on another computer or share with your Architect.</div>
+              <div class="portability-desc">Download complete project backup to continue on another computer or share
+                with your Architect.</div>
             </div>
           </div>
           <div class="project-backup-actions">
-            <button type="button" class="portability-btn" onclick="triggerProjectImport()" title="Load existing project file">
-              <span class="material-symbols-outlined" style="font-size: 16px;">folder_open</span>
-              <span>Open Plan</span>
-            </button>
-            <button type="button" class="portability-btn portability-btn-primary" onclick="exportProjectFile()" title="Save plan to .eplan file">
+            <button type="button" id="exportProjectBtn" class="portability-btn portability-btn-primary" disabled
+              onclick="exportProjectFile()" title="Save project to .eplan file">
               <span class="material-symbols-outlined" style="font-size: 16px;">download</span>
               <span>Save Project</span>
             </button>

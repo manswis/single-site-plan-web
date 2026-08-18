@@ -1460,11 +1460,17 @@ function toggleLegalConsent() {
   const exportBtn = document.getElementById('downloadPdfBtn');
   const printBtn = document.getElementById('printBtn');
   const reportBtn = document.getElementById('reportDrawingBtn');
+  const saveProjectBtn = document.getElementById('exportProjectBtn');
   const errConsent = document.getElementById('err-legalConsent');
 
   const isChecked = consent && consent.checked;
 
   if (errConsent) errConsent.style.display = 'none';
+
+  // Save Project button is strictly gated by legal consent
+  if (saveProjectBtn) {
+    saveProjectBtn.disabled = !isChecked;
+  }
 
   if (!isChecked) {
     // Unchecked -> Delete generated plan state and disable all buttons!
