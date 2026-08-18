@@ -6465,3 +6465,178 @@ body.pdf-export-active .drawing-canvas-column,
 [data-theme="dark"] .sig-preview-box {
   background: #1e293b;
 }
+
+/* ==========================================================================
+   PROJECT PORTABILITY & BACKUP BANNER COMPONENT
+   ========================================================================== */
+
+.project-portability-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(0, 102, 204, 0.04);
+  border: 1px dashed rgba(0, 102, 204, 0.28);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+}
+
+.project-portability-banner:hover {
+  background: rgba(0, 102, 204, 0.07);
+  border-color: rgba(0, 102, 204, 0.45);
+}
+
+.portability-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.portability-icon-circle {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 8px;
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--apple-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portability-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.portability-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  line-height: 1.2;
+}
+
+.portability-desc {
+  font-size: 11.5px;
+  color: var(--apple-text-secondary);
+  line-height: 1.3;
+}
+
+.portability-btn {
+  background: rgba(0, 102, 204, 0.1);
+  border: 1px solid rgba(0, 102, 204, 0.25);
+  color: var(--apple-accent);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.portability-btn:hover {
+  background: var(--apple-accent);
+  color: #ffffff;
+  border-color: var(--apple-accent);
+  transform: translateY(-1px);
+}
+
+.portability-btn-primary {
+  background: var(--apple-accent);
+  color: #ffffff;
+  border: 1px solid var(--apple-accent);
+}
+
+.portability-btn-primary:hover {
+  background: #0055b3;
+  border-color: #0055b3;
+}
+
+/* Step 7 Backup Card */
+.project-backup-card {
+  margin-bottom: 24px;
+  padding: 16px 18px;
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.project-backup-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] .project-portability-banner {
+  background: rgba(41, 151, 255, 0.08);
+  border-color: rgba(41, 151, 255, 0.25);
+}
+
+[data-theme="dark"] .portability-icon-circle {
+  background: rgba(41, 151, 255, 0.18);
+  color: #2997ff;
+}
+
+[data-theme="dark"] .portability-btn {
+  background: rgba(41, 151, 255, 0.15);
+  border-color: rgba(41, 151, 255, 0.35);
+  color: #2997ff;
+}
+
+[data-theme="dark"] .portability-btn:hover {
+  background: #2997ff;
+  color: #000000;
+  border-color: #2997ff;
+}
+
+@media (max-width: 640px) {
+  .project-portability-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .portability-banner-left {
+    width: 100%;
+  }
+
+  .portability-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 14px;
+  }
+
+  .project-backup-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .project-backup-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .project-backup-actions .portability-btn {
+    width: 100%;
+  }
+}

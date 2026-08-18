@@ -370,18 +370,18 @@
       <!-- STEP 1: Revenue Records & Identifiers -->
       <div id="wizardStep1" class="wizard-step-content">
         <!-- Project Portability Banner (Import / Open Saved Plan) -->
-        <div class="project-portability-banner"
-          style="display: flex; justify-content: space-between; align-items: center; background: rgba(0, 102, 204, 0.05); border: 1px solid rgba(0, 102, 204, 0.18); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px;">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span class="material-symbols-outlined" style="font-size: 20px; color: var(--apple-accent);">folder_open</span>
-            <div>
-              <div style="font-size: 12.5px; font-weight: 700; color: var(--apple-text-primary);">Have a saved project file?</div>
-              <div style="font-size: 11px; color: var(--apple-text-secondary);">Load a .eplan or .json backup to resume on this device.</div>
+        <div class="project-portability-banner">
+          <div class="portability-banner-left">
+            <div class="portability-icon-circle">
+              <span class="material-symbols-outlined" style="font-size: 18px;">folder_open</span>
+            </div>
+            <div class="portability-text-wrap">
+              <div class="portability-title">Have a saved project file?</div>
+              <div class="portability-desc">Load a .eplan or .json backup to resume on this device.</div>
             </div>
           </div>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="triggerProjectImport()"
-            style="padding: 5px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;">
-            <span class="material-symbols-outlined" style="font-size: 15px;">upload_file</span>
+          <button type="button" class="portability-btn" onclick="triggerProjectImport()" title="Open existing project file">
+            <span class="material-symbols-outlined" style="font-size: 16px;">upload_file</span>
             <span>Open Plan</span>
           </button>
           <input type="file" id="projectFileInput" accept=".eplan,.json" style="display: none;" onchange="handleProjectFileImport(event)" />
@@ -1446,24 +1446,23 @@
         </div>
 
         <!-- Project Backup & Portability Card (Step 7) -->
-        <div class="apple-card"
-          style="margin-bottom: 24px; padding: 16px 20px; background: var(--apple-card-bg); border: 1px solid var(--apple-border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-radius: 14px;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span class="material-symbols-outlined" style="font-size: 24px; color: var(--apple-accent);">save</span>
-            <div>
-              <h4 style="margin: 0; font-size: 13.5px; font-weight: 700; color: var(--apple-text-primary);">Save Project File (.eplan)</h4>
-              <p style="margin: 2px 0 0 0; font-size: 11.5px; color: var(--apple-text-secondary);">Download complete plan backup to continue on another computer or share with your Architect.</p>
+        <div class="project-backup-card">
+          <div class="portability-banner-left">
+            <div class="portability-icon-circle" style="width: 36px; height: 36px; min-width: 36px; border-radius: 10px;">
+              <span class="material-symbols-outlined" style="font-size: 20px;">save</span>
+            </div>
+            <div class="portability-text-wrap">
+              <div class="portability-title">Save Project File (.eplan)</div>
+              <div class="portability-desc">Download complete plan backup to continue on another computer or share with your Architect.</div>
             </div>
           </div>
-          <div style="display: flex; gap: 8px;">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="triggerProjectImport()"
-              style="padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 7px; display: inline-flex; align-items: center; gap: 4px;">
-              <span class="material-symbols-outlined" style="font-size: 15px;">folder_open</span>
+          <div class="project-backup-actions">
+            <button type="button" class="portability-btn" onclick="triggerProjectImport()" title="Load existing project file">
+              <span class="material-symbols-outlined" style="font-size: 16px;">folder_open</span>
               <span>Open Plan</span>
             </button>
-            <button type="button" class="apple-btn-primary btn-sm" onclick="exportProjectFile()"
-              style="padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 7px; display: inline-flex; align-items: center; gap: 4px;">
-              <span class="material-symbols-outlined" style="font-size: 15px;">download</span>
+            <button type="button" class="portability-btn portability-btn-primary" onclick="exportProjectFile()" title="Save plan to .eplan file">
+              <span class="material-symbols-outlined" style="font-size: 16px;">download</span>
               <span>Save Project</span>
             </button>
           </div>
