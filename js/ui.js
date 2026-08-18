@@ -1477,11 +1477,11 @@ function toggleLegalConsent() {
     const viewport = document.getElementById('exportViewportSection');
     if (viewport) viewport.style.display = 'none';
   } else {
-    // Checked -> Enable "Generate Plan" & "Report Drawing", keep Export & Print disabled until plan is generated!
+    // Checked -> Enable "Generate Plan", keep Export, Print & Report disabled until plan is generated!
     if (genBtn) genBtn.disabled = false;
-    if (reportBtn) reportBtn.disabled = false;
     if (exportBtn) exportBtn.disabled = !isPlanGenerated;
     if (printBtn) printBtn.disabled = !isPlanGenerated;
+    if (reportBtn) reportBtn.disabled = !isPlanGenerated;
   }
 }
 
