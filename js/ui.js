@@ -1536,13 +1536,6 @@ function onGeneratePlanClick() {
  * @returns {Promise<void>}
  */
 async function reportDrawingIssue() {
-  const btn = document.getElementById('reportDrawingBtn');
-  const originalHtml = btn ? btn.innerHTML : '';
-  if (btn) {
-    btn.innerHTML = '<span>⏳ Sanitizing...</span>';
-    btn.disabled = true;
-  }
-
   try {
     // 1. Ensure plan is generated in DOM
     if (typeof generatePlan === 'function') generatePlan();
@@ -1671,12 +1664,22 @@ async function reportDrawingIssue() {
   } catch (err) {
     console.error('Report drawing error:', err);
     alert('Could not prepare drawing report: ' + err.message);
-    if (btn) {
-      btn.innerHTML = originalHtml;
-      btn.disabled = false;
-    }
   }
 }
+
+// Ensure buttons are clean and interactive when navigating back via browser history (bfcache)
+window.addEventListener('pageshow', () => {
+  const reportBtn = document.getElementById('reportDrawingBtn');
+  if (reportBtn) {
+    reportBtn.innerHTML = '<span>Report Drawing</span>';
+    reportBtn.disabled = !isPlanGenerated;
+  }
+  const downloadBtn = document.getElementById('downloadPdfBtn');
+  if (downloadBtn) {
+    downloadBtn.innerHTML = '<span>Export PDF</span>';
+    downloadBtn.disabled = !isPlanGenerated;
+  }
+});
 
 /**
  * Central dictionary containing beginner-friendly field explanations,
