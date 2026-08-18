@@ -1287,16 +1287,25 @@ function buildReviewSummary() {
 
   let html = '<div class="review-summary-grid">';
 
-  sections.forEach(sec => {
+  sections.forEach((sec, idx) => {
+    // Only section 1 is open by default (idx === 0)
+    const isOpen = (idx === 0);
+
     html += `
-      <div class="review-summary-card">
-        <div class="review-summary-header">
-          <h4>${sec.title}</h4>
-          <button type="button" class="review-edit-btn" onclick="goToStep(${sec.step})" title="Edit ${sec.title}">
-            <span class="material-symbols-outlined">edit</span> Edit
-          </button>
+      <div class="review-summary-card ${isOpen ? 'open' : 'collapsed'}" id="reviewCard${sec.step}">
+        <div class="review-summary-header" onclick="toggleReviewSection(${sec.step})">
+          <div class="review-header-title-wrap">
+            <span class="material-symbols-outlined review-chevron">${isOpen ? 'expand_more' : 'chevron_right'}</span>
+            <h4>${sec.title}</h4>
+            <span class="review-item-count">(${sec.fields.length} fields)</span>
+          </div>
+          <div class="review-header-actions" onclick="event.stopPropagation()">
+            <button type="button" class="review-edit-btn" onclick="goToStep(${sec.step})" title="Edit ${sec.title}">
+              <span class="material-symbols-outlined" style="font-size: 13px;">edit</span> Edit
+            </button>
+          </div>
         </div>
-        <div class="review-fields-list">
+        <div class="review-fields-list" style="${isOpen ? 'display: block;' : 'display: none;'}">
     `;
 
     sec.fields.forEach(f => {
@@ -1327,7 +1336,7 @@ function buildReviewSummary() {
       }
 
       html += `
-        <div class="review-field-row">
+        <div class="review-field-row" onclick="editFieldFromReview(${sec.step}, '${f.id}')" title="Click to edit ${f.label}">
           <span class="field-label">${f.label}:</span>
           <span class="field-value">${val}</span>
         </div>
@@ -1339,6 +1348,58 @@ function buildReviewSummary() {
 
   html += '</div>';
   container.innerHTML = html;
+}
+
+/**
+ * Toggles accordion collapse/expand state for a specific summary section card.
+ * 
+ * @function toggleReviewSection
+ * @param {number} stepNum - Step number (1 to 6).
+ * @returns {void}
+ */
+function toggleReviewSection(stepNum) {
+  const card = document.getElementById(`reviewCard${stepNum}`);
+  if (!card) return;
+  const list = card.querySelector('.review-fields-list');
+  const chevron = card.querySelector('.review-chevron');
+  const isCurrentlyOpen = card.classList.contains('open');
+
+  if (isCurrentlyOpen) {
+    card.classList.remove('open');
+    card.classList.add('collapsed');
+    if (list) list.style.display = 'none';
+    if (chevron) chevron.textContent = 'chevron_right';
+  } else {
+    card.classList.add('open');
+    card.classList.remove('collapsed');
+    if (list) list.style.display = 'block';
+    if (chevron) chevron.textContent = 'expand_more';
+  }
+}
+
+/**
+ * Expands or collapses all summary section cards simultaneously.
+ * 
+ * @function toggleAllReviewSections
+ * @param {boolean} expand - True to open all, false to collapse all.
+ * @returns {void}
+ */
+function toggleAllReviewSections(expand) {
+  document.querySelectorAll('.review-summary-card').forEach(card => {
+    const list = card.querySelector('.review-fields-list');
+    const chevron = card.querySelector('.review-chevron');
+    if (expand) {
+      card.classList.add('open');
+      card.classList.remove('collapsed');
+      if (list) list.style.display = 'block';
+      if (chevron) chevron.textContent = 'expand_more';
+    } else {
+      card.classList.remove('open');
+      card.classList.add('collapsed');
+      if (list) list.style.display = 'none';
+      if (chevron) chevron.textContent = 'chevron_right';
+    }
+  });
 }
 
 /**
