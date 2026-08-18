@@ -1316,7 +1316,7 @@ function buildReviewSummary() {
           <div class="review-header-title-wrap">
             <span class="material-symbols-outlined review-chevron">${isOpen ? 'expand_more' : 'chevron_right'}</span>
             <h4>${sec.title}</h4>
-            <span class="review-item-count">(${sec.fields.length} fields)</span>
+            <span class="review-item-count">(${sec.fields.length})</span>
           </div>
           <div class="review-header-actions" onclick="event.stopPropagation()">
             <button type="button" class="review-edit-btn" onclick="goToStep(${sec.step})" title="Edit ${sec.title}">
