@@ -6323,3 +6323,97 @@ body.pdf-export-active .drawing-canvas-column,
   border-color: rgba(255, 255, 255, 0.2) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
+
+/* Digital Signature & Seal Upload Cards (Step 6) */
+.sig-upload-card {
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  transition: all 0.2s ease;
+}
+
+.sig-dropzone {
+  border: 1.5px dashed var(--apple-border);
+  border-radius: 10px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(0, 102, 204, 0.02);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sig-dropzone:hover {
+  border-color: var(--apple-accent);
+  background: rgba(0, 102, 204, 0.06);
+  transform: translateY(-1px);
+}
+
+.sig-preview-box {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  background: #ffffff;
+  border: 1px solid var(--apple-border);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.04);
+}
+
+.sig-preview-box img {
+  max-width: 90%;
+  max-height: 68px;
+  object-fit: contain;
+  display: block;
+}
+
+.sig-preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  backdrop-filter: blur(2px);
+}
+
+.sig-preview-box:hover .sig-preview-overlay {
+  opacity: 1;
+}
+
+.sig-remove-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.sig-remove-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+[data-theme="dark"] .sig-dropzone {
+  background: rgba(41, 151, 255, 0.05);
+}
+
+[data-theme="dark"] .sig-preview-box {
+  background: #1e293b;
+}

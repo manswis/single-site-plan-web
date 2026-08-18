@@ -207,6 +207,79 @@
     </div>
   </div>
 
+  <!-- Interactive Signature Cropper Modal -->
+  <div id="signatureCropModal" class="apple-modal-overlay no-print" style="display: none;"
+    onclick="if(event.target===this)closeSignatureCropModal()">
+    <div class="apple-modal-card alert-modal-card"
+      style="max-width: 520px; width: 94%; text-align: left; padding: 20px; border-radius: 20px; max-height: 92vh; display: flex; flex-direction: column;">
+
+      <!-- Modal Header -->
+      <div
+        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid var(--apple-border); padding-bottom: 10px;">
+        <h3 id="sigModalTitle"
+          style="margin: 0; font-size: 16px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 8px;">
+          <span class="material-symbols-outlined" style="font-size: 20px; color: var(--apple-accent);">crop</span>
+          <span>Fit & Align Signature</span>
+        </h3>
+        <button type="button" onclick="closeSignatureCropModal()"
+          style="background: none; border: none; font-size: 20px; font-weight: 700; color: var(--apple-text-secondary); cursor: pointer; padding: 0 4px;">✕</button>
+      </div>
+
+      <p style="margin: 0 0 12px 0; font-size: 12px; color: var(--apple-text-secondary); line-height: 1.4;">
+        Drag image to position signature inside the dashed box. Adjust zoom slider to fit perfectly.
+      </p>
+
+      <!-- Crop Viewport Canvas Area -->
+      <div id="cropCanvasWrapper"
+        style="position: relative; width: 100%; height: 230px; border-radius: 12px; overflow: hidden; background: #0f172a; display: flex; align-items: center; justify-content: center; cursor: grab; user-select: none; touch-action: none; border: 1px solid var(--apple-border);">
+        <canvas id="cropCanvas" style="display: block; width: 100%; height: 100%;"></canvas>
+
+        <!-- Target Signature Alignment Box Overlay (2.5:1 ratio) -->
+        <div class="crop-target-box"
+          style="position: absolute; width: 280px; height: 112px; border: 2px dashed #38bdf8; border-radius: 6px; box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.68); pointer-events: none; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px;">
+          <span
+            style="font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,0.75); letter-spacing: 0.5px; text-transform: uppercase; background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 4px;">Target
+            Signature Box</span>
+        </div>
+      </div>
+
+      <!-- Controls: Zoom Slider & Auto-Clean Toggle -->
+      <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="material-symbols-outlined"
+            style="font-size: 18px; color: var(--apple-text-secondary);">zoom_out</span>
+          <input id="sigCropZoom" type="range" min="0.4" max="3.0" step="0.02" value="1"
+            style="flex: 1; accent-color: var(--apple-accent); cursor: pointer;"
+            oninput="onSignatureCropZoom(parseFloat(this.value))">
+          <span class="material-symbols-outlined"
+            style="font-size: 18px; color: var(--apple-text-secondary);">zoom_in</span>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <label
+            style="display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer; color: var(--apple-text-primary); margin: 0;">
+            <input type="checkbox" id="sigCleanBgCheck" checked onchange="redrawCropCanvas()">
+            <span>✨ Auto-clean background (transparent paper)</span>
+          </label>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="resetCropTransform()"
+            style="padding: 4px 10px; font-size: 11px; border-radius: 6px;">Reset</button>
+        </div>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div
+        style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--apple-border);">
+        <button type="button" class="apple-btn-secondary" onclick="closeSignatureCropModal()"
+          style="padding: 8px 16px; font-size: 13px; font-weight: 600;">Cancel</button>
+        <button type="button" class="apple-btn-primary" onclick="applySignatureCrop()"
+          style="padding: 8px 20px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+          <span class="material-symbols-outlined" style="font-size: 18px;">check</span>
+          <span>Apply Signature</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="container" style="max-width: 960px;">
 
     <!-- Line 2: Horizontal Sliding Control Navigation Bar for Mobile Pages -->
@@ -1148,7 +1221,100 @@
           </div>
         </div>
 
-        <div class="checkbox-box" style="margin-top: 12px;">
+        <!-- Architect Details & Digital Signatures (Optional) -->
+        <div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--apple-border);">
+          <h4
+            style="margin: 0 0 10px 0; font-size: 13px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 6px;">
+            <span class="material-symbols-outlined" style="font-size: 17px; color: var(--apple-accent);">draw</span>
+            <span>Architect Verification & Digital Signatures</span>
+            <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span>
+          </h4>
+
+          <div class="grid">
+            <div class="field">
+              <label>Architect / Licensed Surveyor Name</label>
+              <input id="architectName" type="text" placeholder="e.g. Ar. Suresh Rao" oninput="onArchitectInfoInput()">
+            </div>
+            <div class="field">
+              <label>COA / BBMP Registration Number</label>
+              <input id="architectRegNo" type="text" placeholder="e.g. CA/2018/98712 or BCC/BL/123"
+                oninput="onArchitectInfoInput()">
+            </div>
+          </div>
+
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 12px;">
+            <!-- Owner Signature Card -->
+            <div class="sig-upload-card" id="ownerSigCard">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label style="margin: 0; font-size: 12px; font-weight: 600; color: var(--apple-text-primary);">Owner
+                  Signature</label>
+                <button type="button" class="sig-remove-btn" id="btnRemoveOwnerSig" style="display: none;"
+                  onclick="removeSignature('owner')" title="Remove Signature">✕ Remove</button>
+              </div>
+
+              <!-- Empty Upload Dropzone -->
+              <div class="sig-dropzone" id="ownerSigDropzone"
+                onclick="document.getElementById('ownerSigFileInput').click()">
+                <span class="material-symbols-outlined"
+                  style="font-size: 24px; color: var(--apple-accent);">ink_pen</span>
+                <span style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary); margin-top: 4px;">Upload
+                  Owner Signature</span>
+                <span style="font-size: 10px; color: var(--apple-text-secondary);">PNG, JPG (Tap to crop & align)</span>
+              </div>
+              <input type="file" id="ownerSigFileInput" accept="image/*" style="display: none;"
+                onchange="onSignatureFileSelected('owner', this)">
+
+              <!-- Live Cropped Preview Box (Click to re-crop) -->
+              <div class="sig-preview-box" id="ownerSigPreviewBox" style="display: none;"
+                onclick="reopenSignatureCrop('owner')" title="Tap to readjust alignment">
+                <img id="ownerSigThumbImg" src="" alt="Owner Signature" />
+                <div class="sig-preview-overlay">
+                  <span class="material-symbols-outlined" style="font-size: 14px;">crop</span>
+                  <span>Tap to Adjust Crop</span>
+                </div>
+              </div>
+              <input type="hidden" id="ownerSigData" value="">
+            </div>
+
+            <!-- Architect Seal / Signature Card -->
+            <div class="sig-upload-card" id="archSigCard">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <label
+                  style="margin: 0; font-size: 12px; font-weight: 600; color: var(--apple-text-primary);">Architect
+                  Seal / Signature</label>
+                <button type="button" class="sig-remove-btn" id="btnRemoveArchSig" style="display: none;"
+                  onclick="removeSignature('arch')" title="Remove Seal">✕ Remove</button>
+              </div>
+
+              <!-- Empty Upload Dropzone -->
+              <div class="sig-dropzone" id="archSigDropzone"
+                onclick="document.getElementById('archSigFileInput').click()">
+                <span class="material-symbols-outlined"
+                  style="font-size: 24px; color: var(--apple-accent);">approval</span>
+                <span
+                  style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary); margin-top: 4px;">Upload
+                  Architect Seal / Sign</span>
+                <span style="font-size: 10px; color: var(--apple-text-secondary);">PNG, JPG (Tap to crop & align)</span>
+              </div>
+              <input type="file" id="archSigFileInput" accept="image/*" style="display: none;"
+                onchange="onSignatureFileSelected('arch', this)">
+
+              <!-- Live Cropped Preview Box (Click to re-crop) -->
+              <div class="sig-preview-box" id="archSigPreviewBox" style="display: none;"
+                onclick="reopenSignatureCrop('arch')" title="Tap to readjust alignment">
+                <img id="archSigThumbImg" src="" alt="Architect Seal" />
+                <div class="sig-preview-overlay">
+                  <span class="material-symbols-outlined" style="font-size: 14px;">crop</span>
+                  <span>Tap to Adjust Crop</span>
+                </div>
+              </div>
+              <input type="hidden" id="archSigData" value="">
+            </div>
+          </div>
+        </div>
+
+        <div class="checkbox-box" style="margin-top: 14px;">
           <label>
             <input type="checkbox" id="includeLegendPage" checked onchange="toggleLegendSheetPage()">
             <span>📑 Include BBMP Line & Colour Specifications Sheet (Page 2) in Merged PDF</span>
@@ -1591,14 +1757,27 @@
             <div class="sidebar-panel">
               <div class="sidebar-panel-header">7. SIGNATURES & SEALS</div>
               <div class="sidebar-panel-body">
-                <div class="cert-grid" style="grid-template-columns:1fr 1fr;">
-                  <div>
+                <div class="cert-grid" style="grid-template-columns:1fr 1fr; gap: 8px;">
+                  <div style="text-align: center;">
+                    <div id="panelOwnerSigWrap"
+                      style="height: 38px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 2px;">
+                      <img id="panelOwnerSigImg" src="" alt="Owner Signature"
+                        style="max-height: 36px; max-width: 100%; object-fit: contain; display: none;" />
+                    </div>
                     <div class="line"></div>
                     <div class="title">Owner Signature</div>
                   </div>
-                  <div>
+                  <div style="text-align: center;">
+                    <div id="panelArchSigWrap"
+                      style="height: 38px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 2px;">
+                      <img id="panelArchSigImg" src="" alt="Architect Seal"
+                        style="max-height: 36px; max-width: 100%; object-fit: contain; display: none;" />
+                    </div>
                     <div class="line"></div>
-                    <div class="title">Architect Seal</div>
+                    <div class="title" id="panelArchTitle">Architect Seal</div>
+                    <div id="panelArchDetails"
+                      style="font-size: 7.5px; color: #475569; margin-top: 1px; display: none; line-height: 1.1; font-weight: 500;">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1811,11 +1990,17 @@
           <!-- Section 5: Verification & Seal Block -->
           <div class="legend-footer-seals">
             <div class="seal-box">
+              <div id="p2ArchSigWrap"
+                style="height: 38px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 2px;">
+                <img id="p2ArchSigImg" src="" alt="Architect Seal"
+                  style="max-height: 36px; max-width: 100%; object-fit: contain; display: none;" />
+              </div>
               <div class="seal-line"></div>
-              <strong>Architect / Engineer Signature & Seal</strong><br>
-              <small>COA / BBMP Registration No.</small>
+              <strong id="p2ArchTitle">Architect / Engineer Signature & Seal</strong><br>
+              <small id="p2ArchDetails">COA / BBMP Registration No.</small>
             </div>
             <div class="seal-box">
+              <div style="height: 38px;"></div>
               <div class="seal-line"></div>
               <strong>BBMP Verification Officer (AEE / ADTP)</strong><br>
               <small>Bruhat Bengaluru Mahanagara Palike</small>

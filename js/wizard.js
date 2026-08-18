@@ -44,7 +44,8 @@ const DRAFT_FIELD_IDS = [
   'setbackFront', 'setbackRear', 'setbackLeft', 'setbackRight',
   'proposedRoadWidth', 'roadWideningStripWidth',
   'bufferType', 'bufferWidth',
-  'challanNo', 'challanFee', 'challanDate'
+  'challanNo', 'challanFee', 'challanDate',
+  'architectName', 'architectRegNo', 'ownerSigData', 'archSigData'
 ];
 
 const DRAFT_CHECKBOX_IDS = [
@@ -215,6 +216,7 @@ function restoreDraft(hideModal = true) {
     if (typeof autoCalculateSetbacks === 'function') autoCalculateSetbacks(false);
     if (typeof validateBuildingSetbackFeasibility === 'function') validateBuildingSetbackFeasibility();
     if (typeof syncGpsZoomControls === 'function') syncGpsZoomControls();
+    if (typeof syncSignaturePreviews === 'function') syncSignaturePreviews();
 
     // Mark active session flag
     sessionStorage.setItem(SESSION_FLAG_KEY, 'true');
@@ -260,6 +262,8 @@ function discardDraft() {
     if (ftEl) ftEl.value = '';
     if (inEl) inEl.value = '';
   });
+
+  if (typeof syncSignaturePreviews === 'function') syncSignaturePreviews();
 
   // Reset checkboxes
   DRAFT_CHECKBOX_IDS.forEach(id => {

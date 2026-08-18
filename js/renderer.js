@@ -299,6 +299,33 @@ function generatePlan() {
   document.getElementById('tbZone').textContent = `${zone} Zone`;
   document.getElementById('tbScale').textContent = scale;
 
+  // 6b. Populate Sidebar Panel 7: Signatures & Architect Seal
+  const archName = (document.getElementById('architectName')?.value || '').trim();
+  const archReg = (document.getElementById('architectRegNo')?.value || '').trim();
+  const panelArchTitle = document.getElementById('panelArchTitle');
+  const panelArchDetails = document.getElementById('panelArchDetails');
+  const p2ArchTitle = document.getElementById('p2ArchTitle');
+  const p2ArchDetails = document.getElementById('p2ArchDetails');
+
+  if (archName || archReg) {
+    if (panelArchTitle) panelArchTitle.textContent = archName ? archName.toUpperCase() : 'ARCHITECT SEAL';
+    if (panelArchDetails) {
+      panelArchDetails.textContent = archReg ? `COA/BBMP: ${archReg}` : '';
+      panelArchDetails.style.display = archReg ? 'block' : 'none';
+    }
+    if (p2ArchTitle) p2ArchTitle.textContent = archName || 'Architect / Engineer Signature & Seal';
+    if (p2ArchDetails) p2ArchDetails.textContent = archReg ? `COA / BBMP Reg: ${archReg}` : 'COA / BBMP Registration No.';
+  } else {
+    if (panelArchTitle) panelArchTitle.textContent = 'Architect Seal';
+    if (panelArchDetails) panelArchDetails.style.display = 'none';
+    if (p2ArchTitle) p2ArchTitle.textContent = 'Architect / Engineer Signature & Seal';
+    if (p2ArchDetails) p2ArchDetails.textContent = 'COA / BBMP Registration No.';
+  }
+
+  if (typeof syncSignaturePreviews === 'function') {
+    syncSignaturePreviews();
+  }
+
   // 7. Render Plot Vector SVG Canvas inside generous 700 x 520 ViewBox
   const plotRect = document.getElementById('plotRect');
   const plotPoly = document.getElementById('plotPoly');

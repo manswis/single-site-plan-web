@@ -1270,6 +1270,10 @@ function buildReviewSummary() {
         { id: 'challanFee', label: 'Challan Fee Amount (₹)' },
         { id: 'challanNo', label: 'Challan Number' },
         { id: 'challanDate', label: 'Challan Date' },
+        { id: 'architectName', label: 'Architect / Surveyor Name' },
+        { id: 'architectRegNo', label: 'COA / BBMP Reg. No' },
+        { id: 'ownerSigData', label: 'Owner Signature', customVal: document.getElementById('ownerSigData')?.value ? 'Uploaded (Digital)' : 'Not Uploaded (Physical Signature)' },
+        { id: 'archSigData', label: 'Architect Seal / Sign', customVal: document.getElementById('archSigData')?.value ? 'Uploaded (Digital)' : 'Not Uploaded (Physical Seal)' },
         { id: 'includeLegendPage', label: 'Include Page 2 Legend Sheet', isCheckbox: true },
         { id: 'sampleWatermarkCheck', label: 'Sample Draft Watermark', isCheckbox: true }
       ]
@@ -1612,5 +1616,376 @@ function showFieldHelp(key) {
 function closeFieldHelp() {
   const modal = document.getElementById('fieldHelpModal');
   if (modal) modal.style.display = 'none';
+}
+
+/* ==========================================================================
+   DIGITAL SIGNATURE & ARCHITECT CROPPING ENGINE
+   ========================================================================== */
+
+let activeSigType = 'owner'; // 'owner' | 'arch'
+let sigImageObj = null;
+let sigPanX = 0;
+let sigPanY = 0;
+let sigZoom = 1.0;
+let isDraggingSig = false;
+let dragStartX = 0;
+let dragStartY = 0;
+let initialPanX = 0;
+let initialPanY = 0;
+
+/**
+ * Handles file selection from file input.
+ */
+function onSignatureFileSelected(type, input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    openSignatureCropModal(type, e.target.result);
+  };
+  reader.readAsDataURL(file);
+  input.value = ''; // Reset so same file can be selected again
+}
+
+/**
+ * Opens signature cropping and alignment modal.
+ */
+function openSignatureCropModal(type, imageSrc) {
+  activeSigType = type;
+  const modal = document.getElementById('signatureCropModal');
+  const titleEl = document.getElementById('sigModalTitle');
+  if (titleEl) {
+    titleEl.innerHTML = `<span class="material-symbols-outlined" style="font-size: 20px; color: var(--apple-accent);">${type === 'owner' ? 'ink_pen' : 'approval'}</span><span>Fit & Align ${type === 'owner' ? 'Owner Signature' : 'Architect Seal / Sign'}</span>`;
+  }
+
+  const img = new Image();
+  img.onload = () => {
+    sigImageObj = img;
+    const canvas = document.getElementById('cropCanvas');
+    const wrapper = document.getElementById('cropCanvasWrapper');
+    if (canvas && wrapper) {
+      canvas.width = wrapper.clientWidth || 480;
+      canvas.height = wrapper.clientHeight || 230;
+    }
+
+    // Auto-fit initial zoom & center
+    const targetW = 280;
+    const targetH = 112;
+    const scaleX = targetW / img.naturalWidth;
+    const scaleY = targetH / img.naturalHeight;
+    sigZoom = Math.max(scaleX, scaleY) * 1.1;
+    if (sigZoom < 0.4) sigZoom = 0.4;
+    if (sigZoom > 3.0) sigZoom = 3.0;
+
+    const zoomSlider = document.getElementById('sigCropZoom');
+    if (zoomSlider) zoomSlider.value = sigZoom.toFixed(2);
+
+    sigPanX = 0;
+    sigPanY = 0;
+
+    initCropInteractionListeners();
+    redrawCropCanvas();
+
+    if (modal) {
+      modal.style.display = 'flex';
+    }
+  };
+  img.src = imageSrc;
+}
+
+/**
+ * Closes the crop modal.
+ */
+function closeSignatureCropModal() {
+  const modal = document.getElementById('signatureCropModal');
+  if (modal) modal.style.display = 'none';
+}
+
+/**
+ * Initializes mouse and touch drag listeners for panning inside crop wrapper.
+ */
+function initCropInteractionListeners() {
+  const wrapper = document.getElementById('cropCanvasWrapper');
+  if (!wrapper || wrapper.getAttribute('data-events-bound') === 'true') return;
+  wrapper.setAttribute('data-events-bound', 'true');
+
+  const onPointerDown = (clientX, clientY) => {
+    isDraggingSig = true;
+    dragStartX = clientX;
+    dragStartY = clientY;
+    initialPanX = sigPanX;
+    initialPanY = sigPanY;
+    wrapper.style.cursor = 'grabbing';
+  };
+
+  const onPointerMove = (clientX, clientY) => {
+    if (!isDraggingSig) return;
+    const dx = clientX - dragStartX;
+    const dy = clientY - dragStartY;
+    sigPanX = initialPanX + dx;
+    sigPanY = initialPanY + dy;
+    redrawCropCanvas();
+  };
+
+  const onPointerUp = () => {
+    if (isDraggingSig) {
+      isDraggingSig = false;
+      wrapper.style.cursor = 'grab';
+    }
+  };
+
+  // Mouse events
+  wrapper.addEventListener('mousedown', (e) => onPointerDown(e.clientX, e.clientY));
+  window.addEventListener('mousemove', (e) => onPointerMove(e.clientX, e.clientY));
+  window.addEventListener('mouseup', onPointerUp);
+
+  // Touch events (Mobile support)
+  wrapper.addEventListener('touchstart', (e) => {
+    if (e.touches && e.touches[0]) {
+      onPointerDown(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches[0]) {
+      onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', onPointerUp);
+}
+
+/**
+ * Redraws the crop canvas with current pan & zoom.
+ */
+function redrawCropCanvas() {
+  const canvas = document.getElementById('cropCanvas');
+  if (!canvas || !sigImageObj) return;
+  const ctx = canvas.getContext('2d');
+  const cw = canvas.width;
+  const ch = canvas.height;
+
+  ctx.clearRect(0, 0, cw, ch);
+
+  // Draw neutral check pattern or dark background
+  ctx.fillStyle = '#0f172a';
+  ctx.fillRect(0, 0, cw, ch);
+
+  const drawW = sigImageObj.naturalWidth * sigZoom;
+  const drawH = sigImageObj.naturalHeight * sigZoom;
+  const drawX = cw / 2 - drawW / 2 + sigPanX;
+  const drawY = ch / 2 - drawH / 2 + sigPanY;
+
+  ctx.save();
+  ctx.drawImage(sigImageObj, drawX, drawY, drawW, drawH);
+  ctx.restore();
+}
+
+/**
+ * Adjusts zoom on input slider change.
+ */
+function onSignatureCropZoom(val) {
+  sigZoom = val;
+  redrawCropCanvas();
+}
+
+/**
+ * Resets pan and zoom.
+ */
+function resetCropTransform() {
+  sigPanX = 0;
+  sigPanY = 0;
+  sigZoom = 1.0;
+  const zoomSlider = document.getElementById('sigCropZoom');
+  if (zoomSlider) zoomSlider.value = 1.0;
+  redrawCropCanvas();
+}
+
+/**
+ * Crops the 280x112 target box area, performs optional contrast auto-clean,
+ * and updates the state, thumbnails, and CAD drawing sheet.
+ */
+function applySignatureCrop() {
+  const canvas = document.getElementById('cropCanvas');
+  if (!canvas || !sigImageObj) {
+    closeSignatureCropModal();
+    return;
+  }
+
+  const cw = canvas.width;
+  const ch = canvas.height;
+  const targetW = 280;
+  const targetH = 112;
+
+  // Render high-res 400x160 output canvas
+  const outCanvas = document.createElement('canvas');
+  outCanvas.width = 400;
+  outCanvas.height = 160;
+  const outCtx = outCanvas.getContext('2d');
+
+  const scaleOut = 400 / targetW;
+  const drawW = sigImageObj.naturalWidth * sigZoom * scaleOut;
+  const drawH = sigImageObj.naturalHeight * sigZoom * scaleOut;
+  const drawX = (outCanvas.width / 2) - (drawW / 2) + (sigPanX * scaleOut);
+  const drawY = (outCanvas.height / 2) - (drawH / 2) + (sigPanY * scaleOut);
+
+  outCtx.fillStyle = '#ffffff';
+  outCtx.fillRect(0, 0, outCanvas.width, outCanvas.height);
+  outCtx.drawImage(sigImageObj, drawX, drawY, drawW, drawH);
+
+  // Auto-clean background to pure white / transparent if checked
+  const cleanBg = document.getElementById('sigCleanBgCheck')?.checked;
+  if (cleanBg) {
+    try {
+      const imgData = outCtx.getImageData(0, 0, outCanvas.width, outCanvas.height);
+      const data = imgData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        // If pixel is light grey or off-white paper background, make it transparent
+        const brightness = (r * 0.299 + g * 0.587 + b * 0.114);
+        if (brightness > 200) {
+          data[i + 3] = 0; // Transparent
+        } else {
+          // Increase ink contrast
+          data[i] = Math.max(0, r - 30);
+          data[i + 1] = Math.max(0, g - 30);
+          data[i + 2] = Math.max(0, b - 30);
+        }
+      }
+      outCtx.putImageData(imgData, 0, 0);
+    } catch (err) {
+      console.warn('Signature thresholding error:', err);
+    }
+  }
+
+  const dataUrl = outCanvas.toDataURL('image/png');
+
+  if (activeSigType === 'owner') {
+    const dataInp = document.getElementById('ownerSigData');
+    if (dataInp) dataInp.value = dataUrl;
+  } else {
+    const dataInp = document.getElementById('archSigData');
+    if (dataInp) dataInp.value = dataUrl;
+  }
+
+  syncSignaturePreviews();
+  closeSignatureCropModal();
+
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+}
+
+/**
+ * Removes uploaded signature.
+ */
+function removeSignature(type) {
+  if (type === 'owner') {
+    const dataInp = document.getElementById('ownerSigData');
+    if (dataInp) dataInp.value = '';
+  } else {
+    const dataInp = document.getElementById('archSigData');
+    if (dataInp) dataInp.value = '';
+  }
+
+  syncSignaturePreviews();
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+}
+
+/**
+ * Re-opens crop modal for an existing signature.
+ */
+function reopenSignatureCrop(type) {
+  const dataInp = document.getElementById(type === 'owner' ? 'ownerSigData' : 'archSigData');
+  if (dataInp && dataInp.value) {
+    openSignatureCropModal(type, dataInp.value);
+  }
+}
+
+/**
+ * Synchronizes thumbnail previews in Step 6 and Drawing sheet images in Panel 7 & Page 2.
+ */
+function syncSignaturePreviews() {
+  const ownerData = (document.getElementById('ownerSigData')?.value || '').trim();
+  const archData = (document.getElementById('archSigData')?.value || '').trim();
+
+  // 1. Owner Signature Step 6 Card
+  const ownerDropzone = document.getElementById('ownerSigDropzone');
+  const ownerPreview = document.getElementById('ownerSigPreviewBox');
+  const ownerThumb = document.getElementById('ownerSigThumbImg');
+  const ownerRemoveBtn = document.getElementById('btnRemoveOwnerSig');
+  if (ownerData) {
+    if (ownerDropzone) ownerDropzone.style.display = 'none';
+    if (ownerPreview) ownerPreview.style.display = 'flex';
+    if (ownerThumb) ownerThumb.src = ownerData;
+    if (ownerRemoveBtn) ownerRemoveBtn.style.display = 'inline-block';
+  } else {
+    if (ownerDropzone) ownerDropzone.style.display = 'flex';
+    if (ownerPreview) ownerPreview.style.display = 'none';
+    if (ownerThumb) ownerThumb.src = '';
+    if (ownerRemoveBtn) ownerRemoveBtn.style.display = 'none';
+  }
+
+  // 2. Architect Seal Step 6 Card
+  const archDropzone = document.getElementById('archSigDropzone');
+  const archPreview = document.getElementById('archSigPreviewBox');
+  const archThumb = document.getElementById('archSigThumbImg');
+  const archRemoveBtn = document.getElementById('btnRemoveArchSig');
+  if (archData) {
+    if (archDropzone) archDropzone.style.display = 'none';
+    if (archPreview) archPreview.style.display = 'flex';
+    if (archThumb) archThumb.src = archData;
+    if (archRemoveBtn) archRemoveBtn.style.display = 'inline-block';
+  } else {
+    if (archDropzone) archDropzone.style.display = 'flex';
+    if (archPreview) archPreview.style.display = 'none';
+    if (archThumb) archThumb.src = '';
+    if (archRemoveBtn) archRemoveBtn.style.display = 'none';
+  }
+
+  // 3. Drawing Sheet Panel 7 (Page 1)
+  const panelOwnerImg = document.getElementById('panelOwnerSigImg');
+  if (panelOwnerImg) {
+    if (ownerData) {
+      panelOwnerImg.src = ownerData;
+      panelOwnerImg.style.display = 'block';
+    } else {
+      panelOwnerImg.src = '';
+      panelOwnerImg.style.display = 'none';
+    }
+  }
+
+  const panelArchImg = document.getElementById('panelArchSigImg');
+  if (panelArchImg) {
+    if (archData) {
+      panelArchImg.src = archData;
+      panelArchImg.style.display = 'block';
+    } else {
+      panelArchImg.src = '';
+      panelArchImg.style.display = 'none';
+    }
+  }
+
+  // 4. Drawing Sheet Page 2 (Legend Sheet)
+  const p2ArchImg = document.getElementById('p2ArchSigImg');
+  if (p2ArchImg) {
+    if (archData) {
+      p2ArchImg.src = archData;
+      p2ArchImg.style.display = 'block';
+    } else {
+      p2ArchImg.src = '';
+      p2ArchImg.style.display = 'none';
+    }
+  }
+}
+
+/**
+ * Handles text input on Architect Name & Registration Number.
+ */
+function onArchitectInfoInput() {
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
 }
 
