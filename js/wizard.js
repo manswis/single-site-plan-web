@@ -368,7 +368,7 @@ function exportProjectFile() {
   const exportPayload = {
     app: 'e-Plan Studio BBMP',
     format: 'eplan',
-    schemaVersion: '1.2.0',
+    schemaVersion: '1.2.1',
     exportedAt: new Date().toISOString(),
     currentStep,
     formData

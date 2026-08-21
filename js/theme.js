@@ -11,7 +11,7 @@
 window.APP_CONFIG = {
   BRAND_ICON: '🏛️',
   BRAND_NAME: 'e-Plan Studio',
-  VERSION: '1.2.0'
+  VERSION: '1.2.1'
 };
 
 (function () {
@@ -53,7 +53,7 @@ window.APP_CONFIG = {
   function syncAppConfig() {
     const cfg = window.APP_CONFIG || {};
     const icon = cfg.BRAND_ICON || '🏛️';
-    const version = cfg.VERSION || '1.2.0';
+    const version = cfg.VERSION || '1.2.1';
     const name = cfg.BRAND_NAME || 'e-Plan Studio';
 
     // 1. Synchronize Brand Icons

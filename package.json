@@ -1,6 +1,6 @@
 {
   "name": "eplan-studio",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "description": "Instant, 100% client-side vector CAD site plan drafting engine for BBMP Sakala B-to-A Khata drawings.",
   "main": "_worker.js",
   "type": "module",
