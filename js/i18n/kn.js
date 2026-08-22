@@ -26,6 +26,7 @@ export const kn = {
 
   // --- Action Buttons & Stepper Controls ---
   "btn.continue": "ಮುಂದುವರಿಯಿರಿ →",
+  "btn.generate": "ರಚಿಸಿ",
   "btn.back": "← ಹಿಂದಕ್ಕೆ",
   "btn.review": "ಪರಿಶೀಲಿಸಿ →",
   "btn.exportPdf": "ಪಿಡಿಎಫ್ ಡೌನ್‌ಲೋಡ್",

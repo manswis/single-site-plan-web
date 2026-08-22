@@ -26,6 +26,7 @@ export const en = {
 
   // --- Action Buttons & Stepper Controls ---
   "btn.continue": "Continue →",
+  "btn.generate": "Generate",
   "btn.back": "← Back",
   "btn.review": "Review →",
   "btn.exportPdf": "Export PDF",
