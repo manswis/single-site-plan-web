@@ -1838,6 +1838,13 @@ const FIELD_HELP_DATA = {
     what: "The official revenue survey number or site/house number of your plot.",
     where: "Found in your Sale Deed Schedule or 11E Survey Sketch (e.g. Sy No 42/1)."
   },
+  plotArea: {
+    title: "Total Plot Area & Land Unit Converter",
+    what: "The total superficial land area of your site in Square Feet (sq.ft). Must match the measurement written in your registered Sale Deed Schedule and 11E survey sketch.",
+    where: "Look under the 'Schedule of Property' section of your registered Sale Deed or Form 11E Mojini survey sketch.",
+    sample: "Total Area: 1,200 sq.ft (30ft × 40ft) or 2,400 sq.ft (40ft × 60ft)",
+    note: "Tip: If your land is recorded in Guntas, Gajam (Sq.Yards), Cent, or Acre, tap the circular ⇄ Converter button next to the input to auto-convert to sq.ft (e.g., 1 Gunta = 1,089 sq.ft, 1 Gajam = 9 sq.ft, 1 Acre = 43,560 sq.ft)."
+  },
   isOdd: {
     title: "Regular vs Irregular Plot Shape",
     what: "Choose Regular for simple rectangular/square plots (2 dimensions), or Irregular if your plot has 4 unequal or slanted sides.",
@@ -1958,6 +1965,13 @@ const FIELD_HELP_DATA_KN = {
     title: "ಸರ್ವೆ ನಂಬರ್ / ಸೈಟ್ ನಂ",
     what: "ನಿಮ್ಮ ನಿವೇಶನದ ಅಧಿಕೃತ ಕಂದಾಯ ಸರ್ವೆ ಸಂಖ್ಯೆ ಅಥವಾ ಸೈಟ್ ಸಂಖ್ಯೆ.",
     where: "ಕ್ರಯಪತ್ರದ ಶೆಡ್ಯೂಲ್ ಅಥವಾ 11E ಸರ್ವೆ ಸ್ಕೆಚ್‌ನಲ್ಲಿ ಕಂಡುಬರುತ್ತದೆ (ಉದಾ: Sy No 42/1)."
+  },
+  plotArea: {
+    title: "ಒಟ್ಟು ನಿವೇಶನದ ವಿಸ್ತೀರ್ಣ ಮತ್ತು ಭೂ ಪರಿವರ್ತಕ",
+    what: "ನಿಮ್ಮ ನಿವೇಶನದ ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ ಚದರ ಅಡಿಗಳಲ್ಲಿ (sq.ft). ಇದು ನಿಮ್ಮ ನೋಂದಾಯಿತ ಕ್ರಯಪತ್ರದ ಶೆಡ್ಯೂಲ್ ಮತ್ತು 11E ಸರ್ವೆ ಸ್ಕೆಚ್‌ನಲ್ಲಿರುವ ಅಳತೆಗೆ ಹೊಂದಿಕೆಯಾಗಬೇಕು.",
+    where: "ನಿಮ್ಮ ಕ್ರಯಪತ್ರದ 'ಶೆಡ್ಯೂಲ್ ಆಫ್ ಪ್ರಾಪರ್ಟಿ' ಅಥವಾ ನಮೂನೆ 11E ಮೊಜಿನಿ ಸರ್ವೆ ನಕ್ಷೆಯಲ್ಲಿ ನೋಡಿ.",
+    sample: "ಒಟ್ಟು ವಿಸ್ತೀರ್ಣ: ೧,೨೦೦ ಚ.ಅಡಿ (೩೦×೪೦) ಅಥವಾ ೨,೪೦೦ ಚ.ಅಡಿ (೪೦×೬೦)",
+    note: "ಸೂಚನೆ: ನಿಮ್ಮ ಜಮೀನು ಗುಂಟೆ, ಗಜ, ಸೆಂಟ್ ಅಥವಾ ಎಕರೆಯಲ್ಲಿದ್ದರೆ, ಇನ್‌ಪುಟ್ ಪಕ್ಕದಲ್ಲಿರುವ ⇄ ಪರಿವರ್ತಕ ಬಟನ್ ಟ್ಯಾಪ್ ಮಾಡಿ ನೇರವಾಗಿ ಚದರ ಅಡಿಗೆ ಪರಿವರ್ತಿಸಿಕೊಳ್ಳಿ (ಉದಾ: ೧ ಗುಂಟೆ = ೧,೦೮೯ ಚ.ಅಡಿ, ೧ ಗಜ = ೯ ಚ.ಅಡಿ, ೧ ಎಕರೆ = ೪೩,೫೬೦ ಚ.ಅಡಿ)."
   },
   isOdd: {
     title: "ಆಯತಾಕಾರ vs ವಿಷಮ ಕೋನ ನಿವೇಶನ",

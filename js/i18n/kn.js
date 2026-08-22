@@ -147,6 +147,7 @@ export const kn = {
   "converter.units.acre": "ಎಕರೆ (Acre) — ೪೩,೫೬೦ ಚ.ಅಡಿ (೪೦ ಗುಂಟೆ)",
   "converter.units.ankana": "ಅಂಕಣ (Ankana) — ೭೨ ಚ.ಅಡಿ",
   "converter.units.cent": "ಸೆಂಟ್ (Cent) — ೪೩೫.೬ ಚ.ಅಡಿ",
+  "converter.btnTooltip": "ಕರ್ನಾಟಕ ಭೂ ವಿಸ್ತೀರ್ಣ ಪರಿವರ್ತಕ (ಗುಂಟೆ, ಗಜ, ಚ.ಮೀ ನಿಂದ ಚ.ಅಡಿಗೆ)",
 
   // --- BBMP Zone & Ward Directory Modal ---
   "wardModal.title": "ಬಿಬಿಎಂಪಿ ವಲಯ ಮತ್ತು ವಾರ್ಡ್ ಡೈರೆಕ್ಟರಿ",

@@ -891,11 +891,16 @@
 
         <div class="grid">
           <div class="field" style="position: relative;">
-            <label>Plot Area (sq.ft) <span class="required">*</span></label>
+            <label>Plot Area (sq.ft) <span class="required">*</span> <button type="button" class="field-help-btn"
+                onclick="showFieldHelp('plotArea')" title="Help & Where to find"><svg viewBox="0 0 24 24">
+                  <path
+                    d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
+                </svg></button></label>
             <div style="display: flex; align-items: center; gap: 8px;">
               <input id="plotArea" type="number" style="flex: 1;" placeholder="e.g. 2400"
                 oninput="this.dataset.userEdited='true'; clearFieldError('plotArea', 'err-plotArea'); if(typeof renderCanvas==='function') renderCanvas();">
               <button type="button" class="zone-search-circle-btn" onclick="openAreaConverterModal(event)"
+                data-i18n-title="converter.btnTooltip" data-i18n-aria="converter.btnTooltip"
                 title="Open Karnataka Land Area Converter (Gunta, Sq.Yd, Sq.M to Sq.Ft)" aria-label="Convert Land Area">
                 <span class="material-symbols-outlined">swap_horiz</span>
               </button>

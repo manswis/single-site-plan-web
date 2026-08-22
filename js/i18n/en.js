@@ -147,6 +147,7 @@ export const en = {
   "converter.units.acre": "Acre (ಎಕರೆ) — 43,560 sq.ft (40 G)",
   "converter.units.ankana": "Ankana (ಅಂಕಣ) — 72 sq.ft",
   "converter.units.cent": "Cent (ಸೆಂಟ್) — 435.6 sq.ft",
+  "converter.btnTooltip": "Open Karnataka Land Area Converter (Gunta, Sq.Yd, Sq.M to Sq.Ft)",
 
   // --- BBMP Zone & Ward Directory Modal ---
   "wardModal.title": "BBMP Zone & Ward Directory",
