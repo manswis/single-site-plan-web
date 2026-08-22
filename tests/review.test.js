@@ -178,11 +178,20 @@ assert.equal(sCheckedAndGenerated.printBtnDisabled, false, 'Print Drawing must b
 console.log('   ✓ Legal consent gating and post-generation button enablement verified.');
 
 // 4. Window Export Parity AST / Static Verification
-console.log('\n4. Verifying Window Export Parity in js/ui.js:');
+console.log('\n4. Verifying Window Export Parity across UI, Renderer & Wizard Modules:');
 const uiJsPath = path.resolve('js/ui.js');
 const uiJsContent = fs.readFileSync(uiJsPath, 'utf8');
 
-const CRITICAL_WINDOW_EXPORTS = [
+const rendererJsPath = path.resolve('js/renderer.js');
+const rendererJsContent = fs.readFileSync(rendererJsPath, 'utf8');
+
+const wizardJsPath = path.resolve('js/wizard.js');
+const wizardJsContent = fs.readFileSync(wizardJsPath, 'utf8');
+
+const CRITICAL_UI_EXPORTS = [
+  'downloadPDFPackage',
+  'printPlanPackage',
+  'reportDrawingIssue',
   'buildReviewSummary',
   'toggleReviewSection',
   'toggleAllReviewSections',
@@ -201,10 +210,25 @@ const CRITICAL_WINDOW_EXPORTS = [
   'closeWardSearchModal'
 ];
 
-CRITICAL_WINDOW_EXPORTS.forEach(fnName => {
+CRITICAL_UI_EXPORTS.forEach(fnName => {
   const exportPattern = new RegExp(`window\\.${fnName}\\s*=`, 'm');
   assert.ok(exportPattern.test(uiJsContent), `CRITICAL REGRESSION: window.${fnName} is missing from window exports block in js/ui.js`);
 });
-console.log(`   ✓ All ${CRITICAL_WINDOW_EXPORTS.length} critical UI functions confirmed present in window exports.`);
+console.log(`   ✓ All ${CRITICAL_UI_EXPORTS.length} critical UI functions confirmed present in js/ui.js exports.`);
+
+const CRITICAL_RENDERER_EXPORTS = ['generatePlan', 'updateKeyPlan', 'parseCoordinates'];
+CRITICAL_RENDERER_EXPORTS.forEach(fnName => {
+  const exportPattern = new RegExp(`window\\.${fnName}\\s*=`, 'm');
+  assert.ok(exportPattern.test(rendererJsContent), `CRITICAL REGRESSION: window.${fnName} is missing from window exports block in js/renderer.js`);
+});
+console.log(`   ✓ All ${CRITICAL_RENDERER_EXPORTS.length} renderer CAD engine functions confirmed present in js/renderer.js exports.`);
+
+const CRITICAL_WIZARD_EXPORTS = ['initWizard', 'goToStep', 'nextStep', 'prevStep', 'showStep', 'saveDraft', 'restoreDraft', 'exportProjectFile'];
+CRITICAL_WIZARD_EXPORTS.forEach(fnName => {
+  const exportPattern = new RegExp(`window\\.${fnName}\\s*=`, 'm');
+  assert.ok(exportPattern.test(wizardJsContent), `CRITICAL REGRESSION: window.${fnName} is missing from window exports block in js/wizard.js`);
+});
+console.log(`   ✓ All ${CRITICAL_WIZARD_EXPORTS.length} wizard workflow functions confirmed present in js/wizard.js exports.`);
 
 console.log('\n🎉 ALL 4 REVIEW SUMMARY & EXPORT TEST SUITES PASSED WITH 100% SUCCESS!\n');
+

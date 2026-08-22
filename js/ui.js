@@ -3141,7 +3141,7 @@ if (typeof window !== 'undefined') {
   window.parseFeetInchesString = parseFeetInchesString;
   window.initSmartFtInAutoTab = initSmartFtInAutoTab;
 
-  // Step 7 Review & Export Summary
+  // Step 7 Review, Actions & PDF Export Package
   window.buildReviewSummary = buildReviewSummary;
   window.toggleReviewSection = toggleReviewSection;
   window.toggleAllReviewSections = toggleAllReviewSections;
@@ -3150,6 +3150,17 @@ if (typeof window !== 'undefined') {
   window.formatBoundarySummary = formatBoundarySummary;
   window.toggleLegalConsent = toggleLegalConsent;
   window.onGeneratePlanClick = onGeneratePlanClick;
+  window.downloadPDFPackage = downloadPDFPackage;
+  window.printPlanPackage = printPlanPackage;
+  window.reportDrawingIssue = reportDrawingIssue;
+  window.toggleLegendSheetPage = toggleLegendSheetPage;
+  window.toggleSampleWatermark = toggleSampleWatermark;
+  window.toggleBoundaryType = toggleBoundaryType;
+  window.toggleRoadWidening = toggleRoadWidening;
+  window.toggleBufferZone = toggleBufferZone;
+  window.syncSignaturePreviews = syncSignaturePreviews;
+  window.recalculateSetbacks = recalculateSetbacks;
+  window.recalculateGeometry = recalculateGeometry;
 
   // Map Location & Geocoding
   window.openLocationPickerModal = openLocationPickerModal;

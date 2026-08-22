@@ -100,7 +100,8 @@
       style="max-width: 440px; text-align: left; padding: 24px; border-radius: 20px;">
       <div
         style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid var(--apple-border); padding-bottom: 10px;">
-        <h3 id="helpModalTitle" data-i18n="help.title" style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">
+        <h3 id="helpModalTitle" data-i18n="help.title"
+          style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">
           Field Help</h3>
         <button type="button" onclick="closeFieldHelp()"
           style="background: none; border: none; font-size: 20px; font-weight: 700; color: var(--apple-text-secondary); cursor: pointer; padding: 0 4px;">✕</button>
@@ -315,9 +316,11 @@
         <div class="converter-input-wrapper">
           <input type="number" id="convModalInputValue" class="converter-modal-input" placeholder="e.g. 1.5" step="any"
             min="0" oninput="calculateModalConvertedArea()" autocomplete="off">
-          
+
           <div class="converter-unit-dropdown-wrapper">
-            <button type="button" class="converter-unit-select-btn" id="convModalUnitBtn" onclick="toggleConverterUnitMenu(event)" aria-haspopup="listbox" aria-expanded="false" title="Click to select unit type">
+            <button type="button" class="converter-unit-select-btn" id="convModalUnitBtn"
+              onclick="toggleConverterUnitMenu(event)" aria-haspopup="listbox" aria-expanded="false"
+              title="Click to select unit type">
               <span id="convModalUnitBtnText">Gunta (1,089 sq.ft)</span>
               <span class="material-symbols-outlined dropdown-chevron">expand_more</span>
             </button>
@@ -394,16 +397,25 @@
 
       <!-- Quick Presets -->
       <div class="converter-modal-section">
-        <label class="converter-modal-label" data-i18n="converter.presetsLabel">Quick Presets (Standard Plots & Measures)</label>
+        <label class="converter-modal-label" data-i18n="converter.presetsLabel">Quick Presets (Standard Plots &
+          Measures)</label>
         <div class="converter-presets-chips-grid">
-          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1, 'gunta')">1 Gunta (1,089 sq.ft)</button>
-          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1.5, 'gunta')">1.5 Guntas (1,633.5 sq.ft)</button>
-          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(2, 'gunta')">2 Guntas (2,178 sq.ft)</button>
-          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1200, 'sqft')">30 × 40 (1,200 sq.ft)</button>
-          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1500, 'sqft')">30 × 50 (1,500 sq.ft)</button>
-          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(2400, 'sqft')">40 × 60 (2,400 sq.ft)</button>
-          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(4000, 'sqft')">50 × 80 (4,000 sq.ft)</button>
-          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(100, 'sqyd')">100 Sq.Yds (900 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1, 'gunta')">1 Gunta (1,089
+            sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1.5, 'gunta')">1.5 Guntas
+            (1,633.5 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(2, 'gunta')">2 Guntas (2,178
+            sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1200, 'sqft')">30 × 40
+            (1,200 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1500, 'sqft')">30 × 50
+            (1,500 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(2400, 'sqft')">40 × 60
+            (2,400 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(4000, 'sqft')">50 × 80
+            (4,000 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(100, 'sqyd')">100 Sq.Yds
+            (900 sq.ft)</button>
         </div>
       </div>
 
@@ -620,10 +632,12 @@
             </div>
             <div class="portability-text-wrap">
               <div class="portability-title" id="assistantLangPrompt">Prefer drafting in English?</div>
-              <div class="portability-desc" id="assistantLangDesc">Switch studio form inputs, guidance, and labels to English.</div>
+              <div class="portability-desc" id="assistantLangDesc">Switch studio form inputs, guidance, and labels to
+                English.</div>
             </div>
           </div>
-          <button type="button" class="assistant-lang-switch assistant-lang-btn portability-btn" id="assistantLangSwitch">
+          <button type="button" class="assistant-lang-switch assistant-lang-btn portability-btn"
+            id="assistantLangSwitch">
             <span id="assistantLangAction">Switch to English</span>
           </button>
         </div>

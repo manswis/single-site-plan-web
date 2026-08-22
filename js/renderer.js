@@ -1188,3 +1188,11 @@ function updateKeyPlan() {
 
   svg.innerHTML = html;
 }
+
+if (typeof window !== 'undefined') {
+  window.generatePlan = generatePlan;
+  window.updateKeyPlan = updateKeyPlan;
+  window.parseCoordinates = parseCoordinates;
+  window.renderCenteredKeyPlanMap = renderCenteredKeyPlanMap;
+}
+

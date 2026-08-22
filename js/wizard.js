@@ -1164,3 +1164,23 @@ window.addEventListener('localeChanged', () => {
     showStep(currentStep, false, false);
   }
 });
+
+if (typeof window !== 'undefined') {
+  window.initWizard = initWizard;
+  window.goToStep = goToStep;
+  window.nextStep = nextStep;
+  window.prevStep = prevStep;
+  window.showStep = showStep;
+  window.saveDraft = saveDraft;
+  window.restoreDraft = restoreDraft;
+  window.discardDraft = discardDraft;
+  window.validateStep = validateStep;
+  window.exportProjectFile = exportProjectFile;
+  window.triggerProjectImport = triggerProjectImport;
+  window.handleProjectFileImport = handleProjectFileImport;
+  window.closeProjectImportErrorModal = closeProjectImportErrorModal;
+  window.showDraftRestoreModal = showDraftRestoreModal;
+  window.clearFieldError = clearFieldError;
+  window.checkRequired = checkRequired;
+}
+
