@@ -3195,7 +3195,11 @@ if (typeof window !== 'undefined') {
   window.closeSignatureCropModal = closeSignatureCropModal;
   window.saveCroppedSignature = saveCroppedSignature;
   window.removeSignature = removeSignature;
+  window.reopenSignatureCrop = reopenSignatureCrop;
   window.rotateSignature = rotateSignature;
+  window.resetCropTransform = resetCropTransform;
+  window.onSignatureCropZoom = onSignatureCropZoom;
+  window.applySignatureCrop = applySignatureCrop;
   window.onSignatureCropTypeChange = onSignatureCropTypeChange;
   window.triggerProjectImport = triggerProjectImport;
   window.handleProjectFileImport = handleProjectFileImport;
