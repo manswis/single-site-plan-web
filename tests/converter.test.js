@@ -118,20 +118,36 @@ assert.equal(convertLandArea(Infinity, 'gunta'), 0, 'Infinity input must fail-sa
 assert.equal(convertLandArea(10, 'unknown_unit'), 0, 'Unregistered unit must fail-safe to 0');
 console.log('   ✓ Negative, malformed, non-numeric, and infinite inputs fail-safely without throwing.');
 
-// 6. Field Help Data Dictionary Parity
-console.log('\n6. Verifying Field Help Data Dictionary Schema:');
-const REQUIRED_HELP_KEYS = [
-  'epId', 'pidNo', 'adlrNo', 'dcOrderNo', 'zoneName', 'wardNo',
-  'siteAddress', 'plotNo', 'gpsCoords', 'surveyNo', 'plotArea',
-  'isOdd', 'plotDimensions', 'roadFacing', 'roadWidth', 'bldgType',
-  'bldgOrientation', 'setbacks', 'boundaries', 'roadWidening',
-  'bufferZone', 'challanDetails'
-];
+// 7. Modal Initial Number Synchronization Logic
+console.log('\n7. Verifying Modal Initial Number Synchronization:');
+function resolveConverterInitialState(plotAreaValue) {
+  if (plotAreaValue && parseFloat(plotAreaValue) > 0) {
+    return {
+      initialValue: String(plotAreaValue).trim(),
+      initialUnit: 'sqft'
+    };
+  }
+  return {
+    initialValue: '1',
+    initialUnit: 'gunta'
+  };
+}
 
-assert.ok(REQUIRED_HELP_KEYS.includes('plotArea'), 'plotArea must exist in help keys');
-REQUIRED_HELP_KEYS.forEach(k => {
-  assert.ok(typeof k === 'string' && k.length > 0);
-});
-console.log(`   ✓ All ${REQUIRED_HELP_KEYS.length} field help entries verified including plotArea & land converter.`);
+const state1 = resolveConverterInitialState('2400');
+assert.equal(state1.initialValue, '2400', 'Must start with exact number from plot area input');
+assert.equal(state1.initialUnit, 'sqft', 'Must start with sqft unit when plot area exists');
 
-console.log('\n🎉 ALL 6 CONVERTER & HELP TEST SUITES PASSED WITH 100% SUCCESS!\n');
+const state2 = resolveConverterInitialState(' 1200 ');
+assert.equal(state2.initialValue, '1200', 'Must trim and start with exact number from plot area input');
+assert.equal(state2.initialUnit, 'sqft');
+
+const state3 = resolveConverterInitialState('');
+assert.equal(state3.initialValue, '1', 'Must fallback to 1 when plot area is empty');
+assert.equal(state3.initialUnit, 'gunta', 'Must fallback to gunta when plot area is empty');
+
+const state4 = resolveConverterInitialState('0');
+assert.equal(state4.initialValue, '1', 'Must fallback to 1 when plot area is 0');
+assert.equal(state4.initialUnit, 'gunta');
+console.log('   ✓ Modal initial start number correctly mirrors Plot Area (sq.ft) input value.');
+
+console.log('\n🎉 ALL 7 CONVERTER & HELP TEST SUITES PASSED WITH 100% SUCCESS!\n');

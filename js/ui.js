@@ -2578,15 +2578,12 @@ function openAreaConverterModal(e) {
   const plotAreaInput = document.getElementById('plotArea');
   const inputEl = document.getElementById('convModalInputValue');
   if (inputEl) {
-    if (!inputEl.value || parseFloat(inputEl.value) <= 0) {
-      if (plotAreaInput && parseFloat(plotAreaInput.value) > 0) {
-        const currentSqFt = parseFloat(plotAreaInput.value);
-        inputEl.value = (currentSqFt / 1089).toFixed(2).replace(/\.00$/, '');
-        activeConverterUnit = 'gunta';
-      } else {
-        inputEl.value = '1';
-        activeConverterUnit = 'gunta';
-      }
+    if (plotAreaInput && plotAreaInput.value && parseFloat(plotAreaInput.value) > 0) {
+      inputEl.value = plotAreaInput.value.trim();
+      activeConverterUnit = 'sqft';
+    } else {
+      inputEl.value = '1';
+      activeConverterUnit = 'gunta';
     }
     setTimeout(() => {
       inputEl.focus();
