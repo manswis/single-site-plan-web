@@ -21,6 +21,7 @@
 
   <link rel="stylesheet" href="css/styles.min.css">
   <script src="js/theme.min.js"></script>
+  <script src="js/i18n.min.js"></script>
 </head>
 
 <body>
@@ -32,17 +33,21 @@
         <span class="app-brand-icon" style="margin-right: 6px;"></span>
         <span class="brand-text-desktop app-brand-name"></span>
         <span class="brand-text-mobile app-brand-name"></span>
-        <span class="apple-pill-badge">B-to-A Khata Ready</span>
+        <span class="apple-pill-badge" data-i18n="brand.badge">B-to-A Khata Ready</span>
       </a>
       <div style="display: flex; align-items: center;">
         <nav class="apple-nav-links desktop-nav-bar">
-          <a href="index.html">Home</a>
-          <a href="studio.html">Studio Workbench</a>
-          <a href="pricing.html" class="active">Pricing</a>
-          <a href="legal.html">Legal Disclaimer</a>
-          <a href="faq.html">FAQ & Help</a>
-          <a href="contact.html">Contact & Support</a>
+          <a href="index.html" data-i18n="nav.home">Home</a>
+          <a href="studio.html" data-i18n="nav.workbench">Studio Workbench</a>
+          <a href="pricing.html" class="active" data-i18n="nav.pricing">Pricing</a>
+          <a href="legal.html" data-i18n="nav.legal">Legal Disclaimer</a>
+          <a href="faq.html" data-i18n="nav.faq">FAQ & Help</a>
+          <a href="contact.html" data-i18n="nav.contact">Contact & Support</a>
         </nav>
+        <button type="button" class="lang-toggle-btn desktop-nav-bar" aria-label="Switch Language"
+          title="Switch to Kannada (ಕನ್ನಡ)">
+          <span class="lang-btn-text">ಕನ್ನಡ</span>
+        </button>
         <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme"
           title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
@@ -56,27 +61,33 @@
     <!-- Horizontal Sliding Control Navigation Bar for Mobile Pages -->
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
       <div class="mobile-nav-slider" style="margin-bottom: 0; flex: 1;">
-        <a href="index.html" class="mobile-nav-item">Home</a>
-        <a href="studio.html" class="mobile-nav-item">Workbench</a>
-        <a href="pricing.html" class="mobile-nav-item active">Pricing</a>
-        <a href="legal.html" class="mobile-nav-item">Legal</a>
-        <a href="faq.html" class="mobile-nav-item">FAQ & Help</a>
-        <a href="contact.html" class="mobile-nav-item">Contact</a>
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav.home">Home</a>
+        <a href="studio.html" class="mobile-nav-item" data-i18n="nav.workbench">Workbench</a>
+        <a href="pricing.html" class="mobile-nav-item active" data-i18n="nav.pricing">Pricing</a>
+        <a href="legal.html" class="mobile-nav-item" data-i18n="nav.legal">Legal</a>
+        <a href="faq.html" class="mobile-nav-item" data-i18n="nav.faq">FAQ & Help</a>
+        <a href="contact.html" class="mobile-nav-item" data-i18n="nav.contact">Contact</a>
       </div>
-      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
-        title="Toggle Light/Dark Mode">
-        <span class="material-symbols-outlined">dark_mode</span>
-      </button>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button type="button" class="lang-toggle-btn mobile-lang-btn" aria-label="Switch Language"
+          title="Switch to Kannada (ಕನ್ನಡ)">
+          <span class="lang-btn-text">ಕನ್ನಡ</span>
+        </button>
+        <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
+          title="Toggle Light/Dark Mode">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+      </div>
     </div>
 
     <!-- Pricing Hero -->
     <section class="apple-hero" style="padding-top: 50px;">
       <div
         style="background: #eff6ff; border: 1.5px solid #3b82f6; border-radius: 980px; padding: 6px 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #1e40af; margin-bottom: 16px;">
-        <span>🎉 INTRODUCTORY LAUNCH OFFER — 100% FREE FOR ALL USERS</span>
+        <span data-i18n="pricing.hero.badge">🎉 INTRODUCTORY LAUNCH OFFER — 100% FREE FOR ALL USERS</span>
       </div>
-      <h1>Simple, Transparent Pricing</h1>
-      <p class="subtitle">All Pro features are currently 100% free during our public launch. Generate unlimited single
+      <h1 data-i18n="pricing.hero.title">Simple, Transparent Pricing</h1>
+      <p class="subtitle" data-i18n="pricing.hero.subtitle">All Pro features are currently 100% free during our public launch. Generate unlimited single
         plot layout plans without payment.</p>
     </section>
 
@@ -85,57 +96,57 @@
       <div class="pricing-grid">
         <div class="price-card">
           <div>
-            <h3>Free Sample Draft</h3>
-            <div class="price">₹0 <span>/ plan</span></div>
+            <h3 data-i18n="pricing.plan.free.title">Free Sample Draft</h3>
+            <div class="price"><span data-i18n="pricing.plan.free.price">₹0</span> <span data-i18n="pricing.plan.free.unit">/ plan</span></div>
             <ul class="price-features">
-              <li>✅ Live Vector Drawing Workbench</li>
-              <li>✅ Auto Setback Math Calculations</li>
-              <li>✅ Sample Watermarked PDF Download</li>
-              <li>✅ 100% Client-Side Local Privacy</li>
+              <li data-i18n="pricing.plan.free.f1">✅ Live Vector Drawing Workbench</li>
+              <li data-i18n="pricing.plan.free.f2">✅ Auto Setback Math Calculations</li>
+              <li data-i18n="pricing.plan.free.f3">✅ Sample Watermarked PDF Download</li>
+              <li data-i18n="pricing.plan.free.f4">✅ 100% Client-Side Local Privacy</li>
             </ul>
           </div>
           <a href="index.html" class="apple-btn-secondary"
-            style="display:block; text-align:center; text-decoration:none; line-height:40px;">Launch Free Workbench</a>
+            style="display:block; text-align:center; text-decoration:none; line-height:40px;" data-i18n="pricing.plan.free.btn">Launch Free Workbench</a>
         </div>
 
         <div class="price-card featured">
-          <span class="featured-badge" style="background:#059669;">Launch Offer: Free</span>
+          <span class="featured-badge" style="background:#059669;" data-i18n="pricing.plan.pro.badge">Launch Offer: Free</span>
           <div>
-            <h3>Pro Official PDF</h3>
+            <h3 data-i18n="pricing.plan.pro.title">Pro Official PDF</h3>
             <div class="price"><span
-                style="text-decoration: line-through; color: #94a3b8; font-size: 22px; margin-right: 8px;">₹499</span>
-              ₹0 <span>/ plan</span></div>
+                style="text-decoration: line-through; color: #94a3b8; font-size: 22px; margin-right: 8px;" data-i18n="pricing.plan.pro.origPrice">₹499</span>
+              <span data-i18n="pricing.plan.pro.price">₹0</span> <span data-i18n="pricing.plan.pro.unit">/ plan</span></div>
             <ul class="price-features">
-              <li>✅ High-Resolution Unwatermarked PDF</li>
-              <li>✅ Page 1 Layout Plan + Page 2 Legend Sheet</li>
-              <li>✅ ADLR Survey & Deed DNA Verification</li>
-              <li>✅ 100% Client-Side Local Privacy</li>
+              <li data-i18n="pricing.plan.pro.f1">✅ High-Resolution Unwatermarked PDF</li>
+              <li data-i18n="pricing.plan.pro.f2">✅ Page 1 Layout Plan + Page 2 Legend Sheet</li>
+              <li data-i18n="pricing.plan.pro.f3">✅ ADLR Survey & Deed DNA Verification</li>
+              <li data-i18n="pricing.plan.pro.f4">✅ 100% Client-Side Local Privacy</li>
             </ul>
           </div>
           <a href="index.html" class="apple-btn-primary"
-            style="display:block; text-align:center; text-decoration:none; line-height:40px; background:#059669;">Generate
+            style="display:block; text-align:center; text-decoration:none; line-height:40px; background:#059669;" data-i18n="pricing.plan.pro.btn">Generate
             Free Pro PDF</a>
         </div>
 
         <div class="price-card">
           <div>
-            <h3>Architect Enterprise</h3>
+            <h3 data-i18n="pricing.plan.ent.title">Architect Enterprise</h3>
             <div class="price"><span
-                style="text-decoration: line-through; color: #94a3b8; font-size: 22px; margin-right: 8px;">₹2,499</span>
-              ₹0 <span>/ month</span></div>
+                style="text-decoration: line-through; color: #94a3b8; font-size: 22px; margin-right: 8px;" data-i18n="pricing.plan.ent.origPrice">₹2,499</span>
+              <span data-i18n="pricing.plan.ent.price">₹0</span> <span data-i18n="pricing.plan.ent.unit">/ month</span></div>
             <ul class="price-features">
-              <li>✅ Unlimited Plan Generations</li>
-              <li>✅ Digital COA Stamp & Signature Overlay</li>
-              <li>✅ Multi-Client Batch Property Export</li>
-              <li>✅ Zero Data Upload Privacy Guarantee</li>
+              <li data-i18n="pricing.plan.ent.f1">✅ Unlimited Plan Generations</li>
+              <li data-i18n="pricing.plan.ent.f2">✅ Digital COA Stamp & Signature Overlay</li>
+              <li data-i18n="pricing.plan.ent.f3">✅ Multi-Client Batch Property Export</li>
+              <li data-i18n="pricing.plan.ent.f4">✅ Zero Data Upload Privacy Guarantee</li>
             </ul>
           </div>
           <a href="index.html" class="apple-btn-secondary"
-            style="display:block; text-align:center; text-decoration:none; line-height:40px;">Start Enterprise Free</a>
+            style="display:block; text-align:center; text-decoration:none; line-height:40px;" data-i18n="pricing.plan.ent.btn">Start Enterprise Free</a>
         </div>
       </div>
 
-      <p style="margin-top: 30px; font-size: 12px; color: var(--apple-text-secondary); text-align: center;">
+      <p style="margin-top: 30px; font-size: 12px; color: var(--apple-text-secondary); text-align: center;" data-i18n="pricing.disclaimer">
         *Introductory launch prices are subject to change without prior notice.
       </p>
     </section>

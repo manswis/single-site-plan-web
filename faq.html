@@ -21,6 +21,7 @@
 
   <link rel="stylesheet" href="css/styles.min.css">
   <script src="js/theme.min.js"></script>
+  <script src="js/i18n.min.js"></script>
 </head>
 
 <body>
@@ -32,17 +33,21 @@
         <span class="app-brand-icon" style="margin-right: 6px;"></span>
         <span class="brand-text-desktop app-brand-name"></span>
         <span class="brand-text-mobile app-brand-name"></span>
-        <span class="apple-pill-badge">B-to-A Khata Ready</span>
+        <span class="apple-pill-badge" data-i18n="brand.badge">B-to-A Khata Ready</span>
       </a>
       <div style="display: flex; align-items: center;">
         <nav class="apple-nav-links desktop-nav-bar">
-          <a href="index.html">Home</a>
-          <a href="studio.html">Studio Workbench</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="legal.html">Legal Terms</a>
-          <a href="faq.html" class="active">FAQ & Help</a>
-          <a href="contact.html">Contact & Support</a>
+          <a href="index.html" data-i18n="nav.home">Home</a>
+          <a href="studio.html" data-i18n="nav.workbench">Studio Workbench</a>
+          <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+          <a href="legal.html" data-i18n="nav.legal">Legal Terms</a>
+          <a href="faq.html" class="active" data-i18n="nav.faq">FAQ & Help</a>
+          <a href="contact.html" data-i18n="nav.contact">Contact & Support</a>
         </nav>
+        <button type="button" class="lang-toggle-btn desktop-nav-bar" aria-label="Switch Language"
+          title="Switch to Kannada (ಕನ್ನಡ)">
+          <span class="lang-btn-text">ಕನ್ನಡ</span>
+        </button>
         <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme"
           title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
@@ -56,34 +61,40 @@
     <!-- Mobile Nav Slider -->
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
       <div class="mobile-nav-slider" style="margin-bottom: 0; flex: 1;">
-        <a href="index.html" class="mobile-nav-item">Home</a>
-        <a href="studio.html" class="mobile-nav-item">Workbench</a>
-        <a href="pricing.html" class="mobile-nav-item">Pricing</a>
-        <a href="legal.html" class="mobile-nav-item">Legal</a>
-        <a href="faq.html" class="mobile-nav-item active">FAQ & Help</a>
-        <a href="contact.html" class="mobile-nav-item">Contact</a>
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav.home">Home</a>
+        <a href="studio.html" class="mobile-nav-item" data-i18n="nav.workbench">Workbench</a>
+        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav.pricing">Pricing</a>
+        <a href="legal.html" class="mobile-nav-item" data-i18n="nav.legal">Legal</a>
+        <a href="faq.html" class="mobile-nav-item active" data-i18n="nav.faq">FAQ & Help</a>
+        <a href="contact.html" class="mobile-nav-item" data-i18n="nav.contact">Contact</a>
       </div>
-      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
-        title="Toggle Light/Dark Mode">
-        <span class="material-symbols-outlined">dark_mode</span>
-      </button>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button type="button" class="lang-toggle-btn mobile-lang-btn" aria-label="Switch Language"
+          title="Switch to Kannada (ಕನ್ನಡ)">
+          <span class="lang-btn-text">ಕನ್ನಡ</span>
+        </button>
+        <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
+          title="Toggle Light/Dark Mode">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+      </div>
     </div>
 
     <!-- Hero Section -->
     <section class="apple-hero" style="padding-top: 40px; padding-bottom: 20px;">
-      <h1>FAQ & User Guide</h1>
-      <p class="subtitle">Easy step-by-step instructions to find your property documents and complete your single plot
+      <h1 data-i18n="faq.hero.title">FAQ & User Guide</h1>
+      <p class="subtitle" data-i18n="faq.hero.subtitle">Easy step-by-step instructions to find your property documents and complete your single plot
         plan.</p>
     </section>
 
     <!-- Navigation Pills: Guide vs FAQ -->
     <div class="help-tab-container" style="display: flex; justify-content: center; gap: 12px; margin-bottom: 30px;">
       <button type="button" id="tabGuideBtn" class="apple-btn-primary" onclick="switchHelpTab('guide')"
-        style="padding: 10px 22px; font-weight: 600;">
-        Help
+        style="padding: 10px 22px; font-weight: 600;" data-i18n="faq.tab.guide">
+        Help Guide
       </button>
       <button type="button" id="tabFaqBtn" class="apple-btn-secondary" onclick="switchHelpTab('faq')"
-        style="padding: 10px 22px; font-weight: 600;">
+        style="padding: 10px 22px; font-weight: 600;" data-i18n="faq.tab.faq">
         Frequently Asked Questions
       </button>
     </div>
@@ -94,10 +105,10 @@
       <!-- Step 1 Guide Card -->
       <div class="help-step-card">
         <div class="help-step-header">
-          <span class="help-step-badge">Step 1</span>
-          <h3>Property Records & Document Numbers</h3>
+          <span class="help-step-badge" data-i18n="faq.step1.badge">Step 1</span>
+          <h3 data-i18n="faq.step1.title">Property Records & Document Numbers</h3>
         </div>
-        <p class="help-step-intro">Enter the numbers printed on your government property certificates.</p>
+        <p class="help-step-intro" data-i18n="faq.step1.intro">Enter the numbers printed on your government property certificates.</p>
 
         <div class="help-grid">
           <!-- Field 1: eKhata ID -->
@@ -267,10 +278,10 @@
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>What is BBMP B-to-A Khata conversion and why do I need a site plan?</span>
+          <span data-i18n="faq.q1.question">What is BBMP B-to-A Khata conversion and why do I need a site plan?</span>
           <span>+</span>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer" data-i18n="faq.q1.answer">
           B-Khata is a temporary tax entry for unapproved properties. A-Khata is the official permanent ownership
           certificate issued by BBMP. To get A-Khata, BBMP requires a clean single plot layout plan showing your plot
           boundaries, road width, and setbacks.
@@ -279,10 +290,10 @@
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>Where can I get my eKhata ID (ePID)?</span>
+          <span data-i18n="faq.q2.question">Where can I get my eKhata ID (ePID)?</span>
           <span>+</span>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer" data-i18n="faq.q2.answer">
           You can check or download your eKhata ID from the official Karnataka e-Khata portal
           (bbmpekhata.karnataka.gov.in). It is a 10-digit number printed on the top-right corner of your e-Khata letter.
         </div>
@@ -290,10 +301,10 @@
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>What is an 11E Survey Sketch?</span>
+          <span data-i18n="faq.q3.question">What is an 11E Survey Sketch?</span>
           <span>+</span>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer" data-i18n="faq.q3.answer">
           An 11E Sketch is an official survey sketch map issued by the government land records department (ADLR) via the
           Bhoomi Mojini system. It confirms the exact physical shape and measurements of your plot.
         </div>
@@ -301,10 +312,10 @@
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>How are open spaces (setbacks) calculated?</span>
+          <span data-i18n="faq.q4.question">How are open spaces (setbacks) calculated?</span>
           <span>+</span>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer" data-i18n="faq.q4.answer">
           Setbacks are open spaces you must leave on the front, back, and sides of your building. Our app automatically
           calculates the required setbacks based on your plot size and road width following BBMP master plan
           regulations.
@@ -313,10 +324,10 @@
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>What if my plot has 4 unequal or slanted sides?</span>
+          <span data-i18n="faq.q5.question">What if my plot has 4 unequal or slanted sides?</span>
           <span>+</span>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer" data-i18n="faq.q5.answer">
           On Step 3, check the "Irregular Plot" box. You can then enter all 4 side lengths (North, South, East, West)
           individually. The system will draw the plot shape accurately.
         </div>
@@ -324,10 +335,10 @@
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>Is my property data safe and private?</span>
+          <span data-i18n="faq.q6.question">Is my property data safe and private?</span>
           <span>+</span>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer" data-i18n="faq.q6.answer">
           Yes, 100%. All your data is saved and processed inside your web browser. No property details or personal
           information are sent or saved on external servers.
         </div>
@@ -335,10 +346,10 @@
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>Does my final plan need an architect's signature?</span>
+          <span data-i18n="faq.q7.question">Does my final plan need an architect's signature?</span>
           <span>+</span>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer" data-i18n="faq.q7.answer">
           Yes. The generated PDF comes with standard signature and seal boxes for your licensed architect or engineer to
           sign before submitting to BBMP.
         </div>
@@ -346,10 +357,10 @@
 
       <div class="faq-item">
         <div class="faq-question" onclick="toggleFaq(this)">
-          <span>Can I edit my details if I make a mistake?</span>
+          <span data-i18n="faq.q8.question">Can I edit my details if I make a mistake?</span>
           <span>+</span>
         </div>
-        <div class="faq-answer">
+        <div class="faq-answer" data-i18n="faq.q8.answer">
           Yes. On Step 7 (Summary), you can click the "Edit" button next to any section to go back and update your
           information anytime.
         </div>
@@ -357,7 +368,7 @@
 
     </div>
 
-    <!-- Script for Tab Switching -->
+    <!-- Script for Tab Switching & FAQ Accordion -->
     <script>
       function switchHelpTab(tab) {
         const guideSec = document.getElementById('helpGuideSection');
@@ -376,6 +387,15 @@
           guideBtn.className = 'apple-btn-secondary';
           faqBtn.className = 'apple-btn-primary';
         }
+      }
+
+      function toggleFaq(el) {
+        const ans = el.nextElementSibling;
+        const icon = el.querySelector('span:last-child');
+        if (!ans) return;
+        const isOpen = ans.style.display === 'block';
+        ans.style.display = isOpen ? 'none' : 'block';
+        if (icon) icon.textContent = isOpen ? '+' : '−';
       }
     </script>
 
@@ -410,7 +430,6 @@
 
   </div>
 
-  <script src="js/ui.js"></script>
 </body>
 
 </html>

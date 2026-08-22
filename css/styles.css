@@ -387,6 +387,131 @@
   display: none;
 }
 
+/* Standalone Apple Pill Language Switcher Button (Text-only) */
+.lang-toggle-btn {
+  background: rgba(235, 235, 240, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  height: 36px;
+  padding: 0 15px;
+  border-radius: 980px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--apple-text-primary);
+  font-size: 13px;
+  font-weight: 700;
+  user-select: none;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.lang-toggle-btn:hover {
+  color: var(--apple-accent);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transform: scale(1.04);
+}
+
+[data-theme="dark"] .lang-toggle-btn {
+  background: rgba(44, 44, 46, 0.75);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .lang-toggle-btn span,
+[data-theme="dark"] .lang-toggle-btn .lang-btn-text {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .lang-toggle-btn:hover {
+  color: #ffffff !important;
+  background: #3a3a3c;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-lang-btn {
+  display: none;
+}
+
+/* Step 1 Contextual Assistant Language Banner */
+.assistant-lang-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 113, 227, 0.06);
+  border: 1px solid rgba(0, 113, 227, 0.18);
+  border-radius: 12px;
+  padding: 9px 14px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--apple-text-primary);
+}
+
+.assistant-lang-banner span {
+  color: var(--apple-text-primary);
+}
+
+.assistant-lang-switch {
+  background: #0071e3;
+  color: #ffffff !important;
+  border: none;
+  border-radius: 980px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 113, 227, 0.2);
+}
+
+.assistant-lang-switch span,
+.assistant-lang-switch #assistantLangAction {
+  color: #ffffff !important;
+}
+
+.assistant-lang-switch:hover {
+  background: #0077ed;
+  color: #ffffff !important;
+  transform: scale(1.04);
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.35);
+}
+
+[data-theme="dark"] .assistant-lang-banner {
+  background: rgba(41, 151, 255, 0.12);
+  border-color: rgba(41, 151, 255, 0.3);
+  color: #f5f5f7;
+}
+
+[data-theme="dark"] .assistant-lang-banner span,
+[data-theme="dark"] #assistantLangPrompt {
+  color: #f5f5f7 !important;
+}
+
+[data-theme="dark"] .assistant-lang-switch {
+  background: #0071e3 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.4);
+}
+
+[data-theme="dark"] .assistant-lang-switch span,
+[data-theme="dark"] .assistant-lang-switch #assistantLangAction {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .assistant-lang-switch:hover {
+  background: #2997ff !important;
+  color: #ffffff !important;
+}
+
 /* Global Reset & Base Typography */
 * {
   box-sizing: border-box;
@@ -1115,7 +1240,8 @@ button:disabled span,
     display: none !important;
   }
 
-  .mobile-theme-btn {
+  .mobile-theme-btn,
+  .mobile-lang-btn {
     display: inline-flex !important;
   }
 
@@ -2141,7 +2267,9 @@ body.pdf-export-active .drawing-canvas-column,
   .mobile-nav-slider,
   .mobile-step-card,
   .mobile-theme-btn,
+  .mobile-lang-btn,
   .theme-toggle-btn,
+  .lang-toggle-btn,
   .apple-hero,
   .mobile-tab-switcher,
   .pricing-section,

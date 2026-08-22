@@ -21,6 +21,7 @@
 
   <link rel="stylesheet" href="css/styles.min.css">
   <script src="js/theme.min.js"></script>
+  <script src="js/i18n.min.js"></script>
 </head>
 
 <body>
@@ -32,17 +33,21 @@
         <span class="app-brand-icon" style="margin-right: 6px;"></span>
         <span class="brand-text-desktop app-brand-name"></span>
         <span class="brand-text-mobile app-brand-name"></span>
-        <span class="apple-pill-badge">B-to-A Khata Ready</span>
+        <span class="apple-pill-badge" data-i18n="brand.badge">B-to-A Khata Ready</span>
       </a>
       <div style="display: flex; align-items: center;">
         <nav class="apple-nav-links desktop-nav-bar">
-          <a href="index.html">Home</a>
-          <a href="studio.html">Studio Workbench</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="legal.html" class="active">Legal Terms</a>
-          <a href="faq.html">FAQ & Help</a>
-          <a href="contact.html">Contact & Support</a>
+          <a href="index.html" data-i18n="nav.home">Home</a>
+          <a href="studio.html" data-i18n="nav.workbench">Studio Workbench</a>
+          <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+          <a href="legal.html" class="active" data-i18n="nav.legal">Legal Terms</a>
+          <a href="faq.html" data-i18n="nav.faq">FAQ & Help</a>
+          <a href="contact.html" data-i18n="nav.contact">Contact & Support</a>
         </nav>
+        <button type="button" class="lang-toggle-btn desktop-nav-bar" aria-label="Switch Language"
+          title="Switch to Kannada (ಕನ್ನಡ)">
+          <span class="lang-btn-text">ಕನ್ನಡ</span>
+        </button>
         <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme"
           title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
@@ -56,23 +61,30 @@
     <!-- Mobile Nav Slider -->
     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
       <div class="mobile-nav-slider" style="margin-bottom: 0; flex: 1;">
-        <a href="index.html" class="mobile-nav-item">Home</a>
-        <a href="studio.html" class="mobile-nav-item">Workbench</a>
-        <a href="pricing.html" class="mobile-nav-item">Pricing</a>
-        <a href="legal.html" class="mobile-nav-item active">Legal</a>
-        <a href="faq.html" class="mobile-nav-item">FAQ & Help</a>
-        <a href="contact.html" class="mobile-nav-item">Contact</a>
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav.home">Home</a>
+        <a href="studio.html" class="mobile-nav-item" data-i18n="nav.workbench">Workbench</a>
+        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav.pricing">Pricing</a>
+        <a href="legal.html" class="mobile-nav-item active" data-i18n="nav.legal">Legal</a>
+        <a href="faq.html" class="mobile-nav-item" data-i18n="nav.faq">FAQ & Help</a>
+        <a href="contact.html" class="mobile-nav-item" data-i18n="nav.contact">Contact</a>
       </div>
-      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
-        title="Toggle Light/Dark Mode">
-        <span class="material-symbols-outlined">dark_mode</span>
-      </button>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button type="button" class="lang-toggle-btn mobile-lang-btn" aria-label="Switch Language"
+          title="Switch to Kannada (ಕನ್ನಡ)">
+          <span class="lang-btn-text">ಕನ್ನಡ</span>
+        </button>
+        <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()"
+          aria-label="Toggle theme" title="Toggle Light/Dark Mode">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+      </div>
     </div>
 
     <!-- Legal Hero -->
     <section class="apple-hero" style="padding-top: 40px; padding-bottom: 20px;">
-      <h1>Terms of Service & Legal Disclaimer</h1>
-      <p class="subtitle">Last Updated: February 2026. Please read these legally binding terms carefully before using
+      <h1 data-i18n="legal.hero.title">Terms of Service & Legal Disclaimer</h1>
+      <p class="subtitle" data-i18n="legal.hero.subtitle">Last Updated: February 2026. Please read these legally binding
+        terms carefully before using
         e-Plan Studio.</p>
     </section>
 
@@ -85,9 +97,10 @@
 
           <!-- 1. Acceptance of Terms -->
           <div>
-            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">1.
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;"
+              data-i18n="legal.sec1.title">1.
               Acceptance of Terms</h3>
-            <p style="margin: 0;">
+            <p style="margin: 0;" data-i18n="legal.sec1.desc">
               By accessing, browsing, generating drawings, or downloading PDF files from e-Plan Studio ("the Web
               Application" / "the Tool"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree
               to these Terms, you must immediately cease using the Tool.
@@ -96,62 +109,49 @@
 
           <!-- 2. Description of Tool & Limited License -->
           <div>
-            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">2.
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;"
+              data-i18n="legal.sec2.title">2.
               Description of Service & Limited License</h3>
-            <p style="margin: 0 0 8px 0;">
-              e-Plan Studio provides automated vector CAD layout drafting software that generates preliminary
-              single plot layout plans based solely on unverified user-supplied input data.
-            </p>
-            <p style="margin: 0;">
-              We grant you a personal, non-exclusive, non-transferable, revocable license to use the Tool for personal
-              or commercial drafting reference purposes, subject to these Terms.
+            <p style="margin: 0;" data-i18n="legal.sec2.desc">
+              e-Plan Studio provides automated vector CAD layout drafting software that generates preliminary single
+              plot layout plans based solely on unverified user-supplied input data. We grant you a personal,
+              non-exclusive, non-transferable, revocable license to use the Tool for personal or commercial drafting
+              reference purposes, subject to these Terms.
             </p>
           </div>
 
           <!-- 3. Absolute Developer Zero Liability & Hold Harmless -->
           <div
             style="background: rgba(239, 68, 68, 0.06); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 12px; padding: 18px;">
-            <h3 style="font-size: 17px; font-weight: 700; color: #dc2626; margin: 0 0 8px 0;">3. Absolute Limitation of
+            <h3 style="font-size: 17px; font-weight: 700; color: #dc2626; margin: 0 0 8px 0;"
+              data-i18n="legal.sec3.title">3. Absolute Limitation of
               Liability & Developer Indemnity</h3>
-            <p style="margin: 0 0 8px 0; color: var(--apple-text-primary);">
+            <p style="margin: 0; color: var(--apple-text-primary);" data-i18n="legal.sec3.desc">
               To the maximum extent permitted by applicable law, the software developer, author, operator, owner, and
               affiliates shall bear <strong>ZERO LIABILITY</strong> under any legal theory, contract, tort, negligence,
               or strict liability for any direct, indirect, incidental, consequential, special, exemplary, or punitive
               damages.
             </p>
-            <p style="margin: 0; color: var(--apple-text-primary);">
-              This includes, without limitation, damages for:
-            </p>
-            <ul style="margin: 8px 0 0 0; padding-left: 20px; color: var(--apple-text-primary);">
-              <li>Rejection or cancellation of layout plans, khata applications, or plan sanctions by BBMP, BDA, Sakala,
-                or municipal authorities.</li>
-              <li>Financial losses, application fee forfeitures, surveyor fees, or legal costs incurred by the user or
-                third parties.</li>
-              <li>Boundary disputes, measurement discrepancies, revenue survey errors, or title defects.</li>
-              <li>Loss of time, business interruption, loss of profits, or regulatory penalties.</li>
-            </ul>
           </div>
 
           <!-- 4. Covenant Not to Sue & Waiver of Litigation -->
           <div>
-            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">4. User
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;"
+              data-i18n="legal.sec4.title">4. User
               Covenant Not to Sue & Waiver of Class Action</h3>
-            <p style="margin: 0 0 8px 0;">
+            <p style="margin: 0;" data-i18n="legal.sec4.desc">
               By generating or downloading layout plans from this software, you explicitly agree to <strong>WAIVE ALL
                 RIGHTS TO LITIGATE</strong>, institute legal claims, file complaints, or initiate arbitration against
               the software developer, author, or platform provider in any court of law or legal tribunal worldwide.
-            </p>
-            <p style="margin: 0;">
-              You expressly agree that any dispute resolution proceedings will be conducted solely on an individual
-              basis and not in a class, consolidated, or representative action.
             </p>
           </div>
 
           <!-- 5. Mandatory Independent Professional Verification -->
           <div>
-            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">5.
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;"
+              data-i18n="legal.sec5.title">5.
               Mandatory Professional Audit & Licensed Signature</h3>
-            <p style="margin: 0;">
+            <p style="margin: 0;" data-i18n="legal.sec5.desc">
               Layout plans generated by this software serve strictly as preliminary mathematical reference drafts. All
               final submission packages must be independently verified, audited, signed, and stamped by a Council of
               Architecture (COA) registered architect or BBMP licensed supervisor prior to official municipal
@@ -161,9 +161,10 @@
 
           <!-- 6. Disclaimer of Government Affiliation -->
           <div>
-            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">6. No
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;"
+              data-i18n="legal.sec6.title">6. No
               Government Affiliation</h3>
-            <p style="margin: 0;">
+            <p style="margin: 0;" data-i18n="legal.sec6.desc">
               e-Plan Studio is an independent web utility software tool and is NOT affiliated with, authorized by,
               endorsed by, or connected to Bruhat Bengaluru Mahanagara Palike (BBMP), Bangalore Development Authority
               (BDA), Sakala Services, Karnataka Revenue Department, ADLR, or the Government of Karnataka.
@@ -173,135 +174,79 @@
           <!-- 7. Data Architecture, Storage Scope & Manual Submission Model -->
           <div
             style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 18px;">
-            <h3 style="font-size: 17px; font-weight: 700; color: #059669; margin: 0 0 8px 0;">7. Data Architecture,
+            <h3 style="font-size: 17px; font-weight: 700; color: #059669; margin: 0 0 8px 0;"
+              data-i18n="legal.sec7.title">7. Data Architecture,
               Zero-Telemetry Model & Manual Submission Scope</h3>
-            <p style="margin: 0 0 10px 0; color: var(--apple-text-primary);">
-              <strong>Zero Automated Background Storage:</strong> e-Plan Studio operates on a strict zero-telemetry and
-              offline-first architectural paradigm. Under no circumstances does the application automatically collect,
-              ingest, track, scrape, or transmit property survey numbers, eKhata identifiers, owner names, site
-              dimensions, GPS coordinates, CAD geometry coordinates, or session drafts. All computational drafting, mathematical setback
-              evaluations, session draft persistence, and PDF rendering executions occur entirely within the
-              <strong>local client-side storage (device LocalStorage and browser cache memory)</strong> of your own
-              device, strictly isolated from remote servers.
-            </p>
-            <p style="margin: 0 0 10px 0; color: var(--apple-text-primary);">
-              <strong>Client-Side Geolocation & Map Imagery Privacy:</strong> Use of GPS coordinates, HTML5 browser geolocation ("Locate Me"),
-              and the interactive map picker ("Pick on Map") is entirely optional. When activated by the user, coordinate calculations and Web Mercator tile index conversions are executed 100% locally within your browser sandbox. Public map tiles are requested directly by the client browser from OpenStreetMap / CartoDB tile CDNs solely to render the visual Key Plan thumbnail. No location histories, device GPS readings, or site coordinates are logged, retained, or transmitted to any developer server or centralized database.
-            </p>
-            <p style="margin: 0; color: var(--apple-text-primary);">
-              <strong>Strictly Manual Voluntary Helpdesk Transmission:</strong> Remote cloud database retention occurs
-              <em>solely and exclusively</em> when a user deliberately, knowingly, and manually initiates an explicit
-              technical ticket submission via the Support Center and confirms the modal consent dialog. Users are
-              expressly advised not to include unredacted property deeds, financial information, or sensitive personal
-              records in voluntary support inquiries.
+            <p style="margin: 0; color: var(--apple-text-primary);" data-i18n="legal.sec7.desc">
+              e-Plan Studio operates on a strict zero-telemetry and offline-first architectural paradigm. Under no
+              circumstances does the application automatically collect, ingest, track, scrape, or transmit property
+              survey numbers, eKhata identifiers, owner names, site dimensions, GPS coordinates, CAD geometry
+              coordinates, or session drafts. All computational drafting, mathematical setback evaluations, session
+              draft persistence, and PDF rendering executions occur entirely within the local client-side storage of
+              your own device.
             </p>
           </div>
 
           <!-- 8. Enterprise Cloudflare Security, Disaster Force Majeure & Absolute Liability Exclusion -->
           <div
             style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 12px; padding: 18px;">
-            <h3 style="font-size: 17px; font-weight: 700; color: #dc2626; margin: 0 0 8px 0;">8. Cloud Security
+            <h3 style="font-size: 17px; font-weight: 700; color: #dc2626; margin: 0 0 8px 0;"
+              data-i18n="legal.sec8.title">8. Cloud Security
               Safeguards, Force Majeure & Absolute Exclusion of Developer Liability</h3>
-            <p style="margin: 0 0 10px 0; color: var(--apple-text-primary);">
-              <strong>Commercially Reasonable Security Deployments:</strong> For manually submitted support inquiries,
-              the project deploys industry-standard edge computing and database infrastructure managed via Cloudflare
-              Inc. (including TLS/HTTPS cryptographic transit encryption, Web Application Firewall (WAF) threat
-              filtering, salted cryptographic hashing of network identifiers, and localized database instances) to
-              safeguard transmitted data to the maximum reasonable extent.
+            <p style="margin: 0; color: var(--apple-text-primary);" data-i18n="legal.sec8.desc">
+              For manually submitted support inquiries, the project deploys industry-standard edge computing and
+              database infrastructure managed via Cloudflare Inc. Notwithstanding the deployment of industry-standard
+              safeguards, the user expressly acknowledges that no digital transmission or cloud storage system is
+              entirely impenetrable.
             </p>
-            <p style="margin: 0 0 10px 0; color: var(--apple-text-primary);">
-              <strong>Disaster, Security Breach & Infrastructure Failure Waiver:</strong> Notwithstanding the deployment
-              of industry-standard safeguards, the user expressly acknowledges that no digital transmission or cloud
-              storage system is entirely impenetrable. IN THE EVENT OF ANY UNFORESEEN CATASTROPHIC INCIDENT, THIRD-PARTY
-              CLOUD OUTAGE, ZERO-DAY SECURITY EXPLOIT, DISTRIBUTED CYBER ATTACK, HARDWARE DESTRUCTION, UNAUTHORIZED
-              SYSTEM INTRUSION, DATA CORRUPTION, OR FORCE MAJEURE BREACH (WHETHER RESULTING FROM HOSTING PROVIDER
-              FAILURES OR THIRD-PARTY MALICIOUS ACTION), THE INDIVIDUAL DEVELOPER, AUTHOR, AND PROJECT CONTRIBUTORS
-              SHALL BEAR <strong>ABSOLUTELY ZERO CIVIL, TORTIOUS, CONTRACTUAL, OR STATUTORY LIABILITY</strong>.
-            </p>
-            <p style="margin: 0 0 10px 0; color: var(--apple-text-primary);">
-              TO THE MAXIMUM EXTENT PERMITTED UNDER THE INFORMATION TECHNOLOGY ACT, 2000, THE DIGITAL PERSONAL DATA
-              PROTECTION ACT, 2023, AND THE INDIAN CONTRACT ACT, 1872:
-            </p>
-            <ul
-              style="margin: 0 0 10px 0; padding-left: 20px; color: var(--apple-text-primary); font-size: 13px; line-height: 1.6;">
-              <li>The developer disclaims all liability for any direct, indirect, incidental, punitive, special,
-                exemplary, or consequential losses, legal liabilities, regulatory fines, or damages resulting from data
-                compromise, loss of data accessibility, or third-party breaches;</li>
-              <li>The user utilizes the open-source utility and voluntary helpdesk solely at their own election,
-                assumption of risk, and peril;</li>
-              <li>In no event shall the total aggregate financial or compensatory liability of the developer exceed the
-                statutory sum of <strong>INR ₹0 (Zero Indian Rupees)</strong>.</li>
-            </ul>
           </div>
 
           <!-- 9. User Indemnification -->
           <div>
-            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">9. User
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;"
+              data-i18n="legal.sec9.title">9. User
               Indemnification & Hold Harmless</h3>
-            <p style="margin: 0;">
+            <p style="margin: 0;" data-i18n="legal.sec9.desc">
               You agree to irrevocably defend, indemnify, and hold harmless e-Plan Studio, its individual developer, and
               open-source contributors from and against any and all third-party claims, legal actions, demands, losses,
-              regulatory penalties, damages, costs, and expenses (including reasonable attorneys' fees) arising out of
-              or related to: (a) your use or misuse of the software; (b) any communication or data submitted by you
-              through the support desk; (c) your violation of these Terms; or (d) any statutory, revenue, or municipal
-              layout dispute before BBMP, BDA, or government authorities.
+              regulatory penalties, damages, costs, and expenses arising out of or related to your use of the software.
             </p>
           </div>
 
           <!-- 10. Governing Law & Jurisdiction -->
           <div>
-            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;">10.
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-text-primary); margin: 0 0 8px 0;"
+              data-i18n="legal.sec10.title">10.
               Governing Law & Exclusive Jurisdiction</h3>
-            <p style="margin: 0 0 8px 0;">
+            <p style="margin: 0;" data-i18n="legal.sec10.desc">
               These Terms shall be governed by and construed in accordance with the laws of India, without regard to
               conflict of law principles. Any dispute arising out of or related to these Terms shall be subject to the
               exclusive jurisdiction of the courts located in Bengaluru, Karnataka, India.
-            </p>
-            <p style="margin: 0;">
-              If any provision of these Terms is found to be invalid or unenforceable, that provision will be limited to
-              the minimum extent necessary, and the remaining provisions shall remain in full force and effect.
             </p>
           </div>
 
           <!-- 11. Open Source Software License & GitHub Repository -->
           <div
             style="background: rgba(0, 102, 204, 0.05); border: 1px solid rgba(0, 102, 204, 0.18); border-radius: 12px; padding: 18px;">
-            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-accent); margin: 0 0 8px 0;">11. Open
+            <h3 style="font-size: 17px; font-weight: 700; color: var(--apple-accent); margin: 0 0 8px 0;"
+              data-i18n="legal.sec11.title">11. Open
               Source Software License & GitHub Repository</h3>
-            <p style="margin: 0 0 8px 0; color: var(--apple-text-primary);">
-              e-Plan Studio is an open-source software project distributed under the permissive <strong>MIT
-                License</strong>. The complete source code, vector CAD renderers, and calculations are publicly hosted
-              on GitHub at <a href="https://github.com/manswis/singleSitePlan-web" target="_blank"
-                rel="noopener noreferrer"
-                style="color: var(--apple-accent); font-weight: 600; text-decoration: underline;">github.com/manswis/singleSitePlan-web</a>.
-            </p>
-            <p style="margin: 0; color: var(--apple-text-primary); font-size: 12px; line-height: 1.5; opacity: 0.9;">
-              THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
-              LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
-              EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-              IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
-              THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+            <p style="margin: 0; color: var(--apple-text-primary);" data-i18n="legal.sec11.desc">
+              e-Plan Studio is an open-source software project distributed under the permissive MIT License. The
+              complete source code, vector CAD renderers, and calculations are publicly hosted on GitHub.
             </p>
           </div>
 
           <!-- 12. Trademark & Government Service Mark Acknowledgment -->
           <div
             style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 18px;">
-            <h3 style="font-size: 17px; font-weight: 700; color: #d97706; margin: 0 0 8px 0;">12. Trademark & Government
+            <h3 style="font-size: 17px; font-weight: 700; color: #d97706; margin: 0 0 8px 0;"
+              data-i18n="legal.sec12.title">12. Trademark & Government
               Service Mark Acknowledgment</h3>
-            <p style="margin: 0 0 8px 0; color: var(--apple-text-primary);">
+            <p style="margin: 0; color: var(--apple-text-primary);" data-i18n="legal.sec12.desc">
               "BBMP", "Bruhat Bengaluru Mahanagara Palike", "e-Khata", "ePID", "Sakala", "ADLR", "11E Sketch", "BDA",
-              and
-              "Bhoomi Mojini" are trademarks, registered service marks, or official government acronyms belonging to the
-              <strong>Government of Karnataka</strong> and its respective municipal, survey, or revenue departments.
-            </p>
-            <p style="margin: 0; color: var(--apple-text-primary);">
-              All product names, statutory terms, logos, and brands referenced across this application are property of
-              their respective trademark holders. Reference to these marks is made strictly for <strong>descriptive and
-                regulatory compliance purposes (nominative fair use)</strong> to indicate technical drawing format
-              compatibility, and does NOT imply any ownership, endorsement, sponsorship, or official affiliation by
-              e-Plan
-              Studio.
+              and "Bhoomi Mojini" are trademarks, registered service marks, or official government acronyms belonging to
+              the Government of Karnataka and its respective municipal, survey, or revenue departments.
             </p>
           </div>
 
@@ -336,12 +281,12 @@
           GitHub
         </a>
       </p>
-      <p>© 2026 <span class="app-brand-name"></span> • v<span class="app-version"></span> • All processing performed 100% locally on client browser.</p>
+      <p>© 2026 <span class="app-brand-name"></span> • v<span class="app-version"></span> • All processing performed
+        100% locally on client browser.</p>
     </footer>
 
   </div>
 
-  <script src="js/ui.js"></script>
 </body>
 
 </html>

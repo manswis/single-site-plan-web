@@ -21,6 +21,7 @@
 
   <link rel="stylesheet" href="css/styles.min.css">
   <script src="js/theme.min.js"></script>
+  <script src="js/i18n.min.js"></script>
 
   <!-- html2canvas and jsPDF for Direct Client-Side PDF File Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -40,17 +41,21 @@
         <span class="app-brand-icon" style="margin-right: 6px;"></span>
         <span class="brand-text-desktop app-brand-name"></span>
         <span class="brand-text-mobile app-brand-name"></span>
-        <span class="apple-pill-badge">B-to-A Khata Ready</span>
+        <span class="apple-pill-badge" data-i18n="brand.badge">B-to-A Khata Ready</span>
       </a>
       <div style="display: flex; align-items: center;">
         <nav class="apple-nav-links desktop-nav-bar">
-          <a href="index.html">Home</a>
-          <a href="studio.html" class="active">Studio Workbench</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="legal.html">Legal Disclaimer</a>
-          <a href="faq.html">FAQ & Help</a>
-          <a href="contact.html">Contact & Support</a>
+          <a href="index.html" data-i18n="nav.home">Home</a>
+          <a href="studio.html" class="active" data-i18n="nav.workbench">Studio Workbench</a>
+          <a href="pricing.html" data-i18n="nav.pricing">Pricing</a>
+          <a href="legal.html" data-i18n="nav.legal">Legal Disclaimer</a>
+          <a href="faq.html" data-i18n="nav.faq">FAQ & Help</a>
+          <a href="contact.html" data-i18n="nav.contact">Contact & Support</a>
         </nav>
+        <button type="button" class="lang-toggle-btn desktop-nav-bar" aria-label="Switch Language"
+          title="Switch to Kannada (ಕನ್ನಡ)">
+          <span class="lang-btn-text">ಕನ್ನಡ</span>
+        </button>
         <button type="button" class="theme-toggle-btn desktop-nav-bar" onclick="toggleTheme()" aria-label="Toggle theme"
           title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
@@ -315,17 +320,23 @@
     <div class="no-print"
       style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
       <div class="mobile-nav-slider" style="margin-bottom: 0; flex: 1;">
-        <a href="index.html" class="mobile-nav-item">Home</a>
-        <a href="studio.html" class="mobile-nav-item active">Workbench</a>
-        <a href="pricing.html" class="mobile-nav-item">Pricing</a>
-        <a href="legal.html" class="mobile-nav-item">Legal</a>
-        <a href="faq.html" class="mobile-nav-item">FAQ & Help</a>
-        <a href="contact.html" class="mobile-nav-item">Contact</a>
+        <a href="index.html" class="mobile-nav-item" data-i18n="nav.home">Home</a>
+        <a href="studio.html" class="mobile-nav-item active" data-i18n="nav.workbench">Workbench</a>
+        <a href="pricing.html" class="mobile-nav-item" data-i18n="nav.pricing">Pricing</a>
+        <a href="legal.html" class="mobile-nav-item" data-i18n="nav.legal">Legal</a>
+        <a href="faq.html" class="mobile-nav-item" data-i18n="nav.faq">FAQ & Help</a>
+        <a href="contact.html" class="mobile-nav-item" data-i18n="nav.contact">Contact</a>
       </div>
-      <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
-        title="Toggle Light/Dark Mode">
-        <span class="material-symbols-outlined">dark_mode</span>
-      </button>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <button type="button" class="lang-toggle-btn mobile-lang-btn" aria-label="Switch Language"
+          title="Switch to Kannada (ಕನ್ನಡ)">
+          <span class="lang-btn-text">ಕನ್ನಡ</span>
+        </button>
+        <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
+          title="Toggle Light/Dark Mode">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+      </div>
     </div>
 
     <!-- Compact Mobile Active Step Indicator (Visible ONLY on Mobile screens <= 768px) -->
@@ -348,13 +359,13 @@
           <div id="wizardProgressBar" class="stepper-progress-bar"></div>
         </div>
         <div class="stepper-tabs">
-          <button id="stepTab1" class="step-tab active" onclick="goToStep(1)">1. Records</button>
-          <button id="stepTab2" class="step-tab" onclick="goToStep(2)">2. Location</button>
-          <button id="stepTab3" class="step-tab" onclick="goToStep(3)">3. Plot</button>
-          <button id="stepTab4" class="step-tab" onclick="goToStep(4)">4. Setbacks</button>
-          <button id="stepTab5" class="step-tab" onclick="goToStep(5)">5. Deed</button>
-          <button id="stepTab6" class="step-tab" onclick="goToStep(6)">6. Options</button>
-          <button id="stepTab7" class="step-tab" onclick="goToStep(7)">7. Export</button>
+          <button id="stepTab1" class="step-tab active" onclick="goToStep(1)" data-i18n="step1.mobileTitle">1. Records</button>
+          <button id="stepTab2" class="step-tab" onclick="goToStep(2)" data-i18n="step2.mobileTitle">2. Location</button>
+          <button id="stepTab3" class="step-tab" onclick="goToStep(3)" data-i18n="step3.mobileTitle">3. Plot</button>
+          <button id="stepTab4" class="step-tab" onclick="goToStep(4)" data-i18n="step4.mobileTitle">4. Setbacks</button>
+          <button id="stepTab5" class="step-tab" onclick="goToStep(5)" data-i18n="step5.mobileTitle">5. Deed</button>
+          <button id="stepTab6" class="step-tab" onclick="goToStep(6)" data-i18n="step6.mobileTitle">6. Options</button>
+          <button id="stepTab7" class="step-tab" onclick="goToStep(7)" data-i18n="step7.mobileTitle">7. Export</button>
         </div>
       </div>
 
@@ -369,6 +380,14 @@
 
       <!-- STEP 1: Revenue Records & Identifiers -->
       <div id="wizardStep1" class="wizard-step-content">
+        <!-- Step 1 Contextual Assistant Language Banner -->
+        <div class="assistant-lang-banner no-print">
+          <span id="assistantLangPrompt">💡 ಕನ್ನಡದಲ್ಲಿ ಭರ್ತಿ ಮಾಡಲು ಬಯಸುವಿರಾ?</span>
+          <button type="button" class="assistant-lang-switch assistant-lang-btn" id="assistantLangSwitch">
+            <span id="assistantLangAction">ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಿ</span>
+          </button>
+        </div>
+
         <!-- Project Portability Banner (Import / Open Saved Plan) -->
         <div class="project-portability-banner">
           <div class="portability-banner-left">
@@ -376,49 +395,49 @@
               <span class="material-symbols-outlined" style="font-size: 18px;">folder_open</span>
             </div>
             <div class="portability-text-wrap">
-              <div class="portability-title">Have a saved .eplan project file?</div>
-              <div class="portability-desc">Upload a previously saved .eplan file (downloaded from Step 7) to
+              <div class="portability-title" data-i18n="portability.title">Have a saved .eplan project file?</div>
+              <div class="portability-desc" data-i18n="portability.desc">Upload a previously saved .eplan file (downloaded from Step 7) to
                 automatically restore all your property measurements on this device.</div>
             </div>
           </div>
           <button type="button" class="portability-btn" onclick="triggerProjectImport()"
             title="Open existing .eplan project file">
             <span class="material-symbols-outlined" style="font-size: 16px;">upload_file</span>
-            <span>Open Project</span>
+            <span data-i18n="btn.openProject">Open Project</span>
           </button>
           <input type="file" id="projectFileInput" accept=".eplan,.json" style="display: none;"
             onchange="handleProjectFileImport(event)" />
         </div>
 
-        <div class="info-tooltip-box">
+        <div class="info-tooltip-box" data-i18n-html="tooltip.step1">
           💡 <strong>Where to find ePID?</strong> Your eKhata ID (ePID) is printed on top of your Sakala e-Khata draft
           acknowledgement (e.g. 1509988776).
         </div>
         <div class="grid">
           <div class="field">
-            <label>Owner Name(s) <span class="required">*</span></label>
-            <input id="ownerName" type="text" placeholder="e.g. Ramesh Kumar & Anjali Kumar"
+            <label><span data-i18n="step1.ownerName.label">Owner Name(s)</span> <span class="required">*</span></label>
+            <input id="ownerName" type="text" data-i18n-placeholder="step1.ownerName.placeholder" placeholder="e.g. Ramesh Kumar & Anjali Kumar"
               oninput="clearFieldError('ownerName', 'err-ownerName')">
             <div class="error-msg" id="err-ownerName">⚠ Owner name is required</div>
           </div>
           <div class="field">
-            <label>eKhata ID (ePID) <span class="required">*</span> <button type="button" class="field-help-btn"
+            <label><span data-i18n="step1.epId.label">eKhata ID (ePID)</span> <span class="required">*</span> <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('epId')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="epId" type="text" placeholder="e.g. 1509988776" oninput="clearFieldError('epId', 'err-epId')">
+            <input id="epId" type="text" data-i18n-placeholder="step1.epId.placeholder" placeholder="e.g. 1509988776" oninput="clearFieldError('epId', 'err-epId')">
             <div class="error-msg" id="err-epId">⚠ eKhata ID (ePID) is required</div>
           </div>
           <div class="field">
-            <label>BBMP PID Number <span
+            <label><span data-i18n="step1.pidNo.label">BBMP PID Number</span> <span
                 style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
                 type="button" class="field-help-btn" onclick="showFieldHelp('pidNo')" title="Help & Where to find"><svg
                   viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="pidNo" type="text" placeholder="e.g. 108-W0045-12 (Optional)">
+            <input id="pidNo" type="text" data-i18n-placeholder="step1.pidNo.placeholder" placeholder="e.g. 108-W0045-12 (Optional)">
           </div>
           <div class="field">
             <label>SAS Application / Khata No <span
@@ -460,7 +479,7 @@
 
       <!-- STEP 2: Location & BBMP Administration -->
       <div id="wizardStep2" class="wizard-step-content" style="display:none;">
-        <div class="info-tooltip-box">
+        <div class="info-tooltip-box" data-i18n-html="tooltip.step2">
           💡 <strong>BBMP Jurisdiction:</strong> Select your administrative BBMP zone to align with Sakala
           engineer inspection codes.
         </div>
@@ -613,7 +632,7 @@
 
       <!-- STEP 3: Plot Measurements & Dimensions -->
       <div id="wizardStep3" class="wizard-step-content" style="display:none;">
-        <div class="info-tooltip-box">
+        <div class="info-tooltip-box" data-i18n-html="tooltip.step3">
           💡 <strong>Rectangular vs Irregular Sites:</strong> For regular sites, opposite sides auto-sync automatically.
           Check 'Irregular Site' below for odd-shaped quadrilateral plots.
         </div>
@@ -812,7 +831,7 @@
 
       <!-- STEP 4: Building Proposal & Calculations -->
       <div id="wizardStep4" class="wizard-step-content" style="display:none;">
-        <div class="info-tooltip-box">
+        <div class="info-tooltip-box" data-i18n-html="tooltip.step4">
           💡 <strong>Building Footprint:</strong> Leave building width and length empty to auto-calculate footprints
           based on BBMP RMP-2015 minimum setback rules.
         </div>
@@ -1007,7 +1026,7 @@
 
       <!-- STEP 5: Schedule of Property & Deed DNA -->
       <div id="wizardStep5" class="wizard-step-content" style="display:none;">
-        <div class="info-tooltip-box">
+        <div class="info-tooltip-box" data-i18n-html="tooltip.step5">
           📜 <strong>Deed Schedule DNA:</strong> Under Karnataka property law, boundary descriptions prevail over area
           in legal disputes. Select exact boundary categories.
         </div>
@@ -1179,7 +1198,7 @@
 
       <!-- STEP 6: Constraints & Document Options -->
       <div id="wizardStep6" class="wizard-step-content" style="display:none;">
-        <div class="info-tooltip-box">
+        <div class="info-tooltip-box" data-i18n-html="tooltip.step6">
           🚧 <strong>Master Plan Constraints:</strong> Check road widening or drain buffer if applicable. Enabling Page
           2 attaches official BBMP line & colour specifications.
         </div>
@@ -1380,8 +1399,8 @@
         <div style="margin-bottom: 24px;">
           <h4
             style="margin: 0 0 12px 0; font-size: 15px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 6px;">
-            <span>📋 Property Settings & Dimensions Summary</span>
-            <span style="font-size: 11.5px; font-weight: 500; color: var(--apple-text-secondary);">(Tap header to
+            <span data-i18n="step7.summaryHeading">📋 Property Settings & Dimensions Summary</span>
+            <span style="font-size: 11.5px; font-weight: 500; color: var(--apple-text-secondary);" data-i18n="step7.summarySubheading">(Tap header to
               expand/collapse)</span>
           </h4>
           <div id="reviewSummaryContainer"></div>
@@ -1395,14 +1414,14 @@
             <div style="display: flex; align-items: center; gap: 10px;">
               <span style="font-size: 26px;">🏛️</span>
               <div>
-                <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);">Single Plot
+                <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);" data-i18n="step7.package.title">Single Plot
                   Plan Package Generator</h3>
-                <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);">Sakala B-to-A Khata
+                <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);" data-i18n="step7.package.subtitle">Sakala B-to-A Khata
                   Compliant Architectural Drawing Engine</p>
               </div>
             </div>
             <span class="apple-pill-badge"
-              style="background: rgba(52, 199, 89, 0.12); color: #166534; font-weight: 700; font-size: 11px;">100%
+              style="background: rgba(52, 199, 89, 0.12); color: #166534; font-weight: 700; font-size: 11px;" data-i18n="step7.package.badge">100%
               Private & Sakala Ready</span>
           </div>
 
@@ -1413,16 +1432,16 @@
               <input type="checkbox" id="legalConsentCheck" onchange="toggleLegalConsent()"
                 style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
               <span style="font-weight: 600; font-size: 13px; color: var(--apple-text-primary); line-height: 1.45;">
-                I Agree to the <a href="legal.html" target="_blank"
-                  style="color: #0066cc; text-decoration: underline; font-weight: 700;">Terms of Service, Privacy Policy
+                <span data-i18n="step7.legalConsent.prefix">I Agree to the</span> <a href="legal.html" target="_blank"
+                  style="color: #0066cc; text-decoration: underline; font-weight: 700;" data-i18n="step7.legalConsent.link">Terms of Service, Privacy Policy
                   & Zero Liability Disclaimer</a> <span class="required">*</span>
               </span>
             </label>
-            <p style="margin: 6px 0 0 28px; font-size: 11.5px; color: var(--apple-text-secondary); line-height: 1.4;">
+            <p style="margin: 6px 0 0 28px; font-size: 11.5px; color: var(--apple-text-secondary); line-height: 1.4;" data-i18n="step7.legalConsent.desc">
               All mathematical calculations run 100% locally in your web browser. Plans serve as preliminary draft
               documentation for B-to-A Khata submission.
             </p>
-            <div class="error-msg" id="err-legalConsent" style="margin-top: 8px; font-weight: 600; display: none;">⚠ You
+            <div class="error-msg" id="err-legalConsent" style="margin-top: 8px; font-weight: 600; display: none;" data-i18n="step7.legalConsent.err">⚠ You
               must check and agree to the Terms & Zero Liability Disclaimer to generate, export, or print your plan.
             </div>
           </div>
@@ -1432,19 +1451,19 @@
             style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
             <button id="generatePlanBtn" class="apple-btn-primary" disabled onclick="onGeneratePlanClick()"
               style="height: 46px; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
-              <span>Generate Plan</span>
+              <span data-i18n="btn.continue">Generate Plan</span>
             </button>
             <button id="downloadPdfBtn" class="apple-btn-secondary" disabled onclick="downloadPDFPackage()"
               style="height: 46px; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
-              <span>Export PDF</span>
+              <span data-i18n="btn.exportPdf">Export PDF</span>
             </button>
             <button id="printBtn" class="apple-btn-secondary" disabled onclick="printPlanPackage()"
               style="height: 46px; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
-              <span>Print Drawing</span>
+              <span data-i18n="btn.printPackage">Print Drawing</span>
             </button>
             <button id="reportDrawingBtn" class="apple-btn-secondary" disabled onclick="reportDrawingIssue()"
               style="height: 46px; font-size: 13.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
-              <span>Report Drawing</span>
+              <span data-i18n="btn.reportDrawing">Report Drawing</span>
             </button>
           </div>
         </div>
@@ -1457,8 +1476,8 @@
               <span class="material-symbols-outlined" style="font-size: 20px;">save</span>
             </div>
             <div class="portability-text-wrap">
-              <div class="portability-title">Save Project File (.eplan)</div>
-              <div class="portability-desc">Download complete project backup to continue on another computer or share
+              <div class="portability-title" data-i18n="backup.title">Save Project File (.eplan)</div>
+              <div class="portability-desc" data-i18n="backup.desc">Download complete project backup to continue on another computer or share
                 with your Architect.</div>
             </div>
           </div>
@@ -1466,7 +1485,7 @@
             <button type="button" id="exportProjectBtn" class="portability-btn portability-btn-primary" disabled
               onclick="exportProjectFile()" title="Save project to .eplan file">
               <span class="material-symbols-outlined" style="font-size: 16px;">download</span>
-              <span>Save Project</span>
+              <span data-i18n="btn.saveProject">Save Project</span>
             </button>
           </div>
         </div>

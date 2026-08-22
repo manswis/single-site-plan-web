@@ -865,16 +865,26 @@ function showStep(stepNum, shouldSave = true, clearErrors = true) {
   const mobileBadge = document.getElementById('mobileStepBadge');
   const mobileTitle = document.getElementById('mobileStepTitle');
 
-  if (stepBadge) stepBadge.textContent = `Step ${stepNum} of ${TOTAL_STEPS}`;
-  if (stepTitle && meta) stepTitle.textContent = `${meta.icon} ${meta.title}`;
-  if (stepDesc && meta) stepDesc.textContent = meta.desc;
+  const badgeText = typeof t === 'function' ? t(`step${stepNum}.badge`) : `Step ${stepNum} of ${TOTAL_STEPS}`;
+  const titleText = (typeof t === 'function' && t(`step${stepNum}.title`) !== `step${stepNum}.title`) ? `${meta.icon} ${t(`step${stepNum}.title`)}` : `${meta.icon} ${meta.title}`;
+  const descText = (typeof t === 'function' && t(`step${stepNum}.desc`) !== `step${stepNum}.desc`) ? t(`step${stepNum}.desc`) : meta.desc;
+  const mobileTitleText = (typeof t === 'function' && t(`step${stepNum}.mobileTitle`) !== `step${stepNum}.mobileTitle`) ? `${meta.icon} ${t(`step${stepNum}.mobileTitle`)}` : `${meta.icon} ${meta.mobileTitle || meta.title}`;
 
-  if (mobileBadge) mobileBadge.textContent = `Step ${stepNum} of ${TOTAL_STEPS}`;
-  if (mobileTitle && meta) mobileTitle.textContent = `${meta.icon} ${meta.mobileTitle || meta.title}`;
+  if (stepBadge) stepBadge.textContent = badgeText;
+  if (stepTitle && meta) stepTitle.textContent = titleText;
+  if (stepDesc && meta) stepDesc.textContent = descText;
+
+  if (mobileBadge) mobileBadge.textContent = badgeText;
+  if (mobileTitle && meta) mobileTitle.textContent = mobileTitleText;
 
   // Toggle Full-Width Export Viewport Section (Visible ONLY on Step 7)
   const exportSection = document.getElementById('exportViewportSection');
   const nextBtn = document.getElementById('nextBtn');
+  const prevBtn = document.getElementById('prevBtn');
+
+  if (prevBtn && typeof t === 'function') {
+    prevBtn.textContent = t('btn.back');
+  }
 
   if (exportSection) {
     exportSection.style.display = (stepNum === 7) ? 'block' : 'none';
@@ -882,12 +892,12 @@ function showStep(stepNum, shouldSave = true, clearErrors = true) {
 
   if (nextBtn) {
     if (stepNum === 6) {
-      nextBtn.textContent = 'Review →';
+      nextBtn.textContent = typeof t === 'function' ? t('btn.review') : 'Review →';
       nextBtn.style.display = 'inline-flex';
     } else if (stepNum === 7) {
       nextBtn.style.display = 'none';
     } else {
-      nextBtn.textContent = 'Continue →';
+      nextBtn.textContent = typeof t === 'function' ? t('btn.continue') : 'Continue →';
       nextBtn.style.display = 'inline-flex';
     }
   }
@@ -1135,4 +1145,11 @@ function scrollFirstErrorIntoView(stepNum) {
 // Initialize wizard on DOM Content Loaded
 document.addEventListener('DOMContentLoaded', () => {
   initWizard();
+});
+
+// React to live language change
+window.addEventListener('localeChanged', () => {
+  if (typeof showStep === 'function') {
+    showStep(currentStep, false, false);
+  }
 });
