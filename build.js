@@ -17,7 +17,8 @@ const JS_FILES = [
   'js/ui.js',
   'js/validator.js',
   'js/wizard.js',
-  'js/i18n.js'
+  'js/i18n.js',
+  'js/data/bbmpWards.js'
 ];
 
 async function runBuild() {
@@ -39,7 +40,7 @@ async function runBuild() {
     await esbuild.build({
       entryPoints: [file],
       outfile: outFile,
-      bundle: file === 'js/i18n.js',
+      bundle: file === 'js/i18n.js' || file === 'js/ui.js',
       minify: true,
       sourcemap: false,
       legalComments: 'none',

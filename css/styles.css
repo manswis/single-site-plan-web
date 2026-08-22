@@ -7714,3 +7714,404 @@ body.pdf-export-active .drawing-canvas-column,
     padding: 9px 14px;
   }
 }
+
+/* ==========================================================================
+   Circular Zone Search Accessory Button & BBMP Ward Directory Modal
+   ========================================================================== */
+
+.zone-search-circle-btn {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0, 113, 227, 0.08);
+  border: 1px solid rgba(0, 113, 227, 0.22);
+  color: var(--apple-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.zone-search-circle-btn .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.zone-search-circle-btn:hover {
+  background: var(--apple-accent);
+  color: #ffffff;
+  border-color: var(--apple-accent);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 3px 10px rgba(0, 113, 227, 0.3);
+}
+
+.zone-search-circle-btn:active {
+  transform: scale(0.96);
+}
+
+.ward-modal-card {
+  max-width: 620px;
+  width: 94%;
+  padding: 24px;
+  border-radius: 22px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--apple-card-bg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.ward-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--apple-border);
+  padding-bottom: 12px;
+}
+
+.ward-modal-icon-badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(0, 113, 227, 0.1);
+  color: var(--apple-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ward-modal-icon-badge .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.ward-modal-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  line-height: 1.2;
+}
+
+.ward-modal-subtitle {
+  margin: 3px 0 0 0;
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+  line-height: 1.3;
+}
+
+.ward-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.ward-modal-close-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--apple-text-primary);
+}
+
+.ward-search-bar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.ward-search-bar-wrapper .ward-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--apple-text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ward-search-bar-wrapper input.ward-search-input,
+#wardModalSearchInput {
+  width: 100% !important;
+  padding-left: 44px !important;
+  padding-right: 38px !important;
+  padding-top: 11px !important;
+  padding-bottom: 11px !important;
+  font-size: 13.5px !important;
+  border-radius: 12px !important;
+  border: 1.5px solid var(--apple-border);
+  background: var(--apple-bg);
+  color: var(--apple-text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box !important;
+}
+
+.ward-search-bar-wrapper input.ward-search-input:focus,
+#wardModalSearchInput:focus {
+  border-color: var(--apple-accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15) !important;
+  background: #ffffff !important;
+}
+
+.ward-search-clear-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--apple-text-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.ward-zone-chips-scroll {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  scrollbar-width: none;
+}
+
+.ward-zone-chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.ward-zone-chip {
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 5px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border-radius: 980px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.ward-zone-chip:hover {
+  border-color: var(--apple-accent);
+  color: var(--apple-accent);
+  transform: translateY(-1px);
+}
+
+.ward-zone-chip.active {
+  background: var(--apple-accent);
+  color: #ffffff !important;
+  border-color: var(--apple-accent) !important;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3);
+}
+
+.ward-results-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+}
+
+.ward-results-count {
+  color: var(--apple-accent);
+}
+
+.ward-results-scrollable {
+  flex: 1;
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 6px 6px 12px 6px;
+}
+
+.ward-result-card {
+  background: #ffffff;
+  border: 1.5px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  position: relative;
+}
+
+.ward-result-card:hover,
+.ward-result-card:focus {
+  border-color: var(--apple-accent);
+  background: rgba(0, 113, 227, 0.03);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.14);
+  outline: none;
+  z-index: 1;
+}
+
+.ward-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.ward-number-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--apple-accent);
+  background: rgba(0, 113, 227, 0.08);
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+}
+
+.ward-zone-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 980px;
+}
+
+.ward-name-primary {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 3px;
+}
+
+.ward-landmarks-preview {
+  font-size: 11.5px;
+  color: var(--apple-text-secondary);
+  line-height: 1.3;
+}
+
+.ward-empty-state {
+  text-align: center;
+  padding: 36px 16px;
+}
+
+.ward-modal-footer {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--apple-border);
+  text-align: right;
+}
+
+/* Dark Mode Theme Support for Ward Directory */
+[data-theme="dark"] .zone-search-circle-btn {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .zone-search-circle-btn:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .ward-modal-card {
+  background: #18181b !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7) !important;
+}
+
+[data-theme="dark"] .ward-modal-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .ward-modal-subtitle {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .ward-modal-close-btn {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .ward-modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .ward-search-input {
+  background: #09090b !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .ward-search-input:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+}
+
+[data-theme="dark"] .ward-zone-chip {
+  background: #27272a !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .ward-zone-chip:hover {
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .ward-zone-chip.active {
+  background: #0284c7 !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .ward-results-meta {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .ward-results-count {
+  color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .ward-result-card {
+  background: #27272a !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="dark"] .ward-result-card:hover,
+[data-theme="dark"] .ward-result-card:focus {
+  background: rgba(56, 189, 248, 0.1) !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.22) !important;
+}
+
+[data-theme="dark"] .ward-name-primary {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .ward-landmarks-preview {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .ward-zone-tag {
+  background: #3f3f46 !important;
+  color: #f1f5f9 !important;
+}

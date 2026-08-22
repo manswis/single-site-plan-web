@@ -146,6 +146,14 @@ export const en = {
   "converter.units.ankana": "Ankana (ಅಂಕಣ) — 72 sq.ft",
   "converter.units.cent": "Cent (ಸೆಂಟ್) — 435.6 sq.ft",
 
+  // --- BBMP Zone & Ward Directory Modal ---
+  "wardModal.title": "BBMP Zone & Ward Directory",
+  "wardModal.subtitle": "Search by locality, area, landmark, or ward number to auto-fill municipal zoning",
+  "wardModal.searchPlaceholder": "Search Locality, Landmark, or Ward No (e.g. Koramangala, Indiranagar, ITPL, 151)...",
+  "wardModal.selectHint": "Tap any ward to auto-fill",
+  "wardModal.closeBtn": "Close",
+  "wardModal.btnTooltip": "Search 198 BBMP Wards & Localities Directory",
+
   // --- Step 4: Structure & Building Setbacks ---
   "step4.badge": "Step 4 of 7",
   "step4.title": "Structure & Building Setbacks",

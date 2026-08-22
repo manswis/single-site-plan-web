@@ -146,6 +146,14 @@ export const kn = {
   "converter.units.ankana": "ಅಂಕಣ (Ankana) — ೭೨ ಚ.ಅಡಿ",
   "converter.units.cent": "ಸೆಂಟ್ (Cent) — ೪೩೫.೬ ಚ.ಅಡಿ",
 
+  // --- BBMP Zone & Ward Directory Modal ---
+  "wardModal.title": "ಬಿಬಿಎಂಪಿ ವಲಯ ಮತ್ತು ವಾರ್ಡ್ ಡೈರೆಕ್ಟರಿ",
+  "wardModal.subtitle": "ವಲಯ ಮತ್ತು ವಾರ್ಡ್ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಭರ್ತಿ ಮಾಡಲು ಬಡಾವಣೆ, ಪ್ರದೇಶ ಅಥವಾ ಲ್ಯಾಂಡ್‌ಮಾರ್ಕ್ ಹುಡುಕಿ",
+  "wardModal.searchPlaceholder": "ಬಡಾವಣೆ, ಲ್ಯಾಂಡ್‌ಮಾರ್ಕ್ ಅಥವಾ ವಾರ್ಡ್ ಸಂಖ್ಯೆ ಹುಡುಕಿ (ಉದಾ: ಕೋರಮಂಗಲ, ಇಂದಿರಾನಗರ, 151)...",
+  "wardModal.selectHint": "ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡಲು ಯಾವುದೇ ವಾರ್ಡ್ ಮೇಲೆ ಟ್ಯಾಪ್ ಮಾಡಿ",
+  "wardModal.closeBtn": "ಮುಚ್ಚಿ",
+  "wardModal.btnTooltip": "೧೯೮ ಬಿಬಿಎಂಪಿ ವಾರ್ಡ್‌ಗಳು ಮತ್ತು ಬಡಾವಣೆಗಳ ಡೈರೆಕ್ಟರಿ ಹುಡುಕಿ",
+
   // --- Step 4: Structure & Building Setbacks ---
   "step4.badge": "ಹಂತ ೪ / ೭",
   "step4.title": "ಕಟ್ಟಡ ರಚನೆ ಮತ್ತು ಸೆಟ್‌ಬ್ಯಾಕ್ ಅಂತರ",

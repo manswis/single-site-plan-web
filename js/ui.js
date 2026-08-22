@@ -5,6 +5,8 @@
  * @author Senior Systems Architect
  */
 
+import { BBMP_ZONES, BBMP_WARDS } from './data/bbmpWards.js';
+
 let pickerMapInstance = null;
 let pickerMarkerInstance = null;
 let currentPickerCoords = { lat: 12.9716, lon: 77.5946 };
@@ -2616,12 +2618,214 @@ function applyAreaPreset(val, unit) {
   applyConvertedArea();
 }
 
+/* ==========================================================================
+   BBMP Zone & Ward Auto-Suggest Directory Modal Controller
+   ========================================================================== */
+
+let activeWardZoneFilter = 'all';
+
+/**
+ * Opens the BBMP Zone & Ward Search Directory Modal.
+ * @param {Event} [e] - Click event
+ */
+function openWardSearchModal(e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+
+  const modal = document.getElementById('bbmpWardModal');
+  if (!modal) return;
+
+  modal.style.display = 'flex';
+  modal.classList.add('active');
+
+  // Initialize zone filter tabs
+  renderWardZoneChips();
+
+  // Reset search input and show all / zone-filtered wards
+  const searchInput = document.getElementById('wardModalSearchInput');
+  const currentWard = (document.getElementById('wardName')?.value || '').trim();
+  if (searchInput) {
+    searchInput.value = currentWard;
+    filterAndRenderWards(currentWard);
+    setTimeout(() => {
+      searchInput.focus();
+      if (currentWard) searchInput.select();
+    }, 80);
+  } else {
+    filterAndRenderWards('');
+  }
+}
+
+/**
+ * Closes the BBMP Zone & Ward Search Directory Modal.
+ */
+function closeWardSearchModal() {
+  const modal = document.getElementById('bbmpWardModal');
+  if (!modal) return;
+  modal.classList.remove('active');
+  modal.style.display = 'none';
+}
+
+/**
+ * Renders the Zone Filter Chips in the Modal header.
+ */
+function renderWardZoneChips() {
+  const container = document.getElementById('wardZoneChipsContainer');
+  if (!container) return;
+
+  const currentLang = window.i18n ? window.i18n.currentLocale : 'en';
+  const zones = (typeof BBMP_ZONES !== 'undefined' ? BBMP_ZONES : window.BBMP_ZONES) || [];
+
+  container.innerHTML = zones.map(z => {
+    const isSelected = activeWardZoneFilter === z.id;
+    const label = currentLang === 'kn' && z.nameKn ? z.nameKn : z.nameEn;
+    return `<button type="button" class="ward-zone-chip ${isSelected ? 'active' : ''}" onclick="setWardZoneFilter('${z.id}')">${label}</button>`;
+  }).join('');
+}
+
+/**
+ * Sets the active zone filter and refreshes results.
+ * @param {string} zoneId
+ */
+function setWardZoneFilter(zoneId) {
+  activeWardZoneFilter = zoneId;
+  renderWardZoneChips();
+  const searchInput = document.getElementById('wardModalSearchInput');
+  const query = searchInput ? searchInput.value : '';
+  filterAndRenderWards(query);
+}
+
+/**
+ * Filters wards by keyword query and active zone, then renders result cards.
+ * @param {string} rawQuery
+ */
+function filterAndRenderWards(rawQuery) {
+  const container = document.getElementById('wardSearchResultsList');
+  if (!container) return;
+
+  const query = (rawQuery || '').trim().toLowerCase();
+  const wards = (typeof BBMP_WARDS !== 'undefined' ? BBMP_WARDS : window.BBMP_WARDS) || [];
+  const currentLang = window.i18n ? window.i18n.currentLocale : 'en';
+
+  const filtered = wards.filter(w => {
+    // Check Zone Filter
+    if (activeWardZoneFilter !== 'all' && w.zone !== activeWardZoneFilter) {
+      return false;
+    }
+
+    if (!query) return true;
+
+    // Match Ward No
+    if (w.wardNo.toString().includes(query)) return true;
+
+    // Match English & Kannada Names
+    if (w.nameEn.toLowerCase().includes(query)) return true;
+    if (w.nameKn && w.nameKn.toLowerCase().includes(query)) return true;
+
+    // Match Keywords / Landmarks
+    if (w.keywords && w.keywords.some(k => k.toLowerCase().includes(query))) return true;
+
+    // Match Zone & Sub-Zone (e-Aasthi Range)
+    if (w.zone.toLowerCase().includes(query)) return true;
+    if (w.subZone && w.subZone.toLowerCase().includes(query)) return true;
+
+    return false;
+  });
+
+  const countEl = document.getElementById('wardResultCountBadge');
+  if (countEl) {
+    const countText = currentLang === 'kn' ? `${filtered.length} ವಾರ್ಡ್‌ಗಳು ಲಭ್ಯವಿದೆ` : `${filtered.length} Wards Found`;
+    countEl.textContent = countText;
+  }
+
+  if (filtered.length === 0) {
+    const noResultMsg = currentLang === 'kn' 
+      ? 'ಯಾವುದೇ ವಾರ್ಡ್ ಕಂಡುಬಂದಿಲ್ಲ. ದಯವಿಟ್ಟು ಬೇರೆ ಬಡಾವಣೆ ಅಥವಾ ಲ್ಯಾಂಡ್‌ಮಾರ್ಕ್ ಹುಡುಕಿ.'
+      : 'No matching BBMP wards found. Try searching by landmark (e.g. Sony World, 100ft Rd, ITPL).';
+    container.innerHTML = `
+      <div class="ward-empty-state">
+        <span class="material-symbols-outlined" style="font-size: 36px; color: var(--apple-text-secondary);">location_off</span>
+        <p style="margin: 8px 0 0 0; font-size: 13px; color: var(--apple-text-secondary); font-weight: 500;">${noResultMsg}</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(w => {
+    const displayName = currentLang === 'kn' ? `${w.nameKn} (${w.nameEn})` : `${w.nameEn} (${w.nameKn})`;
+    const subZoneBadge = w.subZone && w.subZone !== w.zone ? ` • ${w.subZone}` : '';
+    return `
+      <div class="ward-result-card" onclick="selectBbmpWard(${w.wardNo})" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')selectBbmpWard(${w.wardNo})">
+        <div class="ward-result-header">
+          <span class="ward-number-badge">Ward ${w.wardNo}</span>
+          <span class="ward-zone-tag zone-${w.zone.toLowerCase().replace(/[^a-z0-9]/g, '')}">${w.zone} Zone${subZoneBadge}</span>
+        </div>
+        <div class="ward-name-primary">${displayName}</div>
+        ${w.keywords && w.keywords.length > 0 ? `
+          <div class="ward-landmarks-preview">
+            <span class="material-symbols-outlined" style="font-size: 13px; vertical-align: middle;">near_me</span>
+            ${w.keywords.slice(0, 4).join(' • ')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+/**
+ * Populates Step 1 form fields with the chosen BBMP ward and closes modal.
+ * @param {number} wardNo
+ */
+function selectBbmpWard(wardNo) {
+  const wards = (typeof BBMP_WARDS !== 'undefined' ? BBMP_WARDS : window.BBMP_WARDS) || [];
+  const target = wards.find(w => w.wardNo === wardNo);
+  if (!target) return;
+
+  // 1. Set Zone
+  const zoneSelect = document.getElementById('bbmpZone');
+  if (zoneSelect) {
+    zoneSelect.value = target.zone;
+    if (typeof clearFieldError === 'function') clearFieldError('bbmpZone', 'err-bbmpZone');
+  }
+
+  // 2. Set Ward Number
+  const wardNoInput = document.getElementById('wardNo');
+  if (wardNoInput) {
+    wardNoInput.value = target.wardNo;
+    if (typeof clearFieldError === 'function') clearFieldError('wardNo', 'err-wardNo');
+  }
+
+  // 3. Set Ward Name
+  const wardNameInput = document.getElementById('wardName');
+  if (wardNameInput) {
+    wardNameInput.value = target.nameEn;
+    if (typeof clearFieldError === 'function') clearFieldError('wardName', 'err-wardName');
+  }
+
+  // 4. Update CAD Drawing Title Block on Page 1
+  const tbZone = document.getElementById('tbZone');
+  if (tbZone) tbZone.textContent = target.zone + ' Zone';
+  const tbWard = document.getElementById('tbWard');
+  if (tbWard) tbWard.textContent = `Ward ${target.wardNo} (${target.nameEn})`;
+
+  // 5. Persist to storage
+  if (typeof saveDraft === 'function') saveDraft();
+
+  // 6. Close Modal
+  closeWardSearchModal();
+}
+
 if (typeof window !== 'undefined') {
   window.AREA_CONVERSION_RATES = AREA_CONVERSION_RATES;
   window.toggleAreaConverter = toggleAreaConverter;
   window.calculateConvertedArea = calculateConvertedArea;
   window.applyConvertedArea = applyConvertedArea;
   window.applyAreaPreset = applyAreaPreset;
+  window.openWardSearchModal = openWardSearchModal;
+  window.closeWardSearchModal = closeWardSearchModal;
+  window.setWardZoneFilter = setWardZoneFilter;
+  window.filterAndRenderWards = filterAndRenderWards;
+  window.selectBbmpWard = selectBbmpWard;
 }
 
 

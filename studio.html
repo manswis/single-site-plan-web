@@ -19,9 +19,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.svg">
 
-  <link rel="stylesheet" href="css/styles.min.css?v=1.2.3">
-  <script src="js/theme.min.js?v=1.2.3"></script>
-  <script src="js/i18n.min.js?v=1.2.3"></script>
+  <link rel="stylesheet" href="css/styles.min.css?v=1.2.6">
+  <script src="js/theme.min.js?v=1.2.6"></script>
+  <script src="js/i18n.min.js?v=1.2.6"></script>
 
   <!-- html2canvas and jsPDF for Direct Client-Side PDF File Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -238,6 +238,51 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- Apple-Style BBMP Zone & Ward Search Directory Modal -->
+  <div id="bbmpWardModal" class="apple-modal-overlay no-print" style="display: none;"
+    onclick="if(event.target===this)closeWardSearchModal()">
+    <div class="apple-modal-card ward-modal-card">
+      <div class="ward-modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="ward-modal-icon-badge">
+            <span class="material-symbols-outlined">location_city</span>
+          </div>
+          <div>
+            <h3 class="ward-modal-title" data-i18n="wardModal.title">BBMP Zone & Ward Directory</h3>
+            <p class="ward-modal-subtitle" data-i18n="wardModal.subtitle">Search by locality, area, landmark, or ward number to auto-fill municipal zoning</p>
+          </div>
+        </div>
+        <button type="button" class="ward-modal-close-btn" onclick="closeWardSearchModal()" aria-label="Close">✕</button>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="ward-search-bar-wrapper">
+        <span class="material-symbols-outlined ward-search-icon">search</span>
+        <input type="text" id="wardModalSearchInput" class="ward-search-input"
+          placeholder="Search Locality, Landmark, or Ward No (e.g. Koramangala, Indiranagar, ITPL, 151)..."
+          data-i18n-placeholder="wardModal.searchPlaceholder" oninput="filterAndRenderWards(this.value)" autocomplete="off">
+        <button type="button" class="ward-search-clear-btn"
+          onclick="const input = document.getElementById('wardModalSearchInput'); if(input){ input.value=''; filterAndRenderWards(''); input.focus(); }">✕</button>
+      </div>
+
+      <!-- Zone Filter Chips -->
+      <div class="ward-zone-chips-scroll" id="wardZoneChipsContainer">
+        <!-- Injected dynamically via renderWardZoneChips() -->
+      </div>
+
+      <!-- Results Meta Bar -->
+      <div class="ward-results-meta">
+        <span id="wardResultCountBadge" class="ward-results-count">198 Wards Available</span>
+        <span class="ward-results-hint" data-i18n="wardModal.selectHint">Tap any ward to auto-fill</span>
+      </div>
+
+      <!-- Results Scrollable List -->
+      <div class="ward-results-scrollable" id="wardSearchResultsList">
+        <!-- Dynamic Ward Cards Injected via filterAndRenderWards() -->
+      </div>
     </div>
   </div>
 
@@ -555,17 +600,22 @@
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <select id="bbmpZone" onchange="clearFieldError('bbmpZone', 'err-bbmpZone')">
-              <option value="" selected>-- Select Zone --</option>
-              <option value="East">East Zone</option>
-              <option value="West">West Zone</option>
-              <option value="South">South Zone</option>
-              <option value="Mahadevapura">Mahadevapura Zone</option>
-              <option value="Yelahanka">Yelahanka Zone</option>
-              <option value="Dasarahalli">Dasarahalli Zone</option>
-              <option value="Bommanahalli">Bommanahalli Zone</option>
-              <option value="Rajarajeshwari Nagar">RR Nagar Zone</option>
-            </select>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <select id="bbmpZone" style="flex: 1;" onchange="clearFieldError('bbmpZone', 'err-bbmpZone')">
+                <option value="" selected>-- Select Zone --</option>
+                <option value="East">East Zone</option>
+                <option value="West">West Zone</option>
+                <option value="South">South Zone</option>
+                <option value="Mahadevapura">Mahadevapura Zone</option>
+                <option value="Yelahanka">Yelahanka Zone</option>
+                <option value="Dasarahalli">Dasarahalli Zone</option>
+                <option value="Bommanahalli">Bommanahalli Zone</option>
+                <option value="Rajarajeshwari Nagar">RR Nagar Zone</option>
+              </select>
+              <button type="button" class="zone-search-circle-btn" onclick="openWardSearchModal(event)" title="Search 198 BBMP Wards & Localities Directory" aria-label="Search BBMP Wards">
+                <span class="material-symbols-outlined">search</span>
+              </button>
+            </div>
             <div class="error-msg" id="err-bbmpZone">⚠ Select BBMP Zone</div>
           </div>
           <div class="field">
@@ -2290,11 +2340,11 @@
 
   </div> <!-- End Container -->
 
-  <script src="js/analytics.min.js?v=1.2.4"></script>
-  <script src="js/wizard.min.js?v=1.2.4"></script>
-  <script src="js/ui.min.js?v=1.2.4"></script>
-  <script src="js/validator.min.js?v=1.2.4"></script>
-  <script src="js/renderer.min.js?v=1.2.4"></script>
+  <script src="js/analytics.min.js?v=1.2.6"></script>
+  <script src="js/wizard.min.js?v=1.2.6"></script>
+  <script src="js/ui.min.js?v=1.2.6"></script>
+  <script src="js/validator.min.js?v=1.2.6"></script>
+  <script src="js/renderer.min.js?v=1.2.6"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof initLiveStats === 'function') {
