@@ -8,12 +8,15 @@
 import { strict as assert } from 'assert';
 
 const AREA_CONVERSION_RATES = {
+  sqft: 1,
   gunta: 1089,           // 1 Gunta = 33 ft x 33 ft = 1,089 sq.ft
   sqyd: 9,              // 1 Sq. Yard (Gajam) = 3 ft x 3 ft = 9 sq.ft
   sqm: 10.7639104,      // 1 Sq. Meter = 10.7639104 sq.ft
   acre: 43560,          // 1 Acre = 40 Guntas = 43,560 sq.ft
   ankana: 72,           // 1 Ankana = 72 sq.ft (traditional Karnataka unit)
-  cent: 435.6           // 1 Cent = 435.6 sq.ft (1/100 Acre)
+  cent: 435.6,          // 1 Cent = 435.6 sq.ft (1/100 Acre)
+  bigha: 17424,         // 1 Bigha (Karnataka) = 16 Guntas = 17,424 sq.ft
+  hectare: 107639.104   // 1 Hectare = 10,000 sq.m = 107,639.104 sq.ft
 };
 
 function convertLandArea(value, unit) {
@@ -40,7 +43,10 @@ assert.equal(convertLandArea(1, 'ankana'), 72, '1 Ankana must equal 72 sq.ft');
 assert.equal(convertLandArea(10, 'ankana'), 720, '10 Ankanas must equal 720 sq.ft');
 assert.equal(convertLandArea(1, 'cent'), 435.6, '1 Cent must equal 435.6 sq.ft');
 assert.equal(convertLandArea(10, 'cent'), 4356, '10 Cents must equal 4356 sq.ft');
-console.log('   ✓ All 11 standard conversion calculations match statutory standards.');
+assert.equal(convertLandArea(1, 'bigha'), 17424, '1 Bigha must equal 17424 sq.ft (16 Guntas)');
+assert.equal(convertLandArea(1, 'sqft'), 1, '1 Sq.Ft must equal 1 sq.ft');
+assert.ok(Math.abs(convertLandArea(1, 'hectare') - 107639.10) < 0.02, '1 Hectare must equal 107639.10 sq.ft');
+console.log('   ✓ All 14 standard conversion calculations match statutory standards.');
 
 // 2. Square Meter Scientific Precision
 console.log('\n2. Verifying Metric Square Meter Conversions:');

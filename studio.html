@@ -19,9 +19,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.svg">
 
-  <link rel="stylesheet" href="css/styles.min.css?v=1.2.6">
-  <script src="js/theme.min.js?v=1.2.6"></script>
-  <script src="js/i18n.min.js?v=1.2.6"></script>
+  <link rel="stylesheet" href="css/styles.min.css?v=1.2.7">
+  <script src="js/theme.min.js?v=1.2.7"></script>
+  <script src="js/i18n.min.js?v=1.2.7"></script>
 
   <!-- html2canvas and jsPDF for Direct Client-Side PDF File Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -252,10 +252,12 @@
           </div>
           <div>
             <h3 class="ward-modal-title" data-i18n="wardModal.title">BBMP Zone & Ward Directory</h3>
-            <p class="ward-modal-subtitle" data-i18n="wardModal.subtitle">Search by locality, area, landmark, or ward number to auto-fill municipal zoning</p>
+            <p class="ward-modal-subtitle" data-i18n="wardModal.subtitle">Search by locality, area, landmark, or ward
+              number to auto-fill municipal zoning</p>
           </div>
         </div>
-        <button type="button" class="ward-modal-close-btn" onclick="closeWardSearchModal()" aria-label="Close">✕</button>
+        <button type="button" class="ward-modal-close-btn" onclick="closeWardSearchModal()"
+          aria-label="Close">✕</button>
       </div>
 
       <!-- Search Bar -->
@@ -263,7 +265,8 @@
         <span class="material-symbols-outlined ward-search-icon">search</span>
         <input type="text" id="wardModalSearchInput" class="ward-search-input"
           placeholder="Search Locality, Landmark, or Ward No (e.g. Koramangala, Indiranagar, ITPL, 151)..."
-          data-i18n-placeholder="wardModal.searchPlaceholder" oninput="filterAndRenderWards(this.value)" autocomplete="off">
+          data-i18n-placeholder="wardModal.searchPlaceholder" oninput="filterAndRenderWards(this.value)"
+          autocomplete="off">
         <button type="button" class="ward-search-clear-btn"
           onclick="const input = document.getElementById('wardModalSearchInput'); if(input){ input.value=''; filterAndRenderWards(''); input.focus(); }">✕</button>
       </div>
@@ -283,6 +286,150 @@
       <div class="ward-results-scrollable" id="wardSearchResultsList">
         <!-- Dynamic Ward Cards Injected via filterAndRenderWards() -->
       </div>
+    </div>
+  </div>
+
+  <!-- Apple-Style Karnataka Land Area Unit Converter Modal -->
+  <div id="landConverterModal" class="apple-modal-overlay no-print" style="display: none;"
+    onclick="if(event.target===this)closeAreaConverterModal()">
+    <div class="apple-modal-card converter-modal-card">
+      <!-- Modal Header -->
+      <div class="ward-modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="ward-modal-icon-badge" style="background: rgba(0, 113, 227, 0.1); color: var(--apple-accent);">
+            <span class="material-symbols-outlined">swap_horiz</span>
+          </div>
+          <div>
+            <h3 class="ward-modal-title" data-i18n="converter.title">Karnataka Land Area Unit Converter</h3>
+            <p class="ward-modal-subtitle" data-i18n="converter.subtitle">Convert traditional Karnataka land measures
+              (Gunta, Sq.Yd, Cent, Acre) to Sq.Ft</p>
+          </div>
+        </div>
+        <button type="button" class="ward-modal-close-btn" onclick="closeAreaConverterModal()"
+          aria-label="Close">✕</button>
+      </div>
+
+      <!-- Enter Land Measure Section with Tappable Unit Menu -->
+      <div class="converter-modal-section">
+        <label class="converter-modal-label" data-i18n="converter.valLabel">Enter Land Measure & Unit</label>
+        <div class="converter-input-wrapper">
+          <input type="number" id="convModalInputValue" class="converter-modal-input" placeholder="e.g. 1.5" step="any"
+            min="0" oninput="calculateModalConvertedArea()" autocomplete="off">
+          
+          <div class="converter-unit-dropdown-wrapper">
+            <button type="button" class="converter-unit-select-btn" id="convModalUnitBtn" onclick="toggleConverterUnitMenu(event)" aria-haspopup="listbox" aria-expanded="false" title="Click to select unit type">
+              <span id="convModalUnitBtnText">Gunta (1,089 sq.ft)</span>
+              <span class="material-symbols-outlined dropdown-chevron">expand_more</span>
+            </button>
+
+            <!-- Floating Apple-Style Popover Menu -->
+            <div class="converter-unit-menu" id="convModalUnitMenu" style="display: none;">
+              <div class="converter-unit-menu-item active" data-unit="gunta" onclick="selectConverterUnit('gunta')">
+                <div class="unit-menu-text">
+                  <span class="unit-name">Gunta (ಗುಂಟೆ)</span>
+                  <span class="unit-detail">1,089.00 sq.ft (33ft × 33ft)</span>
+                </div>
+                <span class="material-symbols-outlined unit-check-icon">check</span>
+              </div>
+              <div class="converter-unit-menu-item" data-unit="sqyd" onclick="selectConverterUnit('sqyd')">
+                <div class="unit-menu-text">
+                  <span class="unit-name">Square Yard / Gajam (ಗಜ)</span>
+                  <span class="unit-detail">9.00 sq.ft (3ft × 3ft)</span>
+                </div>
+                <span class="material-symbols-outlined unit-check-icon">check</span>
+              </div>
+              <div class="converter-unit-menu-item" data-unit="sqm" onclick="selectConverterUnit('sqm')">
+                <div class="unit-menu-text">
+                  <span class="unit-name">Square Meter (ಮೀಟರ್)</span>
+                  <span class="unit-detail">10.764 sq.ft</span>
+                </div>
+                <span class="material-symbols-outlined unit-check-icon">check</span>
+              </div>
+              <div class="converter-unit-menu-item" data-unit="acre" onclick="selectConverterUnit('acre')">
+                <div class="unit-menu-text">
+                  <span class="unit-name">Acre (ಎಕರೆ)</span>
+                  <span class="unit-detail">43,560.00 sq.ft (40 Guntas)</span>
+                </div>
+                <span class="material-symbols-outlined unit-check-icon">check</span>
+              </div>
+              <div class="converter-unit-menu-item" data-unit="cent" onclick="selectConverterUnit('cent')">
+                <div class="unit-menu-text">
+                  <span class="unit-name">Cent (ಸೆಂಟ್)</span>
+                  <span class="unit-detail">435.60 sq.ft (1/100 Acre)</span>
+                </div>
+                <span class="material-symbols-outlined unit-check-icon">check</span>
+              </div>
+              <div class="converter-unit-menu-item" data-unit="ankana" onclick="selectConverterUnit('ankana')">
+                <div class="unit-menu-text">
+                  <span class="unit-name">Ankana (ಅಂಕಣ)</span>
+                  <span class="unit-detail">72.00 sq.ft</span>
+                </div>
+                <span class="material-symbols-outlined unit-check-icon">check</span>
+              </div>
+              <div class="converter-unit-menu-item" data-unit="bigha" onclick="selectConverterUnit('bigha')">
+                <div class="unit-menu-text">
+                  <span class="unit-name">Bigha (ಬೀಘಾ)</span>
+                  <span class="unit-detail">17,424.00 sq.ft (16 Guntas)</span>
+                </div>
+                <span class="material-symbols-outlined unit-check-icon">check</span>
+              </div>
+              <div class="converter-unit-menu-item" data-unit="hectare" onclick="selectConverterUnit('hectare')">
+                <div class="unit-menu-text">
+                  <span class="unit-name">Hectare (ಹೆಕ್ಟೇರ್)</span>
+                  <span class="unit-detail">1,07,639.10 sq.ft (10,000 sq.m)</span>
+                </div>
+                <span class="material-symbols-outlined unit-check-icon">check</span>
+              </div>
+              <div class="converter-unit-menu-item" data-unit="sqft" onclick="selectConverterUnit('sqft')">
+                <div class="unit-menu-text">
+                  <span class="unit-name">Square Feet (ಚದರ ಅಡಿ)</span>
+                  <span class="unit-detail">1.00 sq.ft</span>
+                </div>
+                <span class="material-symbols-outlined unit-check-icon">check</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Presets -->
+      <div class="converter-modal-section">
+        <label class="converter-modal-label" data-i18n="converter.presetsLabel">Quick Presets (Standard Plots & Measures)</label>
+        <div class="converter-presets-chips-grid">
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1, 'gunta')">1 Gunta (1,089 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1.5, 'gunta')">1.5 Guntas (1,633.5 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(2, 'gunta')">2 Guntas (2,178 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1200, 'sqft')">30 × 40 (1,200 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(1500, 'sqft')">30 × 50 (1,500 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(2400, 'sqft')">40 × 60 (2,400 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(4000, 'sqft')">50 × 80 (4,000 sq.ft)</button>
+          <button type="button" class="converter-preset-chip" onclick="applyConverterPreset(100, 'sqyd')">100 Sq.Yds (900 sq.ft)</button>
+        </div>
+      </div>
+
+      <!-- Live Calculated Result Card -->
+      <div class="converter-result-banner">
+        <div class="converter-result-col">
+          <span class="converter-result-sub" data-i18n="converter.sqftEquivalent">Calculated Plot Area</span>
+          <div class="converter-result-main" id="convModalResultSqFt">0 <span class="unit">sq.ft</span></div>
+        </div>
+        <div class="converter-result-divider"></div>
+        <div class="converter-result-col">
+          <span class="converter-result-sub" data-i18n="converter.sqmEquivalent">Metric Equivalent</span>
+          <div class="converter-result-metric" id="convModalResultSqM">0.00 <span class="unit">sq.m</span></div>
+        </div>
+      </div>
+
+      <div class="converter-formula-footnote" id="convModalFormulaNote">
+        1 Gunta = 1,089.00 sq.ft (33ft × 33ft) = 101.17 sq.m
+      </div>
+
+      <!-- Action Button -->
+      <button type="button" class="converter-apply-action-btn" id="convModalApplyBtn"
+        onclick="applyConvertedAreaModal()">
+        <span class="material-symbols-outlined">check_circle</span>
+        <span data-i18n="converter.applyBtn">Apply to Plot Area</span>
+      </button>
     </div>
   </div>
 
@@ -612,7 +759,8 @@
                 <option value="Bommanahalli">Bommanahalli Zone</option>
                 <option value="Rajarajeshwari Nagar">RR Nagar Zone</option>
               </select>
-              <button type="button" class="zone-search-circle-btn" onclick="openWardSearchModal(event)" title="Search 198 BBMP Wards & Localities Directory" aria-label="Search BBMP Wards">
+              <button type="button" class="zone-search-circle-btn" onclick="openWardSearchModal(event)"
+                title="Search 198 BBMP Wards & Localities Directory" aria-label="Search BBMP Wards">
                 <span class="material-symbols-outlined">search</span>
               </button>
             </div>
@@ -743,77 +891,16 @@
 
         <div class="grid">
           <div class="field" style="position: relative;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
-              <label style="margin-bottom: 0;">Plot Area (sq.ft) <span class="required">*</span></label>
-              <button type="button" class="area-converter-toggle-btn" onclick="toggleAreaConverter(event)" id="areaConverterToggleBtn" title="Convert Gunta, Sq.Yds, Sq.M to Sq.Ft">
+            <label>Plot Area (sq.ft) <span class="required">*</span></label>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input id="plotArea" type="number" style="flex: 1;" placeholder="e.g. 2400"
+                oninput="this.dataset.userEdited='true'; clearFieldError('plotArea', 'err-plotArea'); if(typeof renderCanvas==='function') renderCanvas();">
+              <button type="button" class="zone-search-circle-btn" onclick="openAreaConverterModal(event)"
+                title="Open Karnataka Land Area Converter (Gunta, Sq.Yd, Sq.M to Sq.Ft)" aria-label="Convert Land Area">
                 <span class="material-symbols-outlined">swap_horiz</span>
-                <span data-i18n="converter.toggle">Converter</span>
               </button>
             </div>
-            <input id="plotArea" type="number" placeholder="e.g. 2400"
-              oninput="this.dataset.userEdited='true'; clearFieldError('plotArea', 'err-plotArea'); if(typeof renderCanvas==='function') renderCanvas();">
             <div class="error-msg" id="err-plotArea">⚠ Plot area is required</div>
-          </div>
-
-          <div id="areaConverterContainer" style="grid-column: 1 / -1; display: none;">
-            <!-- Inline Karnataka Land Area Unit Converter Card -->
-            <div id="areaConverterCard" class="area-converter-card">
-              <div class="converter-card-header">
-                <div class="converter-card-title">
-                  <span class="material-symbols-outlined">calculate</span>
-                  <span data-i18n="converter.title">Karnataka Land Area Unit Converter</span>
-                </div>
-                <button type="button" class="converter-close-btn" onclick="toggleAreaConverter(event)" aria-label="Close Converter">
-                  <span class="material-symbols-outlined">close</span>
-                </button>
-              </div>
-
-              <div class="converter-interactive-grid">
-                <!-- Input Value -->
-                <div class="converter-field-group">
-                  <label class="converter-sublabel" data-i18n="converter.valLabel">Enter Land Measure</label>
-                  <input type="number" id="convInputValue" class="converter-input" placeholder="e.g. 1.5" step="any" min="0" oninput="calculateConvertedArea()">
-                </div>
-
-                <!-- Unit Dropdown -->
-                <div class="converter-field-group">
-                  <label class="converter-sublabel" data-i18n="converter.unitLabel">Unit Type</label>
-                  <select id="convInputUnit" class="converter-select" onchange="calculateConvertedArea()">
-                    <option value="gunta" selected data-i18n="converter.units.gunta">Gunta (ಗುಂಟೆ) — 1,089 sq.ft</option>
-                    <option value="sqyd" data-i18n="converter.units.sqyd">Square Yard / Gajam (ಗಜ) — 9 sq.ft</option>
-                    <option value="sqm" data-i18n="converter.units.sqm">Square Meter (ಮೀಟರ್) — 10.764 sq.ft</option>
-                    <option value="acre" data-i18n="converter.units.acre">Acre (ಎಕರೆ) — 43,560 sq.ft (40 G)</option>
-                    <option value="ankana" data-i18n="converter.units.ankana">Ankana (ಅಂಕಣ) — 72 sq.ft</option>
-                    <option value="cent" data-i18n="converter.units.cent">Cent (ಸೆಂಟ್) — 435.6 sq.ft</option>
-                  </select>
-                </div>
-
-                <!-- Result Box & Apply Button -->
-                <div class="converter-result-wrapper">
-                  <div class="converter-result-display">
-                    <span class="converter-result-label" data-i18n="converter.sqftEquivalent">Sq.Ft Equivalent</span>
-                    <div class="converter-result-val" id="convResultValue">0 <span class="converter-result-unit">sq.ft</span></div>
-                  </div>
-                  <button type="button" class="converter-apply-btn" onclick="applyConvertedArea()" id="convApplyBtn">
-                    <span class="material-symbols-outlined">check_circle</span>
-                    <span data-i18n="converter.applyBtn">Apply</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Quick Presets -->
-              <div class="converter-presets-row">
-                <span class="converter-presets-label" data-i18n="converter.presetsLabel">Quick Presets:</span>
-                <div class="converter-presets-chips">
-                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(1, 'gunta')">1 Gunta (1,089)</button>
-                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(1.5, 'gunta')">1.5 Guntas (1,633.5)</button>
-                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(2, 'gunta')">2 Guntas (2,178)</button>
-                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(100, 'sqyd')">100 Sq.Yds (900)</button>
-                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(133.33, 'sqyd')">133.33 Sq.Yds (1,200)</button>
-                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(200, 'sqyd')">200 Sq.Yds (1,800)</button>
-                </div>
-              </div>
-            </div>
           </div>
           <div class="field">
             <label>Primary Abutting Road Width <span class="required">*</span> <button type="button"
@@ -2097,8 +2184,11 @@
                   <tr>
                     <td colspan="2"
                       style="font-size: 6.8px; line-height: 1.25; color: #475569; padding-top: 4px; border-top: 1px dashed #cbd5e1; text-align: justify;">
-                      <strong>STATUTORY NOTE:</strong> Prepared for BBMP Sakala B-to-A Khata processing. All site boundaries, setbacks & dimensions subject to physical audit by COA Architect / Licensed Engineer & municipal sanction.<br>
-                      <strong>ಶಾಸನಬದ್ಧ ಟಿಪ್ಪಣಿ:</strong> ಬಿಬಿಎಂಪಿ ಸಕಾಲ ಪ್ರಕ್ರಿಯೆಗಾಗಿ ಸಿದ್ಧಪಡಿಸಲಾದ ನಕ್ಷೆ. ಎಲ್ಲಾ ಅಳತೆಗಳು ಮತ್ತು ಸೆಟ್‌ಬ್ಯಾಕ್‌ಗಳು COA ಆರ್ಕಿಟೆಕ್ಟ್ ಪರಿಶೀಲನೆ ಹಾಗೂ ಪುರಸಭಾ ಮಂಜೂರಾತಿಗೆ ಒಳಪಟ್ಟಿರುತ್ತವೆ.
+                      <strong>STATUTORY NOTE:</strong> Prepared for BBMP Sakala B-to-A Khata processing. All site
+                      boundaries, setbacks & dimensions subject to physical audit by COA Architect / Licensed Engineer &
+                      municipal sanction.<br>
+                      <strong>ಶಾಸನಬದ್ಧ ಟಿಪ್ಪಣಿ:</strong> ಬಿಬಿಎಂಪಿ ಸಕಾಲ ಪ್ರಕ್ರಿಯೆಗಾಗಿ ಸಿದ್ಧಪಡಿಸಲಾದ ನಕ್ಷೆ. ಎಲ್ಲಾ ಅಳತೆಗಳು
+                      ಮತ್ತು ಸೆಟ್‌ಬ್ಯಾಕ್‌ಗಳು COA ಆರ್ಕಿಟೆಕ್ಟ್ ಪರಿಶೀಲನೆ ಹಾಗೂ ಪುರಸಭಾ ಮಂಜೂರಾತಿಗೆ ಒಳಪಟ್ಟಿರುತ್ತವೆ.
                     </td>
                   </tr>
                 </table>
@@ -2299,8 +2389,14 @@
           <!-- Statutory Architectural Note Footnote -->
           <div
             style="margin-top: 14px; padding-top: 8px; border-top: 1px dashed #cbd5e1; font-size: 8.5px; line-height: 1.4; color: #475569; text-align: justify;">
-            <strong>STATUTORY ARCHITECTURAL NOTE:</strong> Single Plot Layout Plan prepared for BBMP Sakala B-to-A Khata processing. All site boundaries, setbacks, road widening reservations, and dimensions are subject to on-ground physical verification and statutory certification by an authorized COA Registered Architect or BBMP Licensed Surveyor prior to execution. Subject to official municipal sanction.<br>
-            <strong>ಶಾಸನಬದ್ಧ ವಾಸ್ತುಶಿಲ್ಪ ಟಿಪ್ಪಣಿ:</strong> ಬಿಬಿಎಂಪಿ ಸಕಾಲ ಬಿ-ಟು-ಎ ಖಾತಾ ಪ್ರಕ್ರಿಯೆಗಾಗಿ ಸಿದ್ಧಪಡಿಸಲಾದ ಸಿಂಗಲ್ ಪ್ಲಾಟ್ ಲೇಔಟ್ ನಕ್ಷೆ. ಎಲ್ಲಾ ನಿವೇಶನದ ಗಡಿಗಳು, ಸೆಟ್‌ಬ್ಯಾಕ್‌ಗಳು, ರಸ್ತೆ ಅಗಲೀಕರಣ ಮತ್ತು ಅಳತೆಗಳು ಸ್ಥಳದಲ್ಲೇ ಪರಿಶೀಲನೆ ಹಾಗೂ ಅಧಿಕೃತ COA ನೋಂದಾಯಿತ ಆರ್ಕಿಟೆಕ್ಟ್ / ಬಿಬಿಎಂಪಿ ಪರವಾನಗಿ ಪಡೆದ ಎಂಜಿನಿಯರ್ ಅವರ ಶಾಸನಬದ್ಧ ದೃಢೀಕರಣ ಮತ್ತು ಪುರಸಭೆಯ ಅಧಿಕೃತ ಮಂಜೂರಾತಿಗೆ ಒಳಪಟ್ಟಿರುತ್ತವೆ.
+            <strong>STATUTORY ARCHITECTURAL NOTE:</strong> Single Plot Layout Plan prepared for BBMP Sakala B-to-A Khata
+            processing. All site boundaries, setbacks, road widening reservations, and dimensions are subject to
+            on-ground physical verification and statutory certification by an authorized COA Registered Architect or
+            BBMP Licensed Surveyor prior to execution. Subject to official municipal sanction.<br>
+            <strong>ಶಾಸನಬದ್ಧ ವಾಸ್ತುಶಿಲ್ಪ ಟಿಪ್ಪಣಿ:</strong> ಬಿಬಿಎಂಪಿ ಸಕಾಲ ಬಿ-ಟು-ಎ ಖಾತಾ ಪ್ರಕ್ರಿಯೆಗಾಗಿ ಸಿದ್ಧಪಡಿಸಲಾದ ಸಿಂಗಲ್
+            ಪ್ಲಾಟ್ ಲೇಔಟ್ ನಕ್ಷೆ. ಎಲ್ಲಾ ನಿವೇಶನದ ಗಡಿಗಳು, ಸೆಟ್‌ಬ್ಯಾಕ್‌ಗಳು, ರಸ್ತೆ ಅಗಲೀಕರಣ ಮತ್ತು ಅಳತೆಗಳು ಸ್ಥಳದಲ್ಲೇ ಪರಿಶೀಲನೆ
+            ಹಾಗೂ ಅಧಿಕೃತ COA ನೋಂದಾಯಿತ ಆರ್ಕಿಟೆಕ್ಟ್ / ಬಿಬಿಎಂಪಿ ಪರವಾನಗಿ ಪಡೆದ ಎಂಜಿನಿಯರ್ ಅವರ ಶಾಸನಬದ್ಧ ದೃಢೀಕರಣ ಮತ್ತು ಪುರಸಭೆಯ
+            ಅಧಿಕೃತ ಮಂಜೂರಾತಿಗೆ ಒಳಪಟ್ಟಿರುತ್ತವೆ.
           </div>
 
         </div> <!-- End Legend Sheet Frame -->
@@ -2340,11 +2436,11 @@
 
   </div> <!-- End Container -->
 
-  <script src="js/analytics.min.js?v=1.2.6"></script>
-  <script src="js/wizard.min.js?v=1.2.6"></script>
-  <script src="js/ui.min.js?v=1.2.6"></script>
-  <script src="js/validator.min.js?v=1.2.6"></script>
-  <script src="js/renderer.min.js?v=1.2.6"></script>
+  <script src="js/analytics.min.js?v=1.2.7"></script>
+  <script src="js/wizard.min.js?v=1.2.7"></script>
+  <script src="js/ui.min.js?v=1.2.7"></script>
+  <script src="js/validator.min.js?v=1.2.7"></script>
+  <script src="js/renderer.min.js?v=1.2.7"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof initLiveStats === 'function') {

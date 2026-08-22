@@ -2502,78 +2502,221 @@ if (typeof window !== 'undefined') {
 }
 
 // ==========================================================================
-// Karnataka Land Area Unit Converter Engine
+// Karnataka Land Area Unit Converter Engine & Modal Controller
 // ==========================================================================
 
-const AREA_CONVERSION_RATES = {
+export const AREA_CONVERSION_RATES = {
+  sqft: 1,
   gunta: 1089,           // 1 Gunta = 33 ft x 33 ft = 1,089 sq.ft
   sqyd: 9,              // 1 Sq. Yard (Gajam) = 3 ft x 3 ft = 9 sq.ft
   sqm: 10.7639104,      // 1 Sq. Meter = 10.7639104 sq.ft
   acre: 43560,          // 1 Acre = 40 Guntas = 43,560 sq.ft
+  cent: 435.6,          // 1 Cent = 435.6 sq.ft (1/100 Acre)
   ankana: 72,           // 1 Ankana = 72 sq.ft (traditional Karnataka unit)
-  cent: 435.6           // 1 Cent = 435.6 sq.ft (1/100 Acre)
+  bigha: 17424,         // 1 Bigha (Karnataka Standard) = 16 Guntas = 17,424 sq.ft
+  hectare: 107639.104   // 1 Hectare = 10,000 sq.m = 107,639.104 sq.ft
+};
+
+let activeConverterUnit = 'gunta';
+
+const CONVERTER_UNIT_NAMES = {
+  gunta: { en: 'Gunta (1,089 sq.ft)', kn: 'ಗುಂಟೆ (೧,೦೮೯ ಚ.ಅಡಿ)', formula: '1 Gunta = 1,089.00 sq.ft (33ft × 33ft) = 101.17 sq.m' },
+  sqyd: { en: 'Sq. Yard / Gajam (9 sq.ft)', kn: 'ಚದರ ಗಜ (೯ ಚ.ಅಡಿ)', formula: '1 Sq. Yard (Gajam) = 9.00 sq.ft = 0.836 sq.m' },
+  sqm: { en: 'Sq. Meter (10.764 sq.ft)', kn: 'ಚದರ ಮೀಟರ್ (೧೦.೭೬೪ ಚ.ಅಡಿ)', formula: '1 Sq. Meter = 10.764 sq.ft' },
+  acre: { en: 'Acre (43,560 sq.ft)', kn: 'ಎಕರೆ (೪೩,೫೬೦ ಚ.ಅಡಿ)', formula: '1 Acre = 40 Guntas = 43,560.00 sq.ft = 4,046.86 sq.m' },
+  cent: { en: 'Cent (435.6 sq.ft)', kn: 'ಸೆಂಟ್ (೪೩೫.೬ ಚ.ಅಡಿ)', formula: '1 Cent = 435.60 sq.ft = 40.47 sq.m (1/100 Acre)' },
+  ankana: { en: 'Ankana (72 sq.ft)', kn: 'ಅಂಕಣ (೭೨ ಚ.ಅಡಿ)', formula: '1 Ankana = 72.00 sq.ft = 6.689 sq.m' },
+  bigha: { en: 'Bigha (17,424 sq.ft)', kn: 'ಬೀಘಾ (೧೭,೪೨೪ ಚ.ಅಡಿ)', formula: '1 Bigha (Karnataka) = 16 Guntas = 17,424.00 sq.ft = 1,618.74 sq.m' },
+  hectare: { en: 'Hectare (1,07,639 sq.ft)', kn: 'ಹೆಕ್ಟೇರ್ (೧,೦೭,೬೩೯ ಚ.ಅಡಿ)', formula: '1 Hectare = 10,000 sq.m = 1,07,639.10 sq.ft = 2.471 Acres' },
+  sqft: { en: 'Sq. Feet (1 sq.ft)', kn: 'ಚದರ ಅಡಿ (೧ ಚ.ಅಡಿ)', formula: '1 Sq. Foot = 0.0929 sq.m' }
 };
 
 /**
- * Toggles the visibility of the inline Karnataka Land Unit Converter card.
+ * Opens the Apple-Style Karnataka Land Area Converter Modal.
  * @param {Event} [e] - Click event
  */
-function toggleAreaConverter(e) {
+function openAreaConverterModal(e) {
   if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
   if (e && typeof e.preventDefault === 'function') e.preventDefault();
-  const container = document.getElementById('areaConverterContainer');
-  const card = document.getElementById('areaConverterCard');
-  const target = container || card;
-  if (!target) return;
-  
-  const isHidden = target.style.display === 'none' || window.getComputedStyle(target).display === 'none';
-  target.style.display = isHidden ? 'block' : 'none';
-  if (card && target !== card) {
-    card.style.display = 'block';
-  }
-  
-  if (isHidden) {
-    if (typeof calculateConvertedArea === 'function') {
-      calculateConvertedArea();
+
+  const modal = document.getElementById('landConverterModal');
+  if (!modal) return;
+
+  modal.style.display = 'flex';
+  modal.classList.add('active');
+
+  const plotAreaInput = document.getElementById('plotArea');
+  const inputEl = document.getElementById('convModalInputValue');
+  if (inputEl) {
+    if (!inputEl.value || parseFloat(inputEl.value) <= 0) {
+      if (plotAreaInput && parseFloat(plotAreaInput.value) > 0) {
+        const currentSqFt = parseFloat(plotAreaInput.value);
+        inputEl.value = (currentSqFt / 1089).toFixed(2).replace(/\.00$/, '');
+        activeConverterUnit = 'gunta';
+      } else {
+        inputEl.value = '1';
+        activeConverterUnit = 'gunta';
+      }
     }
-    const input = document.getElementById('convInputValue');
-    if (input && !input.value) {
-      setTimeout(() => input.focus(), 50);
+    setTimeout(() => {
+      inputEl.focus();
+      inputEl.select();
+    }, 50);
+  }
+
+  closeConverterUnitMenu();
+  updateConverterUnitChipsUI();
+  calculateModalConvertedArea();
+}
+
+/**
+ * Closes the Area Converter Modal.
+ */
+function closeAreaConverterModal() {
+  closeConverterUnitMenu();
+  const modal = document.getElementById('landConverterModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
+}
+
+/**
+ * Toggles the unit selection popover menu.
+ * @param {Event} [e]
+ */
+function toggleConverterUnitMenu(e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  const menu = document.getElementById('convModalUnitMenu');
+  const btn = document.getElementById('convModalUnitBtn');
+  if (!menu) return;
+
+  const isOpen = menu.style.display === 'block';
+  if (isOpen) {
+    closeConverterUnitMenu();
+  } else {
+    menu.style.display = 'block';
+    if (btn) {
+      btn.classList.add('menu-open');
+      btn.setAttribute('aria-expanded', 'true');
     }
   }
 }
 
 /**
- * Computes live converted area in square feet based on current input and selected unit.
+ * Closes the unit selection popover menu.
+ */
+function closeConverterUnitMenu() {
+  const menu = document.getElementById('convModalUnitMenu');
+  const btn = document.getElementById('convModalUnitBtn');
+  if (menu) menu.style.display = 'none';
+  if (btn) {
+    btn.classList.remove('menu-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+// Global click listener to close popover when clicked outside
+if (typeof document !== 'undefined') {
+  document.addEventListener('click', (e) => {
+    const dropdown = document.querySelector('.converter-unit-dropdown-wrapper');
+    if (dropdown && !dropdown.contains(e.target)) {
+      closeConverterUnitMenu();
+    }
+  });
+}
+
+/**
+ * Selects a unit type action chip (only one active at a time).
+ * @param {string} unitKey
+ */
+function selectConverterUnit(unitKey) {
+  if (!AREA_CONVERSION_RATES[unitKey]) return;
+  activeConverterUnit = unitKey;
+  closeConverterUnitMenu();
+  updateConverterUnitChipsUI();
+  calculateModalConvertedArea();
+}
+
+/**
+ * Updates active class on unit menu items and updates button label.
+ */
+function updateConverterUnitChipsUI() {
+  const currentLang = window.i18n ? window.i18n.currentLang : 'en';
+  const meta = CONVERTER_UNIT_NAMES[activeConverterUnit] || { en: activeConverterUnit, formula: '' };
+
+  const btnText = document.getElementById('convModalUnitBtnText');
+  if (btnText) {
+    btnText.textContent = currentLang === 'kn' ? (meta.kn || meta.en) : meta.en;
+  }
+
+  const menu = document.getElementById('convModalUnitMenu');
+  if (menu) {
+    const items = menu.querySelectorAll('.converter-unit-menu-item');
+    items.forEach(item => {
+      const u = item.getAttribute('data-unit');
+      if (u === activeConverterUnit) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+
+  const noteEl = document.getElementById('convModalFormulaNote');
+  if (noteEl && meta.formula) {
+    noteEl.textContent = meta.formula;
+  }
+}
+
+/**
+ * Computes live conversion for modal in both sq.ft and sq.m.
  * @returns {number} Converted area in square feet
  */
-function calculateConvertedArea() {
-  const inputEl = document.getElementById('convInputValue');
-  const unitEl = document.getElementById('convInputUnit');
-  const resultDisplay = document.getElementById('convResultValue');
+function calculateModalConvertedArea() {
+  const inputEl = document.getElementById('convModalInputValue');
+  const sqftDisplay = document.getElementById('convModalResultSqFt');
+  const sqmDisplay = document.getElementById('convModalResultSqM');
 
-  if (!inputEl || !unitEl || !resultDisplay) return 0;
+  if (!inputEl || !sqftDisplay || !sqmDisplay) return 0;
 
   const rawVal = parseFloat(inputEl.value);
-  const unitKey = unitEl.value;
-  const multiplier = AREA_CONVERSION_RATES[unitKey] || 1;
+  const multiplier = AREA_CONVERSION_RATES[activeConverterUnit] || 1;
 
   if (isNaN(rawVal) || rawVal <= 0) {
-    resultDisplay.innerHTML = `0 <span class="converter-result-unit">sq.ft</span>`;
+    sqftDisplay.innerHTML = `0 <span class="unit">sq.ft</span>`;
+    sqmDisplay.innerHTML = `0.00 <span class="unit">sq.m</span>`;
     return 0;
   }
 
   const sqftVal = rawVal * multiplier;
-  const formatted = sqftVal.toLocaleString('en-IN', { maximumFractionDigits: 2 });
-  resultDisplay.innerHTML = `${formatted} <span class="converter-result-unit">sq.ft</span>`;
+  const sqmVal = sqftVal / 10.7639104;
+
+  const formattedSqFt = sqftVal.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  const formattedSqM = sqmVal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  sqftDisplay.innerHTML = `${formattedSqFt} <span class="unit">sq.ft</span>`;
+  sqmDisplay.innerHTML = `${formattedSqM} <span class="unit">sq.m</span>`;
+
   return sqftVal;
 }
 
 /**
- * Applies the converted square footage value directly into the #plotArea form input.
+ * Applies a quick preset inside the modal, recalculates live, and updates input.
+ * @param {number} val
+ * @param {string} unitKey
  */
-function applyConvertedArea() {
-  const sqftVal = calculateConvertedArea();
+function applyConverterPreset(val, unitKey) {
+  const inputEl = document.getElementById('convModalInputValue');
+  if (inputEl) inputEl.value = val;
+  selectConverterUnit(unitKey);
+}
+
+/**
+ * Applies the calculated modal area to #plotArea and closes modal.
+ */
+function applyConvertedAreaModal() {
+  const sqftVal = calculateModalConvertedArea();
   if (sqftVal <= 0) return;
 
   const plotAreaInput = document.getElementById('plotArea');
@@ -2591,32 +2734,27 @@ function applyConvertedArea() {
     if (typeof saveDraft === 'function') saveDraft();
   }
 
-  const btn = document.getElementById('convApplyBtn');
+  const btn = document.getElementById('convModalApplyBtn');
   if (btn) {
     const origHtml = btn.innerHTML;
-    const appliedMsg = window.i18n ? window.i18n.t('converter.applied') : 'Applied!';
+    const appliedMsg = window.i18n ? window.i18n.t('converter.applied') : 'Applied to Plan!';
     btn.innerHTML = `<span class="material-symbols-outlined">done_all</span> ${appliedMsg}`;
-    btn.style.background = '#10b981';
+    btn.style.background = '#059669';
     setTimeout(() => {
       btn.innerHTML = origHtml;
       btn.style.background = '';
-    }, 1500);
+      closeAreaConverterModal();
+    }, 400);
+  } else {
+    closeAreaConverterModal();
   }
 }
 
-/**
- * Applies a quick preset value and unit, calculates, and copies to plot area.
- * @param {number} val - Quantity
- * @param {string} unit - Unit key ('gunta', 'sqyd', etc.)
- */
-function applyAreaPreset(val, unit) {
-  const inputEl = document.getElementById('convInputValue');
-  const unitEl = document.getElementById('convInputUnit');
-  if (inputEl) inputEl.value = val;
-  if (unitEl) unitEl.value = unit;
-  calculateConvertedArea();
-  applyConvertedArea();
-}
+// Backward compatibility aliases
+function calculateConvertedArea() { return calculateModalConvertedArea(); }
+function applyConvertedArea() { return applyConvertedAreaModal(); }
+function applyAreaPreset(val, unit) { return applyConverterPreset(val, unit); }
+function toggleAreaConverter(e) { return openAreaConverterModal(e); }
 
 /* ==========================================================================
    BBMP Zone & Ward Auto-Suggest Directory Modal Controller
@@ -2739,7 +2877,7 @@ function filterAndRenderWards(rawQuery) {
   }
 
   if (filtered.length === 0) {
-    const noResultMsg = currentLang === 'kn' 
+    const noResultMsg = currentLang === 'kn'
       ? 'ಯಾವುದೇ ವಾರ್ಡ್ ಕಂಡುಬಂದಿಲ್ಲ. ದಯವಿಟ್ಟು ಬೇರೆ ಬಡಾವಣೆ ಅಥವಾ ಲ್ಯಾಂಡ್‌ಮಾರ್ಕ್ ಹುಡುಕಿ.'
       : 'No matching BBMP wards found. Try searching by landmark (e.g. Sony World, 100ft Rd, ITPL).';
     container.innerHTML = `
@@ -2817,6 +2955,14 @@ function selectBbmpWard(wardNo) {
 
 if (typeof window !== 'undefined') {
   window.AREA_CONVERSION_RATES = AREA_CONVERSION_RATES;
+  window.openAreaConverterModal = openAreaConverterModal;
+  window.closeAreaConverterModal = closeAreaConverterModal;
+  window.toggleConverterUnitMenu = toggleConverterUnitMenu;
+  window.closeConverterUnitMenu = closeConverterUnitMenu;
+  window.selectConverterUnit = selectConverterUnit;
+  window.calculateModalConvertedArea = calculateModalConvertedArea;
+  window.applyConverterPreset = applyConverterPreset;
+  window.applyConvertedAreaModal = applyConvertedAreaModal;
   window.toggleAreaConverter = toggleAreaConverter;
   window.calculateConvertedArea = calculateConvertedArea;
   window.applyConvertedArea = applyConvertedArea;
