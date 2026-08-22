@@ -206,7 +206,9 @@ export class I18nManager {
 export const i18n = new I18nManager();
 if (typeof window !== 'undefined') {
   window.i18n = i18n;
+  window.I18nManager = I18nManager;
   window.t = (key, params) => i18n.t(key, params);
+  window.setLanguage = (locale) => i18n.applyLocale(locale);
 }
 
 if (typeof document !== 'undefined') {

@@ -17,7 +17,12 @@ export const kn = {
   "nav.contact": "ಸಂಪರ್ಕ & ಬೆಂಬಲ",
   "nav.langSwitch": "English",
   "nav.langTitle": "Switch to English",
-  "nav.themeTitle": "ಡಾರ್ಕ್/ಲೈಟ್ ಮೋಡ್ ಬದಲಾಯಿಸಿ",
+  "nav.themeTitle": "ಲೈಟ್/ಡಾರ್ಕ್ ಮೋಡ್ ಬದಲಿಸಿ",
+  "menu.title": "ತ್ವರಿತ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+  "menu.theme": "ರೂಪ (Theme)",
+  "menu.theme.light": "ಲೈಟ್",
+  "menu.theme.dark": "ಡಾರ್ಕ್",
+  "menu.language": "ಭಾಷೆ (Language)",
 
   // --- Action Buttons & Stepper Controls ---
   "btn.continue": "ಮುಂದುವರಿಯಿರಿ →",

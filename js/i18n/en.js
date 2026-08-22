@@ -18,6 +18,11 @@ export const en = {
   "nav.langSwitch": "ಕನ್ನಡ",
   "nav.langTitle": "Switch to Kannada (ಕನ್ನಡ)",
   "nav.themeTitle": "Toggle Light/Dark Mode",
+  "menu.title": "Quick Settings",
+  "menu.theme": "Appearance",
+  "menu.theme.light": "Light",
+  "menu.theme.dark": "Dark",
+  "menu.language": "Language",
 
   // --- Action Buttons & Stepper Controls ---
   "btn.continue": "Continue →",

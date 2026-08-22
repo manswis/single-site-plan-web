@@ -58,9 +58,8 @@
 
   <div class="container">
 
-    <!-- Mobile Nav Slider -->
-    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-      <div class="mobile-nav-slider" style="margin-bottom: 0; flex: 1;">
+    <div class="mobile-header-controls-row no-print">
+      <div class="mobile-nav-slider">
         <a href="index.html" class="mobile-nav-item" data-i18n="nav.home">Home</a>
         <a href="studio.html" class="mobile-nav-item" data-i18n="nav.workbench">Workbench</a>
         <a href="pricing.html" class="mobile-nav-item" data-i18n="nav.pricing">Pricing</a>
@@ -68,15 +67,52 @@
         <a href="faq.html" class="mobile-nav-item active" data-i18n="nav.faq">FAQ & Help</a>
         <a href="contact.html" class="mobile-nav-item" data-i18n="nav.contact">Contact</a>
       </div>
-      <div style="display: flex; align-items: center; gap: 4px;">
-        <button type="button" class="lang-toggle-btn mobile-lang-btn" aria-label="Switch Language"
-          title="Switch to Kannada (ಕನ್ನಡ)">
-          <span class="lang-btn-text">ಕನ್ನಡ</span>
+      <div class="mobile-menu-wrapper">
+        <button type="button" class="mobile-menu-btn" onclick="toggleMobileMenu(event)" aria-label="Open Settings Menu" title="Menu" id="mobileMenuTrigger">
+          <span class="material-symbols-outlined">menu</span>
         </button>
-        <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
-          title="Toggle Light/Dark Mode">
-          <span class="material-symbols-outlined">dark_mode</span>
-        </button>
+        <div id="mobileMenuDropdown" class="mobile-menu-dropdown" style="display: none;">
+          <div class="mobile-menu-header">
+            <span class="mobile-menu-title" data-i18n="menu.title">Quick Settings</span>
+            <button type="button" class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="Close Menu">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+
+          <!-- Section 1: Appearance / Theme Toggle -->
+          <div class="mobile-menu-section">
+            <div class="mobile-menu-section-label">
+              <span class="material-symbols-outlined">palette</span>
+              <span data-i18n="menu.theme">Appearance</span>
+            </div>
+            <div class="theme-segmented-control">
+              <button type="button" class="theme-segment-btn" id="themeSegmentLight" onclick="setThemeMode('light')">
+                <span class="material-symbols-outlined">light_mode</span>
+                <span data-i18n="menu.theme.light">Light</span>
+              </button>
+              <button type="button" class="theme-segment-btn" id="themeSegmentDark" onclick="setThemeMode('dark')">
+                <span class="material-symbols-outlined">dark_mode</span>
+                <span data-i18n="menu.theme.dark">Dark</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Section 2: Language Selector -->
+          <div class="mobile-menu-section">
+            <div class="mobile-menu-section-label">
+              <span class="material-symbols-outlined">translate</span>
+              <span data-i18n="menu.language">Language</span>
+            </div>
+            <div class="lang-segmented-control">
+              <button type="button" class="lang-segment-btn" id="langSegmentEn" onclick="setLanguage('en')">
+                <span>English</span>
+              </button>
+              <button type="button" class="lang-segment-btn" id="langSegmentKn" onclick="setLanguage('kn')">
+                <span>ಕನ್ನಡ</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
