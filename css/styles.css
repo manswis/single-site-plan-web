@@ -1579,12 +1579,12 @@ select:focus {
   }
 }
 
-/* Setback Compliance Inline Advisory Text (Refined Subtitle Feeling) */
+/* Setback Compliance Inline Advisory Text (Compact Subtitle Caption) */
 .setback-compliance-pill,
 .setback-compliance-text {
-  margin-top: 4px;
-  font-size: 11px;
-  line-height: 1.35;
+  margin-top: 3px;
+  font-size: 10px;
+  line-height: 1.25;
   font-weight: 500;
   letter-spacing: -0.01em;
   display: block;
