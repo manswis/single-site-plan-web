@@ -151,6 +151,10 @@ export const en = {
   "step4.setbackRear.label": "Rear Setback",
   "step4.setbackLeft.label": "Left Side Setback",
   "step4.setbackRight.label": "Right Side Setback",
+  "step4.setbackAdvisory.note": "<strong>Informational Note:</strong> BBMP RMP-2015 setback guidance notes are for your reference only. They will not alter your CAD drawing and will <strong>NOT</strong> appear on the final downloaded plan or PDF package.",
+  "step4.setback.compliant": "🟢 Compliant (Min {min} rec.)",
+  "step4.setback.warning": "🟡 Below RMP-2015 rec. min ({min})",
+  "step4.setback.vacant": "Vacant plot (No setback required)",
 
   // --- Step 5: Schedule of Property & Deed DNA ---
   "step5.badge": "Step 5 of 7",

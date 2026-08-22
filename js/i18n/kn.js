@@ -151,6 +151,10 @@ export const kn = {
   "step4.setbackRear.label": "ಹಿಂಭಾಗದ ಅಂತರ (Rear Setback)",
   "step4.setbackLeft.label": "ಎಡಭಾಗದ ಅಂತರ (Left Setback)",
   "step4.setbackRight.label": "ಬಲಭಾಗದ ಅಂತರ (Right Setback)",
+  "step4.setbackAdvisory.note": "<strong>ಮಾಹಿತಿ ಟಿಪ್ಪಣಿ:</strong> ಬಿಬಿಎಂಪಿ RMP-2015 ಸೆಟ್‌ಬ್ಯಾಕ್ ಮಾರ್ಗಸೂಚಿಗಳು ಕೇವಲ ನಿಮ್ಮ ಉಲ್ಲೇಖ ಮತ್ತು ಮಾಹಿತಿಗಾಗಿ ಮಾತ್ರ. ಇವು ನಿಮ್ಮ ನಕ್ಷೆಯ ಮೇಲೆ ಯಾವುದೇ ಪರಿಣಾಮ ಬೀರುವುದಿಲ್ಲ ಮತ್ತು ಅಂತಿಮ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ ಪಿಡಿಎಫ್ ಪ್ಲಾನ್‌ನಲ್ಲಿ <strong>ಪ್ರದರ್ಶನಗೊಳ್ಳುವುದಿಲ್ಲ</strong>.",
+  "step4.setback.compliant": "🟢 RMP-2015 ನಿಯಮಕ್ಕೆ ಸರಿಹೊಂದುತ್ತದೆ (ಕನಿಷ್ಠ {min})",
+  "step4.setback.warning": "🟡 RMP-2015 ಶಿಫಾರಸು ಕನಿಷ್ಠಕ್ಕಿಂತ ಕಡಿಮೆ ({min})",
+  "step4.setback.vacant": "ಖಾಲಿ ನಿವೇಶನ (ಸೆಟ್‌ಬ್ಯಾಕ್ ಅನ್ವಯಿಸುವುದಿಲ್ಲ)",
 
   // --- Step 5: Schedule of Property & Deed DNA ---
   "step5.badge": "ಹಂತ ೫ / ೭",

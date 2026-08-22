@@ -549,6 +549,9 @@ function onFtInInput(fieldId) {
   } else if (fieldId.startsWith('setback')) {
     if (hiddenEl) hiddenEl.dataset.manualEdit = 'true';
     validateBuildingSetbackFeasibility();
+    if (typeof updateSetbackComplianceBadges === 'function') {
+      updateSetbackComplianceBadges();
+    }
   }
 
   if (typeof clearFieldError === 'function') {
@@ -588,6 +591,9 @@ function onBuildingTypeChange() {
     });
   }
 
+  if (typeof updateSetbackComplianceBadges === 'function') {
+    updateSetbackComplianceBadges();
+  }
   if (typeof validateBuildingSetbackFeasibility === 'function') {
     validateBuildingSetbackFeasibility();
   }
@@ -741,6 +747,81 @@ function autoCalculateSetbacks(force = false) {
   populateField('setbackRear', calcRear);
   populateField('setbackLeft', calcLeft);
   populateField('setbackRight', calcRight);
+
+  updateSetbackComplianceBadges();
+}
+
+/**
+ * Evaluates real-time BBMP RMP-2015 recommended setback clearances and updates advisory badges.
+ * 
+ * @function updateSetbackComplianceBadges
+ * @returns {void}
+ */
+function updateSetbackComplianceBadges() {
+  const bldgType = document.getElementById('bldgType')?.value || '';
+  const isVacant = bldgType === 'Vacant Plot' || bldgType === 'vacant';
+  const plotAreaVal = parseFloat(document.getElementById('plotArea')?.value) || 0;
+
+  // Determine BBMP RMP-2015 Recommended Minimums based on site area (Table 11 guidelines)
+  let minFront = 3.28; // ~1.0m
+  let minRear = 3.28;  // ~1.0m
+  let minSide = 3.28;  // ~1.0m
+
+  if (plotAreaVal > 0 && plotAreaVal <= 650) {
+    minFront = 3.28;
+    minRear = 0;
+    minSide = 0;
+  } else if (plotAreaVal > 650 && plotAreaVal <= 1300) {
+    minFront = 3.28; // 1.0m
+    minRear = 3.28;  // 1.0m
+    minSide = 3.28;  // 1.0m
+  } else if (plotAreaVal > 1300 && plotAreaVal <= 2600) {
+    minFront = 4.92; // 1.5m (~5'0")
+    minRear = 3.28;  // 1.0m
+    minSide = 3.28;  // 1.0m
+  } else if (plotAreaVal > 2600) {
+    minFront = 6.56; // 2.0m (~6'7")
+    minRear = 4.92;  // 1.5m
+    minSide = 4.92;  // 1.5m
+  }
+
+  const checkBadge = (fieldId, recMin) => {
+    const pill = document.getElementById('compliance_' + fieldId);
+    if (!pill) return;
+
+    if (isVacant) {
+      pill.style.display = 'none';
+      return;
+    }
+
+    const ftVal = document.getElementById(fieldId + '_ft')?.value;
+    const inVal = document.getElementById(fieldId + '_in')?.value;
+    if ((ftVal === '' || ftVal === undefined) && (inVal === '' || inVal === undefined)) {
+      pill.style.display = 'none';
+      return;
+    }
+
+    const currentVal = parseFloat(document.getElementById(fieldId)?.value) || 0;
+    const formattedRec = formatFeetInches(recMin);
+
+    pill.style.display = 'inline-block';
+    if (recMin === 0 || currentVal >= (recMin - 0.05)) {
+      pill.className = 'setback-compliance-pill compliant';
+      pill.textContent = typeof t === 'function'
+        ? t('step4.setback.compliant', { min: formattedRec })
+        : `🟢 Compliant (Min ${formattedRec} rec.)`;
+    } else {
+      pill.className = 'setback-compliance-pill warning';
+      pill.textContent = typeof t === 'function'
+        ? t('step4.setback.warning', { min: formattedRec })
+        : `🟡 Below RMP-2015 rec. min (${formattedRec})`;
+    }
+  };
+
+  checkBadge('setbackFront', minFront);
+  checkBadge('setbackRear', minRear);
+  checkBadge('setbackLeft', minSide);
+  checkBadge('setbackRight', minSide);
 }
 
 /**
@@ -2408,5 +2489,13 @@ function syncSignaturePreviews() {
 function onArchitectInfoInput() {
   if (typeof saveDraft === 'function') saveDraft();
   if (typeof generatePlan === 'function') generatePlan();
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('localeChanged', () => {
+    if (typeof updateSetbackComplianceBadges === 'function') {
+      updateSetbackComplianceBadges();
+    }
+  });
 }
 

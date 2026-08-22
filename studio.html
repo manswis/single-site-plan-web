@@ -332,8 +332,8 @@
           title="Switch to Kannada (ಕನ್ನಡ)">
           <span class="lang-btn-text">ಕನ್ನಡ</span>
         </button>
-        <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()" aria-label="Toggle theme"
-          title="Toggle Light/Dark Mode">
+        <button type="button" class="theme-toggle-btn mobile-theme-btn" onclick="toggleTheme()"
+          aria-label="Toggle theme" title="Toggle Light/Dark Mode">
           <span class="material-symbols-outlined">dark_mode</span>
         </button>
       </div>
@@ -359,10 +359,13 @@
           <div id="wizardProgressBar" class="stepper-progress-bar"></div>
         </div>
         <div class="stepper-tabs">
-          <button id="stepTab1" class="step-tab active" onclick="goToStep(1)" data-i18n="step1.mobileTitle">1. Records</button>
-          <button id="stepTab2" class="step-tab" onclick="goToStep(2)" data-i18n="step2.mobileTitle">2. Location</button>
+          <button id="stepTab1" class="step-tab active" onclick="goToStep(1)" data-i18n="step1.mobileTitle">1.
+            Records</button>
+          <button id="stepTab2" class="step-tab" onclick="goToStep(2)" data-i18n="step2.mobileTitle">2.
+            Location</button>
           <button id="stepTab3" class="step-tab" onclick="goToStep(3)" data-i18n="step3.mobileTitle">3. Plot</button>
-          <button id="stepTab4" class="step-tab" onclick="goToStep(4)" data-i18n="step4.mobileTitle">4. Setbacks</button>
+          <button id="stepTab4" class="step-tab" onclick="goToStep(4)" data-i18n="step4.mobileTitle">4.
+            Setbacks</button>
           <button id="stepTab5" class="step-tab" onclick="goToStep(5)" data-i18n="step5.mobileTitle">5. Deed</button>
           <button id="stepTab6" class="step-tab" onclick="goToStep(6)" data-i18n="step6.mobileTitle">6. Options</button>
           <button id="stepTab7" class="step-tab" onclick="goToStep(7)" data-i18n="step7.mobileTitle">7. Export</button>
@@ -396,7 +399,8 @@
             </div>
             <div class="portability-text-wrap">
               <div class="portability-title" data-i18n="portability.title">Have a saved .eplan project file?</div>
-              <div class="portability-desc" data-i18n="portability.desc">Upload a previously saved .eplan file (downloaded from Step 7) to
+              <div class="portability-desc" data-i18n="portability.desc">Upload a previously saved .eplan file
+                (downloaded from Step 7) to
                 automatically restore all your property measurements on this device.</div>
             </div>
           </div>
@@ -416,17 +420,19 @@
         <div class="grid">
           <div class="field">
             <label><span data-i18n="step1.ownerName.label">Owner Name(s)</span> <span class="required">*</span></label>
-            <input id="ownerName" type="text" data-i18n-placeholder="step1.ownerName.placeholder" placeholder="e.g. Ramesh Kumar & Anjali Kumar"
-              oninput="clearFieldError('ownerName', 'err-ownerName')">
+            <input id="ownerName" type="text" data-i18n-placeholder="step1.ownerName.placeholder"
+              placeholder="e.g. Ramesh Kumar & Anjali Kumar" oninput="clearFieldError('ownerName', 'err-ownerName')">
             <div class="error-msg" id="err-ownerName">⚠ Owner name is required</div>
           </div>
           <div class="field">
-            <label><span data-i18n="step1.epId.label">eKhata ID (ePID)</span> <span class="required">*</span> <button type="button" class="field-help-btn"
-                onclick="showFieldHelp('epId')" title="Help & Where to find"><svg viewBox="0 0 24 24">
+            <label><span data-i18n="step1.epId.label">eKhata ID (ePID)</span> <span class="required">*</span> <button
+                type="button" class="field-help-btn" onclick="showFieldHelp('epId')" title="Help & Where to find"><svg
+                  viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="epId" type="text" data-i18n-placeholder="step1.epId.placeholder" placeholder="e.g. 1509988776" oninput="clearFieldError('epId', 'err-epId')">
+            <input id="epId" type="text" data-i18n-placeholder="step1.epId.placeholder" placeholder="e.g. 1509988776"
+              oninput="clearFieldError('epId', 'err-epId')">
             <div class="error-msg" id="err-epId">⚠ eKhata ID (ePID) is required</div>
           </div>
           <div class="field">
@@ -437,7 +443,8 @@
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="pidNo" type="text" data-i18n-placeholder="step1.pidNo.placeholder" placeholder="e.g. 108-W0045-12 (Optional)">
+            <input id="pidNo" type="text" data-i18n-placeholder="step1.pidNo.placeholder"
+              placeholder="e.g. 108-W0045-12 (Optional)">
           </div>
           <div class="field">
             <label>SAS Application / Khata No <span
@@ -956,9 +963,9 @@
           </h4>
         </div>
 
-        <div class="grid" style="margin-top: 8px;">
+        <div class="setbacks-4col-grid" style="margin-top: 8px;">
           <div class="field">
-            <label>Front Setback</label>
+            <label data-i18n="step4.setbackFront.label">Front Setback (Road Facing)</label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="setbackFront_ft" type="number" min="0" placeholder="10" class="ft-num-input"
@@ -972,9 +979,10 @@
               </div>
               <input id="setbackFront" type="hidden">
             </div>
+            <div class="setback-compliance-pill" id="compliance_setbackFront" style="display: none;"></div>
           </div>
           <div class="field">
-            <label>Rear Setback</label>
+            <label data-i18n="step4.setbackRear.label">Rear Setback</label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="setbackRear_ft" type="number" min="0" placeholder="10" class="ft-num-input"
@@ -988,9 +996,10 @@
               </div>
               <input id="setbackRear" type="hidden">
             </div>
+            <div class="setback-compliance-pill" id="compliance_setbackRear" style="display: none;"></div>
           </div>
           <div class="field">
-            <label>Left Setback</label>
+            <label data-i18n="step4.setbackLeft.label">Left Side Setback</label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="setbackLeft_ft" type="number" min="0" placeholder="5" class="ft-num-input"
@@ -1004,9 +1013,10 @@
               </div>
               <input id="setbackLeft" type="hidden">
             </div>
+            <div class="setback-compliance-pill" id="compliance_setbackLeft" style="display: none;"></div>
           </div>
           <div class="field">
-            <label>Right Setback</label>
+            <label data-i18n="step4.setbackRight.label">Right Side Setback</label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="setbackRight_ft" type="number" min="0" placeholder="5" class="ft-num-input"
@@ -1020,6 +1030,18 @@
               </div>
               <input id="setbackRight" type="hidden">
             </div>
+            <div class="setback-compliance-pill" id="compliance_setbackRight" style="display: none;"></div>
+          </div>
+        </div>
+
+        <!-- Informational Guidance Note (Yellow Callout) -->
+        <div class="setback-info-note-card">
+          <span style="font-size: 18px; line-height: 1; margin-top: 1px;">💡</span>
+          <div style="font-size: 12px; line-height: 1.5; color: var(--apple-text-primary);"
+            data-i18n-html="step4.setbackAdvisory.note">
+            <strong>Informational Note:</strong> BBMP RMP-2015 setback guidance notes are for your reference only. They
+            will not alter your CAD drawing and will <strong>NOT</strong> appear on the final downloaded plan or PDF
+            package.
           </div>
         </div>
       </div>
@@ -1400,7 +1422,8 @@
           <h4
             style="margin: 0 0 12px 0; font-size: 15px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 6px;">
             <span data-i18n="step7.summaryHeading">📋 Property Settings & Dimensions Summary</span>
-            <span style="font-size: 11.5px; font-weight: 500; color: var(--apple-text-secondary);" data-i18n="step7.summarySubheading">(Tap header to
+            <span style="font-size: 11.5px; font-weight: 500; color: var(--apple-text-secondary);"
+              data-i18n="step7.summarySubheading">(Tap header to
               expand/collapse)</span>
           </h4>
           <div id="reviewSummaryContainer"></div>
@@ -1414,14 +1437,17 @@
             <div style="display: flex; align-items: center; gap: 10px;">
               <span style="font-size: 26px;">🏛️</span>
               <div>
-                <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);" data-i18n="step7.package.title">Single Plot
+                <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: var(--apple-text-primary);"
+                  data-i18n="step7.package.title">Single Plot
                   Plan Package Generator</h3>
-                <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);" data-i18n="step7.package.subtitle">Sakala B-to-A Khata
+                <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--apple-text-secondary);"
+                  data-i18n="step7.package.subtitle">Sakala B-to-A Khata
                   Compliant Architectural Drawing Engine</p>
               </div>
             </div>
             <span class="apple-pill-badge"
-              style="background: rgba(52, 199, 89, 0.12); color: #166534; font-weight: 700; font-size: 11px;" data-i18n="step7.package.badge">100%
+              style="background: rgba(52, 199, 89, 0.12); color: #166534; font-weight: 700; font-size: 11px;"
+              data-i18n="step7.package.badge">100%
               Private & Sakala Ready</span>
           </div>
 
@@ -1433,15 +1459,18 @@
                 style="margin-top: 3px; width: 18px; height: 18px; cursor: pointer;">
               <span style="font-weight: 600; font-size: 13px; color: var(--apple-text-primary); line-height: 1.45;">
                 <span data-i18n="step7.legalConsent.prefix">I Agree to the</span> <a href="legal.html" target="_blank"
-                  style="color: #0066cc; text-decoration: underline; font-weight: 700;" data-i18n="step7.legalConsent.link">Terms of Service, Privacy Policy
+                  style="color: #0066cc; text-decoration: underline; font-weight: 700;"
+                  data-i18n="step7.legalConsent.link">Terms of Service, Privacy Policy
                   & Zero Liability Disclaimer</a> <span class="required">*</span>
               </span>
             </label>
-            <p style="margin: 6px 0 0 28px; font-size: 11.5px; color: var(--apple-text-secondary); line-height: 1.4;" data-i18n="step7.legalConsent.desc">
+            <p style="margin: 6px 0 0 28px; font-size: 11.5px; color: var(--apple-text-secondary); line-height: 1.4;"
+              data-i18n="step7.legalConsent.desc">
               All mathematical calculations run 100% locally in your web browser. Plans serve as preliminary draft
               documentation for B-to-A Khata submission.
             </p>
-            <div class="error-msg" id="err-legalConsent" style="margin-top: 8px; font-weight: 600; display: none;" data-i18n="step7.legalConsent.err">⚠ You
+            <div class="error-msg" id="err-legalConsent" style="margin-top: 8px; font-weight: 600; display: none;"
+              data-i18n="step7.legalConsent.err">⚠ You
               must check and agree to the Terms & Zero Liability Disclaimer to generate, export, or print your plan.
             </div>
           </div>
@@ -1477,7 +1506,8 @@
             </div>
             <div class="portability-text-wrap">
               <div class="portability-title" data-i18n="backup.title">Save Project File (.eplan)</div>
-              <div class="portability-desc" data-i18n="backup.desc">Download complete project backup to continue on another computer or share
+              <div class="portability-desc" data-i18n="backup.desc">Download complete project backup to continue on
+                another computer or share
                 with your Architect.</div>
             </div>
           </div>

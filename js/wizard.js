@@ -214,6 +214,7 @@ function restoreDraft(hideModal = true) {
     }
     if (typeof calculateBuiltUpArea === 'function') calculateBuiltUpArea();
     if (typeof autoCalculateSetbacks === 'function') autoCalculateSetbacks(false);
+    if (typeof updateSetbackComplianceBadges === 'function') updateSetbackComplianceBadges();
     if (typeof validateBuildingSetbackFeasibility === 'function') validateBuildingSetbackFeasibility();
     if (typeof syncGpsZoomControls === 'function') syncGpsZoomControls();
     if (typeof syncSignaturePreviews === 'function') syncSignaturePreviews();
@@ -907,6 +908,11 @@ function showStep(stepNum, shouldSave = true, clearErrors = true) {
   // Save active step index and form state to localStorage
   if (shouldSave) {
     saveDraft();
+  }
+
+  // Update real-time setback compliance pills on Step 4
+  if (stepNum === 4 && typeof updateSetbackComplianceBadges === 'function') {
+    updateSetbackComplianceBadges();
   }
 
   // Populate formatted review summary grid & reset consent/plan state on Step 7
