@@ -809,12 +809,12 @@ function updateSetbackComplianceBadges() {
       pill.className = 'setback-compliance-pill compliant';
       pill.textContent = typeof t === 'function'
         ? t('step4.setback.compliant', { min: formattedRec })
-        : `🟢 Compliant (Min ${formattedRec} rec.)`;
+        : `Compliant (Min ${formattedRec} rec.)`;
     } else {
       pill.className = 'setback-compliance-pill warning';
       pill.textContent = typeof t === 'function'
         ? t('step4.setback.warning', { min: formattedRec })
-        : `🟡 Below RMP-2015 rec. min (${formattedRec})`;
+        : `Below RMP-2015 rec. min (${formattedRec})`;
     }
   };
 
