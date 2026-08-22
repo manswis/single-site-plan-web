@@ -2039,7 +2039,7 @@ const FIELD_HELP_DATA_KN = {
  * @returns {void}
  */
 function showFieldHelp(key) {
-  const isKn = (window.i18n && window.i18n.currentLocale === 'kn');
+  const isKn = (window.i18n && (window.i18n.currentLocale === 'kn' || window.i18n.currentLang === 'kn'));
   const data = (isKn && FIELD_HELP_DATA_KN[key]) ? FIELD_HELP_DATA_KN[key] : (FIELD_HELP_DATA[key] || {});
   if (!data.title) return;
 
@@ -2070,6 +2070,12 @@ function showFieldHelp(key) {
     `;
   }
 
+  if (data.note) {
+    html += `
+      <p style="margin: 10px 0 0 0; font-size: 12px; color: var(--apple-accent); background: rgba(0, 113, 227, 0.08); padding: 8px 12px; border-radius: 8px;">${data.note}</p>
+    `;
+  }
+
   if (data.link) {
     html += `
       <a href="${data.link}" target="_blank" rel="noopener" class="doc-link-btn" style="margin-top: 6px;">
@@ -2082,11 +2088,15 @@ function showFieldHelp(key) {
 
   bodyEl.innerHTML = html;
   modal.style.display = 'flex';
+  modal.classList.add('active');
 }
 
 function closeFieldHelp() {
   const modal = document.getElementById('fieldHelpModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
 }
 
 /* ==========================================================================
@@ -2968,6 +2978,10 @@ function selectBbmpWard(wardNo) {
 }
 
 if (typeof window !== 'undefined') {
+  window.FIELD_HELP_DATA = FIELD_HELP_DATA;
+  window.FIELD_HELP_DATA_KN = FIELD_HELP_DATA_KN;
+  window.showFieldHelp = showFieldHelp;
+  window.closeFieldHelp = closeFieldHelp;
   window.AREA_CONVERSION_RATES = AREA_CONVERSION_RATES;
   window.openAreaConverterModal = openAreaConverterModal;
   window.closeAreaConverterModal = closeAreaConverterModal;
