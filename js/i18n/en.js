@@ -50,10 +50,12 @@ export const en = {
   "btn.reCrop": "Re-Crop",
   "btn.remove": "Remove",
 
-  // --- Contextual Assistant Prompt ---
-  "assistant.kannadaPrompt": "💡 ಕನ್ನಡದಲ್ಲಿ ಭರ್ತಿ ಮಾಡಲು ಬಯಸುವಿರಾ?",
+  // --- Step 1 Contextual Assistant Language Switcher ---
+  "assistant.kannadaPrompt": "ಕನ್ನಡದಲ್ಲಿ ಭರ್ತಿ ಮಾಡಲು ಬಯಸುವಿರಾ?",
+  "assistant.kannadaDesc": "ಫಾರ್ಮ್, ಮಾರ್ಗದರ್ಶನ ಮತ್ತು ಸಿಎಡಿ ಲೇಬಲ್‌ಗಳನ್ನು ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಿ.",
   "assistant.kannadaAction": "ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಿ",
-  "assistant.englishPrompt": "💡 Prefer drafting in English?",
+  "assistant.englishPrompt": "Prefer drafting in English?",
+  "assistant.englishDesc": "Switch studio form inputs, guidance, and labels to English.",
   "assistant.englishAction": "Switch to English",
 
   // --- Step 1: Revenue Records & Identifiers ---

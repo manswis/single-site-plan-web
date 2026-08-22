@@ -194,9 +194,15 @@ export class I18nManager {
 
     // Update Step 1 Contextual Assistant Banner
     const assistantPrompt = document.getElementById('assistantLangPrompt');
+    const assistantDesc = document.getElementById('assistantLangDesc');
     const assistantAction = document.getElementById('assistantLangAction');
-    if (assistantPrompt && assistantAction) {
+    if (assistantPrompt) {
       assistantPrompt.textContent = this.t(isEn ? 'assistant.kannadaPrompt' : 'assistant.englishPrompt');
+    }
+    if (assistantDesc) {
+      assistantDesc.textContent = this.t(isEn ? 'assistant.kannadaDesc' : 'assistant.englishDesc');
+    }
+    if (assistantAction) {
       assistantAction.textContent = this.t(isEn ? 'assistant.kannadaAction' : 'assistant.englishAction');
     }
   }

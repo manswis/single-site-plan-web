@@ -614,9 +614,18 @@
       <div id="wizardStep1" class="wizard-step-content">
         <!-- Step 1 Contextual Assistant Language Banner -->
         <div class="assistant-lang-banner no-print">
-          <span id="assistantLangPrompt">💡 ಕನ್ನಡದಲ್ಲಿ ಭರ್ತಿ ಮಾಡಲು ಬಯಸುವಿರಾ?</span>
-          <button type="button" class="assistant-lang-switch assistant-lang-btn" id="assistantLangSwitch">
-            <span id="assistantLangAction">ಕನ್ನಡಕ್ಕೆ ಬದಲಾಯಿಸಿ</span>
+          <div class="portability-banner-left">
+            <div class="portability-icon-circle">
+              <span class="material-symbols-outlined" style="font-size: 18px;">translate</span>
+            </div>
+            <div class="portability-text-wrap">
+              <div class="portability-title" id="assistantLangPrompt">Prefer drafting in English?</div>
+              <div class="portability-desc" id="assistantLangDesc">Switch studio form inputs, guidance, and labels to English.</div>
+            </div>
+          </div>
+          <button type="button" class="assistant-lang-switch assistant-lang-btn portability-btn" id="assistantLangSwitch">
+            <span class="material-symbols-outlined" style="font-size: 16px;">translate</span>
+            <span id="assistantLangAction">Switch to English</span>
           </button>
         </div>
 
