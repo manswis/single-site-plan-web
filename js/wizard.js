@@ -915,6 +915,11 @@ function showStep(stepNum, shouldSave = true, clearErrors = true) {
     updateSetbackComplianceBadges();
   }
 
+  // Initialize smart numeric field auto-tabbing for step inputs
+  if (typeof initSmartFtInAutoTab === 'function') {
+    initSmartFtInAutoTab();
+  }
+
   // Populate formatted review summary grid & reset consent/plan state on Step 7
   if (stepNum === 7) {
     const consent = document.getElementById('legalConsentCheck');

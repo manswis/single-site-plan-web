@@ -565,6 +565,141 @@ function onFtInInput(fieldId) {
 }
 
 /**
+ * Parses diverse survey text formats into discrete feet and inches components.
+ * Supports "30.6", "40' 6\"", "50-8", "60ft 4in", etc.
+ * 
+ * @function parseFeetInchesString
+ * @param {string} rawText - Raw pasted or entered string
+ * @returns {{ ft: string, in: string } | null}
+ */
+function parseFeetInchesString(rawText) {
+  if (!rawText || typeof rawText !== 'string') return null;
+  const cleaned = rawText.trim();
+  if (!cleaned) return null;
+
+  // Case 1: Standard decimal "30.6" or "30.11"
+  if (cleaned.includes('.')) {
+    const parts = cleaned.split('.');
+    const ft = parts[0].replace(/\D/g, '');
+    const inPart = parts[1].replace(/\D/g, '').slice(0, 2);
+    return { ft, in: inPart };
+  }
+
+  // Case 2: Architectural quote notation e.g. 30' 6" or 30'6
+  if (cleaned.includes("'")) {
+    const parts = cleaned.split("'");
+    const ft = parts[0].replace(/\D/g, '');
+    const inPart = (parts[1] || '').replace(/\D/g, '').slice(0, 2);
+    return { ft, in: inPart };
+  }
+
+  // Case 3: Hyphenated notation e.g. 30-6 or 30 - 6
+  if (cleaned.includes('-')) {
+    const parts = cleaned.split('-');
+    const ft = parts[0].replace(/\D/g, '');
+    const inPart = (parts[1] || '').replace(/\D/g, '').slice(0, 2);
+    return { ft, in: inPart };
+  }
+
+  // Case 4: Pure integer feet
+  const digits = cleaned.replace(/\D/g, '');
+  if (digits) {
+    return { ft: digits, in: '' };
+  }
+
+  return null;
+}
+
+/**
+ * Initializes smart numeric auto-tabbing and keyboard accelerators
+ * across all .ft-in-wrapper inputs in the application.
+ * 
+ * @function initSmartFtInAutoTab
+ * @returns {void}
+ */
+function initSmartFtInAutoTab() {
+  if (typeof document === 'undefined') return;
+
+  const wrappers = document.querySelectorAll('.ft-in-wrapper');
+  wrappers.forEach(wrapper => {
+    if (wrapper.dataset.autotabBound === 'true') return;
+    wrapper.dataset.autotabBound = 'true';
+
+    const ftInput = wrapper.querySelector('.ft-num-input');
+    const inInput = wrapper.querySelector('.in-num-input');
+    if (!ftInput || !inInput) return;
+
+    const baseFieldId = ftInput.id.replace(/_ft$/, '');
+
+    // 1. Delimiter navigation (. / Space / Enter / Comma) on Feet input
+    ftInput.addEventListener('keydown', (e) => {
+      if (['.', ' ', 'Enter', ','].includes(e.key)) {
+        e.preventDefault();
+        inInput.focus();
+        inInput.select();
+      }
+    });
+
+    // 2. 2-Digit Auto-advance when typing in Feet input
+    ftInput.addEventListener('input', (e) => {
+      if (e.inputType === 'deleteContentBackward' || e.inputType === 'deleteContentForward') {
+        return;
+      }
+      const val = ftInput.value;
+      if (val && val.length >= 2 && !val.includes('.')) {
+        setTimeout(() => {
+          if (document.activeElement === ftInput) {
+            inInput.focus();
+            inInput.select();
+          }
+        }, 120);
+      }
+    });
+
+    // 3. Smart Backspace Navigation (from empty Inches back to Feet)
+    inInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && inInput.value === '') {
+        e.preventDefault();
+        ftInput.focus();
+        const len = ftInput.value.length;
+        try {
+          ftInput.setSelectionRange(len, len);
+        } catch (_) { }
+      }
+    });
+
+    // 4. Smart Decimal / Dimension Paste Auto-Split
+    ftInput.addEventListener('paste', (e) => {
+      const clipboardData = e.clipboardData || window.clipboardData;
+      if (!clipboardData) return;
+      const text = clipboardData.getData('text');
+      if (text && (text.includes('.') || text.includes("'") || text.includes('-'))) {
+        const parsed = parseFeetInchesString(text);
+        if (parsed) {
+          e.preventDefault();
+          ftInput.value = parsed.ft;
+          inInput.value = parsed.in;
+          if (typeof onFtInInput === 'function') {
+            onFtInInput(baseFieldId);
+          }
+          inInput.focus();
+          inInput.select();
+        }
+      }
+    });
+  });
+}
+
+// Auto-run if DOM already loaded or on load
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmartFtInAutoTab);
+  } else {
+    initSmartFtInAutoTab();
+  }
+}
+
+/**
  * Handles Building Type selection change.
  * If Vacant Plot is chosen, resets floors and built-up area and syncs with draft.
  * 
@@ -3003,6 +3138,8 @@ if (typeof window !== 'undefined') {
   window.setWardZoneFilter = setWardZoneFilter;
   window.filterAndRenderWards = filterAndRenderWards;
   window.selectBbmpWard = selectBbmpWard;
+  window.parseFeetInchesString = parseFeetInchesString;
+  window.initSmartFtInAutoTab = initSmartFtInAutoTab;
 }
 
 

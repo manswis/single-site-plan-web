@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.js",
-    "test": "node tests/ward.test.js && node tests/converter.test.js && node tests/i18n.test.js",
+    "test": "node tests/ward.test.js && node tests/converter.test.js && node tests/autotab.test.js && node tests/i18n.test.js",
     "dev": "npx wrangler dev",
     "deploy": "node build.js && npx wrangler deploy"
   },
