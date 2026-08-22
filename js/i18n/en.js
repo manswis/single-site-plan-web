@@ -130,6 +130,22 @@ export const en = {
   "step3.sideEast.label": "East Side Dimension",
   "step3.sideWest.label": "West Side Dimension",
 
+  // --- Step 3 Land Area Unit Converter ---
+  "converter.toggle": "Converter",
+  "converter.title": "Karnataka Land Area Unit Converter",
+  "converter.valLabel": "Enter Land Measure",
+  "converter.unitLabel": "Unit Type",
+  "converter.sqftEquivalent": "Sq.Ft Equivalent",
+  "converter.applyBtn": "Apply",
+  "converter.applied": "Applied!",
+  "converter.presetsLabel": "Quick Presets:",
+  "converter.units.gunta": "Gunta (ಗುಂಟೆ) — 1,089 sq.ft",
+  "converter.units.sqyd": "Square Yard / Gajam (ಗಜ) — 9 sq.ft",
+  "converter.units.sqm": "Square Meter (ಮೀಟರ್) — 10.764 sq.ft",
+  "converter.units.acre": "Acre (ಎಕರೆ) — 43,560 sq.ft (40 G)",
+  "converter.units.ankana": "Ankana (ಅಂಕಣ) — 72 sq.ft",
+  "converter.units.cent": "Cent (ಸೆಂಟ್) — 435.6 sq.ft",
+
   // --- Step 4: Structure & Building Setbacks ---
   "step4.badge": "Step 4 of 7",
   "step4.title": "Structure & Building Setbacks",

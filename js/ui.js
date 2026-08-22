@@ -2499,3 +2499,129 @@ if (typeof window !== 'undefined') {
   });
 }
 
+// ==========================================================================
+// Karnataka Land Area Unit Converter Engine
+// ==========================================================================
+
+const AREA_CONVERSION_RATES = {
+  gunta: 1089,           // 1 Gunta = 33 ft x 33 ft = 1,089 sq.ft
+  sqyd: 9,              // 1 Sq. Yard (Gajam) = 3 ft x 3 ft = 9 sq.ft
+  sqm: 10.7639104,      // 1 Sq. Meter = 10.7639104 sq.ft
+  acre: 43560,          // 1 Acre = 40 Guntas = 43,560 sq.ft
+  ankana: 72,           // 1 Ankana = 72 sq.ft (traditional Karnataka unit)
+  cent: 435.6           // 1 Cent = 435.6 sq.ft (1/100 Acre)
+};
+
+/**
+ * Toggles the visibility of the inline Karnataka Land Unit Converter card.
+ * @param {Event} [e] - Click event
+ */
+function toggleAreaConverter(e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+  const container = document.getElementById('areaConverterContainer');
+  const card = document.getElementById('areaConverterCard');
+  const target = container || card;
+  if (!target) return;
+  
+  const isHidden = target.style.display === 'none' || window.getComputedStyle(target).display === 'none';
+  target.style.display = isHidden ? 'block' : 'none';
+  if (card && target !== card) {
+    card.style.display = 'block';
+  }
+  
+  if (isHidden) {
+    if (typeof calculateConvertedArea === 'function') {
+      calculateConvertedArea();
+    }
+    const input = document.getElementById('convInputValue');
+    if (input && !input.value) {
+      setTimeout(() => input.focus(), 50);
+    }
+  }
+}
+
+/**
+ * Computes live converted area in square feet based on current input and selected unit.
+ * @returns {number} Converted area in square feet
+ */
+function calculateConvertedArea() {
+  const inputEl = document.getElementById('convInputValue');
+  const unitEl = document.getElementById('convInputUnit');
+  const resultDisplay = document.getElementById('convResultValue');
+
+  if (!inputEl || !unitEl || !resultDisplay) return 0;
+
+  const rawVal = parseFloat(inputEl.value);
+  const unitKey = unitEl.value;
+  const multiplier = AREA_CONVERSION_RATES[unitKey] || 1;
+
+  if (isNaN(rawVal) || rawVal <= 0) {
+    resultDisplay.innerHTML = `0 <span class="converter-result-unit">sq.ft</span>`;
+    return 0;
+  }
+
+  const sqftVal = rawVal * multiplier;
+  const formatted = sqftVal.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+  resultDisplay.innerHTML = `${formatted} <span class="converter-result-unit">sq.ft</span>`;
+  return sqftVal;
+}
+
+/**
+ * Applies the converted square footage value directly into the #plotArea form input.
+ */
+function applyConvertedArea() {
+  const sqftVal = calculateConvertedArea();
+  if (sqftVal <= 0) return;
+
+  const plotAreaInput = document.getElementById('plotArea');
+  if (plotAreaInput) {
+    const rounded = Math.round(sqftVal * 100) / 100;
+    plotAreaInput.value = rounded;
+    plotAreaInput.dataset.userEdited = 'true';
+    if (typeof clearFieldError === 'function') {
+      clearFieldError('plotArea', 'err-plotArea');
+    }
+    if (typeof calculateBuiltUpArea === 'function') calculateBuiltUpArea();
+    if (typeof updateSetbackComplianceBadges === 'function') updateSetbackComplianceBadges();
+    if (typeof renderCanvas === 'function') renderCanvas();
+    if (typeof renderPlan === 'function') renderPlan();
+    if (typeof saveDraft === 'function') saveDraft();
+  }
+
+  const btn = document.getElementById('convApplyBtn');
+  if (btn) {
+    const origHtml = btn.innerHTML;
+    const appliedMsg = window.i18n ? window.i18n.t('converter.applied') : 'Applied!';
+    btn.innerHTML = `<span class="material-symbols-outlined">done_all</span> ${appliedMsg}`;
+    btn.style.background = '#10b981';
+    setTimeout(() => {
+      btn.innerHTML = origHtml;
+      btn.style.background = '';
+    }, 1500);
+  }
+}
+
+/**
+ * Applies a quick preset value and unit, calculates, and copies to plot area.
+ * @param {number} val - Quantity
+ * @param {string} unit - Unit key ('gunta', 'sqyd', etc.)
+ */
+function applyAreaPreset(val, unit) {
+  const inputEl = document.getElementById('convInputValue');
+  const unitEl = document.getElementById('convInputUnit');
+  if (inputEl) inputEl.value = val;
+  if (unitEl) unitEl.value = unit;
+  calculateConvertedArea();
+  applyConvertedArea();
+}
+
+if (typeof window !== 'undefined') {
+  window.AREA_CONVERSION_RATES = AREA_CONVERSION_RATES;
+  window.toggleAreaConverter = toggleAreaConverter;
+  window.calculateConvertedArea = calculateConvertedArea;
+  window.applyConvertedArea = applyConvertedArea;
+  window.applyAreaPreset = applyAreaPreset;
+}
+
+

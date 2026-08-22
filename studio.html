@@ -19,9 +19,9 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.svg">
 
-  <link rel="stylesheet" href="css/styles.min.css?v=1.2.2">
-  <script src="js/theme.min.js?v=1.2.2"></script>
-  <script src="js/i18n.min.js?v=1.2.2"></script>
+  <link rel="stylesheet" href="css/styles.min.css?v=1.2.3">
+  <script src="js/theme.min.js?v=1.2.3"></script>
+  <script src="js/i18n.min.js?v=1.2.3"></script>
 
   <!-- html2canvas and jsPDF for Direct Client-Side PDF File Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -692,11 +692,78 @@
         </div>
 
         <div class="grid">
-          <div class="field">
-            <label>Plot Area (sq.ft) <span class="required">*</span></label>
+          <div class="field" style="position: relative;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+              <label style="margin-bottom: 0;">Plot Area (sq.ft) <span class="required">*</span></label>
+              <button type="button" class="area-converter-toggle-btn" onclick="toggleAreaConverter(event)" id="areaConverterToggleBtn" title="Convert Gunta, Sq.Yds, Sq.M to Sq.Ft">
+                <span class="material-symbols-outlined">swap_horiz</span>
+                <span data-i18n="converter.toggle">Converter</span>
+              </button>
+            </div>
             <input id="plotArea" type="number" placeholder="e.g. 2400"
-              oninput="this.dataset.userEdited='true'; clearFieldError('plotArea', 'err-plotArea')">
+              oninput="this.dataset.userEdited='true'; clearFieldError('plotArea', 'err-plotArea'); if(typeof renderCanvas==='function') renderCanvas();">
             <div class="error-msg" id="err-plotArea">⚠ Plot area is required</div>
+          </div>
+
+          <div id="areaConverterContainer" style="grid-column: 1 / -1; display: none;">
+            <!-- Inline Karnataka Land Area Unit Converter Card -->
+            <div id="areaConverterCard" class="area-converter-card">
+              <div class="converter-card-header">
+                <div class="converter-card-title">
+                  <span class="material-symbols-outlined">calculate</span>
+                  <span data-i18n="converter.title">Karnataka Land Area Unit Converter</span>
+                </div>
+                <button type="button" class="converter-close-btn" onclick="toggleAreaConverter(event)" aria-label="Close Converter">
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+
+              <div class="converter-interactive-grid">
+                <!-- Input Value -->
+                <div class="converter-field-group">
+                  <label class="converter-sublabel" data-i18n="converter.valLabel">Enter Land Measure</label>
+                  <input type="number" id="convInputValue" class="converter-input" placeholder="e.g. 1.5" step="any" min="0" oninput="calculateConvertedArea()">
+                </div>
+
+                <!-- Unit Dropdown -->
+                <div class="converter-field-group">
+                  <label class="converter-sublabel" data-i18n="converter.unitLabel">Unit Type</label>
+                  <select id="convInputUnit" class="converter-select" onchange="calculateConvertedArea()">
+                    <option value="gunta" selected data-i18n="converter.units.gunta">Gunta (ಗುಂಟೆ) — 1,089 sq.ft</option>
+                    <option value="sqyd" data-i18n="converter.units.sqyd">Square Yard / Gajam (ಗಜ) — 9 sq.ft</option>
+                    <option value="sqm" data-i18n="converter.units.sqm">Square Meter (ಮೀಟರ್) — 10.764 sq.ft</option>
+                    <option value="acre" data-i18n="converter.units.acre">Acre (ಎಕರೆ) — 43,560 sq.ft (40 G)</option>
+                    <option value="ankana" data-i18n="converter.units.ankana">Ankana (ಅಂಕಣ) — 72 sq.ft</option>
+                    <option value="cent" data-i18n="converter.units.cent">Cent (ಸೆಂಟ್) — 435.6 sq.ft</option>
+                  </select>
+                </div>
+
+                <!-- Result Box & Apply Button -->
+                <div class="converter-result-wrapper">
+                  <div class="converter-result-display">
+                    <span class="converter-result-label" data-i18n="converter.sqftEquivalent">Sq.Ft Equivalent</span>
+                    <div class="converter-result-val" id="convResultValue">0 <span class="converter-result-unit">sq.ft</span></div>
+                  </div>
+                  <button type="button" class="converter-apply-btn" onclick="applyConvertedArea()" id="convApplyBtn">
+                    <span class="material-symbols-outlined">check_circle</span>
+                    <span data-i18n="converter.applyBtn">Apply</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Quick Presets -->
+              <div class="converter-presets-row">
+                <span class="converter-presets-label" data-i18n="converter.presetsLabel">Quick Presets:</span>
+                <div class="converter-presets-chips">
+                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(1, 'gunta')">1 Gunta (1,089)</button>
+                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(1.5, 'gunta')">1.5 Guntas (1,633.5)</button>
+                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(2, 'gunta')">2 Guntas (2,178)</button>
+                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(100, 'sqyd')">100 Sq.Yds (900)</button>
+                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(133.33, 'sqyd')">133.33 Sq.Yds (1,200)</button>
+                  <button type="button" class="converter-preset-chip" onclick="applyAreaPreset(200, 'sqyd')">200 Sq.Yds (1,800)</button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="field">
             <label>Primary Abutting Road Width <span class="required">*</span> <button type="button"
@@ -2223,11 +2290,11 @@
 
   </div> <!-- End Container -->
 
-  <script src="js/analytics.min.js"></script>
-  <script src="js/wizard.min.js"></script>
-  <script src="js/ui.min.js"></script>
-  <script src="js/validator.min.js"></script>
-  <script src="js/renderer.min.js"></script>
+  <script src="js/analytics.min.js?v=1.2.4"></script>
+  <script src="js/wizard.min.js?v=1.2.4"></script>
+  <script src="js/ui.min.js?v=1.2.4"></script>
+  <script src="js/validator.min.js?v=1.2.4"></script>
+  <script src="js/renderer.min.js?v=1.2.4"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof initLiveStats === 'function') {

@@ -130,6 +130,22 @@ export const kn = {
   "step3.sideEast.label": "ಪೂರ್ವ ಬದಿಯ ಅಳತೆ",
   "step3.sideWest.label": "ಪಶ್ಚಿಮ ಬದಿಯ ಅಳತೆ",
 
+  // --- Step 3 Land Area Unit Converter ---
+  "converter.toggle": "ಪರಿವರ್ತಕ",
+  "converter.title": "ಕರ್ನಾಟಕ ಭೂಮಾಪನ ವಿಸ್ತೀರ್ಣ ಪರಿವರ್ತಕ",
+  "converter.valLabel": "ಅಳತೆ ನಮೂದಿಸಿ",
+  "converter.unitLabel": "ಘಟಕದ ಪ್ರಕಾರ",
+  "converter.sqftEquivalent": "ಚದರ ಅಡಿ (Sq.Ft)",
+  "converter.applyBtn": "ಅನ್ವಯಿಸಿ",
+  "converter.applied": "ಅನ್ವಯಿಸಲಾಗಿದೆ!",
+  "converter.presetsLabel": "ತ್ವರಿತ ಅಳತೆಗಳು:",
+  "converter.units.gunta": "ಗುಂಟೆ (Gunta) — ೧,೦೮೯ ಚ.ಅಡಿ",
+  "converter.units.sqyd": "ಚದರ ಗಜ / ಗಜ (Sq.Yd) — ೯ ಚ.ಅಡಿ",
+  "converter.units.sqm": "ಚದರ ಮೀಟರ್ (Sq.M) — ೧೦.೭೬೪ ಚ.ಅಡಿ",
+  "converter.units.acre": "ಎಕರೆ (Acre) — ೪೩,೫೬೦ ಚ.ಅಡಿ (೪೦ ಗುಂಟೆ)",
+  "converter.units.ankana": "ಅಂಕಣ (Ankana) — ೭೨ ಚ.ಅಡಿ",
+  "converter.units.cent": "ಸೆಂಟ್ (Cent) — ೪೩೫.೬ ಚ.ಅಡಿ",
+
   // --- Step 4: Structure & Building Setbacks ---
   "step4.badge": "ಹಂತ ೪ / ೭",
   "step4.title": "ಕಟ್ಟಡ ರಚನೆ ಮತ್ತು ಸೆಟ್‌ಬ್ಯಾಕ್ ಅಂತರ",
