@@ -3140,6 +3140,55 @@ if (typeof window !== 'undefined') {
   window.selectBbmpWard = selectBbmpWard;
   window.parseFeetInchesString = parseFeetInchesString;
   window.initSmartFtInAutoTab = initSmartFtInAutoTab;
+
+  // Step 7 Review & Export Summary
+  window.buildReviewSummary = buildReviewSummary;
+  window.toggleReviewSection = toggleReviewSection;
+  window.toggleAllReviewSections = toggleAllReviewSections;
+  window.editFieldFromReview = editFieldFromReview;
+  window.formatGpsSummary = formatGpsSummary;
+  window.formatBoundarySummary = formatBoundarySummary;
+  window.toggleLegalConsent = toggleLegalConsent;
+  window.onGeneratePlanClick = onGeneratePlanClick;
+
+  // Map Location & Geocoding
+  window.openLocationPickerModal = openLocationPickerModal;
+  window.closeLocationPickerModal = closeLocationPickerModal;
+  window.searchMapLocation = searchMapLocation;
+  window.locateOnPickerMap = locateOnPickerMap;
+  window.resetToBangaloreCenter = resetToBangaloreCenter;
+  window.onGpsZoomInput = onGpsZoomInput;
+  window.syncGpsZoomControls = syncGpsZoomControls;
+  window.applyPickerLocation = applyPickerLocation;
+  window.detectGPSLocation = detectGPSLocation;
+  window.onGpsCoordsInput = onGpsCoordsInput;
+  window.onKeyPlanMapError = onKeyPlanMapError;
+
+  // Geometry & Setbacks
+  window.toggleOddSite = toggleOddSite;
+  window.onRegularDimensionInput = onRegularDimensionInput;
+  window.calculatePlotAreaFromSides = calculatePlotAreaFromSides;
+  window.onFtInInput = onFtInInput;
+  window.onBuildingTypeChange = onBuildingTypeChange;
+  window.calculateBuiltUpArea = calculateBuiltUpArea;
+  window.autoCalculateSetbacks = autoCalculateSetbacks;
+  window.updateSetbackComplianceBadges = updateSetbackComplianceBadges;
+  window.formatFeetInches = formatFeetInches;
+  window.validateBuildingSetbackFeasibility = validateBuildingSetbackFeasibility;
+  window.clearFieldError = clearFieldError;
+  window.showFieldError = showFieldError;
+
+  // Signatures & Project Import/Export
+  window.onSignatureFileSelected = onSignatureFileSelected;
+  window.openSignatureCropModal = openSignatureCropModal;
+  window.closeSignatureCropModal = closeSignatureCropModal;
+  window.saveCroppedSignature = saveCroppedSignature;
+  window.removeSignature = removeSignature;
+  window.rotateSignature = rotateSignature;
+  window.onSignatureCropTypeChange = onSignatureCropTypeChange;
+  window.triggerProjectImport = triggerProjectImport;
+  window.handleProjectFileImport = handleProjectFileImport;
+  window.closeProjectImportErrorModal = closeProjectImportErrorModal;
 }
 
 
