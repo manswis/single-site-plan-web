@@ -100,7 +100,7 @@
       style="max-width: 440px; text-align: left; padding: 24px; border-radius: 20px;">
       <div
         style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid var(--apple-border); padding-bottom: 10px;">
-        <h3 id="helpModalTitle" style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">
+        <h3 id="helpModalTitle" data-i18n="help.title" style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary);">
           Field Help</h3>
         <button type="button" onclick="closeFieldHelp()"
           style="background: none; border: none; font-size: 20px; font-weight: 700; color: var(--apple-text-secondary); cursor: pointer; padding: 0 4px;">✕</button>
@@ -109,7 +109,7 @@
         <!-- Dynamic content injected from FIELD_HELP_DATA -->
       </div>
       <div style="margin-top: 20px; text-align: right;">
-        <button type="button" class="apple-btn-secondary" onclick="closeFieldHelp()"
+        <button type="button" class="apple-btn-secondary" onclick="closeFieldHelp()" data-i18n="btn.gotIt"
           style="padding: 8px 20px; font-size: 13px; font-weight: 600;">Got It</button>
       </div>
     </div>

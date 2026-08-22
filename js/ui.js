@@ -2087,6 +2087,12 @@ function showFieldHelp(key) {
   html += `</div>`;
 
   bodyEl.innerHTML = html;
+
+  const btnGotIt = modal.querySelector('.apple-btn-secondary');
+  if (btnGotIt) {
+    btnGotIt.textContent = isKn ? 'ತಿಳಿಯಿತು' : 'Got It';
+  }
+
   modal.style.display = 'flex';
   modal.classList.add('active');
 }

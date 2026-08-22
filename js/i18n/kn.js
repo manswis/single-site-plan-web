@@ -38,6 +38,8 @@ export const kn = {
   "btn.cancel": "ರದ್ದುಮಾಡಿ",
   "btn.apply": "ಅನ್ವಯಿಸಿ",
   "btn.close": "ಮುಚ್ಚಿ",
+  "btn.gotIt": "ತಿಳಿಯಿತು",
+  "help.title": "ಕ್ಷೇತ್ರದ ಮಾಹಿತಿ",
   "btn.autoCalculate": "✨ ಬಿಬಿಎಂಪಿ ಸೆಟ್‌ಬ್ಯಾಕ್ ಲೆಕ್ಕಾಚಾರ",
   "btn.pickOnMap": "ಮ್ಯಾಪ್‌ನಲ್ಲಿ ಆರಿಸಿ",
   "btn.locateMe": "ನನ್ನ ಸ್ಥಳ ಹುಡುಕಿ",

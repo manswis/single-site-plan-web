@@ -38,6 +38,8 @@ export const en = {
   "btn.cancel": "Cancel",
   "btn.apply": "Apply",
   "btn.close": "Close",
+  "btn.gotIt": "Got It",
+  "help.title": "Field Help",
   "btn.autoCalculate": "✨ Auto-Calculate BBMP Setbacks",
   "btn.pickOnMap": "Pick on Map",
   "btn.locateMe": "Locate Me",
