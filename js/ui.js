@@ -1410,19 +1410,19 @@ function triggerSmartFillChipAnimation(btnEl) {
 }
 
 /**
- * Standard Bangalore Plot Dimension Presets dictionary (Pure Dimensions only).
+ * Standard Bangalore Plot Dimension Presets dictionary.
  */
 const STEP3_SMART_FILL_PRESETS = {
-  '30x40': { nsFt: 30, nsIn: 0, ewFt: 40, ewIn: 0, area: 1200 },
-  '40x60': { nsFt: 40, nsIn: 0, ewFt: 60, ewIn: 0, area: 2400 },
-  '30x50': { nsFt: 30, nsIn: 0, ewFt: 50, ewIn: 0, area: 1500 },
-  '20x30': { nsFt: 20, nsIn: 0, ewFt: 30, ewIn: 0, area: 600 },
-  '50x80': { nsFt: 50, nsIn: 0, ewFt: 80, ewIn: 0, area: 4000 }
+  '30x40': { nsFt: 30, nsIn: 0, ewFt: 40, ewIn: 0, area: 1200, roadWidthFt: 30, roadFacing: 'north' },
+  '40x60': { nsFt: 40, nsIn: 0, ewFt: 60, ewIn: 0, area: 2400, roadWidthFt: 40, roadFacing: 'east' },
+  '30x50': { nsFt: 30, nsIn: 0, ewFt: 50, ewIn: 0, area: 1500, roadWidthFt: 30, roadFacing: 'north' },
+  '20x30': { nsFt: 20, nsIn: 0, ewFt: 30, ewIn: 0, area: 600, roadWidthFt: 25, roadFacing: 'north' },
+  '50x80': { nsFt: 50, nsIn: 0, ewFt: 80, ewIn: 0, area: 4000, roadWidthFt: 50, roadFacing: 'east' }
 };
 
 /**
  * Applies a 1-tap standard Bangalore dimension preset on Step 3.
- * Only updates plot measurements & area; preserves user's road width and facing choices.
+ * Populates plot dimensions, area, front road width, facing direction, and defaults scale to 1:100.
  * 
  * @function applyStep3SmartFill
  * @param {string} presetId - Preset key ('30x40', '40x60', etc.).
@@ -1444,6 +1444,9 @@ function applyStep3SmartFill(presetId, btnEl) {
   const ewFtEl = document.getElementById('regEastWest_ft');
   const ewInEl = document.getElementById('regEastWest_in');
   const areaEl = document.getElementById('plotArea');
+  const rwFtEl = document.getElementById('roadWidth_ft');
+  const rwInEl = document.getElementById('roadWidth_in');
+  const rfEl = document.getElementById('roadFacing');
   const scaleEl = document.getElementById('scale');
 
   if (nsFtEl) nsFtEl.value = preset.nsFt;
@@ -1456,6 +1459,10 @@ function applyStep3SmartFill(presetId, btnEl) {
     areaEl.dataset.userEdited = 'true';
   }
 
+  if (rwFtEl) rwFtEl.value = preset.roadWidthFt;
+  if (rwInEl) rwInEl.value = 0;
+  if (rfEl) rfEl.value = preset.roadFacing;
+
   // Ensure default drawing scale is 1:100
   if (scaleEl && !scaleEl.value) {
     scaleEl.value = '1:100';
@@ -1464,10 +1471,13 @@ function applyStep3SmartFill(presetId, btnEl) {
   if (typeof onFtInInput === 'function') {
     onFtInInput('regNorthSouth');
     onFtInInput('regEastWest');
+    onFtInInput('roadWidth');
   }
 
   if (typeof clearFieldError === 'function') {
     clearFieldError('plotArea', 'err-plotArea');
+    clearFieldError('roadWidth', 'err-roadWidth');
+    clearFieldError('roadFacing', 'err-roadFacing');
     clearFieldError('regNorthSouth', 'err-regNorthSouth');
     clearFieldError('regEastWest', 'err-regEastWest');
   }
