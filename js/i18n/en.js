@@ -11,6 +11,8 @@ export const en = {
   "brand.badge": "B-to-A Khata Ready",
   "nav.home": "Home",
   "nav.workbench": "Studio Workbench",
+  "workbench.hero.title": "BBMP Single Site Plan & CAD Drawing Studio Workbench",
+  "workbench.hero.subtitle": "7-Step statutory drafting engine for Bangalore Sakala B-to-A Khata layouts & RMP-2015 setbacks",
   "nav.pricing": "Pricing",
   "nav.legal": "Legal Disclaimer",
   "nav.faq": "FAQ & Help",

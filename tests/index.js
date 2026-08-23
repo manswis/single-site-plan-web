@@ -27,7 +27,8 @@ const TEST_TIERS = [
       'unit/contact.unit.test.js',
       'unit/analytics.unit.test.js',
       'unit/smart_fill.unit.test.js',
-      'unit/step_navigation.unit.test.js'
+      'unit/step_navigation.unit.test.js',
+      'unit/seo.unit.test.js'
     ]
   },
   {
