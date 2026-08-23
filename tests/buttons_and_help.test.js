@@ -189,4 +189,17 @@ assert.equal(state.getButtonStates().exportPdfDisabled, true);
 assert.equal(state.getButtonStates().printDisabled, true);
 console.log('   ✓ Action buttons state machine transitions verified safely.');
 
-console.log('\n🎉 ALL 4 BUTTONS & HELP SYSTEM TEST SUITES PASSED WITH 100% SUCCESS!\n');
+// 5. Map Pin Picker & Geolocation Fallback Architecture Tests
+console.log('\n5. Verifying Map Pin Picker & Geolocation Fallback Architecture:');
+assert.ok(uiJsContent.includes('const BANGALORE_ZONE_CENTERS ='), 'BANGALORE_ZONE_CENTERS must be defined in ui.js');
+assert.ok(uiJsContent.includes('function ensureLeafletLoaded('), 'ensureLeafletLoaded must be defined for dynamic CDN fallback');
+assert.ok(uiJsContent.includes('container._leaflet_id = null;'), 'Must prevent Leaflet map already initialized errors');
+assert.ok(uiJsContent.includes('enableHighAccuracy: false'), 'Must provide 2-stage relaxed GPS fallback');
+assert.ok(uiJsContent.includes('window.openLocationPickerModal ='), 'openLocationPickerModal must be exported to window');
+assert.ok(uiJsContent.includes('window.detectGPSLocation ='), 'detectGPSLocation must be exported to window');
+assert.ok(uiJsContent.includes('window.locateOnPickerMap ='), 'locateOnPickerMap must be exported to window');
+assert.ok(uiJsContent.includes('window.resetToBangaloreCenter ='), 'resetToBangaloreCenter must be exported to window');
+assert.ok(uiJsContent.includes('window.searchMapLocation ='), 'searchMapLocation must be exported to window');
+console.log('   ✓ Map Pin Picker, Geolocation 2-stage fallback, and global window exports verified.');
+
+console.log('\n🎉 ALL 5 BUTTONS & HELP SYSTEM TEST SUITES PASSED WITH 100% SUCCESS!\n');

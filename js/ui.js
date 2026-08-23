@@ -13,6 +13,48 @@ let currentPickerCoords = { lat: 12.9716, lon: 77.5946 };
 
 const BANGALORE_CENTER = { lat: 12.9716, lon: 77.5946 };
 
+const BANGALORE_ZONE_CENTERS = {
+  'East': { lat: 12.9840, lon: 77.6200 },
+  'West': { lat: 12.9900, lon: 77.5600 },
+  'South': { lat: 12.9300, lon: 77.5800 },
+  'Mahadevapura': { lat: 12.9900, lon: 77.6900 },
+  'Bommanahalli': { lat: 12.9000, lon: 77.6200 },
+  'Yelahanka': { lat: 13.1000, lon: 77.5950 },
+  'Rajarajeshwari Nagar': { lat: 12.9250, lon: 77.5200 },
+  'Dasarahalli': { lat: 13.0450, lon: 77.5150 }
+};
+
+/**
+ * Ensures Leaflet library and styles are loaded into the document.
+ * @function ensureLeafletLoaded
+ * @param {Function} callback - Executed when Leaflet is ready.
+ * @returns {void}
+ */
+function ensureLeafletLoaded(callback) {
+  if (typeof L !== 'undefined') {
+    callback();
+    return;
+  }
+
+  if (!document.querySelector('link[href*="leaflet"]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(link);
+  }
+
+  const script = document.createElement('script');
+  script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  script.onload = () => {
+    if (typeof callback === 'function') callback();
+  };
+  script.onerror = () => {
+    console.error('Leaflet failed to load from CDN');
+    alert('Map library could not be loaded. Please check your internet connection.');
+  };
+  document.head.appendChild(script);
+}
+
 /**
  * Opens the interactive map location picker modal and initializes Leaflet.
  * @function openLocationPickerModal
@@ -30,19 +72,27 @@ function openLocationPickerModal() {
   let startCoords = BANGALORE_CENTER;
   if (typeof parseCoordinates === 'function') {
     const parsed = parseCoordinates(rawGps);
-    if (parsed) startCoords = parsed;
+    if (parsed) {
+      startCoords = parsed;
+    } else {
+      const selectedZone = document.getElementById('bbmpZone')?.value;
+      if (selectedZone && BANGALORE_ZONE_CENTERS[selectedZone]) {
+        startCoords = BANGALORE_ZONE_CENTERS[selectedZone];
+      }
+    }
   }
 
   currentPickerCoords = { ...startCoords };
   updatePickerCoordsDisplay(currentPickerCoords.lat, currentPickerCoords.lon);
 
-  // Initialize or re-invalidate Leaflet map after DOM display transition
-  setTimeout(() => {
-    initOrUpdatePickerMap(currentPickerCoords.lat, currentPickerCoords.lon);
-  }, 100);
-  setTimeout(() => {
-    if (pickerMapInstance) pickerMapInstance.invalidateSize();
-  }, 350);
+  ensureLeafletLoaded(() => {
+    setTimeout(() => {
+      initOrUpdatePickerMap(currentPickerCoords.lat, currentPickerCoords.lon);
+    }, 100);
+    setTimeout(() => {
+      if (pickerMapInstance) pickerMapInstance.invalidateSize();
+    }, 350);
+  });
 
   // Keyboard accessibility: Close on Escape
   const onEscKey = (e) => {
@@ -79,51 +129,65 @@ function initOrUpdatePickerMap(lat, lon) {
   if (!container || typeof L === 'undefined') return;
 
   if (!pickerMapInstance) {
-    pickerMapInstance = L.map('pickerMapContainer', {
-      center: [lat, lon],
-      zoom: 15,
-      zoomControl: true
-    });
+    if (container._leaflet_id) {
+      container._leaflet_id = null;
+    }
 
-    // High-performance CartoDB Voyager raster tiles
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      subdomains: 'abcd',
-      maxZoom: 19
-    }).addTo(pickerMapInstance);
+    try {
+      pickerMapInstance = L.map('pickerMapContainer', {
+        center: [lat, lon],
+        zoom: 15,
+        zoomControl: true
+      });
 
-    // Draggable red marker
-    const redPinIcon = L.divIcon({
-      className: 'custom-map-pin',
-      html: `<svg width="32" height="32" viewBox="0 0 24 24" fill="#dc2626" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); transform: translate(-8px, -24px);">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>`,
-      iconSize: [24, 24],
-      iconAnchor: [12, 24]
-    });
+      // High-performance CartoDB Voyager raster tiles
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(pickerMapInstance);
 
-    pickerMarkerInstance = L.marker([lat, lon], {
-      draggable: true,
-      icon: redPinIcon
-    }).addTo(pickerMapInstance);
+      // Draggable red marker
+      const redPinIcon = L.divIcon({
+        className: 'custom-map-pin',
+        html: `<svg width="32" height="32" viewBox="0 0 24 24" fill="#dc2626" style="filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); transform: translate(-8px, -24px);">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+        </svg>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 24]
+      });
 
-    // Update coordinates when marker is dragged
-    pickerMarkerInstance.on('dragend', function (e) {
-      const pos = e.target.getLatLng();
-      currentPickerCoords = { lat: pos.lat, lon: pos.lng };
-      updatePickerCoordsDisplay(pos.lat, pos.lng);
-    });
+      pickerMarkerInstance = L.marker([lat, lon], {
+        draggable: true,
+        icon: redPinIcon
+      }).addTo(pickerMapInstance);
 
-    // Click anywhere on map to move marker
-    pickerMapInstance.on('click', function (e) {
-      pickerMarkerInstance.setLatLng(e.latlng);
-      currentPickerCoords = { lat: e.latlng.lat, lon: e.latlng.lng };
-      updatePickerCoordsDisplay(e.latlng.lat, e.latlng.lng);
-    });
+      // Update coordinates when marker is dragged
+      pickerMarkerInstance.on('dragend', function (e) {
+        const pos = e.target.getLatLng();
+        currentPickerCoords = { lat: pos.lat, lon: pos.lng };
+        updatePickerCoordsDisplay(pos.lat, pos.lng);
+      });
+
+      // Click anywhere on map to move marker
+      pickerMapInstance.on('click', function (e) {
+        pickerMarkerInstance.setLatLng(e.latlng);
+        currentPickerCoords = { lat: e.latlng.lat, lon: e.latlng.lng };
+        updatePickerCoordsDisplay(e.latlng.lat, e.latlng.lng);
+      });
+    } catch (err) {
+      console.error('Error creating Leaflet map:', err);
+    }
   } else {
-    pickerMapInstance.invalidateSize();
-    pickerMapInstance.setView([lat, lon], 15);
-    pickerMarkerInstance.setLatLng([lat, lon]);
+    try {
+      pickerMapInstance.invalidateSize();
+      pickerMapInstance.setView([lat, lon], pickerMapInstance.getZoom() || 15);
+      if (pickerMarkerInstance) {
+        pickerMarkerInstance.setLatLng([lat, lon]);
+      }
+    } catch (err) {
+      console.warn('Map update error:', err);
+    }
   }
 }
 
@@ -144,7 +208,7 @@ function updatePickerCoordsDisplay(lat, lon) {
 }
 
 /**
- * Searches a location in Bangalore using OpenStreetMap Nominatim API with fallback.
+ * Searches a location in Bangalore using OpenStreetMap Nominatim API with offline ward directory fallback.
  * @function searchMapLocation
  * @returns {void}
  */
@@ -153,7 +217,27 @@ function searchMapLocation() {
   if (!input || !input.value.trim()) return;
 
   const query = input.value.trim();
-  const fullQuery = query.toLowerCase().includes('bangalore') || query.toLowerCase().includes('bengaluru')
+  const qLower = query.toLowerCase();
+
+  const applyFoundCoords = (lat, lon) => {
+    currentPickerCoords = { lat, lon };
+    updatePickerCoordsDisplay(lat, lon);
+    if (pickerMapInstance && pickerMarkerInstance) {
+      pickerMapInstance.flyTo([lat, lon], 16, { duration: 1 });
+      pickerMarkerInstance.setLatLng([lat, lon]);
+    }
+  };
+
+  // Check local 198 BBMP Wards
+  const wards = (typeof BBMP_WARDS !== 'undefined' ? BBMP_WARDS : window.BBMP_WARDS) || [];
+  const matchedWard = wards.find(w =>
+    w.nameEn.toLowerCase().includes(qLower) ||
+    w.nameKn.includes(query) ||
+    String(w.wardNo) === query ||
+    (w.keywords && w.keywords.some(k => k.toLowerCase().includes(qLower)))
+  );
+
+  const fullQuery = qLower.includes('bangalore') || qLower.includes('bengaluru')
     ? query
     : `${query}, Bengaluru, Karnataka`;
 
@@ -163,19 +247,22 @@ function searchMapLocation() {
       if (data && data.length > 0) {
         const lat = parseFloat(data[0].lat);
         const lon = parseFloat(data[0].lon);
-        currentPickerCoords = { lat, lon };
-        updatePickerCoordsDisplay(lat, lon);
-        if (pickerMapInstance && pickerMarkerInstance) {
-          pickerMapInstance.flyTo([lat, lon], 16, { duration: 1 });
-          pickerMarkerInstance.setLatLng([lat, lon]);
-        }
+        applyFoundCoords(lat, lon);
+      } else if (matchedWard && BANGALORE_ZONE_CENTERS[matchedWard.zone]) {
+        const coords = BANGALORE_ZONE_CENTERS[matchedWard.zone];
+        applyFoundCoords(coords.lat, coords.lon);
       } else {
-        alert(`Location "${query}" not found. Try entering a nearby landmark or ward name.`);
+        alert(`Location "${query}" not found. Try entering a nearby landmark, ward, or layout name.`);
       }
     })
     .catch(err => {
-      console.warn('Geocoding search failed:', err);
-      alert('Search service currently unavailable. Please pan and drop the pin manually.');
+      console.warn('Geocoding search failed, checking offline directory:', err);
+      if (matchedWard && BANGALORE_ZONE_CENTERS[matchedWard.zone]) {
+        const coords = BANGALORE_ZONE_CENTERS[matchedWard.zone];
+        applyFoundCoords(coords.lat, coords.lon);
+      } else {
+        alert('Search service currently unreachable. Please drag the pin on the map to your site location.');
+      }
     });
 }
 
@@ -190,21 +277,36 @@ function locateOnPickerMap() {
     return;
   }
 
+  const handleSuccess = (pos) => {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+    currentPickerCoords = { lat, lon };
+    updatePickerCoordsDisplay(lat, lon);
+    if (pickerMapInstance && pickerMarkerInstance) {
+      pickerMapInstance.flyTo([lat, lon], 17, { duration: 1.2 });
+      pickerMarkerInstance.setLatLng([lat, lon]);
+    }
+  };
+
+  const handleError = (err) => {
+    console.warn('locateOnPickerMap error:', err);
+    if (err && err.code === 1) {
+      alert('Location permission was denied. Please enable location permissions or drag the pin manually.');
+    } else {
+      alert('Could not access current GPS coordinates. Please pan and drag the pin to your site on the map.');
+    }
+  };
+
   navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      const lat = pos.coords.latitude;
-      const lon = pos.coords.longitude;
-      currentPickerCoords = { lat, lon };
-      updatePickerCoordsDisplay(lat, lon);
-      if (pickerMapInstance && pickerMarkerInstance) {
-        pickerMapInstance.flyTo([lat, lon], 17, { duration: 1.2 });
-        pickerMarkerInstance.setLatLng([lat, lon]);
-      }
+    handleSuccess,
+    () => {
+      navigator.geolocation.getCurrentPosition(
+        handleSuccess,
+        handleError,
+        { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
+      );
     },
-    (err) => {
-      alert('Could not access current location. Please pan or search manually.');
-    },
-    { enableHighAccuracy: true, timeout: 10000 }
+    { enableHighAccuracy: true, timeout: 6000, maximumAge: 60000 }
   );
 }
 
@@ -321,34 +423,53 @@ function detectGPSLocation() {
     btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; animation: spin 1s linear infinite;">sync</span> <span>Locating...</span>';
   }
 
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const lat = position.coords.latitude.toFixed(5);
-      const lon = position.coords.longitude.toFixed(5);
-      if (gpsInput) {
-        gpsInput.value = `${lat}, ${lon}`;
-        if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
-      }
-      if (btn) {
-        btn.disabled = false;
-        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: #10b981;">check</span> <span>Located</span>';
-        setTimeout(() => {
-          btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">my_location</span> <span>Locate Me</span>';
-        }, 3000);
-      }
-      syncGpsZoomControls();
-      if (typeof saveDraft === 'function') saveDraft();
-      if (typeof generatePlan === 'function') generatePlan();
-    },
-    (err) => {
-      console.warn('Geolocation error:', err.message);
-      if (btn) {
-        btn.disabled = false;
+  const handleSuccess = (position) => {
+    const lat = position.coords.latitude.toFixed(5);
+    const lon = position.coords.longitude.toFixed(5);
+    if (gpsInput) {
+      gpsInput.value = `${lat}, ${lon}`;
+      if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
+    }
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: #10b981;">check</span> <span>Located</span>';
+      setTimeout(() => {
         btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">my_location</span> <span>Locate Me</span>';
+      }, 3000);
+    }
+    syncGpsZoomControls();
+    if (typeof saveDraft === 'function') saveDraft();
+    if (typeof generatePlan === 'function') generatePlan();
+  };
+
+  const handleFinalError = (err) => {
+    console.warn('Geolocation error:', err ? err.message : 'Unknown error');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">my_location</span> <span>Locate Me</span>';
+    }
+    if (err && err.code === 1) {
+      alert('Location permission was denied. Please enable location permissions in browser settings, or use "Pick on Map" to drop a pin.');
+    } else {
+      // Prompt user to pick on map if device hardware GPS fails
+      const fallbackPrompt = confirm('GPS signal could not be locked. Would you like to open the Map to pinpoint your site location?');
+      if (fallbackPrompt) {
+        openLocationPickerModal();
       }
-      alert('Could not detect location. Please enter Latitude & Longitude manually (e.g. 12.9716, 77.5946).');
+    }
+  };
+
+  navigator.geolocation.getCurrentPosition(
+    handleSuccess,
+    () => {
+      // Fallback attempt: enableHighAccuracy = false (uses cellular/wifi, works indoors and on weak GPS signals)
+      navigator.geolocation.getCurrentPosition(
+        handleSuccess,
+        handleFinalError,
+        { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
+      );
     },
-    { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    { enableHighAccuracy: true, timeout: 6000, maximumAge: 60000 }
   );
 }
 
