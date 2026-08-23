@@ -197,30 +197,26 @@
   <!-- Interactive Map Location Picker Modal (Leaflet Engine) -->
   <div id="locationPickerModal" class="apple-modal-overlay no-print" style="display: none;"
     onclick="if(event.target===this)closeLocationPickerModal()">
-    <div class="apple-modal-card map-picker-modal-card"
-      style="max-width: 680px; width: 94%; text-align: left; padding: 20px; border-radius: 20px; max-height: 92vh; display: flex; flex-direction: column;">
+    <div class="apple-modal-card map-picker-modal-card">
 
       <!-- Modal Header -->
-      <div
-        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid var(--apple-border); padding-bottom: 10px;">
-        <h3
-          style="margin: 0; font-size: 17px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 8px;">
-          <span class="material-symbols-outlined" style="font-size: 20px; color: var(--apple-accent);">pin_drop</span>
-          Pinpoint Property Location on Map
+      <div class="map-picker-header">
+        <h3 class="map-picker-title">
+          <span class="material-symbols-outlined" style="color: var(--apple-accent);">pin_drop</span>
+          <span data-i18n="mapPicker.title">Pinpoint Property Location on Map</span>
         </h3>
         <button type="button" onclick="closeLocationPickerModal()"
           style="background: none; border: none; font-size: 20px; font-weight: 700; color: var(--apple-text-secondary); cursor: pointer; padding: 0 4px;">✕</button>
       </div>
 
       <!-- Line 1: Search Bar & Search Button (Matching Height & Alignment) -->
-      <div style="display: flex; gap: 8px; align-items: stretch; margin-bottom: 12px;">
-        <input id="mapSearchInput" type="text" placeholder="Search Bangalore area (e.g. Indiranagar, Whitefield)..."
+      <div class="map-picker-search-bar-row">
+        <input id="mapSearchInput" type="text" class="map-picker-search-input"
+          placeholder="Search Bangalore area (e.g. Indiranagar)..."
           data-i18n-placeholder="mapPicker.searchPlaceholder"
-          style="padding: 0 14px; height: 40px; box-sizing: border-box; font-size: 13px; border-radius: 10px; border: 1px solid var(--apple-border); flex: 1; background: var(--apple-bg); color: var(--apple-text-primary); line-height: 40px; outline: none;"
           onkeydown="if(event.key==='Enter'){event.preventDefault();searchMapLocation();}">
-        <button type="button" class="map-toolbar-btn map-toolbar-btn-primary" onclick="searchMapLocation()"
-          title="Search Location"
-          style="padding: 0 22px; height: 40px; box-sizing: border-box; font-size: 13px; font-weight: 600; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; margin: 0;">
+        <button type="button" class="map-toolbar-btn map-toolbar-btn-primary map-picker-search-btn"
+          onclick="searchMapLocation()" title="Search Location">
           <span data-i18n="btn.search">Search</span>
         </button>
       </div>
@@ -270,8 +266,7 @@
       </div>
 
       <!-- Map Viewport Frame -->
-      <div
-        style="position: relative; width: 100%; height: 350px; border-radius: 12px; overflow: hidden; border: 1px solid var(--apple-border); background: #e2e8f0;">
+      <div class="map-picker-map-frame">
         <div id="pickerMapContainer" style="width: 100%; height: 100%;"></div>
 
         <!-- Floating Layer Switcher (Top Right: Street vs Satellite) -->
@@ -313,23 +308,19 @@
       </div>
 
       <!-- Footer Action & Coordinate Status -->
-      <div
-        style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--apple-border);">
-        <div
-          style="font-size: 12.5px; color: var(--apple-text-primary); font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
+      <div class="map-picker-footer">
+        <div class="map-picker-selected-coords">
           <span class="material-symbols-outlined"
             style="font-size: 17px; color: var(--apple-accent);">location_on</span>
           <span data-i18n="mapPicker.selectedLabel">Selected:</span> <span id="pickerCoordsDisplay"
             style="color: var(--apple-accent); font-family: monospace; font-size: 13px; font-weight: 700;">12.9716,
             77.5946</span>
         </div>
-        <div style="display: flex; gap: 8px; margin-left: auto;">
-          <button type="button" class="apple-btn-secondary" onclick="closeLocationPickerModal()"
-            style="padding: 8px 18px; font-size: 13px; font-weight: 600;">
+        <div class="map-picker-footer-actions">
+          <button type="button" class="apple-btn-secondary" onclick="closeLocationPickerModal()">
             <span data-i18n="btn.cancel">Cancel</span>
           </button>
-          <button type="button" class="apple-btn-primary" onclick="applyPickerLocation()"
-            style="padding: 8px 22px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
+          <button type="button" class="apple-btn-primary" onclick="applyPickerLocation()">
             <span data-i18n="mapPicker.useThisLocation">Use This Location</span>
           </button>
         </div>
