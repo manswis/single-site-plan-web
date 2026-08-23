@@ -1545,15 +1545,12 @@ function deriveStep5FromStep3(options = {}) {
       if (widthInEl) widthInEl.value = rwIn;
     } else {
       if (typeEl) {
-        if (typeEl.value === 'road' || !typeEl.value || options.overwriteDescriptions) {
+        if (typeEl.value === 'road' || !typeEl.value) {
           typeEl.value = 'plot';
           if (typeof toggleBoundaryType === 'function') toggleBoundaryType(dir);
         }
       }
-      const descEl = document.getElementById('descPlot' + dir);
-      if (descEl && (!descEl.value || descEl.value.trim() === '' || options.overwriteDescriptions)) {
-        descEl.value = 'Private Property';
-      }
+      // Do NOT auto-fill Description Label for neighbor plots; preserve user's deed entries
     }
 
     if (typeof clearFieldError === 'function') {
@@ -1581,43 +1578,44 @@ function onRoadFacingChange() {
 }
 
 /**
- * Standard Deed DNA Boundary Presets dictionary.
+ * Standard Deed DNA Boundary Presets dictionary (Types & Roads only; No dummy plot descriptions).
  */
 const STEP5_SMART_FILL_PRESETS = {
   'north_road': {
     North: { type: 'road', name: 'Main Road', width: 30 },
-    South: { type: 'plot', desc: 'Site No. 45' },
-    East: { type: 'plot', desc: 'Site No. 42' },
-    West: { type: 'plot', desc: 'Site No. 40' }
+    South: { type: 'plot' },
+    East: { type: 'plot' },
+    West: { type: 'plot' }
   },
   'east_road': {
-    North: { type: 'plot', desc: 'Site No. 18' },
-    South: { type: 'plot', desc: 'Site No. 20' },
+    North: { type: 'plot' },
+    South: { type: 'plot' },
     East: { type: 'road', name: 'Main Road', width: 30 },
-    West: { type: 'plot', desc: 'Site No. 12' }
+    West: { type: 'plot' }
   },
   'south_road': {
-    North: { type: 'plot', desc: 'Site No. 10' },
+    North: { type: 'plot' },
     South: { type: 'road', name: 'Main Road', width: 30 },
-    East: { type: 'plot', desc: 'Site No. 15' },
-    West: { type: 'plot', desc: 'Site No. 14' }
+    East: { type: 'plot' },
+    West: { type: 'plot' }
   },
   'west_road': {
-    North: { type: 'plot', desc: 'Site No. 25' },
-    South: { type: 'plot', desc: 'Site No. 27' },
-    East: { type: 'plot', desc: 'Site No. 30' },
+    North: { type: 'plot' },
+    South: { type: 'plot' },
+    East: { type: 'plot' },
     West: { type: 'road', name: 'Main Road', width: 30 }
   },
   'corner_ne': {
     North: { type: 'road', name: 'Main Road', width: 30 },
     East: { type: 'road', name: 'Cross Road', width: 30 },
-    South: { type: 'plot', desc: 'Site No. 08' },
-    West: { type: 'plot', desc: 'Site No. 06' }
+    South: { type: 'plot' },
+    West: { type: 'plot' }
   }
 };
 
 /**
  * Applies a 1-tap standard Deed DNA boundary layout preset on Step 5.
+ * Configures boundary types and road dimensions without populating dummy plot descriptions.
  * 
  * @function applyStep5SmartFill
  * @param {string} presetId - Preset key ('north_road', 'east_road', etc.).
@@ -1645,13 +1643,15 @@ function applyStep5SmartFill(presetId, btnEl) {
       const widthFtEl = document.getElementById('widthRoad' + dir + '_ft');
       const widthInEl = document.getElementById('widthRoad' + dir + '_in');
 
-      if (nameEl) nameEl.value = cfg.name;
-      if (widthEl) widthEl.value = cfg.width;
-      if (widthFtEl) widthFtEl.value = cfg.width;
+      if (nameEl) nameEl.value = cfg.name || 'Main Road';
+      if (widthEl) widthEl.value = cfg.width || 30;
+      if (widthFtEl) widthFtEl.value = cfg.width || 30;
       if (widthInEl) widthInEl.value = 0;
     } else if (cfg.type === 'plot' || cfg.type === 'private') {
-      const descEl = document.getElementById('descPlot' + dir);
-      if (descEl) descEl.value = cfg.desc;
+      if (cfg.desc) {
+        const descEl = document.getElementById('descPlot' + dir);
+        if (descEl) descEl.value = cfg.desc;
+      }
     }
 
     if (typeof clearFieldError === 'function') {

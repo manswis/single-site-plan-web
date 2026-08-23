@@ -36,33 +36,33 @@ const STEP3_PRESETS = {
 const STEP5_PRESETS = {
   'north_road': {
     North: { type: 'road', name: 'Main Road', width: 30 },
-    South: { type: 'plot', desc: 'Site No. 45' },
-    East: { type: 'plot', desc: 'Site No. 42' },
-    West: { type: 'plot', desc: 'Site No. 40' }
+    South: { type: 'plot' },
+    East: { type: 'plot' },
+    West: { type: 'plot' }
   },
   'east_road': {
-    North: { type: 'plot', desc: 'Site No. 18' },
-    South: { type: 'plot', desc: 'Site No. 20' },
+    North: { type: 'plot' },
+    South: { type: 'plot' },
     East: { type: 'road', name: 'Main Road', width: 30 },
-    West: { type: 'plot', desc: 'Site No. 12' }
+    West: { type: 'plot' }
   },
   'south_road': {
-    North: { type: 'plot', desc: 'Site No. 10' },
+    North: { type: 'plot' },
     South: { type: 'road', name: 'Main Road', width: 30 },
-    East: { type: 'plot', desc: 'Site No. 15' },
-    West: { type: 'plot', desc: 'Site No. 14' }
+    East: { type: 'plot' },
+    West: { type: 'plot' }
   },
   'west_road': {
-    North: { type: 'plot', desc: 'Site No. 25' },
-    South: { type: 'plot', desc: 'Site No. 27' },
-    East: { type: 'plot', desc: 'Site No. 30' },
+    North: { type: 'plot' },
+    South: { type: 'plot' },
+    East: { type: 'plot' },
     West: { type: 'road', name: 'Main Road', width: 30 }
   },
   'corner_ne': {
     North: { type: 'road', name: 'Main Road', width: 30 },
     East: { type: 'road', name: 'Cross Road', width: 30 },
-    South: { type: 'plot', desc: 'Site No. 08' },
-    West: { type: 'plot', desc: 'Site No. 06' }
+    South: { type: 'plot' },
+    West: { type: 'plot' }
   }
 };
 
@@ -129,7 +129,12 @@ suite.test('All 5 Deed DNA Presets define 4 complete cardinal boundaries', () =>
   });
 });
 
-suite.test('applyStep5SmartFill configures North-Facing boundaries in DOM', () => {
+suite.test('applyStep5SmartFill configures North-Facing boundaries in DOM without dummy descriptions', () => {
+  // Clear any existing descriptions
+  mockDoc.getElementById('descPlotSouth').value = '';
+  mockDoc.getElementById('descPlotEast').value = '';
+  mockDoc.getElementById('descPlotWest').value = '';
+
   if (typeof mockWindow.applyStep5SmartFill === 'function') {
     mockWindow.applyStep5SmartFill('north_road');
 
@@ -138,13 +143,10 @@ suite.test('applyStep5SmartFill configures North-Facing boundaries in DOM', () =
     assert.equal(String(mockDoc.getElementById('widthRoadNorth').value), '30');
 
     assert.equal(mockDoc.getElementById('typeSouth').value, 'plot');
-    assert.equal(mockDoc.getElementById('descPlotSouth').value, 'Site No. 45');
+    assert.equal(mockDoc.getElementById('descPlotSouth').value, '', 'Must not auto-fill dummy description');
 
     assert.equal(mockDoc.getElementById('typeEast').value, 'plot');
-    assert.equal(mockDoc.getElementById('descPlotEast').value, 'Site No. 42');
-
     assert.equal(mockDoc.getElementById('typeWest').value, 'plot');
-    assert.equal(mockDoc.getElementById('descPlotWest').value, 'Site No. 40');
   }
 });
 
