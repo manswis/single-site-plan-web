@@ -3327,7 +3327,7 @@ if (typeof window !== 'undefined') {
   window.formatFeetInches = formatFeetInches;
   window.validateBuildingSetbackFeasibility = validateBuildingSetbackFeasibility;
 
-  // Signatures
+  // Signatures & Architect Info
   window.onSignatureFileSelected = onSignatureFileSelected;
   window.openSignatureCropModal = openSignatureCropModal;
   window.closeSignatureCropModal = closeSignatureCropModal;
@@ -3336,6 +3336,8 @@ if (typeof window !== 'undefined') {
   window.resetCropTransform = resetCropTransform;
   window.onSignatureCropZoom = onSignatureCropZoom;
   window.applySignatureCrop = applySignatureCrop;
+  window.redrawCropCanvas = redrawCropCanvas;
+  window.onArchitectInfoInput = onArchitectInfoInput;
 }
 
 
