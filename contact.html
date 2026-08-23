@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta name="google-site-verification" content="4xWkz9d39ezgNpyCwN-Jj-RLCUIdIaRYAhds4JPQHyY">
+
   <!-- Primary SEO Meta Tags -->
   <title>Support & Issue Tracking — e-Plan Studio</title>
   <meta name="title" content="Support & Issue Tracking — e-Plan Studio">
@@ -18,7 +19,8 @@
   <meta property="og:site_name" content="e-Plan Studio">
   <meta property="og:url" content="https://single-site-plan.cranbear.workers.dev/contact.html">
   <meta property="og:title" content="Support & Issue Tracking — e-Plan Studio">
-  <meta property="og:description" content="Submit bug reports, feature requests, drawing errors, and feedback for e-Plan Studio.">
+  <meta property="og:description"
+    content="Submit bug reports, feature requests, drawing errors, and feedback for e-Plan Studio.">
   <meta property="og:image" content="https://single-site-plan.cranbear.workers.dev/favicon.svg">
 
   <!-- Google Fonts & Icons: Outfit, Inter & Material Symbols -->
@@ -84,7 +86,8 @@
         <a href="contact.html" class="mobile-nav-item active" data-i18n="nav.contact">Support</a>
       </div>
       <div class="mobile-menu-wrapper">
-        <button type="button" class="mobile-menu-btn" onclick="toggleMobileMenu(event)" aria-label="Open Settings Menu" title="Menu" id="mobileMenuTrigger">
+        <button type="button" class="mobile-menu-btn" onclick="toggleMobileMenu(event)" aria-label="Open Settings Menu"
+          title="Menu" id="mobileMenuTrigger">
           <span class="material-symbols-outlined">menu</span>
         </button>
         <div id="mobileMenuDropdown" class="mobile-menu-dropdown" style="display: none;">
@@ -193,7 +196,8 @@
                   <span class="tile-title" data-i18n="contact.cat.bug.title">Bug Report</span>
                   <span class="material-symbols-outlined tile-check">check_circle</span>
                 </div>
-                <p class="tile-desc" data-i18n="contact.cat.bug.desc">Setback calculation mismatch, boundary glitch, or drawing misalignment.</p>
+                <p class="tile-desc" data-i18n="contact.cat.bug.desc">Setback calculation mismatch, boundary glitch, or
+                  drawing misalignment.</p>
               </div>
             </button>
 
@@ -206,7 +210,8 @@
                   <span class="tile-title" data-i18n="contact.cat.feat.title">Feature Request</span>
                   <span class="material-symbols-outlined tile-check">check_circle</span>
                 </div>
-                <p class="tile-desc" data-i18n="contact.cat.feat.desc">Request new floor support, custom road angles, or BBMP layout formats.</p>
+                <p class="tile-desc" data-i18n="contact.cat.feat.desc">Request new floor support, custom road angles, or
+                  BBMP layout formats.</p>
               </div>
             </button>
 
@@ -219,7 +224,8 @@
                   <span class="tile-title" data-i18n="contact.cat.err.title">Technical Error</span>
                   <span class="material-symbols-outlined tile-check">check_circle</span>
                 </div>
-                <p class="tile-desc" data-i18n="contact.cat.err.desc">PDF generation failure, rendering freeze, or browser exception.</p>
+                <p class="tile-desc" data-i18n="contact.cat.err.desc">PDF generation failure, rendering freeze, or
+                  browser exception.</p>
               </div>
             </button>
 
@@ -232,7 +238,8 @@
                   <span class="tile-title" data-i18n="contact.cat.sug.title">General Feedback</span>
                   <span class="material-symbols-outlined tile-check">check_circle</span>
                 </div>
-                <p class="tile-desc" data-i18n="contact.cat.sug.desc">Suggestions for workflow, Sakala guidelines, or user experience.</p>
+                <p class="tile-desc" data-i18n="contact.cat.sug.desc">Suggestions for workflow, Sakala guidelines, or
+                  user experience.</p>
               </div>
             </button>
 
@@ -261,7 +268,8 @@
               </label>
               <div class="input-with-icon">
                 <span class="material-symbols-outlined input-icon">person</span>
-                <input type="text" id="ticketName" class="field-control" placeholder="e.g. Ramesh Kumar" data-i18n-placeholder="contact.field.name.placeholder">
+                <input type="text" id="ticketName" class="field-control" placeholder="e.g. Ramesh Kumar"
+                  data-i18n-placeholder="contact.field.name.placeholder">
               </div>
             </div>
 
@@ -307,7 +315,8 @@
               <div class="input-with-icon">
                 <span class="material-symbols-outlined input-icon">title</span>
                 <input type="text" id="ticketSubject" required class="field-control"
-                  placeholder="e.g. Setback calculation mismatch on corner plot" data-i18n-placeholder="contact.field.subject.placeholder">
+                  placeholder="e.g. Setback calculation mismatch on corner plot"
+                  data-i18n-placeholder="contact.field.subject.placeholder">
               </div>
             </div>
           </div>
@@ -319,31 +328,39 @@
               <span class="label-required">*</span>
             </label>
             <textarea id="ticketMessage" required rows="5" class="field-control textarea-control"
-              placeholder="Please describe what happened, what step you were on, and what you expected to see..." data-i18n-placeholder="contact.field.desc.placeholder"></textarea>
+              placeholder="Please describe what happened, what step you were on, and what you expected to see..."
+              data-i18n-placeholder="contact.field.desc.placeholder"></textarea>
 
             <!-- Safe Diagnostics Callout -->
             <div class="diagnostics-info-badge">
               <span class="material-symbols-outlined badge-info-icon">info</span>
-              <span>Includes basic device info (browser type & screen size) so our team can quickly find and fix the issue.</span>
+              <span>Includes basic device info (browser type & screen size) so our team can quickly find and fix the
+                issue.</span>
             </div>
           </div>
 
           <!-- Attachment Dropzone Section (5-Layer Sanitized Image Attachments) -->
           <div class="form-field-group">
             <label class="form-field-label" style="display: flex; justify-content: space-between; align-items: center;">
-              <span>Screenshots or Drawings <span style="font-weight: normal; color: var(--apple-text-secondary);">(Optional, max 2 images)</span></span>
-              <span id="attachmentCountBadge" style="font-size: 11px; font-weight: 600; color: var(--apple-text-secondary);">0/2</span>
+              <span>Screenshots or Drawings <span
+                  style="font-weight: normal; color: var(--apple-text-secondary);">(Optional, max 2
+                  images)</span></span>
+              <span id="attachmentCountBadge"
+                style="font-size: 11px; font-weight: 600; color: var(--apple-text-secondary);">0/2</span>
             </label>
 
             <div id="attachmentDropzone" class="attachment-dropzone" onclick="triggerAttachmentPicker()">
-              <input type="file" id="attachmentFileInput" accept="image/png, image/jpeg, image/webp" multiple style="display: none;" onchange="handleAttachmentFileSelect(event)">
+              <input type="file" id="attachmentFileInput" accept="image/png, image/jpeg, image/webp" multiple
+                style="display: none;" onchange="handleAttachmentFileSelect(event)">
               <div class="dropzone-inner-content">
                 <div class="dropzone-icon-circle">
                   <span class="material-symbols-outlined">add_photo_alternate</span>
                 </div>
                 <div class="dropzone-text-group">
-                  <div class="dropzone-primary-text">Click to upload, drag & drop, or paste screenshot (<kbd>Ctrl+V</kbd>)</div>
-                  <div class="dropzone-sub-text">JPG, PNG, or WebP • Auto-compressed & sanitized client-side (&lt; 150 KB)</div>
+                  <div class="dropzone-primary-text">Click to upload, drag & drop, or paste screenshot
+                    (<kbd>Ctrl+V</kbd>)</div>
+                  <div class="dropzone-sub-text">JPG, PNG, or WebP • Auto-compressed & sanitized client-side (&lt; 150
+                    KB)</div>
                 </div>
               </div>
             </div>
@@ -439,10 +456,12 @@
       </div>
 
       <!-- Recent Saved Inquiries on Device -->
-      <div class="apple-card support-card-container saved-tickets-card" id="savedTicketsCard" style="display: none; margin-bottom: 24px;">
+      <div class="apple-card support-card-container saved-tickets-card" id="savedTicketsCard"
+        style="display: none; margin-bottom: 24px;">
         <div class="saved-tickets-header">
           <div class="saved-header-left">
-            <span class="material-symbols-outlined header-section-icon" style="font-size: 20px; color: var(--apple-accent);">history</span>
+            <span class="material-symbols-outlined header-section-icon"
+              style="font-size: 20px; color: var(--apple-accent);">history</span>
             <div>
               <h3 class="saved-section-title">Recent Inquiries on this Device</h3>
               <span id="savedTicketsCountBadge" class="saved-count-pill">0 Saved</span>
@@ -462,7 +481,8 @@
         <!-- Transparent Privacy Footnote -->
         <div class="saved-privacy-footer">
           <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">lock</span>
-          <span>Stored only in your browser's local cache on this device. Never sent to third parties or shared across computers.</span>
+          <span>Stored only in your browser's local cache on this device. Never sent to third parties or shared across
+            computers.</span>
         </div>
       </div>
 
@@ -633,18 +653,18 @@
         100% locally on client browser.</p>
     </footer>
 
-  <!-- Fullscreen Image Lightbox Modal Overlay -->
-  <div id="imageLightboxModal" class="image-lightbox-overlay" style="display: none;" onclick="closeImageLightbox()">
-    <div class="lightbox-content-box" onclick="event.stopPropagation()">
-      <button type="button" class="lightbox-close-btn" onclick="closeImageLightbox()" aria-label="Close Lightbox">
-        <span class="material-symbols-outlined">close</span>
-      </button>
-      <img id="lightboxModalImg" class="lightbox-modal-img" src="" alt="Enlarged Attachment">
-      <div id="lightboxCaption" class="lightbox-caption"></div>
+    <!-- Fullscreen Image Lightbox Modal Overlay -->
+    <div id="imageLightboxModal" class="image-lightbox-overlay" style="display: none;" onclick="closeImageLightbox()">
+      <div class="lightbox-content-box" onclick="event.stopPropagation()">
+        <button type="button" class="lightbox-close-btn" onclick="closeImageLightbox()" aria-label="Close Lightbox">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+        <img id="lightboxModalImg" class="lightbox-modal-img" src="" alt="Enlarged Attachment">
+        <div id="lightboxCaption" class="lightbox-caption"></div>
+      </div>
     </div>
-  </div>
 
-  <script src="js/contact.min.js"></script>
+    <script src="js/contact.min.js"></script>
 </body>
 
 </html>
