@@ -1178,6 +1178,7 @@ if (typeof window !== 'undefined') {
   window.saveDraft = saveDraft;
   window.restoreDraft = restoreDraft;
   window.discardDraft = discardDraft;
+  window.checkAndRestoreDraft = checkAndRestoreDraft;
   window.validateStep = validateStep;
   window.exportProjectFile = exportProjectFile;
   window.triggerProjectImport = triggerProjectImport;
