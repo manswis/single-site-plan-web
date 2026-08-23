@@ -4,12 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <!-- Primary SEO Meta Tags -->
   <title>Studio Workbench — e-Plan Studio | Draft BBMP Single Plot Layout Plan</title>
   <meta name="title" content="Studio Workbench — e-Plan Studio | Draft BBMP Single Plot Layout Plan">
-  <meta name="description" content="7-step wizard to create official Sakala BBMP B-to-A Khata single plot layout plans. Auto-calculate RMP-2015 setbacks, Deed DNA boundaries, and export print-ready vector PDF packages.">
-  <meta name="keywords" content="BBMP single plot plan editor, draft single site plan online, BBMP B to A Khata drawing maker, Sakala layout sketch generator, BBMP setback calculator">
+  <meta name="description"
+    content="7-step wizard to create official Sakala BBMP B-to-A Khata single plot layout plans. Auto-calculate RMP-2015 setbacks, Deed DNA boundaries, and export print-ready vector PDF packages.">
+  <meta name="keywords"
+    content="BBMP single plot plan editor, draft single site plan online, BBMP B to A Khata drawing maker, Sakala layout sketch generator, BBMP setback calculator">
   <meta name="author" content="e-Plan Studio">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="https://single-site-plan.cranbear.workers.dev/studio.html">
@@ -19,7 +21,8 @@
   <meta property="og:site_name" content="e-Plan Studio">
   <meta property="og:url" content="https://single-site-plan.cranbear.workers.dev/studio.html">
   <meta property="og:title" content="Studio Workbench — e-Plan Studio | Draft BBMP Single Plot Layout Plan">
-  <meta property="og:description" content="7-step wizard to create official Sakala BBMP B-to-A Khata single plot layout plans with automated RMP-2015 setbacks and instant PDF export.">
+  <meta property="og:description"
+    content="7-step wizard to create official Sakala BBMP B-to-A Khata single plot layout plans with automated RMP-2015 setbacks and instant PDF export.">
   <meta property="og:image" content="https://single-site-plan.cranbear.workers.dev/favicon.svg">
   <meta property="og:locale" content="en_IN">
   <meta property="og:locale:alternate" content="kn_IN">
@@ -28,7 +31,8 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@ePlanStudio">
   <meta name="twitter:title" content="Studio Workbench — e-Plan Studio">
-  <meta name="twitter:description" content="7-step wizard to create official Sakala BBMP B-to-A Khata single plot layout plans.">
+  <meta name="twitter:description"
+    content="7-step wizard to create official Sakala BBMP B-to-A Khata single plot layout plans.">
   <meta name="twitter:image" content="https://single-site-plan.cranbear.workers.dev/favicon.svg">
 
   <!-- Google Fonts & Icons: Outfit, Inter & Material Symbols -->
@@ -64,9 +68,9 @@
   }
   </script>
 
-  <link rel="stylesheet" href="css/styles.min.css?v=1.3.0">
-  <script src="js/theme.min.js?v=1.3.0"></script>
-  <script src="js/i18n.min.js?v=1.3.0"></script>
+  <link rel="stylesheet" href="css/styles.min.css?v=1.4.0">
+  <script src="js/theme.min.js?v=1.4.0"></script>
+  <script src="js/i18n.min.js?v=1.4.0"></script>
 
   <!-- html2canvas and jsPDF for Direct Client-Side PDF File Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -868,12 +872,13 @@
             <div class="gps-field-layout">
               <input id="gpsCoords" type="text" placeholder="e.g. 12.9716, 77.5946" oninput="onGpsCoordsInput()">
               <div class="gps-action-buttons">
-                <button type="button" class="gps-action-btn" id="btnOpenMapPicker" onclick="openLocationPickerModal()">
+                <button type="button" class="gps-action-btn" id="btnOpenMapPicker"
+                  onclick="openLocationPickerModal(event)">
                   <span class="material-symbols-outlined"
                     style="font-size: 18px; color: var(--apple-accent);">map</span>
                   <span>Pick on Map</span>
                 </button>
-                <button type="button" class="gps-action-btn" id="btnLocateMe" onclick="detectGPSLocation()">
+                <button type="button" class="gps-action-btn" id="btnLocateMe" onclick="detectGPSLocation(event)">
                   <span class="material-symbols-outlined"
                     style="font-size: 18px; color: var(--apple-accent);">my_location</span>
                   <span>Locate Me</span>
@@ -2507,11 +2512,11 @@
 
   </div> <!-- End Container -->
 
-  <script src="js/analytics.min.js?v=1.3.0"></script>
-  <script src="js/wizard.min.js?v=1.3.0"></script>
-  <script src="js/ui.min.js?v=1.3.0"></script>
-  <script src="js/validator.min.js?v=1.3.0"></script>
-  <script src="js/renderer.min.js?v=1.3.0"></script>
+  <script src="js/analytics.min.js?v=1.4.0"></script>
+  <script src="js/wizard.min.js?v=1.4.0"></script>
+  <script src="js/ui.min.js?v=1.4.0"></script>
+  <script src="js/validator.min.js?v=1.4.0"></script>
+  <script src="js/renderer.min.js?v=1.4.0"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof initLiveStats === 'function') {

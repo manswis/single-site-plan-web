@@ -58,13 +58,21 @@ function ensureLeafletLoaded(callback) {
 /**
  * Opens the interactive map location picker modal and initializes Leaflet.
  * @function openLocationPickerModal
+ * @param {Event} [e] - Click event
  * @returns {void}
  */
-function openLocationPickerModal() {
-  const modal = document.getElementById('locationPickerModal');
-  if (!modal) return;
+function openLocationPickerModal(e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
 
-  modal.style.display = 'flex';
+  const modal = document.getElementById('locationPickerModal');
+  if (!modal) {
+    console.error('locationPickerModal not found in DOM');
+    return;
+  }
+
+  // Force modal overlay visibility
+  modal.style.setProperty('display', 'flex', 'important');
   modal.classList.add('active');
 
   // Determine starting coordinates
@@ -72,7 +80,7 @@ function openLocationPickerModal() {
   let startCoords = BANGALORE_CENTER;
   if (typeof parseCoordinates === 'function') {
     const parsed = parseCoordinates(rawGps);
-    if (parsed) {
+    if (parsed && typeof parsed.lat === 'number' && typeof parsed.lon === 'number') {
       startCoords = parsed;
     } else {
       const selectedZone = document.getElementById('bbmpZone')?.value;
@@ -86,8 +94,9 @@ function openLocationPickerModal() {
   updatePickerCoordsDisplay(currentPickerCoords.lat, currentPickerCoords.lon);
 
   ensureLeafletLoaded(() => {
+    initOrUpdatePickerMap(currentPickerCoords.lat, currentPickerCoords.lon);
     setTimeout(() => {
-      initOrUpdatePickerMap(currentPickerCoords.lat, currentPickerCoords.lon);
+      if (pickerMapInstance) pickerMapInstance.invalidateSize();
     }, 100);
     setTimeout(() => {
       if (pickerMapInstance) pickerMapInstance.invalidateSize();
@@ -95,8 +104,8 @@ function openLocationPickerModal() {
   });
 
   // Keyboard accessibility: Close on Escape
-  const onEscKey = (e) => {
-    if (e.key === 'Escape') {
+  const onEscKey = (evt) => {
+    if (evt.key === 'Escape') {
       closeLocationPickerModal();
       document.removeEventListener('keydown', onEscKey);
     }
@@ -408,9 +417,13 @@ function applyPickerLocation() {
  * Populates gpsCoords input and refreshes the Key Plan map thumbnail.
  * 
  * @function detectGPSLocation
+ * @param {Event} [e] - Click event
  * @returns {void}
  */
-function detectGPSLocation() {
+function detectGPSLocation(e) {
+  if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
+  if (e && typeof e.preventDefault === 'function') e.preventDefault();
+
   const btn = document.getElementById('btnLocateMe');
   const gpsInput = document.getElementById('gpsCoords');
   if (!navigator.geolocation) {
@@ -432,6 +445,7 @@ function detectGPSLocation() {
     const lon = Number(position.coords.longitude).toFixed(5);
     if (gpsInput) {
       gpsInput.value = `${lat}, ${lon}`;
+      if (typeof onGpsCoordsInput === 'function') onGpsCoordsInput();
       if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
     }
     if (btn) {
