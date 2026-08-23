@@ -117,7 +117,7 @@ assert.strictEqual(manager.catalog.kn['step2.bbmpZone.label'], 'ಬಿಬಿಎ�
 assert.strictEqual(manager.catalog.kn['step2.wardNo.label'], 'ಬಿಬಿಎಂಪಿ ವಾರ್ಡ್ ಸಂಖ್ಯೆ');
 assert.strictEqual(manager.catalog.kn['step2.wardName.label'], 'ವಾರ್ಡ್ / ಬಡಾವಣೆಯ ಹೆಸರು');
 assert.strictEqual(manager.catalog.kn['step2.address.label'], 'ಸಂಪೂರ್ಣ ಆಸ್ತಿ ವಿಳಾಸ');
-assert.strictEqual(manager.catalog.kn['step2.gpsCoords.label'], 'ನಿವೇಶನದ ಜಿಪಿಎಸ್ ನಿರ್ದೇಶಾಂಕಗಳು (ಐಚ್ಛಿಕ)');
+assert.strictEqual(manager.catalog.kn['step2.gpsCoords.label'], 'ನಿವೇಶನದ ಜಿಪಿಎಸ್ ನಿರ್ದೇಶಾಂಕಗಳು (ಅಕ್ಷಾಂಶ, ರೇಖಾಂಶ)');
 assert.strictEqual(manager.catalog.kn['step2.pickOnMap'], 'ನಕ್ಷೆಯಲ್ಲಿ ಗುರುತಿಸಿ');
 assert.strictEqual(manager.catalog.kn['step2.locateMe'], 'ನನ್ನ ಸ್ಥಳ ಗುರುತಿಸಿ');
 assert.strictEqual(manager.catalog.kn['step2.keyPlanPreview'], 'ಕೀ ಪ್ಲಾನ್ ನೇರ ಮುನ್ನೋಟ');
