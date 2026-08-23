@@ -1,14 +1,15 @@
 /**
- * @file navigation_order.unit.test.js
- * @description Unit and structural test suite verifying that all 6 HTML pages strictly adhere
- * to the standardized Information Architecture (IA) navigation order across desktop and mobile.
+ * @file navigation_routing.test.js
+ * @description Integration and Page Architecture test suite validating that all 6 HTML pages
+ * strictly adhere to the standardized Information Architecture (IA) navigation order,
+ * active link routing, and bilingual metadata attributes across desktop and mobile.
  */
 
 import { TestSuite, assert } from '../helpers/test_assert.js';
 import fs from 'fs';
 import path from 'path';
 
-const suite = new TestSuite('Navigation Order & Information Architecture (IA) Tests', '🧭');
+const suite = new TestSuite('Navigation & Page Architecture Integration Tests', '🧭');
 
 const HTML_PAGES = [
   'index.html',
@@ -34,7 +35,6 @@ HTML_PAGES.forEach(page => {
   suite.test(`${page} desktop navbar contains exact 6-link IA order`, () => {
     const html = fs.readFileSync(path.resolve(page), 'utf8');
 
-    // Extract desktop nav links block
     const desktopNavMatch = html.match(/<nav class="apple-nav-links desktop-nav-bar">([\s\S]*?)<\/nav>/);
     assert.ok(desktopNavMatch, `${page} must contain .desktop-nav-bar`);
 
@@ -58,7 +58,6 @@ HTML_PAGES.forEach(page => {
   suite.test(`${page} mobile nav slider contains exact 6-link IA order`, () => {
     const html = fs.readFileSync(path.resolve(page), 'utf8');
 
-    // Extract mobile nav slider block
     const mobileNavMatch = html.match(/<div class="mobile-nav-slider">([\s\S]*?)<\/div>/);
     assert.ok(mobileNavMatch, `${page} must contain .mobile-nav-slider`);
 
@@ -82,12 +81,10 @@ HTML_PAGES.forEach(page => {
   suite.test(`${page} marks itself active in both desktop and mobile navigation`, () => {
     const html = fs.readFileSync(path.resolve(page), 'utf8');
 
-    // Verify active desktop link
     const desktopActiveMatch = html.match(/<nav class="apple-nav-links desktop-nav-bar">[\s\S]*?<a\s+[^>]*href="([^"]+)"[^>]*class="[^"]*active[^"]*"[^>]*>/);
     assert.ok(desktopActiveMatch, `${page} desktop nav must have an active link`);
     assert.equal(desktopActiveMatch[1], page, `${page} desktop active link must point to ${page}`);
 
-    // Verify active mobile link
     const mobileActiveMatch = html.match(/<div class="mobile-nav-slider">[\s\S]*?<a\s+[^>]*href="([^"]+)"[^>]*class="[^"]*active[^"]*"[^>]*>/);
     assert.ok(mobileActiveMatch, `${page} mobile nav must have an active link`);
     assert.equal(mobileActiveMatch[1], page, `${page} mobile active link must point to ${page}`);

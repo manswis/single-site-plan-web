@@ -26,14 +26,14 @@ const TEST_TIERS = [
       'unit/theme.unit.test.js',
       'unit/contact.unit.test.js',
       'unit/analytics.unit.test.js',
-      'unit/smart_fill.unit.test.js',
-      'unit/navigation_order.unit.test.js'
+      'unit/smart_fill.unit.test.js'
     ]
   },
   {
     name: 'Tier 2: Subsystem & Workflow Integration Tests',
     icon: '⚙️',
     files: [
+      'integration/navigation_routing.test.js',
       'integration/map_picker_geocoding.test.js',
       'integration/signature_crop_chroma.test.js',
       'integration/draft_session_lifecycle.test.js',
