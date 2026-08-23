@@ -651,5 +651,7 @@ export const en = {
   "mapPicker.searchPlaceholder": "Search Bangalore area (e.g. Indiranagar, Whitefield)...",
   "mapPicker.layerStreet": "Street",
   "mapPicker.layerSatellite": "Satellite",
-  "mapPicker.dragInstruction": "Drag marker or click map to pinpoint site"
+  "mapPicker.dragInstruction": "Drag marker or click map to pinpoint site",
+  "mapPicker.selectedLabel": "Selected:",
+  "mapPicker.useThisLocation": "Use This Location"
 };

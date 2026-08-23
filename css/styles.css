@@ -1149,6 +1149,17 @@ body {
   color: #ffffff !important;
 }
 
+/* Map Drag Pin Instruction Badge (High Contrast White) */
+.map-drag-instruction-tag,
+.map-drag-instruction-tag span,
+.map-drag-instruction-tag .material-symbols-outlined,
+[data-theme="dark"] .map-drag-instruction-tag,
+[data-theme="dark"] .map-drag-instruction-tag span,
+[data-theme="dark"] .map-drag-instruction-tag .material-symbols-outlined {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
 [data-theme="dark"] .converter-preset-chip {
   background: rgba(41, 151, 255, 0.14);
   border-color: rgba(41, 151, 255, 0.38);
