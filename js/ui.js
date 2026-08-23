@@ -346,7 +346,7 @@ function onGpsZoomInput(val) {
     label.textContent = ZOOM_DESCRIPTIONS[num];
   }
   if (typeof saveDraft === 'function') saveDraft();
-  if (typeof generatePlan === 'function') generatePlan();
+  if (typeof updateKeyPlan === 'function') updateKeyPlan();
 }
 
 /**
@@ -399,8 +399,8 @@ function applyPickerLocation() {
   closeLocationPickerModal();
   syncGpsZoomControls();
 
+  if (typeof updateKeyPlan === 'function') updateKeyPlan();
   if (typeof saveDraft === 'function') saveDraft();
-  if (typeof generatePlan === 'function') generatePlan();
 }
 
 /**
@@ -424,8 +424,12 @@ function detectGPSLocation() {
   }
 
   const handleSuccess = (position) => {
-    const lat = position.coords.latitude.toFixed(5);
-    const lon = position.coords.longitude.toFixed(5);
+    if (!position || !position.coords) {
+      handleFinalError(new Error('Position unavailable'));
+      return;
+    }
+    const lat = Number(position.coords.latitude).toFixed(5);
+    const lon = Number(position.coords.longitude).toFixed(5);
     if (gpsInput) {
       gpsInput.value = `${lat}, ${lon}`;
       if (typeof clearFieldError === 'function') clearFieldError('gpsCoords', 'err-gpsCoords');
@@ -438,8 +442,8 @@ function detectGPSLocation() {
       }, 3000);
     }
     syncGpsZoomControls();
+    if (typeof updateKeyPlan === 'function') updateKeyPlan();
     if (typeof saveDraft === 'function') saveDraft();
-    if (typeof generatePlan === 'function') generatePlan();
   };
 
   const handleFinalError = (err) => {
@@ -448,28 +452,27 @@ function detectGPSLocation() {
       btn.disabled = false;
       btn.innerHTML = '<span class="material-symbols-outlined" style="font-size: 18px; color: var(--apple-accent);">my_location</span> <span>Locate Me</span>';
     }
-    if (err && err.code === 1) {
-      alert('Location permission was denied. Please enable location permissions in browser settings, or use "Pick on Map" to drop a pin.');
+    if (err && err.code === 1) { // PERMISSION_DENIED
+      alert('Location permission was denied. Please enable location permissions in browser settings, or click "Pick on Map" to select your site.');
     } else {
-      // Prompt user to pick on map if device hardware GPS fails
-      const fallbackPrompt = confirm('GPS signal could not be locked. Would you like to open the Map to pinpoint your site location?');
-      if (fallbackPrompt) {
-        openLocationPickerModal();
-      }
+      openLocationPickerModal();
     }
   };
 
   navigator.geolocation.getCurrentPosition(
     handleSuccess,
-    () => {
-      // Fallback attempt: enableHighAccuracy = false (uses cellular/wifi, works indoors and on weak GPS signals)
-      navigator.geolocation.getCurrentPosition(
-        handleSuccess,
-        handleFinalError,
-        { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
-      );
+    (err) => {
+      if (err && err.code !== 1) {
+        navigator.geolocation.getCurrentPosition(
+          handleSuccess,
+          handleFinalError,
+          { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 }
+        );
+      } else {
+        handleFinalError(err);
+      }
     },
-    { enableHighAccuracy: true, timeout: 6000, maximumAge: 60000 }
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 60000 }
   );
 }
 

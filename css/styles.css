@@ -118,12 +118,18 @@
   border-radius: 20px !important;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3) !important;
   width: 100% !important;
-  max-width: 440px !important;
+  max-width: 440px;
   margin: 0 auto !important;
   padding: 28px 24px !important;
   position: relative !important;
   color: var(--apple-text-primary) !important;
   animation: modalPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.map-picker-modal-card {
+  max-width: 720px !important;
+  width: 94% !important;
+  padding: 20px !important;
 }
 
 @keyframes modalPopIn {
