@@ -26,11 +26,11 @@ try {
 }
 
 const STEP3_PRESETS = {
-  '30x40': { nsFt: 30, nsIn: 0, ewFt: 40, ewIn: 0, area: 1200, roadWidthFt: 30, roadFacing: 'north' },
-  '40x60': { nsFt: 40, nsIn: 0, ewFt: 60, ewIn: 0, area: 2400, roadWidthFt: 40, roadFacing: 'east' },
-  '30x50': { nsFt: 30, nsIn: 0, ewFt: 50, ewIn: 0, area: 1500, roadWidthFt: 30, roadFacing: 'north' },
-  '20x30': { nsFt: 20, nsIn: 0, ewFt: 30, ewIn: 0, area: 600, roadWidthFt: 25, roadFacing: 'north' },
-  '50x80': { nsFt: 50, nsIn: 0, ewFt: 80, ewIn: 0, area: 4000, roadWidthFt: 50, roadFacing: 'east' }
+  '30x40': { nsFt: 30, nsIn: 0, ewFt: 40, ewIn: 0, area: 1200 },
+  '40x60': { nsFt: 40, nsIn: 0, ewFt: 60, ewIn: 0, area: 2400 },
+  '30x50': { nsFt: 30, nsIn: 0, ewFt: 50, ewIn: 0, area: 1500 },
+  '20x30': { nsFt: 20, nsIn: 0, ewFt: 30, ewIn: 0, area: 600 },
+  '50x80': { nsFt: 50, nsIn: 0, ewFt: 80, ewIn: 0, area: 4000 }
 };
 
 const STEP5_PRESETS = {
@@ -76,21 +76,24 @@ suite.test('All 5 Bangalore Dimension Presets have mathematically exact properti
   assert.equal(STEP3_PRESETS['50x80'].area, 4000);
 });
 
-suite.test('Step 3 Presets have valid orientation and road width properties', () => {
+suite.test('Step 3 Presets have valid positive span properties', () => {
   ['30x40', '40x60', '30x50', '20x30', '50x80'].forEach(id => {
     const p = STEP3_PRESETS[id];
     assert.ok(p.nsFt > 0, `${id} nsFt must be > 0`);
     assert.ok(p.ewFt > 0, `${id} ewFt must be > 0`);
-    assert.ok(p.roadWidthFt >= 20, `${id} road width must be >= 20`);
-    assert.ok(['north', 'east', 'south', 'west'].includes(p.roadFacing), `${id} facing valid`);
+    assert.ok(p.area > 0, `${id} area must be > 0`);
   });
 });
 
 suite.section('2. Step 3 Smart Fill Population in DOM');
 
-suite.test('applyStep3SmartFill populates fields and unchecks irregular plot mode', () => {
+suite.test('applyStep3SmartFill populates dimensions, unchecks irregular plot mode, and defaults scale to 1:100', () => {
   const oddCheck = mockDoc.getElementById('oddSiteCheck');
   oddCheck.checked = true;
+
+  // Set user customized road width and facing
+  mockDoc.getElementById('roadWidth_ft').value = '45';
+  mockDoc.getElementById('roadFacing').value = 'south';
 
   if (typeof mockWindow.applyStep3SmartFill === 'function') {
     mockWindow.applyStep3SmartFill('30x40');
@@ -99,20 +102,21 @@ suite.test('applyStep3SmartFill populates fields and unchecks irregular plot mod
     assert.equal(String(mockDoc.getElementById('regNorthSouth_ft').value), '30');
     assert.equal(String(mockDoc.getElementById('regEastWest_ft').value), '40');
     assert.equal(String(mockDoc.getElementById('plotArea').value), '1200');
-    assert.equal(String(mockDoc.getElementById('roadWidth_ft').value), '30');
-    assert.equal(String(mockDoc.getElementById('roadFacing').value), 'north');
+    assert.equal(String(mockDoc.getElementById('scale').value), '1:100', 'Scale must default to 1:100');
+
+    // Road width and facing must NOT be overridden
+    assert.equal(String(mockDoc.getElementById('roadWidth_ft').value), '45', 'Road width must be preserved');
+    assert.equal(String(mockDoc.getElementById('roadFacing').value), 'south', 'Road facing must be preserved');
   }
 });
 
-suite.test('applyStep3SmartFill handles 40x60 East-Facing preset accurately', () => {
+suite.test('applyStep3SmartFill handles 40x60 preset accurately', () => {
   if (typeof mockWindow.applyStep3SmartFill === 'function') {
     mockWindow.applyStep3SmartFill('40x60');
 
     assert.equal(String(mockDoc.getElementById('regNorthSouth_ft').value), '40');
     assert.equal(String(mockDoc.getElementById('regEastWest_ft').value), '60');
     assert.equal(String(mockDoc.getElementById('plotArea').value), '2400');
-    assert.equal(String(mockDoc.getElementById('roadWidth_ft').value), '40');
-    assert.equal(String(mockDoc.getElementById('roadFacing').value), 'east');
   }
 });
 
