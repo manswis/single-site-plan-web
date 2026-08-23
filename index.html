@@ -238,7 +238,7 @@
             <span class="material-symbols-outlined">visibility</span>
           </div>
           <div class="stat-info">
-            <span class="stat-number" id="statVisits">—</span>
+            <span class="stat-number" id="statVisits">195</span>
             <span class="stat-label" data-i18n="home.stats.visits">Total Visits</span>
           </div>
         </div>
@@ -248,7 +248,7 @@
             <span class="material-symbols-outlined">architecture</span>
           </div>
           <div class="stat-info">
-            <span class="stat-number" id="statPlans">—</span>
+            <span class="stat-number" id="statPlans">178</span>
             <span class="stat-label" data-i18n="home.stats.plans">Plans Generated</span>
           </div>
         </div>
@@ -413,14 +413,15 @@
       }
       window.location.href = 'studio.html?action=fresh';
     }
-
+  </script>
+  <script src="js/analytics.min.js?v=1.4.2"></script>
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (typeof initLiveStats === 'function') {
         initLiveStats(true);
       }
     });
   </script>
-  <script src="js/analytics.min.js"></script>
 </body>
 
 </html>

@@ -109,8 +109,133 @@ suite.test('isLocalEnvironment accurately detects 127.0.0.1, localhost, and file
   global.window = { location: { hostname: 'eplan-studio.karnataka.gov.in', protocol: 'https:' } };
   assert.equal(isLocalEnvironment(), false, 'Production public domain must NOT be local environment');
 
-  global.window = { location: { hostname: 'bbmp-eplan.in', protocol: 'https:' } };
-  assert.equal(isLocalEnvironment(), false, 'Custom public domain must NOT be local environment');
+  global.window = { location: { hostname: 'single-site-plan.cranbear.workers.dev', protocol: 'https:' } };
+  assert.equal(isLocalEnvironment(), false, 'Cloudflare workers domain must NOT be local environment');
+});
+
+suite.section('4. Instant Cache Rendering & Formatting');
+
+suite.test('updateStatElements formats numerical values with local thousands separators', async () => {
+  const { updateStatElements } = await import('../../js/analytics.js');
+  
+  // Setup mock document
+  const mockElem = { textContent: '' };
+  global.document = {
+    querySelectorAll: (selector) => {
+      if (selector === '#statVisits') return [mockElem];
+      return [];
+    }
+  };
+
+  updateStatElements('statVisits', 12345);
+  assert.equal(mockElem.textContent, (12345).toLocaleString());
+  
+  updateStatElements('statVisits', 195);
+  assert.equal(mockElem.textContent, '195');
+});
+
+suite.test('renderImmediateStats executes safely and renders baseline numbers', async () => {
+  const { renderImmediateStats } = await import('../../js/analytics.js');
+  const visitsEl = { textContent: '' };
+  const plansEl = { textContent: '' };
+  
+  global.document = {
+    querySelectorAll: (selector) => {
+      if (selector === '#statVisits') return [visitsEl];
+      if (selector === '#statPlans') return [plansEl];
+      return [];
+    }
+  };
+
+  renderImmediateStats();
+  assert.ok(visitsEl.textContent.length > 0, 'Visits must be rendered immediately');
+  assert.ok(plansEl.textContent.length > 0, 'Plans must be rendered immediately');
+});
+
+suite.section('5. Localhost vs Production Behavior Parity');
+
+suite.test('Localhost displays counter but skips increment network calls', async () => {
+  const { initLiveStats, trackPlanGenerated } = await import('../../js/analytics.js');
+  
+  // Configure environment as localhost
+  global.window = { location: { hostname: 'localhost', protocol: 'http:' } };
+  
+  const visitsEl = { textContent: '' };
+  const plansEl = { textContent: '' };
+  global.document = {
+    querySelectorAll: (selector) => {
+      if (selector === '#statVisits') return [visitsEl];
+      if (selector === '#statPlans') return [plansEl];
+      return [];
+    }
+  };
+
+  const fetchCalls = [];
+  global.fetch = async (url, options = {}) => {
+    fetchCalls.push({ url, method: options.method || 'GET' });
+    return {
+      ok: true,
+      json: async () => ({ visits: 200, plans: 180 })
+    };
+  };
+
+  // Run initLiveStats(true) on localhost
+  initLiveStats(true);
+  
+  // Must render counter immediately
+  assert.ok(visitsEl.textContent.length > 0, 'Counter must be displayed on localhost');
+  assert.ok(plansEl.textContent.length > 0, 'Plans counter must be displayed on localhost');
+  
+  // Must NOT have called any /hit/ endpoint or ?hit=true on localhost
+  const hitCall = fetchCalls.find(c => c.url.includes('hit=true') || c.url.includes('/hit/'));
+  assert.equal(hitCall, undefined, 'Localhost must never invoke increment hit endpoint');
+
+  // Trigger plan generation on localhost
+  trackPlanGenerated();
+  const planHit = fetchCalls.find(c => c.url.includes('/api/stats/plan') || c.url.includes('/hit/bbmp_eplan_studio_plans'));
+  assert.equal(planHit, undefined, 'Localhost must never increment production plan counter');
+});
+
+suite.test('Production site requests increment on new session and plan generation', async () => {
+  const { initLiveStats, trackPlanGenerated } = await import('../../js/analytics.js');
+  
+  // Configure environment as production
+  global.window = { location: { hostname: 'single-site-plan.cranbear.workers.dev', protocol: 'https:' } };
+  
+  const visitsEl = { textContent: '' };
+  const plansEl = { textContent: '' };
+  global.document = {
+    querySelectorAll: (selector) => {
+      if (selector === '#statVisits') return [visitsEl];
+      if (selector === '#statPlans') return [plansEl];
+      return [];
+    }
+  };
+  global.sessionStorage = {
+    getItem: () => null,
+    setItem: () => {}
+  };
+
+  const fetchCalls = [];
+  global.fetch = async (url, options = {}) => {
+    fetchCalls.push({ url, method: options.method || 'GET' });
+    return {
+      ok: true,
+      json: async () => ({ visits: 205, plans: 185 })
+    };
+  };
+
+  // Run initLiveStats(true) on production
+  initLiveStats(true);
+  
+  // Check that increment endpoint was requested
+  const hasHit = fetchCalls.some(c => c.url.includes('hit=true') || c.url.includes('/hit/'));
+  assert.ok(hasHit, 'Production site must request visit increment on initial session');
+
+  // Trigger trackPlanGenerated on production
+  trackPlanGenerated();
+  const planPost = fetchCalls.find(c => c.url.includes('/api/stats/plan') || c.url.includes('/hit/'));
+  assert.ok(planPost !== undefined, 'Production site must trigger plan increment call');
 });
 
 suite.finish();

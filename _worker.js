@@ -55,7 +55,7 @@ function jsonResponse(data, status = 200) {
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'DENY',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
-      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';",
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://countapi.mileshilliard.com https://nominatim.openstreetmap.org https://tile.openstreetmap.org https://server.arcgisonline.com;",
       'Cache-Control': 'no-store, no-cache, must-revalidate',
       'Access-Control-Allow-Origin': '*'
     }
@@ -210,6 +210,55 @@ export default {
     // Auto-update D1 table schema on API database operations
     if (pathname.startsWith('/api/') && env.DB) {
       await ensureSchemaUpdated(env.DB);
+    }
+
+    // =========================================================================
+    // 0. PUBLIC ROUTE: /api/stats & /api/stats/plan (Edge Counter Proxy & Sync)
+    // =========================================================================
+    if (pathname === '/api/stats' && request.method === 'GET') {
+      const shouldHit = url.searchParams.get('hit') === 'true' || url.searchParams.get('hit') === '1';
+      let visits = 195;
+      let plans = 178;
+
+      try {
+        const visitEndpoint = shouldHit
+          ? 'https://countapi.mileshilliard.com/api/v1/hit/bbmp_eplan_studio_visits_2026'
+          : 'https://countapi.mileshilliard.com/api/v1/get/bbmp_eplan_studio_visits_2026';
+
+        const [visitRes, planRes] = await Promise.allSettled([
+          fetch(visitEndpoint, { headers: { 'User-Agent': 'ePlanStudioEdge/1.2' } }),
+          fetch('https://countapi.mileshilliard.com/api/v1/get/bbmp_eplan_studio_plans_2026', { headers: { 'User-Agent': 'ePlanStudioEdge/1.2' } })
+        ]);
+
+        if (visitRes.status === 'fulfilled' && visitRes.value.ok) {
+          const vData = await visitRes.value.json();
+          if (typeof vData.value === 'number') visits = vData.value;
+        }
+        if (planRes.status === 'fulfilled' && planRes.value.ok) {
+          const pData = await planRes.value.json();
+          if (typeof pData.value === 'number') plans = pData.value;
+        }
+      } catch (e) {
+        console.warn('Worker stats proxy notice:', e.message);
+      }
+
+      return jsonResponse({ visits, plans });
+    }
+
+    if ((pathname === '/api/stats/plan' || pathname === '/api/stats/plans') && (request.method === 'POST' || request.method === 'GET')) {
+      let plans = 178;
+      try {
+        const res = await fetch('https://countapi.mileshilliard.com/api/v1/hit/bbmp_eplan_studio_plans_2026', {
+          headers: { 'User-Agent': 'ePlanStudioEdge/1.2' }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (typeof data.value === 'number') plans = data.value;
+        }
+      } catch (e) {
+        console.warn('Worker plan increment notice:', e.message);
+      }
+      return jsonResponse({ success: true, plans });
     }
 
     // =========================================================================
