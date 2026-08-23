@@ -21,7 +21,8 @@ const TEST_FILES = [
   'i18n.test.js',
   'dom_simulation.test.js',
   'all_steps_workflow.test.js',
-  'all_inputs_controls.test.js'
+  'all_inputs_controls.test.js',
+  'po_concrete_quality.test.js'
 ];
 
 console.log('🏛️  [e-Plan Studio] Starting Complete Automated Quality Test Suite...\n');
