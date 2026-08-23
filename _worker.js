@@ -262,6 +262,39 @@ export default {
     }
 
     // =========================================================================
+    // 0.1 PUBLIC ROUTE: POST /api/indexnow (Instant Bing / IndexNow Search Engine Ping)
+    // =========================================================================
+    if (pathname === '/api/indexnow' && (request.method === 'POST' || request.method === 'GET')) {
+      const host = url.hostname;
+      const key = '4xWkz9d39ezgNpyCwN-Jj-RLCUIdIaRYAhds4JPQHyY';
+      const keyLocation = `https://${host}/${key}.txt`;
+      const urlList = [
+        `https://${host}/`,
+        `https://${host}/studio.html`,
+        `https://${host}/faq.html`,
+        `https://${host}/pricing.html`,
+        `https://${host}/contact.html`,
+        `https://${host}/legal.html`
+      ];
+
+      try {
+        const pingRes = await fetch('https://api.indexnow.org/IndexNow', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify({
+            host,
+            key,
+            keyLocation,
+            urlList
+          })
+        });
+        return jsonResponse({ success: true, status: pingRes.status, message: 'IndexNow notified successfully.' });
+      } catch (err) {
+        return jsonResponse({ success: false, error: err.message }, 500);
+      }
+    }
+
+    // =========================================================================
     // 1. PUBLIC ROUTE: POST /api/tickets (Submit a Request)
     // =========================================================================
     if (pathname === '/api/tickets' && request.method === 'POST') {

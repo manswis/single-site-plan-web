@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://single-site-plan.cranbear.workers.dev/</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-08-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://single-site-plan.cranbear.workers.dev/"/>
@@ -11,7 +11,7 @@
   </url>
   <url>
     <loc>https://single-site-plan.cranbear.workers.dev/studio.html</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-08-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://single-site-plan.cranbear.workers.dev/studio.html"/>
@@ -19,7 +19,7 @@
   </url>
   <url>
     <loc>https://single-site-plan.cranbear.workers.dev/faq.html</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://single-site-plan.cranbear.workers.dev/faq.html"/>
@@ -27,20 +27,26 @@
   </url>
   <url>
     <loc>https://single-site-plan.cranbear.workers.dev/pricing.html</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-08-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://single-site-plan.cranbear.workers.dev/pricing.html"/>
+    <xhtml:link rel="alternate" hreflang="kn" href="https://single-site-plan.cranbear.workers.dev/pricing.html?lang=kn"/>
   </url>
   <url>
     <loc>https://single-site-plan.cranbear.workers.dev/contact.html</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-08-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://single-site-plan.cranbear.workers.dev/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="kn" href="https://single-site-plan.cranbear.workers.dev/contact.html?lang=kn"/>
   </url>
   <url>
     <loc>https://single-site-plan.cranbear.workers.dev/legal.html</loc>
-    <lastmod>2026-08-22</lastmod>
+    <lastmod>2026-08-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://single-site-plan.cranbear.workers.dev/legal.html"/>
+    <xhtml:link rel="alternate" hreflang="kn" href="https://single-site-plan.cranbear.workers.dev/legal.html?lang=kn"/>
   </url>
 </urlset>
