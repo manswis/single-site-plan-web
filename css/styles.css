@@ -1066,35 +1066,107 @@ body {
 .map-layer-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  font-size: 11.5px;
+  gap: 5px;
+  padding: 4px 11px;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 6px;
   border: none;
   background: transparent;
-  color: var(--apple-text-secondary);
+  color: #334155;
   cursor: pointer;
   transition: all 0.15s ease;
   user-select: none;
 }
 
+.map-layer-btn span {
+  color: #334155;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.map-layer-btn .material-symbols-outlined {
+  color: #475569;
+  font-size: 15px;
+}
+
 .map-layer-btn:hover {
-  color: var(--apple-text-primary);
+  background: rgba(0, 113, 227, 0.08);
+  color: var(--apple-accent);
+}
+
+.map-layer-btn:hover span,
+.map-layer-btn:hover .material-symbols-outlined {
+  color: var(--apple-accent);
 }
 
 .map-layer-btn.active {
   background: var(--apple-accent) !important;
   color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 113, 227, 0.3);
 }
 
+.map-layer-btn.active span,
 .map-layer-btn.active .material-symbols-outlined {
   color: #ffffff !important;
 }
 
+/* Dark Mode Contrast */
 [data-theme="dark"] .map-layer-toggle-group {
-  background: rgba(30, 41, 59, 0.92) !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(24, 24, 27, 0.94) !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .map-layer-btn {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .map-layer-btn span {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .map-layer-btn .material-symbols-outlined {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .map-layer-btn:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+}
+
+[data-theme="dark"] .map-layer-btn:hover span,
+[data-theme="dark"] .map-layer-btn:hover .material-symbols-outlined {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .map-layer-btn.active {
+  background: #2997ff !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .map-layer-btn.active span,
+[data-theme="dark"] .map-layer-btn.active .material-symbols-outlined {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .converter-preset-chip {
+  background: rgba(41, 151, 255, 0.14);
+  border-color: rgba(41, 151, 255, 0.38);
+  color: #70baff;
+}
+
+[data-theme="dark"] .converter-preset-chip span {
+  color: #70baff;
+}
+
+[data-theme="dark"] .converter-preset-chip:hover {
+  background: #2997ff;
+  border-color: #2997ff;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .converter-preset-chip:hover span {
+  color: #ffffff !important;
 }
 
 /* Result Banner */
