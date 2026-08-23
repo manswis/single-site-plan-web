@@ -29,13 +29,14 @@
 
 /* Dark Mode Tokens & Overrides */
 [data-theme="dark"] {
-  --apple-bg: #0d0d0e;
-  --apple-card-bg: #1c1c1e;
-  --apple-text-primary: #f5f5f7;
-  --apple-text-secondary: #98989d;
-  --apple-accent: #2997ff;
-  --apple-accent-hover: #0077ed;
-  --apple-border: rgba(255, 255, 255, 0.14);
+  --apple-bg: #0b0c0e;
+  --apple-card-bg: #181a20;
+  --apple-text-primary: #ffffff;
+  --apple-text-secondary: #cbd5e1;
+  --apple-text-muted: #94a3b8;
+  --apple-accent: #38bdf8;
+  --apple-accent-hover: #0ea5e9;
+  --apple-border: rgba(255, 255, 255, 0.16);
   --apple-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   --apple-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.7);
 }
@@ -46,8 +47,8 @@
 }
 
 [data-theme="dark"] .apple-navbar {
-  background: rgba(28, 28, 30, 0.85) !important;
-  border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(24, 26, 32, 0.88) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.14) !important;
 }
 
 /* All Cards, Workbench Steps, Pricing, FAQ, Help & Legal Containers */
@@ -68,18 +69,150 @@
 [data-theme="dark"] .mobile-step-card,
 [data-theme="dark"] .action-bar,
 [data-theme="dark"] .apple-modal-card {
-  background: #1c1c1e !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: #181a20 !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
   color: var(--apple-text-primary) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
-[data-theme="dark"] .faq-question {
-  color: var(--apple-text-primary) !important;
+[data-theme="dark"] p,
+[data-theme="dark"] .card-desc,
+[data-theme="dark"] .tile-desc,
+[data-theme="dark"] .faq-answer,
+[data-theme="dark"] .privacy-note,
+[data-theme="dark"] .diagnostics-info-badge,
+[data-theme="dark"] .help-field-desc,
+[data-theme="dark"] .stat-label,
+[data-theme="dark"] .meta-label,
+[data-theme="dark"] .chat-timestamp,
+[data-theme="dark"] .support-hero-desc {
+  color: #cbd5e1 !important;
 }
 
-[data-theme="dark"] .faq-answer {
-  color: var(--apple-text-secondary) !important;
+[data-theme="dark"] .form-field-label,
+[data-theme="dark"] .field-label,
+[data-theme="dark"] .tile-title,
+[data-theme="dark"] .meta-value,
+[data-theme="dark"] .chat-sender-name,
+[data-theme="dark"] .chat-message-text,
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .label-optional,
+[data-theme="dark"] .optional-tag,
+[data-theme="dark"] .helper-text {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] ::placeholder {
+  color: #94a3b8 !important;
+  opacity: 0.9 !important;
+}
+
+[data-theme="dark"] .field-control,
+[data-theme="dark"] .apple-input,
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="email"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background-color: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .field-control:focus,
+[data-theme="dark"] .apple-input:focus,
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+}
+
+[data-theme="dark"] .input-icon {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .category-tile {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-theme="dark"] .category-tile:hover {
+  background: #283548 !important;
+  border-color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .category-tile.active {
+  background: rgba(56, 189, 248, 0.14) !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 1.5px #38bdf8, 0 6px 20px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="dark"] .support-tab-btn {
+  background: #1e293b !important;
+  color: #cbd5e1 !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+[data-theme="dark"] .support-tab-btn:hover {
+  color: #ffffff !important;
+  background: #283548 !important;
+}
+
+[data-theme="dark"] .support-tab-btn.active {
+  background: #0071e3 !important;
+  color: #ffffff !important;
+  border-color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .priority-segmented-control {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-theme="dark"] .priority-btn {
+  background: transparent !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .priority-btn:hover {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .priority-btn.active {
+  background: #2c3340 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .dropzone-box {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+[data-theme="dark"] .dropzone-text-main {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .dropzone-text-sub {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .diagnostics-info-badge {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .faq-question {
+  color: #ffffff !important;
 }
 
 [data-theme="dark"] .sample-snippet-box {
