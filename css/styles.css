@@ -7378,6 +7378,111 @@ body.pdf-export-active .drawing-canvas-column,
   color: #ffffff !important;
 }
 
+/* Apple-Themed Map Modal Toolbar Buttons */
+.map-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: 8px;
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  color: var(--apple-text-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.map-toolbar-btn span {
+  color: var(--apple-text-primary);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.map-toolbar-btn .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.map-toolbar-btn:hover {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: var(--apple-accent);
+  color: var(--apple-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+}
+
+.map-toolbar-btn:hover span {
+  color: var(--apple-accent);
+}
+
+.map-toolbar-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.map-toolbar-btn-primary {
+  background: var(--apple-accent) !important;
+  border-color: var(--apple-accent) !important;
+  color: #ffffff !important;
+}
+
+.map-toolbar-btn-primary span,
+.map-toolbar-btn-primary .material-symbols-outlined {
+  color: #ffffff !important;
+}
+
+.map-toolbar-btn-primary:hover {
+  background: var(--apple-accent-hover) !important;
+  border-color: var(--apple-accent-hover) !important;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.28) !important;
+}
+
+.map-toolbar-btn-primary:hover span,
+.map-toolbar-btn-primary:hover .material-symbols-outlined {
+  color: #ffffff !important;
+}
+
+/* Dark Mode Toolbar Buttons */
+[data-theme="dark"] .map-toolbar-btn {
+  background: #2c2c2e !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .map-toolbar-btn span {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .map-toolbar-btn:hover {
+  background: #3a3a3c !important;
+  border-color: #2997ff !important;
+}
+
+[data-theme="dark"] .map-toolbar-btn:hover span {
+  color: #2997ff !important;
+}
+
+[data-theme="dark"] .map-toolbar-btn-primary {
+  background: #2997ff !important;
+  border-color: #2997ff !important;
+}
+
+[data-theme="dark"] .map-toolbar-btn-primary span,
+[data-theme="dark"] .map-toolbar-btn-primary .material-symbols-outlined {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .map-toolbar-btn-primary:hover {
+  background: #0077ed !important;
+  border-color: #0077ed !important;
+}
+
 /* Mobile Phone Responsive (< 640px) */
 @media (max-width: 639px) {
   .gps-field-layout {

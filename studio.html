@@ -217,25 +217,23 @@
         style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 12px;">
         <div style="display: flex; gap: 6px; flex: 1; min-width: 220px;">
           <input id="mapSearchInput" type="text" placeholder="Search Bangalore area (e.g. Indiranagar, Whitefield)..."
-            style="padding: 7px 12px; font-size: 12px; border-radius: 8px; border: 1px solid var(--apple-border); flex: 1; background: var(--apple-bg); color: var(--apple-text-primary);"
+            style="padding: 8px 12px; font-size: 12.5px; border-radius: 8px; border: 1px solid var(--apple-border); flex: 1; background: var(--apple-bg); color: var(--apple-text-primary);"
             onkeydown="if(event.key==='Enter'){event.preventDefault();searchMapLocation();}">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="searchMapLocation()"
-            style="padding: 7px 12px; font-size: 12px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px;">
-            <span class="material-symbols-outlined" style="font-size: 16px;">search</span>
+          <button type="button" class="map-toolbar-btn map-toolbar-btn-primary" onclick="searchMapLocation()"
+            title="Search Location">
+            <span class="material-symbols-outlined">search</span>
             <span>Search</span>
           </button>
         </div>
         <div style="display: flex; gap: 6px;">
-          <button type="button" class="btn btn-secondary btn-sm" onclick="locateOnPickerMap()"
-            title="Fly to my current location"
-            style="padding: 7px 10px; font-size: 12px; gap: 4px; display: inline-flex; align-items: center; border-radius: 8px;">
-            <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">near_me</span>
+          <button type="button" class="map-toolbar-btn" onclick="locateOnPickerMap()"
+            title="Fly to my current location">
+            <span class="material-symbols-outlined" style="color: var(--apple-accent);">near_me</span>
             <span>My Location</span>
           </button>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="resetToBangaloreCenter()"
-            title="Center on Bangalore"
-            style="padding: 7px 10px; font-size: 12px; gap: 4px; display: inline-flex; align-items: center; border-radius: 8px;">
-            <span class="material-symbols-outlined" style="font-size: 16px;">apartment</span>
+          <button type="button" class="map-toolbar-btn" onclick="resetToBangaloreCenter()"
+            title="Center on Bangalore">
+            <span class="material-symbols-outlined" style="color: #64748b;">apartment</span>
             <span>Bangalore Center</span>
           </button>
         </div>
