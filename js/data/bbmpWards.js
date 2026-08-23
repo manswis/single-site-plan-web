@@ -11,9 +11,9 @@ export const BBMP_ZONES = [
   { id: 'East', nameEn: 'East Zone', nameKn: 'ಪೂರ್ವ ವಲಯ', color: '#0284c7' },
   { id: 'West', nameEn: 'West Zone', nameKn: 'ಪಶ್ಚಿಮ ವಲಯ', color: '#7c3aed' },
   { id: 'South', nameEn: 'South Zone', nameKn: 'ದಕ್ಷಿಣ ವಲಯ', color: '#10b981' },
+  { id: 'Yelahanka', nameEn: 'North (Yelahanka) Zone', nameKn: 'ಉತ್ತರ (ಯಲಹಂಕ) ವಲಯ', color: '#06b6d4' },
   { id: 'Mahadevapura', nameEn: 'Mahadevapura Zone', nameKn: 'ಮಹದೇವಪುರ ವಲಯ', color: '#f59e0b' },
   { id: 'Bommanahalli', nameEn: 'Bommanahalli Zone', nameKn: 'ಬೊಮ್ಮನಹಳ್ಳಿ ವಲಯ', color: '#ec4899' },
-  { id: 'Yelahanka', nameEn: 'Yelahanka Zone', nameKn: 'ಯಲಹಂಕ ವಲಯ', color: '#06b6d4' },
   { id: 'Rajarajeshwari Nagar', nameEn: 'RR Nagar Zone', nameKn: 'ರಾಜರಾಜೇಶ್ವರಿನಗರ ವಲಯ', color: '#8b5cf6' },
   { id: 'Dasarahalli', nameEn: 'Dasarahalli Zone', nameKn: 'ದಾಸರಹಳ್ಳಿ ವಲಯ', color: '#f97316' }
 ];
