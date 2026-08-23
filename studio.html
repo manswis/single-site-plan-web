@@ -744,39 +744,34 @@
               placeholder="e.g. 108-W0045-12 (Optional)">
           </div>
           <div class="field">
-            <label>SAS Application / Khata No <span
-                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
-            <input id="sasNo" type="text" placeholder="e.g. 812139278 (Optional)">
+            <label><span data-i18n="step1.sasNo.label">SAS Application / Khata No</span> <span data-i18n="common.optional" style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
+            <input id="sasNo" type="text" data-i18n-placeholder="step1.sasNo.placeholder" placeholder="e.g. 812139278 (Optional)">
           </div>
           <div class="field">
-            <label>ADLR 11E Survey Sketch No <span
-                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
+            <label><span data-i18n="step1.adlrNo.label">ADLR 11E Survey Sketch No</span> <span data-i18n="common.optional" style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
                 type="button" class="field-help-btn" onclick="showFieldHelp('adlrNo')" title="Help & Where to find"><svg
                   viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="adlrNo" type="text" placeholder="e.g. ADLR/11E/KR-7891/2023-24 (Optional)">
+            <input id="adlrNo" type="text" data-i18n-placeholder="step1.adlrNo.placeholder" placeholder="e.g. ADLR/11E/KR-7891/2023-24 (Optional)">
           </div>
           <div class="field">
-            <label>DC Conversion Order No <span
-                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
+            <label><span data-i18n="step1.dcOrderNo.label">DC Conversion Order No</span> <span data-i18n="common.optional" style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
                 type="button" class="field-help-btn" onclick="showFieldHelp('dcOrderNo')"
                 title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="dcOrderNo" type="text" placeholder="e.g. ALN(E)SR.(Kr.Ho)97/07-08 (Optional)">
+            <input id="dcOrderNo" type="text" data-i18n-placeholder="step1.dcOrderNo.placeholder" placeholder="e.g. ALN(E)SR.(Kr.Ho)97/07-08 (Optional)">
           </div>
           <div class="field">
-            <label>DC Conversion Date <span
-                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
+            <label><span data-i18n="step1.dcOrderDate.label">DC Conversion Date</span> <span data-i18n="common.optional" style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
             <input id="dcOrderDate" type="date">
           </div>
           <div class="field">
-            <label>Conversion Authority <span
-                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
-            <input id="dcAuthority" type="text" placeholder="e.g. DC, Bengaluru Urban District">
+            <label><span data-i18n="step1.dcAuthority.label">Conversion Authority</span> <span data-i18n="common.optional" style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span></label>
+            <input id="dcAuthority" type="text" data-i18n-placeholder="step1.dcAuthority.placeholder" placeholder="e.g. DC, Bengaluru Urban District">
           </div>
         </div>
       </div>
@@ -789,102 +784,98 @@
         </div>
         <div class="grid">
           <div class="field">
-            <label>Survey Number <span class="required">*</span> <button type="button" class="field-help-btn"
+            <label><span data-i18n="step2.surveyNo.label">Survey Number</span> <span class="required">*</span> <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('surveyNo')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="surveyNo" type="text" placeholder="e.g. 45/2A"
+            <input id="surveyNo" type="text" data-i18n-placeholder="step2.surveyNo.placeholder" placeholder="e.g. 45/2A"
               oninput="clearFieldError('surveyNo', 'err-surveyNo')">
-            <div class="error-msg" id="err-surveyNo">⚠ Survey number is required</div>
+            <div class="error-msg" id="err-surveyNo" data-i18n="step2.err.surveyNo">⚠ Survey number is required</div>
           </div>
           <div class="field">
-            <label>Site / Plot Number <span
-                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
+            <label><span data-i18n="step2.plotNo.label">Site / Plot Number</span> <span data-i18n="common.optional" style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
                 type="button" class="field-help-btn" onclick="showFieldHelp('plotNo')" title="Help & Where to find"><svg
                   viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="plotNo" type="text" placeholder="e.g. 39 or Site No. 42"
+            <input id="plotNo" type="text" data-i18n-placeholder="step2.plotNo.placeholder" placeholder="e.g. 39 or Site No. 42"
               oninput="clearFieldError('plotNo', 'err-plotNo')">
           </div>
           <div class="field">
-            <label>BBMP Zone <span class="required">*</span> <button type="button" class="field-help-btn"
+            <label><span data-i18n="step2.bbmpZone.label">BBMP Zone</span> <span class="required">*</span> <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('zoneName')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
             <div style="display: flex; align-items: center; gap: 8px;">
               <select id="bbmpZone" style="flex: 1;" onchange="clearFieldError('bbmpZone', 'err-bbmpZone')">
-                <option value="" selected>-- Select Zone --</option>
-                <option value="East">East Zone</option>
-                <option value="West">West Zone</option>
-                <option value="South">South Zone</option>
-                <option value="Mahadevapura">Mahadevapura Zone</option>
-                <option value="Yelahanka">Yelahanka Zone</option>
-                <option value="Dasarahalli">Dasarahalli Zone</option>
-                <option value="Bommanahalli">Bommanahalli Zone</option>
-                <option value="Rajarajeshwari Nagar">RR Nagar Zone</option>
+                <option value="" selected data-i18n="step2.selectZone">-- Select Zone --</option>
+                <option value="East" data-i18n="zone.east">East Zone</option>
+                <option value="West" data-i18n="zone.west">West Zone</option>
+                <option value="South" data-i18n="zone.south">South Zone</option>
+                <option value="Mahadevapura" data-i18n="zone.mahadevapura">Mahadevapura Zone</option>
+                <option value="Yelahanka" data-i18n="zone.yelahanka">Yelahanka Zone</option>
+                <option value="Dasarahalli" data-i18n="zone.dasarahalli">Dasarahalli Zone</option>
+                <option value="Bommanahalli" data-i18n="zone.bommanahalli">Bommanahalli Zone</option>
+                <option value="Rajarajeshwari Nagar" data-i18n="zone.rrnagar">RR Nagar Zone</option>
               </select>
-              <button type="button" class="zone-search-circle-btn" onclick="openWardSearchModal(event)"
-                title="Search 198 BBMP Wards & Localities Directory" aria-label="Search BBMP Wards">
+              <button type="button" class="zone-search-circle-btn" onclick="openWardSearchModal(event)" data-i18n-title="step2.searchWards" title="Search 198 BBMP Wards & Localities Directory" aria-label="Search BBMP Wards">
                 <span class="material-symbols-outlined">search</span>
               </button>
             </div>
-            <div class="error-msg" id="err-bbmpZone">⚠ Select BBMP Zone</div>
+            <div class="error-msg" id="err-bbmpZone" data-i18n="step2.err.zone">⚠ Select BBMP Zone</div>
           </div>
           <div class="field">
-            <label>Ward Number <span class="required">*</span> <button type="button" class="field-help-btn"
+            <label><span data-i18n="step2.wardNo.label">Ward Number</span> <span class="required">*</span> <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('wardNo')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="wardNo" type="text" placeholder="e.g. 45" oninput="clearFieldError('wardNo', 'err-wardNo')">
-            <div class="error-msg" id="err-wardNo">⚠ Ward number is required</div>
+            <input id="wardNo" type="text" data-i18n-placeholder="step2.wardNo.placeholder" placeholder="e.g. 45" oninput="clearFieldError('wardNo', 'err-wardNo')">
+            <div class="error-msg" id="err-wardNo" data-i18n="step2.err.wardNo">⚠ Ward number is required</div>
           </div>
           <div class="field">
-            <label>Ward Name <span class="required">*</span></label>
-            <input id="wardName" type="text" placeholder="e.g. Malleshwaram"
+            <label><span data-i18n="step2.wardName.label">Ward Name</span> <span class="required">*</span></label>
+            <input id="wardName" type="text" data-i18n-placeholder="step2.wardName.placeholder" placeholder="e.g. Malleshwaram"
               oninput="clearFieldError('wardName', 'err-wardName')">
-            <div class="error-msg" id="err-wardName">⚠ Ward name is required</div>
+            <div class="error-msg" id="err-wardName" data-i18n="step2.err.wardName">⚠ Ward name is required</div>
           </div>
           <div class="field" style="grid-column: span 2;">
-            <label>Site Address / Location <span class="required">*</span> <button type="button" class="field-help-btn"
+            <label><span data-i18n="step2.address.label">Site Address / Location</span> <span class="required">*</span> <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('siteAddress')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <input id="address" type="text" placeholder="e.g. No. 12, 3rd Cross, Rajajinagar, Bangalore - 560010"
+            <input id="address" type="text" data-i18n-placeholder="step2.address.placeholder" placeholder="e.g. No. 12, 3rd Cross, Rajajinagar, Bangalore - 560010"
               oninput="clearFieldError('address', 'err-address')">
-            <div class="error-msg" id="err-address">⚠ Site address is required</div>
+            <div class="error-msg" id="err-address" data-i18n="step2.err.address">⚠ Site address is required</div>
           </div>
           <div class="field" style="grid-column: span 2;">
-            <label style="margin-bottom: 6px;">GPS Coordinates (Latitude, Longitude) <span
-                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
+            <label style="margin-bottom: 6px;"><span data-i18n="step2.gpsCoords.label">GPS Coordinates (Latitude, Longitude)</span> <span data-i18n="common.optional" style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span> <button
                 type="button" class="field-help-btn" onclick="showFieldHelp('gpsCoords')"
                 title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
             <div class="gps-field-layout">
-              <input id="gpsCoords" type="text" placeholder="e.g. 12.9716, 77.5946" oninput="onGpsCoordsInput()">
+              <input id="gpsCoords" type="text" data-i18n-placeholder="step2.gpsCoords.placeholder" placeholder="e.g. 12.9716, 77.5946" oninput="onGpsCoordsInput()">
               <div class="gps-action-buttons">
                 <button type="button" class="gps-action-btn" id="btnOpenMapPicker"
                   onclick="openLocationPickerModal(event)">
                   <span class="material-symbols-outlined"
                     style="font-size: 18px; color: var(--apple-accent);">map</span>
-                  <span>Pick on Map</span>
+                  <span data-i18n="step2.pickOnMap">Pick on Map</span>
                 </button>
                 <button type="button" class="gps-action-btn" id="btnLocateMe" onclick="detectGPSLocation(event)">
                   <span class="material-symbols-outlined"
                     style="font-size: 18px; color: var(--apple-accent);">my_location</span>
-                  <span>Locate Me</span>
+                  <span data-i18n="step2.locateMe">Locate Me</span>
                 </button>
               </div>
             </div>
-            <div class="error-msg" id="err-gpsCoords">⚠ Please enter valid GPS coordinates (e.g. 12.9716, 77.5946 or
-              Google Maps link)</div>
+            <div class="error-msg" id="err-gpsCoords" data-i18n="step2.err.gps">⚠ Please enter valid GPS coordinates (e.g. 12.9716, 77.5946 or Google Maps link)</div>
 
             <!-- Inline Live Map Preview & Zoom Adjustment (Step 2) -->
             <div id="gpsZoomControlWrap"
@@ -893,7 +884,7 @@
               <!-- Live Preview Map Box -->
               <div
                 style="position: relative; width: 100%; height: 160px; border-radius: 10px; overflow: hidden; border: 1px solid var(--apple-border); background: #e5e7eb; margin-bottom: 12px;">
-                <img id="step2MapPreviewImg" src="" alt="Key Plan Preview" crossorigin="anonymous"
+                <img id="step2MapPreviewImg" src="" alt="Key Plan Preview" data-i18n-alt="step2.keyPlanPreview" crossorigin="anonymous"
                   style="width: 100%; height: 100%; object-fit: cover; display: block;"
                   onerror="this.style.display='none'" />
 
@@ -911,7 +902,7 @@
                 <div
                   style="position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.65); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); color: #ffffff; padding: 3px 8px; border-radius: 6px; font-size: 10.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; z-index: 3;">
                   <span class="material-symbols-outlined" style="font-size: 13px; color: #60a5fa;">visibility</span>
-                  <span>Key Plan Live Preview</span>
+                  <span data-i18n="step2.keyPlanPreview">Key Plan Live Preview</span>
                 </div>
               </div>
 
@@ -921,22 +912,20 @@
                 <span style="display: inline-flex; align-items: center; gap: 4px; color: var(--apple-text-primary);">
                   <span class="material-symbols-outlined"
                     style="font-size: 16px; color: var(--apple-accent);">zoom_in</span>
-                  Map Zoom Level: <span id="gpsZoomValLabel" style="color: var(--apple-accent); font-weight: 700;">16
+                  <span data-i18n="step2.mapZoomLevel">Map Zoom Level:</span> <span id="gpsZoomValLabel" style="color: var(--apple-accent); font-weight: 700;">16
                     (Standard Layout & Cross Roads)</span>
                 </span>
               </div>
               <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 11px; color: var(--apple-text-secondary); white-space: nowrap;">Wide (14)</span>
+                <span style="font-size: 11px; color: var(--apple-text-secondary); white-space: nowrap;" data-i18n="step2.zoomWide">Wide (14)</span>
                 <input id="gpsZoom" type="range" min="14" max="18" step="1" value="16"
                   style="flex: 1; accent-color: var(--apple-accent); cursor: pointer;"
                   oninput="onGpsZoomInput(this.value)">
-                <span style="font-size: 11px; color: var(--apple-text-secondary); white-space: nowrap;">Close
-                  (18)</span>
+                <span style="font-size: 11px; color: var(--apple-text-secondary); white-space: nowrap;" data-i18n="step2.zoomClose">Close (18)</span>
               </div>
             </div>
 
-            <p style="margin: 6px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Auto-embeds a locational
-              map tile into Key Plan Panel 2 on the layout sheet.</p>
+            <p style="margin: 6px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);" data-i18n="step2.mapNote">Auto-embeds a locational map tile into Key Plan Panel 2 on the layout sheet.</p>
           </div>
         </div>
       </div>
@@ -951,22 +940,20 @@
         <div class="checkbox-box" style="margin-bottom: 18px; background: #f0f9ff; border: 1.5px solid #0284c7;">
           <label style="cursor: pointer;">
             <input type="checkbox" id="oddSiteCheck" onchange="toggleOddSite()">
-            <span style="font-weight: 700; color: #0369a1;">🔷 Irregular / Odd Shaped Site (4 sides have different
-              measurements)</span>
+            <span style="font-weight: 700; color: #0369a1;" data-i18n="step3.oddSite.title">🔷 Irregular / Odd Shaped Site (4 sides have different measurements)</span>
           </label>
-          <p id="oddSiteHint" style="margin-top: 4px; font-size: 11px; color: #0284c7;">Rectangular Mode (Default):
-            Opposite sides auto-sync as you type. Check this box for irregular sites.</p>
+          <p id="oddSiteHint" style="margin-top: 4px; font-size: 11px; color: #0284c7;" data-i18n="step3.oddSite.hint">Rectangular Mode (Default): Opposite sides auto-sync as you type. Check this box for irregular sites.</p>
         </div>
 
         <div class="grid">
           <div class="field" style="position: relative;">
-            <label>Plot Area (sq.ft) <span class="required">*</span> <button type="button" class="field-help-btn"
+            <label><span data-i18n="step3.plotArea.label">Plot Area (sq.ft)</span> <span class="required">*</span> <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('plotArea')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
             <div style="display: flex; align-items: center; gap: 8px;">
-              <input id="plotArea" type="number" style="flex: 1;" placeholder="e.g. 2400"
+              <input id="plotArea" type="number" style="flex: 1;" data-i18n-placeholder="step3.plotArea.placeholder" placeholder="e.g. 2400"
                 oninput="this.dataset.userEdited='true'; clearFieldError('plotArea', 'err-plotArea'); if(typeof renderCanvas==='function') renderCanvas();">
               <button type="button" class="zone-search-circle-btn" onclick="openAreaConverterModal(event)"
                 data-i18n-title="converter.btnTooltip" data-i18n-aria="converter.btnTooltip"
@@ -974,10 +961,10 @@
                 <span class="material-symbols-outlined">swap_horiz</span>
               </button>
             </div>
-            <div class="error-msg" id="err-plotArea">⚠ Plot area is required</div>
+            <div class="error-msg" id="err-plotArea" data-i18n="step3.err.plotArea">⚠ Plot area is required</div>
           </div>
           <div class="field">
-            <label>Primary Abutting Road Width <span class="required">*</span> <button type="button"
+            <label><span data-i18n="step3.roadWidth.label">Primary Abutting Road Width</span> <span class="required">*</span> <button type="button"
                 class="field-help-btn" onclick="showFieldHelp('roadWidth')" title="Help & Where to find"><svg
                   viewBox="0 0 24 24">
                   <path
@@ -996,28 +983,28 @@
               </div>
               <input id="roadWidth" type="hidden">
             </div>
-            <div class="error-msg" id="err-roadWidth">⚠ Road width is required</div>
+            <div class="error-msg" id="err-roadWidth" data-i18n="step3.err.roadWidth">⚠ Road width is required</div>
           </div>
           <div class="field">
-            <label>Primary Road Facing Direction <span class="required">*</span> <button type="button"
+            <label><span data-i18n="step3.roadFacing.label">Primary Road Facing Direction</span> <span class="required">*</span> <button type="button"
                 class="field-help-btn" onclick="showFieldHelp('roadFacing')" title="Help & Where to find"><svg
                   viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
             <select id="roadFacing" onchange="clearFieldError('roadFacing', 'err-roadFacing')">
-              <option value="" selected>-- Select Direction --</option>
-              <option value="north">North</option>
-              <option value="south">South</option>
-              <option value="east">East</option>
-              <option value="west">West</option>
+              <option value="" selected data-i18n="step3.selectDirection">-- Select Direction --</option>
+              <option value="north" data-i18n="step3.facing.north">North</option>
+              <option value="south" data-i18n="step3.facing.south">South</option>
+              <option value="east" data-i18n="step3.facing.east">East</option>
+              <option value="west" data-i18n="step3.facing.west">West</option>
             </select>
-            <div class="error-msg" id="err-roadFacing">⚠ Select road facing direction</div>
+            <div class="error-msg" id="err-roadFacing" data-i18n="step3.err.roadFacing">⚠ Select road facing direction</div>
           </div>
           <div class="field">
-            <label>Drawing Scale</label>
+            <label data-i18n="step3.scale.label">Drawing Scale</label>
             <select id="scale">
-              <option value="" selected>-- Select Scale --</option>
+              <option value="" selected data-i18n="step3.selectScale">-- Select Scale --</option>
               <option value="1:100">1:100</option>
               <option value="1:200">1:200</option>
               <option value="1:250">1:250</option>
@@ -1029,7 +1016,7 @@
         <!-- Regular Site Mode: 2 Clean Fields (East/West Depth & North/South Frontage) -->
         <div id="regularSiteControls" class="grid" style="margin-top: 16px;">
           <div class="field">
-            <label>↔️ East–West (ಪೂರ್ವ-ಪಶ್ಚಿಮ) Span <span class="required">*</span> <button type="button"
+            <label><span data-i18n="step3.regEastWest.title">↔️ East–West Span</span> <span class="required">*</span> <button type="button"
                 class="field-help-btn" onclick="showFieldHelp('plotDimensions')" title="Help & Where to find"><svg
                   viewBox="0 0 24 24">
                   <path
@@ -1048,12 +1035,11 @@
               </div>
               <input id="regEastWest" type="hidden">
             </div>
-            <div class="error-msg" id="err-regEastWest">⚠ East & West side measurement is required</div>
-            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Horizontal span (depth):
-              Applies to both North & South boundary lines.</p>
+            <div class="error-msg" id="err-regEastWest" data-i18n="step3.err.regEastWest">⚠ East & West side measurement is required</div>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);" data-i18n="step3.regEastWest.desc">Horizontal span (depth): Applies to both North & South boundary lines.</p>
           </div>
           <div class="field">
-            <label>↕️ North–South (ಉತ್ತರ-ದಕ್ಷಿಣ) Span <span class="required">*</span> <button type="button"
+            <label><span data-i18n="step3.regNorthSouth.title">↕️ North–South Span</span> <span class="required">*</span> <button type="button"
                 class="field-help-btn" onclick="showFieldHelp('plotDimensions')" title="Help & Where to find"><svg
                   viewBox="0 0 24 24">
                   <path
@@ -1072,16 +1058,15 @@
               </div>
               <input id="regNorthSouth" type="hidden">
             </div>
-            <div class="error-msg" id="err-regNorthSouth">⚠ North & South side measurement is required</div>
-            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Vertical span / frontage:
-              Applies to both East & West boundary lines.</p>
+            <div class="error-msg" id="err-regNorthSouth" data-i18n="step3.err.regNorthSouth">⚠ North & South side measurement is required</div>
+            <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);" data-i18n="step3.regNorthSouth.desc">Vertical span / frontage: Applies to both East & West boundary lines.</p>
           </div>
         </div>
 
         <!-- Irregular Site Mode: 4 Independent Fields -->
         <div id="irregularSiteControls" class="grid" style="margin-top: 16px; display: none;">
           <div class="field">
-            <label>⬆️ North Side <span class="required">*</span></label>
+            <label><span data-i18n="step3.sideNorth.title">⬆️ North Side</span> <span class="required">*</span></label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="sideNorth_ft" type="number" min="0" placeholder="40" class="ft-num-input"
@@ -1095,10 +1080,10 @@
               </div>
               <input id="sideNorth" type="hidden">
             </div>
-            <div class="error-msg" id="err-sideNorth">⚠ North side dimension required</div>
+            <div class="error-msg" id="err-sideNorth" data-i18n="step3.err.sideNorth">⚠ North side dimension required</div>
           </div>
           <div class="field">
-            <label>⬇️ South Side <span class="required">*</span></label>
+            <label><span data-i18n="step3.sideSouth.title">⬇️ South Side</span> <span class="required">*</span></label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="sideSouth_ft" type="number" min="0" placeholder="40" class="ft-num-input"
@@ -1112,10 +1097,10 @@
               </div>
               <input id="sideSouth" type="hidden">
             </div>
-            <div class="error-msg" id="err-sideSouth">⚠ South side dimension required</div>
+            <div class="error-msg" id="err-sideSouth" data-i18n="step3.err.sideSouth">⚠ South side dimension required</div>
           </div>
           <div class="field">
-            <label>➡️ East Side <span class="required">*</span></label>
+            <label><span data-i18n="step3.sideEast.title">➡️ East Side</span> <span class="required">*</span></label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="sideEast_ft" type="number" min="0" placeholder="60" class="ft-num-input"
@@ -1129,10 +1114,10 @@
               </div>
               <input id="sideEast" type="hidden">
             </div>
-            <div class="error-msg" id="err-sideEast">⚠ East side dimension required</div>
+            <div class="error-msg" id="err-sideEast" data-i18n="step3.err.sideEast">⚠ East side dimension required</div>
           </div>
           <div class="field">
-            <label>⬅️ West Side <span class="required">*</span></label>
+            <label><span data-i18n="step3.sideWest.title">⬅️ West Side</span> <span class="required">*</span></label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="sideWest_ft" type="number" min="0" placeholder="60" class="ft-num-input"
@@ -1146,7 +1131,7 @@
               </div>
               <input id="sideWest" type="hidden">
             </div>
-            <div class="error-msg" id="err-sideWest">⚠ West side dimension required</div>
+            <div class="error-msg" id="err-sideWest" data-i18n="step3.err.sideWest">⚠ West side dimension required</div>
           </div>
         </div>
       </div>
@@ -1160,60 +1145,58 @@
 
         <div class="grid">
           <div class="field">
-            <label>Proposed Building Type <button type="button" class="field-help-btn"
+            <label><span data-i18n="step4.bldgType.label">Proposed Building Type</span> <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('bldgType')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
             <select id="bldgType"
               onchange="if(typeof onBuildingTypeChange === 'function') onBuildingTypeChange(); else if(typeof generatePlan === 'function') generatePlan();">
-              <option value="" selected>-- Select Type --</option>
-              <option value="Vacant Plot">Vacant Land / Open Plot (No Structure)</option>
-              <option value="Residential">Residential Building</option>
-              <option value="Commercial">Commercial Building</option>
-              <option value="Mixed Use">Mixed Use (Residential + Commercial)</option>
-              <option value="Industrial">Industrial Structure</option>
+              <option value="" selected data-i18n="step4.selectType">-- Select Type --</option>
+              <option value="Vacant Plot" data-i18n="step4.bldgType.vacant">Vacant Land / Open Plot (No Structure)</option>
+              <option value="Residential" data-i18n="step4.bldgType.residential">Residential Building</option>
+              <option value="Commercial" data-i18n="step4.bldgType.commercial">Commercial Building</option>
+              <option value="Mixed Use" data-i18n="step4.bldgType.mixed">Mixed Use (Residential + Commercial)</option>
+              <option value="Industrial" data-i18n="step4.bldgType.industrial">Industrial Structure</option>
             </select>
           </div>
           <div class="field">
-            <label>Number of Floors <button type="button" class="field-help-btn" onclick="showFieldHelp('bldgType')"
+            <label><span data-i18n="step4.noOfFloors.label">Number of Floors</span> <button type="button" class="field-help-btn" onclick="showFieldHelp('bldgType')"
                 title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
             <select id="noOfFloors" onchange="calculateBuiltUpArea(); validateBuildingSetbackFeasibility();">
-              <option value="" selected>-- Select Floors --</option>
-              <option value="Vacant Plot">Vacant Plot</option>
-              <option value="Stilt + Ground">Stilt + Ground</option>
-              <option value="G+1">G + 1 Floor</option>
-              <option value="G+2">G + 2 Floors</option>
-              <option value="G+3">G + 3 Floors</option>
-              <option value="G+4">G + 4 Floors</option>
+              <option value="" selected data-i18n="step4.selectFloors">-- Select Floors --</option>
+              <option value="Vacant Plot" data-i18n="step4.floors.vacant">Vacant Plot</option>
+              <option value="Stilt + Ground" data-i18n="step4.floors.stiltGround">Stilt + Ground</option>
+              <option value="G+1" data-i18n="step4.floors.g1">G + 1 Floor</option>
+              <option value="G+2" data-i18n="step4.floors.g2">G + 2 Floors</option>
+              <option value="G+3" data-i18n="step4.floors.g3">G + 3 Floors</option>
+              <option value="G+4" data-i18n="step4.floors.g4">G + 4 Floors</option>
             </select>
           </div>
         </div>
 
         <!-- Building Alignment Direction Select -->
         <div class="field" style="margin-top: 14px;">
-          <label>Building Footprint Alignment <span
-              style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Long side
-              direction)</span> <button type="button" class="field-help-btn" onclick="showFieldHelp('bldgOrientation')"
+          <label><span data-i18n="step4.bldgOrientation.label">Building Footprint Alignment</span> <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);" data-i18n="step4.bldgOrientation.sublabel">(Long side direction)</span> <button type="button" class="field-help-btn" onclick="showFieldHelp('bldgOrientation')"
               title="Help & Where to find"><svg viewBox="0 0 24 24">
                 <path
                   d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
               </svg></button></label>
           <select id="bldgOrientation"
             onchange="autoCalculateSetbacks(true); validateBuildingSetbackFeasibility(); generatePlan();">
-            <option value="auto" selected>✨ Auto-Fit (Best alignment for plot spans)</option>
-            <option value="horizontal">↔ Horizontal (Long side along North-South span)</option>
-            <option value="vertical">↕ Vertical (Long side along East-West span)</option>
+            <option value="auto" selected data-i18n="step4.bldgOrientation.auto">✨ Auto-Fit (Best alignment for plot spans)</option>
+            <option value="horizontal" data-i18n="step4.bldgOrientation.horizontal">↔ Horizontal (Long side along North-South span)</option>
+            <option value="vertical" data-i18n="step4.bldgOrientation.vertical">↕ Vertical (Long side along East-West span)</option>
           </select>
         </div>
 
         <!-- Building Width & Building Length side-by-side in one line on web -->
         <div class="grid" style="margin-top: 14px;">
           <div class="field">
-            <label>Building Width (ft)</label>
+            <label data-i18n="step4.bldgWidth.label">Building Width (ft)</label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="bldgWidth_ft" type="number" min="0" placeholder="30" class="ft-num-input"
@@ -1230,7 +1213,7 @@
             <div class="error-msg" id="err-bldgWidth"></div>
           </div>
           <div class="field">
-            <label>Building Length (ft)</label>
+            <label data-i18n="step4.bldgLength.label">Building Length (ft)</label>
             <div class="ft-in-wrapper">
               <div class="ft-segment">
                 <input id="bldgLength_ft" type="number" min="0" placeholder="40" class="ft-num-input"
@@ -1250,11 +1233,9 @@
 
         <!-- Total Built-up Area (Auto-calculated) -->
         <div class="field" style="margin-top: 14px;">
-          <label>Total Built-up Area (sq.ft) <span
-              style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Auto-calculated)</span></label>
-          <input id="builtUpArea" type="number" placeholder="Auto-calculated (e.g. 2400)">
-          <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);">Auto-computed from
-            Footprint (Width × Length × Floors multiplier). You may adjust manually.</p>
+          <label><span data-i18n="step4.builtUpArea.label">Total Built-up Area (sq.ft)</span> <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);" data-i18n="step4.builtUpArea.sublabel">(Auto-calculated)</span></label>
+          <input id="builtUpArea" type="number" data-i18n-placeholder="step4.builtUpArea.placeholder" placeholder="Auto-calculated (e.g. 2400)">
+          <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);" data-i18n="step4.builtUpArea.desc">Auto-computed from Footprint (Width × Length × Floors multiplier). You may adjust manually.</p>
         </div>
 
         <!-- Setback Feasibility Warning Banner -->
@@ -1267,9 +1248,7 @@
 
         <!-- Building Setbacks Section Header -->
         <div style="margin-top: 20px; margin-bottom: 8px;">
-          <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--apple-text-primary);">Building Setbacks
-            <span
-              style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Auto-calculated)</span>
+          <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: var(--apple-text-primary);"><span data-i18n="step4.setbacks.heading">Building Setbacks</span> <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);" data-i18n="step4.autoCalculated">(Auto-calculated)</span>
             <button type="button" class="field-help-btn" onclick="showFieldHelp('setbacks')"
               title="Help & Where to find"><svg viewBox="0 0 24 24">
                 <path
@@ -1371,162 +1350,158 @@
         <div class="grid">
           <!-- North Boundary -->
           <div class="boundary-card">
-            <h5>⬆️ North Boundary</h5>
+            <h5 data-i18n="step5.north">⬆️ North Boundary</h5>
             <div class="field">
-              <label>Boundary Type <span class="required">*</span> <button type="button" class="field-help-btn"
-                  onclick="showFieldHelp('boundaries')" title="Help & Where to find"><svg viewBox="0 0 24 24">
+              <label><span data-i18n="step5.boundaryType">Boundary Type</span> <span class="required">*</span> <button type="button" class="field-help-btn" onclick="showFieldHelp('boundaries')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                     <path
                       d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                   </svg></button></label>
               <select id="typeNorth"
                 onchange="toggleBoundaryType('North'); clearFieldError('typeNorth', 'err-typeNorth')">
-                <option value="" selected>-- Select Boundary --</option>
-                <option value="road">Road Access / Public Street</option>
-                <option value="plot">Neighboring Site / Plot</option>
-                <option value="drain">Stormwater Drain / Rajakaluve</option>
-                <option value="lake">Lake / Water Body Buffer</option>
-                <option value="park">BDA Park / CA Site</option>
-                <option value="land">Vacant Survey Land</option>
-                <option value="passage">Private Passage / Lane</option>
-                <option value="infra">Railway / Metro Line</option>
-                <option value="govt">Government Land</option>
-                <option value="private">Private Property</option>
+                <option value="" selected data-i18n="step5.selectBoundary">-- Select Boundary --</option>
+                <option value="road" data-i18n="step5.type.road">Road Access / Public Street</option>
+                <option value="plot" data-i18n="step5.type.plot">Neighboring Site / Plot</option>
+                <option value="drain" data-i18n="step5.type.drain">Stormwater Drain / Rajakaluve</option>
+                <option value="lake" data-i18n="step5.type.lake">Lake / Water Body Buffer</option>
+                <option value="park" data-i18n="step5.type.park">BDA Park / CA Site</option>
+                <option value="land" data-i18n="step5.type.land">Vacant Survey Land</option>
+                <option value="passage" data-i18n="step5.type.passage">Private Passage / Lane</option>
+                <option value="infra" data-i18n="step5.type.infra">Railway / Metro Line</option>
+                <option value="govt" data-i18n="step5.type.govt">Government Land</option>
+                <option value="private" data-i18n="step5.type.private">Private Property</option>
               </select>
-              <div class="error-msg" id="err-typeNorth">⚠ Select boundary type</div>
+              <div class="error-msg" id="err-typeNorth" data-i18n="step5.err.type">⚠ Select boundary type</div>
             </div>
             <div id="roadFieldsNorth" class="grid" style="margin-top: 8px; display: none;">
               <div class="field">
-                <label>Road Name</label>
+                <label data-i18n="step5.roadName">Road Name</label>
                 <input id="nameRoadNorth" type="text" placeholder="e.g. 3rd Cross Road">
               </div>
               <div class="field">
-                <label>Width (ft)</label>
+                <label data-i18n="step5.roadWidth">Width (ft)</label>
                 <input id="widthRoadNorth" type="number" placeholder="e.g. 30">
               </div>
             </div>
             <div id="plotFieldsNorth" class="field" style="margin-top: 8px; display: none;">
-              <label>Description Label</label>
+              <label data-i18n="step5.propDesc">Description Label</label>
               <input id="descPlotNorth" type="text" placeholder="e.g. PLOT NO. 12">
             </div>
           </div>
 
           <!-- South Boundary -->
           <div class="boundary-card">
-            <h5>⬇️ South Boundary</h5>
+            <h5 data-i18n="step5.south">⬇️ South Boundary</h5>
             <div class="field">
-              <label>Boundary Type <span class="required">*</span> <button type="button" class="field-help-btn"
-                  onclick="showFieldHelp('boundaries')" title="Help & Where to find"><svg viewBox="0 0 24 24">
+              <label><span data-i18n="step5.boundaryType">Boundary Type</span> <span class="required">*</span> <button type="button" class="field-help-btn" onclick="showFieldHelp('boundaries')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                     <path
                       d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                   </svg></button></label>
               <select id="typeSouth"
                 onchange="toggleBoundaryType('South'); clearFieldError('typeSouth', 'err-typeSouth')">
-                <option value="" selected>-- Select Boundary --</option>
-                <option value="plot">Neighboring Site / Plot</option>
-                <option value="road">Road Access / Public Street</option>
-                <option value="drain">Stormwater Drain / Rajakaluve</option>
-                <option value="lake">Lake / Water Body Buffer</option>
-                <option value="park">BDA Park / CA Site</option>
-                <option value="land">Vacant Survey Land</option>
-                <option value="passage">Private Passage / Lane</option>
-                <option value="infra">Railway / Metro Line</option>
-                <option value="govt">Government Land</option>
-                <option value="private">Private Property</option>
+                <option value="" selected data-i18n="step5.selectBoundary">-- Select Boundary --</option>
+                <option value="road" data-i18n="step5.type.road">Road Access / Public Street</option>
+                <option value="plot" data-i18n="step5.type.plot">Neighboring Site / Plot</option>
+                <option value="drain" data-i18n="step5.type.drain">Stormwater Drain / Rajakaluve</option>
+                <option value="lake" data-i18n="step5.type.lake">Lake / Water Body Buffer</option>
+                <option value="park" data-i18n="step5.type.park">BDA Park / CA Site</option>
+                <option value="land" data-i18n="step5.type.land">Vacant Survey Land</option>
+                <option value="passage" data-i18n="step5.type.passage">Private Passage / Lane</option>
+                <option value="infra" data-i18n="step5.type.infra">Railway / Metro Line</option>
+                <option value="govt" data-i18n="step5.type.govt">Government Land</option>
+                <option value="private" data-i18n="step5.type.private">Private Property</option>
               </select>
-              <div class="error-msg" id="err-typeSouth">⚠ Select boundary type</div>
+              <div class="error-msg" id="err-typeSouth" data-i18n="step5.err.type">⚠ Select boundary type</div>
             </div>
             <div id="roadFieldsSouth" class="grid" style="margin-top: 8px; display: none;">
               <div class="field">
-                <label>Road Name</label>
+                <label data-i18n="step5.roadName">Road Name</label>
                 <input id="nameRoadSouth" type="text" placeholder="e.g. 4th Cross Road">
               </div>
               <div class="field">
-                <label>Width (ft)</label>
+                <label data-i18n="step5.roadWidth">Width (ft)</label>
                 <input id="widthRoadSouth" type="number" placeholder="e.g. 30">
               </div>
             </div>
             <div id="plotFieldsSouth" class="field" style="margin-top: 8px; display: none;">
-              <label>Description Label</label>
+              <label data-i18n="step5.propDesc">Description Label</label>
               <input id="descPlotSouth" type="text" placeholder="e.g. PLOT NO. 46">
             </div>
           </div>
 
           <!-- East Boundary -->
           <div class="boundary-card">
-            <h5>➡️ East Boundary</h5>
+            <h5 data-i18n="step5.east">➡️ East Boundary</h5>
             <div class="field">
-              <label>Boundary Type <span class="required">*</span> <button type="button" class="field-help-btn"
-                  onclick="showFieldHelp('boundaries')" title="Help & Where to find"><svg viewBox="0 0 24 24">
+              <label><span data-i18n="step5.boundaryType">Boundary Type</span> <span class="required">*</span> <button type="button" class="field-help-btn" onclick="showFieldHelp('boundaries')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                     <path
                       d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                   </svg></button></label>
               <select id="typeEast" onchange="toggleBoundaryType('East'); clearFieldError('typeEast', 'err-typeEast')">
-                <option value="" selected>-- Select Boundary --</option>
-                <option value="plot">Neighboring Site / Plot</option>
-                <option value="road">Road Access / Public Street</option>
-                <option value="drain">Stormwater Drain / Rajakaluve</option>
-                <option value="lake">Lake / Water Body Buffer</option>
-                <option value="park">BDA Park / CA Site</option>
-                <option value="land">Vacant Survey Land</option>
-                <option value="passage">Private Passage / Lane</option>
-                <option value="infra">Railway / Metro Line</option>
-                <option value="govt">Government Land</option>
-                <option value="private">Private Property</option>
+                <option value="" selected data-i18n="step5.selectBoundary">-- Select Boundary --</option>
+                <option value="road" data-i18n="step5.type.road">Road Access / Public Street</option>
+                <option value="plot" data-i18n="step5.type.plot">Neighboring Site / Plot</option>
+                <option value="drain" data-i18n="step5.type.drain">Stormwater Drain / Rajakaluve</option>
+                <option value="lake" data-i18n="step5.type.lake">Lake / Water Body Buffer</option>
+                <option value="park" data-i18n="step5.type.park">BDA Park / CA Site</option>
+                <option value="land" data-i18n="step5.type.land">Vacant Survey Land</option>
+                <option value="passage" data-i18n="step5.type.passage">Private Passage / Lane</option>
+                <option value="infra" data-i18n="step5.type.infra">Railway / Metro Line</option>
+                <option value="govt" data-i18n="step5.type.govt">Government Land</option>
+                <option value="private" data-i18n="step5.type.private">Private Property</option>
               </select>
-              <div class="error-msg" id="err-typeEast">⚠ Select boundary type</div>
+              <div class="error-msg" id="err-typeEast" data-i18n="step5.err.type">⚠ Select boundary type</div>
             </div>
             <div id="roadFieldsEast" class="grid" style="margin-top: 8px; display: none;">
               <div class="field">
-                <label>Road Name</label>
+                <label data-i18n="step5.roadName">Road Name</label>
                 <input id="nameRoadEast" type="text" placeholder="e.g. 100ft Main Road">
               </div>
               <div class="field">
-                <label>Width (ft)</label>
+                <label data-i18n="step5.roadWidth">Width (ft)</label>
                 <input id="widthRoadEast" type="number" placeholder="e.g. 60">
               </div>
             </div>
             <div id="plotFieldsEast" class="field" style="margin-top: 8px; display: none;">
-              <label>Description Label</label>
+              <label data-i18n="step5.propDesc">Description Label</label>
               <input id="descPlotEast" type="text" placeholder="e.g. PLOT NO. 13">
             </div>
           </div>
 
           <!-- West Boundary -->
           <div class="boundary-card">
-            <h5>⬅️ West Boundary</h5>
+            <h5 data-i18n="step5.west">⬅️ West Boundary</h5>
             <div class="field">
-              <label>Boundary Type <span class="required">*</span> <button type="button" class="field-help-btn"
-                  onclick="showFieldHelp('boundaries')" title="Help & Where to find"><svg viewBox="0 0 24 24">
+              <label><span data-i18n="step5.boundaryType">Boundary Type</span> <span class="required">*</span> <button type="button" class="field-help-btn" onclick="showFieldHelp('boundaries')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                     <path
                       d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                   </svg></button></label>
               <select id="typeWest" onchange="toggleBoundaryType('West'); clearFieldError('typeWest', 'err-typeWest')">
-                <option value="" selected>-- Select Boundary --</option>
-                <option value="plot">Neighboring Site / Plot</option>
-                <option value="road">Road Access / Public Street</option>
-                <option value="drain">Stormwater Drain / Rajakaluve</option>
-                <option value="lake">Lake / Water Body Buffer</option>
-                <option value="park">BDA Park / CA Site</option>
-                <option value="land">Vacant Survey Land</option>
-                <option value="passage">Private Passage / Lane</option>
-                <option value="infra">Railway / Metro Line</option>
-                <option value="govt">Government Land</option>
-                <option value="private">Private Property</option>
+                <option value="" selected data-i18n="step5.selectBoundary">-- Select Boundary --</option>
+                <option value="road" data-i18n="step5.type.road">Road Access / Public Street</option>
+                <option value="plot" data-i18n="step5.type.plot">Neighboring Site / Plot</option>
+                <option value="drain" data-i18n="step5.type.drain">Stormwater Drain / Rajakaluve</option>
+                <option value="lake" data-i18n="step5.type.lake">Lake / Water Body Buffer</option>
+                <option value="park" data-i18n="step5.type.park">BDA Park / CA Site</option>
+                <option value="land" data-i18n="step5.type.land">Vacant Survey Land</option>
+                <option value="passage" data-i18n="step5.type.passage">Private Passage / Lane</option>
+                <option value="infra" data-i18n="step5.type.infra">Railway / Metro Line</option>
+                <option value="govt" data-i18n="step5.type.govt">Government Land</option>
+                <option value="private" data-i18n="step5.type.private">Private Property</option>
               </select>
-              <div class="error-msg" id="err-typeWest">⚠ Select boundary type</div>
+              <div class="error-msg" id="err-typeWest" data-i18n="step5.err.type">⚠ Select boundary type</div>
             </div>
             <div id="roadFieldsWest" class="grid" style="margin-top: 8px; display: none;">
               <div class="field">
-                <label>Road Name</label>
+                <label data-i18n="step5.roadName">Road Name</label>
                 <input id="nameRoadWest" type="text" placeholder="e.g. Service Road">
               </div>
               <div class="field">
-                <label>Width (ft)</label>
+                <label data-i18n="step5.roadWidth">Width (ft)</label>
                 <input id="widthRoadWest" type="number" placeholder="e.g. 40">
               </div>
             </div>
             <div id="plotFieldsWest" class="field" style="margin-top: 8px; display: none;">
-              <label>Description Label</label>
+              <label data-i18n="step5.propDesc">Description Label</label>
               <input id="descPlotWest" type="text" placeholder="e.g. PLOT NO. 11">
             </div>
           </div>
@@ -1543,7 +1518,7 @@
         <div class="checkbox-box">
           <label>
             <input type="checkbox" id="roadWideningCheck" onchange="toggleRoadWidening()">
-            <span>Site subject to RMP-2015 Master Plan Road Widening <button type="button" class="field-help-btn"
+            <span data-i18n="step6.roadWidening.title">Site subject to RMP-2015 Master Plan Road Widening <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('roadWidening')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
@@ -1554,16 +1529,16 @@
         <div class="conditional-panel" id="roadWideningControls" style="display: none;">
           <div class="grid">
             <div class="field">
-              <label>Proposed Road Width in RMP-2015 (ft) <span class="required">*</span></label>
+              <label><span data-i18n="step6.proposedRoadWidth">Proposed Road Width in RMP-2015 (ft)</span> <span class="required">*</span></label>
               <input id="proposedRoadWidth" type="number" placeholder="e.g. 60"
                 oninput="clearFieldError('proposedRoadWidth', 'err-proposedRoadWidth')">
-              <div class="error-msg" id="err-proposedRoadWidth">⚠ Proposed road width is required</div>
+              <div class="error-msg" id="err-proposedRoadWidth" data-i18n="step6.err.proposedRoadWidth">⚠ Proposed road width is required</div>
             </div>
             <div class="field">
-              <label>Road Widening Strip Width (ft) <span class="required">*</span></label>
+              <label><span data-i18n="step6.wideningStrip">Road Widening Strip Width (ft)</span> <span class="required">*</span></label>
               <input id="roadWideningStripWidth" type="number" placeholder="e.g. 10"
                 oninput="clearFieldError('roadWideningStripWidth', 'err-roadWideningStripWidth')">
-              <div class="error-msg" id="err-roadWideningStripWidth">⚠ Widening strip width is required</div>
+              <div class="error-msg" id="err-roadWideningStripWidth" data-i18n="step6.err.wideningStrip">⚠ Widening strip width is required</div>
             </div>
           </div>
         </div>
@@ -1571,7 +1546,7 @@
         <div class="checkbox-box" style="margin-top: 12px;">
           <label>
             <input type="checkbox" id="bufferCheck" onchange="toggleBufferZone()">
-            <span>Site has a Stormwater Drain / Nala / Lake Buffer Zone <button type="button" class="field-help-btn"
+            <span data-i18n="step6.buffer.title">Site has a Stormwater Drain / Nala / Lake Buffer Zone <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('bufferZone')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
@@ -1582,28 +1557,28 @@
         <div class="conditional-panel" id="bufferControls" style="display: none;">
           <div class="grid">
             <div class="field">
-              <label>Buffer Zone Type <span class="required">*</span></label>
+              <label><span data-i18n="step6.bufferType">Buffer Zone Type</span> <span class="required">*</span></label>
               <select id="bufferType" onchange="clearFieldError('bufferType', 'err-bufferType')">
-                <option value="" selected>-- Select Buffer --</option>
-                <option value="Primary Drain Buffer (50m)">Primary Drain Buffer (50m)</option>
-                <option value="Secondary Drain Buffer (25m)">Secondary Drain Buffer (25m)</option>
-                <option value="Tertiary Drain Buffer (15m)">Tertiary Drain Buffer (15m)</option>
-                <option value="Lake Buffer Area (30m)">Lake Buffer Area (30m)</option>
+                <option value="" selected data-i18n="step6.selectBuffer">-- Select Buffer --</option>
+                <option value="Primary Drain Buffer (50m)" data-i18n="step6.buffer.primary">Primary Drain Buffer (50m)</option>
+                <option value="Secondary Drain Buffer (25m)" data-i18n="step6.buffer.secondary">Secondary Drain Buffer (25m)</option>
+                <option value="Tertiary Drain Buffer (15m)" data-i18n="step6.buffer.tertiary">Tertiary Drain Buffer (15m)</option>
+                <option value="Lake Buffer Area (30m)" data-i18n="step6.buffer.lake">Lake Buffer Area (30m)</option>
               </select>
-              <div class="error-msg" id="err-bufferType">⚠ Select buffer type</div>
+              <div class="error-msg" id="err-bufferType" data-i18n="step6.err.bufferType">⚠ Select buffer type</div>
             </div>
             <div class="field">
-              <label>Buffer Zone Width (ft) <span class="required">*</span></label>
+              <label><span data-i18n="step6.bufferWidth">Buffer Zone Width (ft)</span> <span class="required">*</span></label>
               <input id="bufferWidth" type="number" placeholder="e.g. 7.0"
                 oninput="clearFieldError('bufferWidth', 'err-bufferWidth')">
-              <div class="error-msg" id="err-bufferWidth">⚠ Buffer width is required</div>
+              <div class="error-msg" id="err-bufferWidth" data-i18n="step6.err.bufferWidth">⚠ Buffer width is required</div>
             </div>
           </div>
         </div>
 
         <div class="grid" style="margin-top: 14px;">
           <div class="field">
-            <label>Remitted Fee Amount (₹) <button type="button" class="field-help-btn"
+            <label><span data-i18n="step6.challanFee">Remitted Fee Amount (₹)</span> <button type="button" class="field-help-btn"
                 onclick="showFieldHelp('challanDetails')" title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
@@ -1611,7 +1586,7 @@
             <input id="challanFee" type="number" placeholder="e.g. 48000">
           </div>
           <div class="field">
-            <label>Challan Number <button type="button" class="field-help-btn" onclick="showFieldHelp('challanDetails')"
+            <label><span data-i18n="step6.challanNo">Challan Number</span> <button type="button" class="field-help-btn" onclick="showFieldHelp('challanDetails')"
                 title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
@@ -1619,7 +1594,7 @@
             <input id="challanNo" type="text" placeholder="e.g. CH-2024-99881">
           </div>
           <div class="field">
-            <label>Challan Date <button type="button" class="field-help-btn" onclick="showFieldHelp('challanDetails')"
+            <label><span data-i18n="step6.challanDate">Challan Date</span> <button type="button" class="field-help-btn" onclick="showFieldHelp('challanDetails')"
                 title="Help & Where to find"><svg viewBox="0 0 24 24">
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
@@ -1633,17 +1608,17 @@
           <h4
             style="margin: 0 0 10px 0; font-size: 13px; font-weight: 700; color: var(--apple-text-primary); display: flex; align-items: center; gap: 6px;">
             <span class="material-symbols-outlined" style="font-size: 17px; color: var(--apple-accent);">draw</span>
-            <span>Architect Verification & Digital Signatures</span>
+            <span data-i18n="step6.architectTitle">Architect Verification & Digital Signatures</span>
             <span style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);">(Optional)</span>
           </h4>
 
           <div class="grid">
             <div class="field">
-              <label>Architect / Licensed Surveyor Name</label>
+              <label data-i18n="step6.architectName">Architect / Licensed Surveyor Name</label>
               <input id="architectName" type="text" placeholder="e.g. Ar. Suresh Rao" oninput="onArchitectInfoInput()">
             </div>
             <div class="field">
-              <label>COA / BBMP Registration Number</label>
+              <label data-i18n="step6.architectRegNo">COA / BBMP Registration Number</label>
               <input id="architectRegNo" type="text" placeholder="e.g. CA/2018/98712 or BCC/BL/123"
                 oninput="onArchitectInfoInput()">
             </div>
@@ -1654,8 +1629,7 @@
             <!-- Owner Signature Card -->
             <div class="sig-upload-card" id="ownerSigCard">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <label style="margin: 0; font-size: 12px; font-weight: 600; color: var(--apple-text-primary);">Owner
-                  Signature</label>
+                <label style="margin: 0; font-size: 12px; font-weight: 600; color: var(--apple-text-primary);" data-i18n="step6.ownerSigTitle">Owner Signature</label>
                 <button type="button" class="sig-remove-btn" id="btnRemoveOwnerSig" style="display: none;"
                   onclick="removeSignature('owner')" title="Remove Signature">✕ Remove</button>
               </div>
@@ -1665,10 +1639,8 @@
                 onclick="document.getElementById('ownerSigFileInput').click()">
                 <span class="material-symbols-outlined"
                   style="font-size: 24px; color: var(--apple-accent);">ink_pen</span>
-                <span
-                  style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary); margin-top: 4px;">Upload
-                  Owner Signature</span>
-                <span style="font-size: 10px; color: var(--apple-text-secondary);">PNG, JPG (Tap to crop & align)</span>
+                <span style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary); margin-top: 4px;" data-i18n="step6.ownerSigUpload">Upload Owner Signature</span>
+                <span style="font-size: 10px; color: var(--apple-text-secondary);" data-i18n="step6.sigCropHint">PNG, JPG (Tap to crop & align)</span>
               </div>
               <input type="file" id="ownerSigFileInput" accept="image/*" style="display: none;"
                 onchange="onSignatureFileSelected('owner', this)">
@@ -1688,8 +1660,7 @@
             <!-- Architect Seal / Signature Card -->
             <div class="sig-upload-card" id="archSigCard">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <label style="margin: 0; font-size: 12px; font-weight: 600; color: var(--apple-text-primary);">Architect
-                  Seal / Signature</label>
+                <label style="margin: 0; font-size: 12px; font-weight: 600; color: var(--apple-text-primary);" data-i18n="step6.archSigTitle">Architect Seal / Signature</label>
                 <button type="button" class="sig-remove-btn" id="btnRemoveArchSig" style="display: none;"
                   onclick="removeSignature('arch')" title="Remove Seal">✕ Remove</button>
               </div>
@@ -1699,10 +1670,8 @@
                 onclick="document.getElementById('archSigFileInput').click()">
                 <span class="material-symbols-outlined"
                   style="font-size: 24px; color: var(--apple-accent);">approval</span>
-                <span
-                  style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary); margin-top: 4px;">Upload
-                  Architect Seal / Sign</span>
-                <span style="font-size: 10px; color: var(--apple-text-secondary);">PNG, JPG (Tap to crop & align)</span>
+                <span style="font-size: 12px; font-weight: 600; color: var(--apple-text-primary); margin-top: 4px;" data-i18n="step6.archSigUpload">Upload Architect Seal / Sign</span>
+                <span style="font-size: 10px; color: var(--apple-text-secondary);" data-i18n="step6.sigCropHint">PNG, JPG (Tap to crop & align)</span>
               </div>
               <input type="file" id="archSigFileInput" accept="image/*" style="display: none;"
                 onchange="onSignatureFileSelected('arch', this)">
@@ -1724,7 +1693,7 @@
         <div class="checkbox-box" style="margin-top: 14px;">
           <label>
             <input type="checkbox" id="includeLegendPage" checked onchange="toggleLegendSheetPage()">
-            <span>📑 Include BBMP Line & Colour Specifications Sheet (Page 2) in Merged PDF</span>
+            <span data-i18n="step6.legendPage">📑 Include BBMP Line & Colour Specifications Sheet (Page 2) in Merged PDF</span>
           </label>
         </div>
       </div>

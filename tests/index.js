@@ -19,6 +19,7 @@ const TEST_FILES = [
   'review.test.js',
   'buttons_and_help.test.js',
   'i18n.test.js',
+  'step_i18n_translation.test.js',
   'dom_simulation.test.js',
   'all_steps_workflow.test.js',
   'all_inputs_controls.test.js',
