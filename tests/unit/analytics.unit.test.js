@@ -80,4 +80,37 @@ suite.test('Ignores null or invalid event names', () => {
   assert.equal(analytics.getEvents().length, 0);
 });
 
+suite.section('3. 127.0.0.1 & Localhost Counter Inflation Protection');
+
+suite.test('isLocalEnvironment accurately detects 127.0.0.1, localhost, and file protocols', async () => {
+  const { isLocalEnvironment } = await import('../../js/analytics.js');
+
+  // Test 127.0.0.1
+  global.window = { location: { hostname: '127.0.0.1', protocol: 'http:' } };
+  assert.equal(isLocalEnvironment(), true, '127.0.0.1 must be identified as local environment');
+
+  // Test localhost
+  global.window = { location: { hostname: 'localhost', protocol: 'http:' } };
+  assert.equal(isLocalEnvironment(), true, 'localhost must be identified as local environment');
+
+  // Test 0.0.0.0
+  global.window = { location: { hostname: '0.0.0.0', protocol: 'http:' } };
+  assert.equal(isLocalEnvironment(), true, '0.0.0.0 must be identified as local environment');
+
+  // Test LAN IP 192.168.x.x
+  global.window = { location: { hostname: '192.168.1.45', protocol: 'http:' } };
+  assert.equal(isLocalEnvironment(), true, '192.168.x.x must be identified as local environment');
+
+  // Test file:// protocol
+  global.window = { location: { hostname: '', protocol: 'file:' } };
+  assert.equal(isLocalEnvironment(), true, 'file: protocol must be identified as local environment');
+
+  // Test production live domain
+  global.window = { location: { hostname: 'eplan-studio.karnataka.gov.in', protocol: 'https:' } };
+  assert.equal(isLocalEnvironment(), false, 'Production public domain must NOT be local environment');
+
+  global.window = { location: { hostname: 'bbmp-eplan.in', protocol: 'https:' } };
+  assert.equal(isLocalEnvironment(), false, 'Custom public domain must NOT be local environment');
+});
+
 suite.finish();

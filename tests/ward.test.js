@@ -114,4 +114,13 @@ assert.equal(searchWards('xyz_non_existent_place_12345').length, 0, 'Non-existen
 
 console.log('   ✓ Malformed, empty, and non-matching inputs handled fail-safely.');
 
+// 5. Verifying BBMP Zone Dropdown Pre-selection Sync
+console.log('\n5. Verifying BBMP Zone Dropdown Pre-selection Sync:');
+validZoneIds.filter(id => id !== 'all').forEach(zone => {
+  const zoneWards = searchWards('', zone);
+  assert(zoneWards.length > 0, `Pre-selecting zone '${zone}' must return wards for that zone`);
+  assert(zoneWards.every(w => w.zone === zone), `All returned wards must belong to zone '${zone}'`);
+});
+console.log('   ✓ Dropdown zone pre-selection correctly filters wards by selected zone by default.');
+
 console.log('\n🎉 ALL BBMP WARD DIRECTORY TEST SUITES PASSED WITH 100% SUCCESS!\n');

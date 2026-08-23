@@ -6,6 +6,7 @@
  */
 
 import { BBMP_ZONES, BBMP_WARDS } from './data/bbmpWards.js';
+import { generateQrSvg, renderQrToCanvas } from './qrcode.js';
 
 let pickerMapInstance = null;
 let pickerMarkerInstance = null;
@@ -1776,14 +1777,230 @@ function switchMobileTab(tabName) {
   }
 }
 
+/* ==========================================================================
+   Voluntary Support & Tip Modal Controller (UPI + BuyMeACoffee)
+   ========================================================================== */
+
+const SUPPORT_CONFIG = {
+  upiId: 'manojbiswas83@okaxis',
+  payeeName: 'Manoj Biswas',
+  buyMeACoffeeUrl: 'https://buymeacoffee.com/cranbear',
+  defaultAmount: 99
+};
+
+let pendingExportAction = 'download';
+
 /**
- * Direct client-side PDF file download using jsPDF + html2canvas.
- * Downloads multi-page A4 PDF file directly into user's Downloads folder WITHOUT opening print UI.
+ * Safely reads from localStorage with error boundary.
+ */
+function safeGetStorage(key, fallback = null) {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+/**
+ * Safely writes to localStorage with error boundary.
+ */
+function safeSetStorage(key, val) {
+  try {
+    localStorage.setItem(key, val);
+  } catch {
+    // Quota or incognito restriction fallback
+  }
+}
+
+/**
+ * Opens the Support & Tip Modal before triggering download/print.
  * 
- * @function downloadPDFPackage
+ * @function showSupportModal
+ * @param {string} [actionType='download'] - 'download' or 'print'
+ * @param {boolean} [isVoluntaryClick=false] - If true, triggered from the Step 7 support card
+ */
+function showSupportModal(actionType = 'download', isVoluntaryClick = false) {
+  pendingExportAction = actionType || 'download';
+
+  const modal = document.getElementById('supportTipModal');
+  if (!modal) {
+    proceedWithPendingAction();
+    return;
+  }
+
+  // Update proceed button text based on action
+  const proceedBtnText = document.getElementById('supportProceedBtnText');
+  if (proceedBtnText) {
+    const isPrint = pendingExportAction === 'print';
+    const defaultText = isPrint ? '🖨️ Proceed to Print Plan' : '⬇️ Proceed to Download PDF';
+    const i18nKey = isPrint ? 'supportModal.proceedPrint' : 'supportModal.proceedDownload';
+    proceedBtnText.textContent = window.i18n ? window.i18n.t(i18nKey) : defaultText;
+  }
+
+  // Always default to standard recommended amount (₹99)
+  selectTipAmount(SUPPORT_CONFIG.defaultAmount || 99);
+
+  modal.style.display = 'flex';
+  modal.classList.add('active');
+}
+
+/**
+ * Selects a tip amount preset, updates the UPI URI, and dynamically re-renders QR Code.
+ * 
+ * @function selectTipAmount
+ * @param {number} amount - Tip amount in INR (49, 99, 199, etc.)
+ */
+function selectTipAmount(amount = 99) {
+  // Update active tab state
+  [49, 99, 199].forEach(amt => {
+    const chip = document.getElementById(`supportChip${amt}`);
+    if (chip) {
+      if (amt === amount) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
+      }
+    }
+  });
+
+  // Construct NPCI Standard UPI URI
+  const upiUri = `upi://pay?pa=${SUPPORT_CONFIG.upiId}&pn=${encodeURIComponent(SUPPORT_CONFIG.payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent('Support ePlanStudio')}`;
+
+  // Update mobile intent link
+  const intentLink = document.getElementById('supportUpiIntentLink');
+  if (intentLink) {
+    intentLink.href = upiUri;
+  }
+
+  // Update displayed UPI ID
+  const upiCodeEl = document.getElementById('supportUpiCode');
+  if (upiCodeEl) {
+    upiCodeEl.textContent = SUPPORT_CONFIG.upiId;
+  }
+
+  // Render pure client-side QR Code (Canvas with SVG fallback)
+  const qrContainer = document.getElementById('supportQrContainer');
+  if (qrContainer) {
+    try {
+      const canvasEl = document.getElementById('supportQrCanvas');
+      const canvasFn = typeof renderQrToCanvas === 'function' ? renderQrToCanvas : (window.renderQrToCanvas || null);
+      let rendered = false;
+      if (canvasEl && canvasFn) {
+        rendered = canvasFn(upiUri, canvasEl, { size: 280, margin: 3, darkColor: '#000000', lightColor: '#ffffff' });
+      }
+      if (!rendered) {
+        const qrFn = typeof generateQrSvg === 'function' ? generateQrSvg : (window.generateQrSvg || null);
+        if (qrFn) {
+          qrContainer.innerHTML = qrFn(upiUri, { size: 140, margin: 3, darkColor: '#000000', lightColor: '#ffffff' });
+        }
+      }
+    } catch (err) {
+      console.warn('QR Code generation fallback:', err);
+      qrContainer.innerHTML = `<div style="font-size: 11px; text-align: center; color: #64748b; padding: 10px;">Scan using UPI ID:<br><strong>${SUPPORT_CONFIG.upiId}</strong></div>`;
+    }
+  }
+}
+
+/**
+ * Copies the UPI ID to clipboard with animated visual feedback and fallback.
+ * 
+ * @function copyUpiId
  * @returns {Promise<void>}
  */
-async function downloadPDFPackage() {
+function copyUpiId() {
+  const upiId = SUPPORT_CONFIG.upiId;
+  const copyBtn = document.getElementById('supportCopyBtn');
+  const copyIcon = document.getElementById('supportCopyIcon');
+  const copyText = document.getElementById('supportCopyText');
+
+  const onCopySuccess = () => {
+    if (copyIcon) {
+      copyIcon.textContent = 'check';
+    }
+    if (copyText) {
+      const origText = copyText.textContent;
+      copyText.textContent = window.i18n ? window.i18n.t('supportModal.copied') : '✓ Copied!';
+    }
+    if (copyBtn) {
+      copyBtn.classList.add('copied');
+      copyBtn.style.background = '#10b981';
+      copyBtn.style.borderColor = '#10b981';
+      copyBtn.style.color = '#ffffff';
+    }
+    setTimeout(() => {
+      if (copyIcon) copyIcon.textContent = 'content_copy';
+      if (copyText) copyText.textContent = '';
+      if (copyBtn) {
+        copyBtn.classList.remove('copied');
+        copyBtn.style.background = '';
+        copyBtn.style.borderColor = '';
+        copyBtn.style.color = '';
+      }
+    }, 2000);
+  };
+
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    return navigator.clipboard.writeText(upiId).then(onCopySuccess).catch(() => fallbackCopyText(upiId, onCopySuccess));
+  } else {
+    fallbackCopyText(upiId, onCopySuccess);
+    return Promise.resolve();
+  }
+}
+
+/**
+ * Fallback copy function for restricted browsers / non-HTTPS local sandboxes.
+ */
+function fallbackCopyText(text, callback) {
+  try {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    if (typeof callback === 'function') callback();
+  } catch (err) {
+    console.warn('Fallback copy failed:', err);
+  }
+}
+
+/**
+ * Closes the support modal.
+ * 
+ * @function closeSupportModal
+ */
+function closeSupportModal() {
+  const modal = document.getElementById('supportTipModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
+}
+
+/**
+ * Proceeds with the pending export action (download PDF or print) and closes modal.
+ * 
+ * @function proceedWithPendingAction
+ */
+function proceedWithPendingAction() {
+  closeSupportModal();
+  if (pendingExportAction === 'print') {
+    executePrintPackageDirect();
+  } else {
+    executeDownloadPDFDirect();
+  }
+}
+
+/**
+ * Triggers PDF export workflow. Shows voluntary support modal first, then executes PDF download.
+ * 
+ * @function downloadPDFPackage
+ * @returns {void}
+ */
+function downloadPDFPackage() {
   const legalCheck = document.getElementById('legalConsentCheck');
   if (legalCheck && !legalCheck.checked) {
     if (typeof goToStep === 'function') goToStep(7);
@@ -1793,6 +2010,17 @@ async function downloadPDFPackage() {
     return;
   }
 
+  showSupportModal('download');
+}
+
+/**
+ * Direct client-side PDF file download using jsPDF + html2canvas.
+ * Downloads multi-page A4 PDF file directly into user's Downloads folder WITHOUT opening print UI.
+ * 
+ * @function executeDownloadPDFDirect
+ * @returns {Promise<void>}
+ */
+async function executeDownloadPDFDirect() {
   const downloadBtn = document.getElementById('downloadPdfBtn');
   const originalBtnText = downloadBtn ? downloadBtn.innerHTML : '';
   if (downloadBtn) {
@@ -1866,7 +2094,7 @@ async function downloadPDFPackage() {
 
   } catch (err) {
     console.error('Direct PDF Export Failed:', err);
-    printPlanPackage();
+    executePrintPackageDirect();
   } finally {
     document.body.classList.remove('pdf-export-active');
     if (downloadBtn) {
@@ -1877,8 +2105,7 @@ async function downloadPDFPackage() {
 }
 
 /**
- * Pre-configures page breaks and multi-page visibility before invoking window.print().
- * Opens native browser printer popup for physical paper printing.
+ * Triggers print workflow. Shows voluntary support modal first, then executes print.
  * 
  * @function printPlanPackage
  * @returns {void}
@@ -1893,6 +2120,17 @@ function printPlanPackage() {
     return;
   }
 
+  showSupportModal('print');
+}
+
+/**
+ * Pre-configures page breaks and multi-page visibility before invoking window.print().
+ * Opens native browser printer popup for physical paper printing.
+ * 
+ * @function executePrintPackageDirect
+ * @returns {void}
+ */
+function executePrintPackageDirect() {
   if (typeof generatePlan === 'function') generatePlan();
   toggleLegendSheetPage();
 
@@ -1902,7 +2140,9 @@ function printPlanPackage() {
   }
 
   setTimeout(() => {
-    window.print();
+    if (typeof window !== 'undefined' && typeof window.print === 'function') {
+      window.print();
+    }
   }, 100);
 }
 
@@ -3496,13 +3736,21 @@ function openWardSearchModal(e) {
   const modal = document.getElementById('bbmpWardModal');
   if (!modal) return;
 
+  // Pre-select active zone filter if user has selected a zone in the dropdown
+  const selectedZone = (document.getElementById('bbmpZone')?.value || '').trim();
+  if (selectedZone && selectedZone !== '') {
+    activeWardZoneFilter = selectedZone;
+  } else {
+    activeWardZoneFilter = 'all';
+  }
+
   modal.style.display = 'flex';
   modal.classList.add('active');
 
   // Initialize zone filter tabs
   renderWardZoneChips();
 
-  // Reset search input and show all / zone-filtered wards
+  // Reset search input and show zone-filtered wards
   const searchInput = document.getElementById('wardModalSearchInput');
   const currentWard = (document.getElementById('wardName')?.value || '').trim();
   if (searchInput) {
@@ -3768,6 +4016,16 @@ if (typeof window !== 'undefined') {
   window.triggerSmartFillChipAnimation = triggerSmartFillChipAnimation;
   window.STEP3_SMART_FILL_PRESETS = STEP3_SMART_FILL_PRESETS;
   window.STEP5_SMART_FILL_PRESETS = STEP5_SMART_FILL_PRESETS;
+
+  // Voluntary Support & Tip Modal Controllers
+  window.SUPPORT_CONFIG = SUPPORT_CONFIG;
+  window.showSupportModal = showSupportModal;
+  window.closeSupportModal = closeSupportModal;
+  window.selectTipAmount = selectTipAmount;
+  window.copyUpiId = copyUpiId;
+  window.proceedWithPendingAction = proceedWithPendingAction;
+  window.executeDownloadPDFDirect = executeDownloadPDFDirect;
+  window.executePrintPackageDirect = executePrintPackageDirect;
 }
 
 

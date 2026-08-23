@@ -887,8 +887,17 @@ function showStep(stepNum, shouldSave = true, clearErrors = true) {
   const nextBtn = document.getElementById('nextBtn');
   const prevBtn = document.getElementById('prevBtn');
 
-  if (prevBtn && typeof t === 'function') {
-    prevBtn.textContent = t('btn.back');
+  // Step Navigation Button State Management:
+  // Step 1: Hide Previous (Continue only)
+  // Steps 2-6: Show both Previous and Continue (Step 6 shows "Review →")
+  // Step 7: Show Previous (Hide Continue since Step 7 has dedicated action buttons)
+  if (prevBtn) {
+    if (stepNum === 1) {
+      prevBtn.style.display = 'none';
+    } else {
+      prevBtn.textContent = typeof t === 'function' ? t('btn.back') : '← Previous';
+      prevBtn.style.display = 'inline-flex';
+    }
   }
 
   if (exportSection) {
@@ -1188,5 +1197,6 @@ if (typeof window !== 'undefined') {
   window.showDraftRestoreModal = showDraftRestoreModal;
   window.clearFieldError = clearFieldError;
   window.checkRequired = checkRequired;
+  window.getCurrentStep = () => currentStep;
 }
 

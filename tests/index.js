@@ -26,7 +26,8 @@ const TEST_TIERS = [
       'unit/theme.unit.test.js',
       'unit/contact.unit.test.js',
       'unit/analytics.unit.test.js',
-      'unit/smart_fill.unit.test.js'
+      'unit/smart_fill.unit.test.js',
+      'unit/step_navigation.unit.test.js'
     ]
   },
   {
@@ -34,6 +35,7 @@ const TEST_TIERS = [
     icon: '⚙️',
     files: [
       'integration/navigation_routing.test.js',
+      'integration/support_tip_modal.test.js',
       'integration/map_picker_geocoding.test.js',
       'integration/signature_crop_chroma.test.js',
       'integration/draft_session_lifecycle.test.js',

@@ -184,6 +184,7 @@ const mockWindow = {
   alert: () => { },
   confirm: () => true,
   prompt: () => '',
+  print: () => { },
   addEventListener: () => { },
   removeEventListener: () => { },
   location: { search: '' }
@@ -223,8 +224,8 @@ try {
   assert.fail(`CRITICAL ERROR during VM evaluation: ${err.message}\n${err.stack}`);
 }
 
-// 4. Modal Lifecycle State Machine Tests (Open & Close on all 7 modals)
-console.log('\n2. Testing All 7 Modal Open & Close State Lifecycles:');
+// 4. Modal Lifecycle State Machine Tests (Open & Close on all 8 modals)
+console.log('\n2. Testing All 8 Modal Open & Close State Lifecycles:');
 
 const MODAL_TEST_SPECS = [
   {
@@ -272,6 +273,13 @@ const MODAL_TEST_SPECS = [
     openFn: 'showProjectImportErrorModal',
     openArgs: [['Error parameter 1', 'Error parameter 2']],
     closeFn: 'closeProjectImportErrorModal'
+  },
+  {
+    name: 'Voluntary Support & Tip Modal',
+    id: 'supportTipModal',
+    openFn: 'showSupportModal',
+    openArgs: ['download'],
+    closeFn: 'closeSupportModal'
   }
 ];
 

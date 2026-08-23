@@ -12,6 +12,7 @@ const JS_FILES = [
   'js/admin.js',
   'js/analytics.js',
   'js/contact.js',
+  'js/qrcode.js',
   'js/renderer.js',
   'js/theme.js',
   'js/ui.js',
@@ -40,7 +41,7 @@ async function runBuild() {
     await esbuild.build({
       entryPoints: [file],
       outfile: outFile,
-      bundle: file === 'js/i18n.js' || file === 'js/ui.js',
+      bundle: file === 'js/i18n.js' || file === 'js/ui.js' || file === 'js/qrcode.js',
       minify: true,
       sourcemap: false,
       legalComments: 'none',
@@ -57,6 +58,7 @@ async function runBuild() {
   // 2. Build combined Workbench Studio bundle for maximum page speed
   const studioBundleInput = 'js/studio.bundle.js';
   const studioBundleContent = `
+    import './qrcode.js';
     import './wizard.js';
     import './ui.js';
     import './validator.js';

@@ -181,30 +181,38 @@
 
 [data-theme="dark"] .step-tab,
 [data-theme="dark"] .stepper-tab {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: #a1a1a6 !important;
+  background: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #cbd5e1 !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  padding: 6px 2px !important;
+  border-radius: 6px !important;
+  white-space: nowrap !important;
 }
 
 [data-theme="dark"] .step-tab:hover,
 [data-theme="dark"] .stepper-tab:hover {
-  background: rgba(255, 255, 255, 0.12) !important;
+  background: #334155 !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
   color: #ffffff !important;
 }
 
 [data-theme="dark"] .step-tab.active,
 [data-theme="dark"] .stepper-tab.active {
-  background: #2997ff !important;
+  background: var(--apple-accent) !important;
   color: #ffffff !important;
-  border-color: #2997ff !important;
-  box-shadow: 0 4px 12px rgba(41, 151, 255, 0.35) !important;
+  border: 1px solid var(--apple-accent) !important;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.35) !important;
+  font-weight: 600 !important;
 }
 
 [data-theme="dark"] .step-tab.completed,
 [data-theme="dark"] .stepper-tab.completed {
-  background: rgba(52, 199, 89, 0.18) !important;
-  color: #34c759 !important;
-  border-color: rgba(52, 199, 89, 0.3) !important;
+  background: rgba(52, 199, 89, 0.16) !important;
+  color: #4ade80 !important;
+  border: 1px solid rgba(52, 199, 89, 0.35) !important;
+  font-weight: 600 !important;
 }
 
 [data-theme="dark"] .wizard-header-banner {
@@ -2199,9 +2207,18 @@ button:disabled span,
     font-size: 14.5px !important;
     font-weight: 700 !important;
     border-radius: 980px !important;
-    display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+  }
+
+  .wizard-footer-bar button:not([style*="display: none"]) {
+    display: inline-flex !important;
+  }
+
+  .wizard-footer-bar button[style*="display: none"],
+  .wizard-footer-bar #prevBtn[style*="display: none"],
+  .wizard-footer-bar #nextBtn[style*="display: none"] {
+    display: none !important;
   }
 
   /* Stack all input text boxes in a single column on mobile */
@@ -2323,23 +2340,27 @@ button:disabled span,
   padding: 6px 2px;
   border-radius: 6px;
   background: #f0f0f2;
+  border: 1px solid transparent;
   cursor: pointer;
   transition: var(--apple-transition);
-  border: none;
+  white-space: nowrap;
 }
 
 .step-tab:hover {
   background: #e5e5e7;
+  color: #0f172a;
 }
 
 .step-tab.active {
   background: var(--apple-accent);
   color: #ffffff;
+  border-color: var(--apple-accent);
 }
 
 .step-tab.completed {
   background: rgba(52, 199, 89, 0.15);
   color: #1e7e34;
+  border-color: rgba(52, 199, 89, 0.3);
 }
 
 /* Wizard Header Guidance Banner */
@@ -2617,6 +2638,10 @@ select:focus {
   border-radius: 0 !important;
 }
 
+.wizard-footer-bar #nextBtn {
+  margin-left: auto;
+}
+
 .apple-btn-secondary {
   background: #e2e8f0;
   color: #0f172a !important;
@@ -2883,8 +2908,8 @@ body.pdf-export-active .drawing-canvas-column,
 }
 
 .svg-container svg {
-  border: 1px solid #e2e8f0;
-  background: #fafafa;
+  border: 1px solid #cbd5e1;
+  background: #ffffff !important;
   max-width: 100%;
   height: auto;
 }
@@ -8776,4 +8801,641 @@ body.pdf-export-active .drawing-canvas-column,
 [data-theme="dark"] .ward-zone-tag {
   background: #3f3f46 !important;
   color: #f1f5f9 !important;
+}
+
+/* ==========================================================================
+   Voluntary Support & Tip Modal & Cards (UPI + BuyMeACoffee)
+   ========================================================================== */
+
+.support-modal-card {
+  max-width: 500px !important;
+  width: 94% !important;
+  border-radius: 20px !important;
+  padding: 22px !important;
+  background: var(--apple-card-bg, #ffffff) !important;
+  border: 1px solid var(--apple-border) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.support-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.support-modal-title {
+  margin: 0 0 4px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.support-modal-subtitle {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.support-free-highlight {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  margin-bottom: 3px;
+}
+
+.support-subtitle-note {
+  display: block;
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+  line-height: 1.4;
+}
+
+.support-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.support-modal-close-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--apple-text-primary);
+}
+
+.support-amount-segmented-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 4px;
+  border-radius: 14px;
+  border: 1px solid var(--apple-border);
+}
+
+.support-amount-tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 6px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+.support-tab-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  line-height: 1.1;
+}
+
+.support-tab-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  margin-top: 2px;
+}
+
+.support-amount-tab:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.support-amount-tab.active {
+  background: var(--apple-card-bg, #ffffff) !important;
+  border-color: var(--apple-accent) !important;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.18) !important;
+}
+
+.support-amount-tab.active .support-tab-price {
+  color: var(--apple-accent) !important;
+}
+
+.support-amount-tab.active .support-tab-label {
+  color: var(--apple-accent) !important;
+  font-weight: 700 !important;
+}
+
+.support-popular-badge {
+  position: absolute;
+  top: -8px;
+  right: 50%;
+  transform: translateX(50%);
+  background: #0284c7;
+  color: #ffffff !important;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: 980px;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.4);
+  white-space: nowrap;
+}
+
+.support-qr-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(0, 113, 227, 0.04);
+  border: 1px solid rgba(0, 113, 227, 0.12);
+}
+
+.support-qr-top-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.support-qr-box {
+  width: 140px;
+  height: 140px;
+  min-width: 140px;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.support-qr-box svg,
+.support-qr-box canvas {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block;
+}
+
+.support-upi-info-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.support-scan-hint {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--apple-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.3;
+}
+
+.support-action-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.support-open-upi-btn,
+.support-open-bmac-btn {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.support-upi-copy-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--apple-card-bg);
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--apple-border);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.support-upi-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--apple-text-secondary);
+}
+
+.support-upi-code {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.support-copy-btn {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  background: var(--apple-bg);
+  border: 1px solid var(--apple-border);
+  padding: 0;
+  border-radius: 8px;
+  color: var(--apple-text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.support-copy-btn:hover {
+  background: var(--apple-accent);
+  border-color: var(--apple-accent);
+  color: #ffffff;
+}
+
+@media (max-width: 480px) {
+  .support-qr-top-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .support-scan-hint {
+    justify-content: center;
+  }
+}
+
+.support-open-upi-btn,
+.support-open-bmac-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.support-open-upi-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
+}
+
+.support-open-upi-btn:hover {
+  background: #047857 !important;
+  color: #ffffff !important;
+}
+
+.support-open-bmac-btn {
+  background: #d97706 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
+}
+
+.support-open-upi-btn span,
+.support-open-upi-btn .material-symbols-outlined,
+.support-open-upi-btn .support-upi-svg,
+.support-open-bmac-btn span,
+.support-open-bmac-btn .material-symbols-outlined,
+.support-open-bmac-btn .support-bmac-svg {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+.support-open-bmac-btn:hover {
+  background: #b45309 !important;
+  color: #ffffff !important;
+}
+
+.support-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--apple-border);
+}
+
+.support-proceed-btn {
+  width: 100% !important;
+  height: 48px !important;
+  background: var(--apple-accent) !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 0 20px !important;
+  border-radius: 12px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  transition: all 0.15s ease !important;
+  box-shadow: 0 4px 14px rgba(0, 113, 227, 0.35) !important;
+}
+
+.support-proceed-btn span,
+.support-proceed-btn .material-symbols-outlined {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+.support-proceed-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 113, 227, 0.45) !important;
+}
+
+/* Step 7 Permanent Support Card */
+.support-tip-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 18px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), rgba(0, 113, 227, 0.06));
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 14px;
+}
+
+@media (max-width: 600px) {
+  .support-tip-card {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+  }
+}
+
+.support-tip-card-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.support-tip-icon-circle {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.support-tip-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.support-tip-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--apple-text-primary);
+}
+
+.support-tip-desc {
+  font-size: 12px;
+  color: var(--apple-text-secondary);
+  line-height: 1.35;
+}
+
+.support-tip-cta-btn {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: #f59e0b !important;
+  color: #ffffff !important;
+  border: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.support-tip-cta-btn span {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+.support-tip-cta-btn:hover {
+  background: #d97706 !important;
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] .support-modal-card {
+  background: #18181b !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8) !important;
+}
+
+[data-theme="dark"] .support-modal-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .support-modal-subtitle {
+  color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .support-free-highlight {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .support-subtitle-note {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .support-modal-close-btn {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .support-modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .support-amount-segmented-grid {
+  background: #202024 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] .support-amount-tab {
+  background: transparent !important;
+}
+
+[data-theme="dark"] .support-amount-tab .support-tab-price {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .support-amount-tab .support-tab-label {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .support-amount-tab:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .support-amount-tab.active {
+  background: #2d2d34 !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25) !important;
+}
+
+[data-theme="dark"] .support-amount-tab.active .support-tab-price {
+  color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .support-amount-tab.active .support-tab-label {
+  color: #e0f2fe !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="dark"] .support-popular-badge {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .support-qr-section {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="dark"] .support-scan-hint,
+[data-theme="dark"] .support-scan-hint span {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .support-scan-hint .material-symbols-outlined {
+  color: #10b981 !important;
+}
+
+[data-theme="dark"] .support-upi-copy-row {
+  background: #27272a !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+[data-theme="dark"] .support-upi-label {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .support-upi-code {
+  color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .support-copy-btn {
+  background: #3f3f46 !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .support-copy-btn span {
+  color: #ffffff !important;
+}
+
+.support-open-upi-btn,
+[data-theme="dark"] .support-open-upi-btn {
+  background: #059669 !important;
+  color: #ffffff !important;
+}
+
+.support-open-upi-btn span,
+.support-open-upi-btn .material-symbols-outlined,
+.support-open-upi-btn .support-upi-svg,
+[data-theme="dark"] .support-open-upi-btn span,
+[data-theme="dark"] .support-open-upi-btn .material-symbols-outlined,
+[data-theme="dark"] .support-open-upi-btn .support-upi-svg {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+.support-open-bmac-btn,
+[data-theme="dark"] .support-open-bmac-btn {
+  background: #d97706 !important;
+  color: #ffffff !important;
+}
+
+.support-open-bmac-btn span,
+.support-open-bmac-btn .material-symbols-outlined,
+.support-open-bmac-btn .support-bmac-svg,
+[data-theme="dark"] .support-open-bmac-btn span,
+[data-theme="dark"] .support-open-bmac-btn .material-symbols-outlined,
+[data-theme="dark"] .support-open-bmac-btn .support-bmac-svg {
+  background: transparent !important;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.support-proceed-btn,
+[data-theme="dark"] .support-proceed-btn {
+  background: var(--apple-accent) !important;
+  color: #ffffff !important;
+}
+
+.support-proceed-btn span,
+.support-proceed-btn .material-symbols-outlined,
+[data-theme="dark"] .support-proceed-btn span,
+[data-theme="dark"] .support-proceed-btn .material-symbols-outlined {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .support-tip-card {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(56, 189, 248, 0.1)) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+}
+
+[data-theme="dark"] .support-tip-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .support-tip-desc {
+  color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .support-tip-cta-btn {
+  background: #f59e0b !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .support-tip-cta-btn span {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .support-tip-cta-btn:hover {
+  background: #d97706 !important;
 }

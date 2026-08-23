@@ -868,8 +868,8 @@ function generatePlan() {
     const svg = document.getElementById('plotSvg');
     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     rect.setAttribute('id', `roadRect${dir}`);
-    rect.setAttribute('fill', '#e2e8f0');
-    rect.setAttribute('stroke', '#94a3b8');
+    rect.setAttribute('fill', '#f8fafc');
+    rect.setAttribute('stroke', '#cbd5e1');
     rect.setAttribute('stroke-width', '1');
     svg.appendChild(rect);
     return rect;
