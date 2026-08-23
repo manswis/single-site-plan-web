@@ -293,7 +293,8 @@
         <div class="map-drag-instruction-tag"
           style="position: absolute; bottom: 12px; left: 12px; z-index: 1000; background: rgba(15, 23, 42, 0.88); color: #ffffff !important; padding: 5px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; pointer-events: none; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); box-shadow: 0 2px 8px rgba(0,0,0,0.35); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; border: 1px solid rgba(255, 255, 255, 0.15);">
           <span class="material-symbols-outlined" style="font-size: 15px; color: #ffffff !important;">touch_app</span>
-          <span data-i18n="mapPicker.dragInstruction" style="color: #ffffff !important; font-weight: 600;">Drag marker or click map to pinpoint site</span>
+          <span data-i18n="mapPicker.dragInstruction" style="color: #ffffff !important; font-weight: 600;">Drag marker
+            or click map to pinpoint site</span>
         </div>
 
         <!-- Floating Architectural North Compass (Bottom Right) -->
@@ -319,7 +320,8 @@
           <span class="material-symbols-outlined"
             style="font-size: 17px; color: var(--apple-accent);">location_on</span>
           <span data-i18n="mapPicker.selectedLabel">Selected:</span> <span id="pickerCoordsDisplay"
-            style="color: var(--apple-accent); font-family: monospace; font-size: 13px; font-weight: 700;">12.9716, 77.5946</span>
+            style="color: var(--apple-accent); font-family: monospace; font-size: 13px; font-weight: 700;">12.9716,
+            77.5946</span>
         </div>
         <div style="display: flex; gap: 8px; margin-left: auto;">
           <button type="button" class="apple-btn-secondary" onclick="closeLocationPickerModal()"
@@ -327,8 +329,7 @@
             <span data-i18n="btn.cancel">Cancel</span>
           </button>
           <button type="button" class="apple-btn-primary" onclick="applyPickerLocation()"
-            style="padding: 8px 22px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
-            <span class="material-symbols-outlined" style="font-size: 18px;">check_circle</span>
+            style="padding: 8px 22px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">
             <span data-i18n="mapPicker.useThisLocation">Use This Location</span>
           </button>
         </div>
