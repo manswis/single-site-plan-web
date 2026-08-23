@@ -126,6 +126,48 @@ function closeLocationPickerModal() {
   }
 }
 
+let currentMapLayerType = 'street';
+let streetTileLayer = null;
+let satelliteTileLayer = null;
+
+/**
+ * Switches the picker map layer between Street and Satellite view.
+ * @function setMapLayerType
+ * @param {'street'|'satellite'} type
+ * @returns {void}
+ */
+function setMapLayerType(type) {
+  currentMapLayerType = type === 'satellite' ? 'satellite' : 'street';
+  if (pickerMapInstance && typeof L !== 'undefined') {
+    if (currentMapLayerType === 'satellite') {
+      if (streetTileLayer && pickerMapInstance.hasLayer(streetTileLayer)) {
+        pickerMapInstance.removeLayer(streetTileLayer);
+      }
+      if (!satelliteTileLayer) {
+        satelliteTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          attribution: '&copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
+          maxZoom: 19
+        });
+      }
+      if (!pickerMapInstance.hasLayer(satelliteTileLayer)) {
+        satelliteTileLayer.addTo(pickerMapInstance);
+      }
+    } else {
+      if (satelliteTileLayer && pickerMapInstance.hasLayer(satelliteTileLayer)) {
+        pickerMapInstance.removeLayer(satelliteTileLayer);
+      }
+      if (streetTileLayer && !pickerMapInstance.hasLayer(streetTileLayer)) {
+        streetTileLayer.addTo(pickerMapInstance);
+      }
+    }
+  }
+
+  const btnStreet = document.getElementById('btnMapLayerStreet');
+  const btnSat = document.getElementById('btnMapLayerSatellite');
+  if (btnStreet) btnStreet.classList.toggle('active', currentMapLayerType === 'street');
+  if (btnSat) btnSat.classList.toggle('active', currentMapLayerType === 'satellite');
+}
+
 /**
  * Initializes or moves the Leaflet map and marker.
  * @function initOrUpdatePickerMap
@@ -150,11 +192,20 @@ function initOrUpdatePickerMap(lat, lon) {
       });
 
       // High-performance CartoDB Voyager raster tiles
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      streetTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; OpenStreetMap &copy; CARTO',
         subdomains: 'abcd',
         maxZoom: 19
-      }).addTo(pickerMapInstance);
+      });
+
+      if (currentMapLayerType === 'satellite') {
+        satelliteTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          attribution: '&copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
+          maxZoom: 19
+        }).addTo(pickerMapInstance);
+      } else {
+        streetTileLayer.addTo(pickerMapInstance);
+      }
 
       // Draggable red marker
       const redPinIcon = L.divIcon({
@@ -3340,6 +3391,7 @@ if (typeof window !== 'undefined') {
   window.locateOnPickerMap = locateOnPickerMap;
   window.resetToBangaloreCenter = resetToBangaloreCenter;
   window.flyPickerToZone = flyPickerToZone;
+  window.setMapLayerType = setMapLayerType;
   window.onGpsZoomInput = onGpsZoomInput;
   window.syncGpsZoomControls = syncGpsZoomControls;
   window.applyPickerLocation = applyPickerLocation;

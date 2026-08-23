@@ -28,7 +28,12 @@ class MockClassList {
   add(...names) { names.forEach(n => this.classes.add(n)); }
   remove(...names) { names.forEach(n => this.classes.delete(n)); }
   contains(name) { return this.classes.has(name); }
-  toggle(name) {
+  toggle(name, force) {
+    if (force !== undefined) {
+      if (force) this.classes.add(name);
+      else this.classes.delete(name);
+      return !!force;
+    }
     if (this.classes.has(name)) { this.classes.delete(name); return false; }
     this.classes.add(name); return true;
   }

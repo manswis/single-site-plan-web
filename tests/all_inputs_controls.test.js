@@ -27,6 +27,15 @@ class MockClassList {
   add(...names) { names.forEach(n => this.classes.add(n)); }
   remove(...names) { names.forEach(n => this.classes.delete(n)); }
   contains(name) { return this.classes.has(name); }
+  toggle(name, force) {
+    if (force !== undefined) {
+      if (force) this.classes.add(name);
+      else this.classes.delete(name);
+      return !!force;
+    }
+    if (this.classes.has(name)) { this.classes.delete(name); return false; }
+    this.classes.add(name); return true;
+  }
 }
 
 class MockElement {
@@ -54,10 +63,10 @@ class MockElement {
   getAttribute(name) { return this.attributes.get(name) || null; }
   setAttribute(name, val) { this.attributes.set(name, String(val)); }
   removeAttribute(name) { this.attributes.delete(name); }
-  focus() {}
-  select() {}
-  scrollIntoView() {}
-  click() {}
+  focus() { }
+  select() { }
+  scrollIntoView() { }
+  click() { }
   closest() { return this.parentElement; }
   querySelectorAll() { return []; }
   querySelector() { return null; }
@@ -71,24 +80,24 @@ class MockElement {
     if (idx !== -1) this.children.splice(idx, 1);
     return child;
   }
-  addEventListener() {}
-  removeEventListener() {}
+  addEventListener() { }
+  removeEventListener() { }
   getContext() {
     return {
-      fillRect: () => {},
-      clearRect: () => {},
-      drawImage: () => {},
-      beginPath: () => {},
-      arc: () => {},
-      fill: () => {},
-      stroke: () => {},
-      save: () => {},
-      restore: () => {},
-      translate: () => {},
-      rotate: () => {},
-      scale: () => {},
+      fillRect: () => { },
+      clearRect: () => { },
+      drawImage: () => { },
+      beginPath: () => { },
+      arc: () => { },
+      fill: () => { },
+      stroke: () => { },
+      save: () => { },
+      restore: () => { },
+      translate: () => { },
+      rotate: () => { },
+      scale: () => { },
       getImageData: () => ({ data: new Uint8ClampedArray(400) }),
-      putImageData: () => {}
+      putImageData: () => { }
     };
   }
   toDataURL() { return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='; }
@@ -116,7 +125,7 @@ class MockDocument {
   querySelectorAll() { return []; }
   createElement(tag) { return new MockElement('', tag); }
   createElementNS(ns, tag) { return new MockElement('', tag); }
-  addEventListener() {}
+  addEventListener() { }
 }
 
 const mockDoc = new MockDocument();
@@ -138,21 +147,21 @@ const mockWindow = {
     clear: () => mockWindow.sessionStorage.store.clear()
   },
   setTimeout: (fn) => { if (typeof fn === 'function') fn(); return 1; },
-  clearTimeout: () => {},
+  clearTimeout: () => { },
   setInterval: () => 1,
-  clearInterval: () => {},
-  console: { log: () => {}, warn: () => {}, error: () => {} },
+  clearInterval: () => { },
+  console: { log: () => { }, warn: () => { }, error: () => { } },
   fetch: () => Promise.resolve({
     ok: true,
     json: () => Promise.resolve([
       { lat: "12.9784", lon: "77.6408", display_name: "Indiranagar, Bangalore, Karnataka, India" }
     ])
   }),
-  alert: () => {},
+  alert: () => { },
   confirm: () => true,
   prompt: () => '',
-  addEventListener: () => {},
-  removeEventListener: () => {},
+  addEventListener: () => { },
+  removeEventListener: () => { },
   URLSearchParams: globalThis.URLSearchParams,
   location: { search: '' },
   Image: class {
@@ -271,6 +280,10 @@ const bbmpZones = ['East', 'West', 'South', 'Mahadevapura', 'Yelahanka', 'Rajara
 bbmpZones.forEach(z => {
   mockWindow.flyPickerToZone(z);
 });
+
+// Test Street vs Satellite layer toggles
+mockWindow.setMapLayerType('satellite');
+mockWindow.setMapLayerType('street');
 
 // Test zoom slider input
 const zoomSlider = mockDoc.getElementById('gpsZoom');

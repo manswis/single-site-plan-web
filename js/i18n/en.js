@@ -646,7 +646,9 @@ export const en = {
   "step6.sigCropHint": "PNG, JPG (Tap to crop & align)",
   "step6.legendPage": "📑 Include BBMP Line & Colour Specifications Sheet (Page 2) in Merged PDF",
   "mapPicker.myLocation": "📍 My Location",
-  "mapPicker.bangaloreCenter": "🏛️ Bangalore Central",
+  "mapPicker.bangaloreCenter": "Bangalore Central",
   "btn.search": "Search",
-  "mapPicker.searchPlaceholder": "Search Bangalore area (e.g. Indiranagar, Whitefield)..."
+  "mapPicker.searchPlaceholder": "Search Bangalore area (e.g. Indiranagar, Whitefield)...",
+  "mapPicker.layerStreet": "Street",
+  "mapPicker.layerSatellite": "Satellite"
 };

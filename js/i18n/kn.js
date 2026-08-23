@@ -648,5 +648,7 @@ export const kn = {
   "mapPicker.myLocation": "📍 ನನ್ನ ಸ್ಥಳ",
   "mapPicker.bangaloreCenter": "🏛️ ಬೆಂಗಳೂರು ಕೇಂದ್ರ",
   "btn.search": "ಹುಡುಕಿ",
-  "mapPicker.searchPlaceholder": "ಬೆಂಗಳೂರು ಪ್ರದೇಶ ಹುಡುಕಿ (ಉದಾ: ಇಂದಿರಾನಗರ, ವೈಟ್‌ಫೀಲ್ಡ್)..."
+  "mapPicker.searchPlaceholder": "ಬೆಂಗಳೂರು ಪ್ರದೇಶ ಹುಡುಕಿ (ಉದಾ: ಇಂದಿರಾನಗರ, ವೈಟ್‌ಫೀಲ್ಡ್)...",
+  "mapPicker.layerStreet": "ರಸ್ತೆ ನಕ್ಷೆ",
+  "mapPicker.layerSatellite": "ಉಪಗ್ರಹ ನೋಟ"
 };

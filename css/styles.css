@@ -1063,6 +1063,40 @@ body {
   display: none;
 }
 
+.map-layer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--apple-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.map-layer-btn:hover {
+  color: var(--apple-text-primary);
+}
+
+.map-layer-btn.active {
+  background: var(--apple-accent) !important;
+  color: #ffffff !important;
+}
+
+.map-layer-btn.active .material-symbols-outlined {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .map-layer-toggle-group {
+  background: rgba(30, 41, 59, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
 /* Result Banner */
 .converter-result-banner {
   background: linear-gradient(135deg, rgba(0, 113, 227, 0.08), rgba(0, 113, 227, 0.03));
