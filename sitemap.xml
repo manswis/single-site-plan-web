@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://single-site-plan.cranbear.workers.dev/</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://single-site-plan.cranbear.workers.dev/"/>
+    <xhtml:link rel="alternate" hreflang="kn" href="https://single-site-plan.cranbear.workers.dev/?lang=kn"/>
+  </url>
+  <url>
+    <loc>https://single-site-plan.cranbear.workers.dev/studio.html</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://single-site-plan.cranbear.workers.dev/studio.html"/>
+    <xhtml:link rel="alternate" hreflang="kn" href="https://single-site-plan.cranbear.workers.dev/studio.html?lang=kn"/>
+  </url>
+  <url>
+    <loc>https://single-site-plan.cranbear.workers.dev/faq.html</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://single-site-plan.cranbear.workers.dev/faq.html"/>
+    <xhtml:link rel="alternate" hreflang="kn" href="https://single-site-plan.cranbear.workers.dev/faq.html?lang=kn"/>
+  </url>
+  <url>
+    <loc>https://single-site-plan.cranbear.workers.dev/pricing.html</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://single-site-plan.cranbear.workers.dev/contact.html</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://single-site-plan.cranbear.workers.dev/legal.html</loc>
+    <lastmod>2026-08-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+</urlset>
