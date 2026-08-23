@@ -1486,10 +1486,98 @@ function applyStep3SmartFill(presetId, btnEl) {
     autoCalculateSetbacks();
   }
 
+  // Automatically derive & synchronize Step 5 Schedule of Property from Step 3
+  deriveStep5FromStep3({ overwriteDescriptions: false });
+
   if (typeof saveDraft === 'function') saveDraft();
   if (typeof generatePlan === 'function') generatePlan();
 
   if (btnEl) triggerSmartFillChipAnimation(btnEl);
+}
+
+/**
+ * Intelligently derives and synchronizes Step 5 Schedule of Boundaries from Step 3 inputs.
+ * Sets the matching boundary to 'road' with the road width from Step 3,
+ * and sets other boundaries to 'plot' with default placeholder/description if empty.
+ * 
+ * @function deriveStep5FromStep3
+ * @param {Object} [options]
+ * @param {boolean} [options.overwriteDescriptions=false] - If true, resets plot descriptions to standard deed defaults.
+ * @param {HTMLElement} [options.btnEl] - Optional button trigger for animated feedback.
+ * @returns {void}
+ */
+function deriveStep5FromStep3(options = {}) {
+  const facingEl = document.getElementById('roadFacing');
+  const rwFtEl = document.getElementById('roadWidth_ft');
+  const rwInEl = document.getElementById('roadWidth_in');
+
+  const facing = (facingEl && facingEl.value) ? facingEl.value.toLowerCase().trim() : 'north';
+  const rwFt = (rwFtEl && rwFtEl.value) ? parseFloat(rwFtEl.value) : 30;
+  const rwIn = (rwInEl && rwInEl.value) ? parseFloat(rwInEl.value) : 0;
+  const totalRoadWidth = rwFt + (rwIn / 12);
+
+  const directionMap = {
+    'north': 'North',
+    'south': 'South',
+    'east': 'East',
+    'west': 'West'
+  };
+
+  const roadDir = directionMap[facing] || 'North';
+
+  ['North', 'South', 'East', 'West'].forEach(dir => {
+    const typeEl = document.getElementById('type' + dir);
+    if (dir === roadDir) {
+      if (typeEl) {
+        typeEl.value = 'road';
+        if (typeof toggleBoundaryType === 'function') toggleBoundaryType(dir);
+      }
+      const nameEl = document.getElementById('nameRoad' + dir);
+      const widthEl = document.getElementById('widthRoad' + dir);
+      const widthFtEl = document.getElementById('widthRoad' + dir + '_ft');
+      const widthInEl = document.getElementById('widthRoad' + dir + '_in');
+
+      if (nameEl && (!nameEl.value || nameEl.value.trim() === '' || options.overwriteDescriptions)) {
+        nameEl.value = 'Main Road';
+      }
+      if (widthEl) widthEl.value = Math.round(totalRoadWidth * 100) / 100;
+      if (widthFtEl) widthFtEl.value = rwFt;
+      if (widthInEl) widthInEl.value = rwIn;
+    } else {
+      if (typeEl) {
+        if (typeEl.value === 'road' || !typeEl.value || options.overwriteDescriptions) {
+          typeEl.value = 'plot';
+          if (typeof toggleBoundaryType === 'function') toggleBoundaryType(dir);
+        }
+      }
+      const descEl = document.getElementById('descPlot' + dir);
+      if (descEl && (!descEl.value || descEl.value.trim() === '' || options.overwriteDescriptions)) {
+        descEl.value = 'Private Property';
+      }
+    }
+
+    if (typeof clearFieldError === 'function') {
+      clearFieldError('type' + dir, 'err-type' + dir);
+    }
+  });
+
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+
+  if (options.btnEl && typeof triggerSmartFillChipAnimation === 'function') {
+    triggerSmartFillChipAnimation(options.btnEl);
+  }
+}
+
+/**
+ * Handler for road facing dropdown change in Step 3.
+ * Automatically synchronizes Step 5 boundaries.
+ */
+function onRoadFacingChange() {
+  if (typeof clearFieldError === 'function') {
+    clearFieldError('roadFacing', 'err-roadFacing');
+  }
+  deriveStep5FromStep3({ overwriteDescriptions: false });
 }
 
 /**
@@ -3672,9 +3760,11 @@ if (typeof window !== 'undefined') {
   window.redrawCropCanvas = redrawCropCanvas;
   window.onArchitectInfoInput = onArchitectInfoInput;
 
-  // Contextual Smart Fill Presets
+  // Contextual Smart Fill Presets & Derivations
   window.applyStep3SmartFill = applyStep3SmartFill;
   window.applyStep5SmartFill = applyStep5SmartFill;
+  window.deriveStep5FromStep3 = deriveStep5FromStep3;
+  window.onRoadFacingChange = onRoadFacingChange;
   window.triggerSmartFillChipAnimation = triggerSmartFillChipAnimation;
   window.STEP3_SMART_FILL_PRESETS = STEP3_SMART_FILL_PRESETS;
   window.STEP5_SMART_FILL_PRESETS = STEP5_SMART_FILL_PRESETS;

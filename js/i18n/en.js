@@ -664,6 +664,7 @@ export const en = {
   "step3.preset.20x30": "20 × 30 (600 sq.ft • 25ft Road • North)",
   "step3.preset.50x80": "50 × 80 (4,000 sq.ft • 50ft Road • East)",
   "step5.smartFill.title": "Quick Fill Common Boundary Layouts:",
+  "step5.preset.syncFromStep3": "Auto-Sync from Step 3 (Facing & Road Width)",
   "step5.preset.northRoad": "North-Facing (Road North • Sites on S/E/W)",
   "step5.preset.eastRoad": "East-Facing (Road East • Sites on N/S/W)",
   "step5.preset.southRoad": "South-Facing (Road South • Sites on N/E/W)",

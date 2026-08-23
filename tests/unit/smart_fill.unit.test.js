@@ -163,7 +163,38 @@ suite.test('applyStep5SmartFill configures Corner Plot (NE) with 2 road accesses
   }
 });
 
-suite.section('4. Smart Fill Chip Micro-Animation & Localization');
+suite.section('4. Step 5 Auto-Derivation from Step 3');
+
+suite.test('deriveStep5FromStep3 derives East-facing road boundary and plot boundaries', () => {
+  mockDoc.getElementById('roadFacing').value = 'east';
+  mockDoc.getElementById('roadWidth_ft').value = '40';
+  mockDoc.getElementById('roadWidth_in').value = '0';
+
+  if (typeof mockWindow.deriveStep5FromStep3 === 'function') {
+    mockWindow.deriveStep5FromStep3({ overwriteDescriptions: true });
+
+    assert.equal(mockDoc.getElementById('typeEast').value, 'road');
+    assert.equal(mockDoc.getElementById('nameRoadEast').value, 'Main Road');
+    assert.equal(String(mockDoc.getElementById('widthRoadEast').value), '40');
+
+    assert.equal(mockDoc.getElementById('typeNorth').value, 'plot');
+    assert.equal(mockDoc.getElementById('typeSouth').value, 'plot');
+    assert.equal(mockDoc.getElementById('typeWest').value, 'plot');
+  }
+});
+
+suite.test('applyStep3SmartFill automatically syncs Step 5 boundaries', () => {
+  if (typeof mockWindow.applyStep3SmartFill === 'function') {
+    mockWindow.applyStep3SmartFill('30x40');
+
+    // 30x40 is North-Facing with 30ft road
+    assert.equal(mockDoc.getElementById('typeNorth').value, 'road');
+    assert.equal(String(mockDoc.getElementById('widthRoadNorth').value), '30');
+    assert.equal(mockDoc.getElementById('typeSouth').value, 'plot');
+  }
+});
+
+suite.section('5. Smart Fill Chip Micro-Animation & Localization');
 
 suite.test('triggerSmartFillChipAnimation toggles applied class and displays localized text', () => {
   const mockBtn = mockDoc.createElement('button');
@@ -188,7 +219,7 @@ suite.test('triggerSmartFillChipAnimation toggles applied class and displays loc
   }
 });
 
-suite.section('5. Fail-Safe Negative & Edge Cases');
+suite.section('6. Fail-Safe Negative & Edge Cases');
 
 suite.test('Invalid or unknown preset ID does not throw error', () => {
   if (typeof mockWindow.applyStep3SmartFill === 'function') {
@@ -196,6 +227,9 @@ suite.test('Invalid or unknown preset ID does not throw error', () => {
   }
   if (typeof mockWindow.applyStep5SmartFill === 'function') {
     assert.doesNotThrow(() => mockWindow.applyStep5SmartFill('invalid_boundary_key'));
+  }
+  if (typeof mockWindow.deriveStep5FromStep3 === 'function') {
+    assert.doesNotThrow(() => mockWindow.deriveStep5FromStep3());
   }
   if (typeof mockWindow.triggerSmartFillChipAnimation === 'function') {
     assert.doesNotThrow(() => mockWindow.triggerSmartFillChipAnimation(null));

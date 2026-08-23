@@ -1084,7 +1084,7 @@
                   <path
                     d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z" />
                 </svg></button></label>
-            <select id="roadFacing" onchange="clearFieldError('roadFacing', 'err-roadFacing')">
+            <select id="roadFacing" onchange="onRoadFacingChange()">
               <option value="" selected data-i18n="step3.selectDirection">-- Select Direction --</option>
               <option value="north" data-i18n="step3.facing.north">North</option>
               <option value="south" data-i18n="step3.facing.south">South</option>
@@ -1472,20 +1472,25 @@
             <span class="smart-fill-title" data-i18n="step5.smartFill.title">Quick Fill Common Boundary Layouts:</span>
           </div>
           <div class="smart-fill-chips-scroll">
+            <button type="button" class="smart-fill-chip"
+              style="background: rgba(0, 113, 227, 0.08); border-color: var(--apple-accent); color: var(--apple-accent);"
+              onclick="deriveStep5FromStep3({ btnEl: this })">
+              <span data-i18n="step5.preset.syncFromStep3">🔄 Auto-Sync from Step 3 (Facing & Road Width)</span>
+            </button>
             <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('north_road', this)">
-              <span data-i18n="step5.preset.northRoad">🚗 North-Facing (Road North • Sites on S/E/W)</span>
+              <span data-i18n="step5.preset.northRoad">North-Facing (Road North • Sites on S/E/W)</span>
             </button>
             <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('east_road', this)">
-              <span data-i18n="step5.preset.eastRoad">🚗 East-Facing (Road East • Sites on N/S/W)</span>
+              <span data-i18n="step5.preset.eastRoad">East-Facing (Road East • Sites on N/S/W)</span>
             </button>
             <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('south_road', this)">
-              <span data-i18n="step5.preset.southRoad">🚗 South-Facing (Road South • Sites on N/E/W)</span>
+              <span data-i18n="step5.preset.southRoad">South-Facing (Road South • Sites on N/E/W)</span>
             </button>
             <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('west_road', this)">
-              <span data-i18n="step5.preset.westRoad">🚗 West-Facing (Road West • Sites on N/S/E)</span>
+              <span data-i18n="step5.preset.westRoad">West-Facing (Road West • Sites on N/S/E)</span>
             </button>
             <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('corner_ne', this)">
-              <span data-i18n="step5.preset.cornerNE">🚗 Corner Plot (Roads on North & East)</span>
+              <span data-i18n="step5.preset.cornerNE">Corner Plot (Roads on North & East)</span>
             </button>
           </div>
         </div>
