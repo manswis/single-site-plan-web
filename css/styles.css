@@ -4905,6 +4905,7 @@ body.pdf-export-active .drawing-canvas-column,
 
 .node-circle .material-symbols-outlined {
   font-size: 19px;
+  color: inherit;
 }
 
 .node-label {
@@ -4919,6 +4920,12 @@ body.pdf-export-active .drawing-canvas-column,
   color: #ffffff;
 }
 
+.stepper-node.completed .node-circle .material-symbols-outlined,
+.stepper-node.completed .node-circle span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
 .stepper-node.completed .node-label {
   color: var(--apple-green);
 }
@@ -4930,9 +4937,62 @@ body.pdf-export-active .drawing-canvas-column,
   box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.2);
 }
 
+.stepper-node.current .node-circle .material-symbols-outlined,
+.stepper-node.current .node-circle span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
 .stepper-node.current .node-label {
   color: var(--apple-accent);
   font-weight: 700;
+}
+
+[data-theme="dark"] .stepper-node.completed .node-circle {
+  background: #34c759 !important;
+  border-color: #34c759 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .stepper-node.completed .node-circle .material-symbols-outlined,
+[data-theme="dark"] .stepper-node.completed .node-circle span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+[data-theme="dark"] .stepper-node.completed .node-label {
+  color: #4ade80 !important;
+}
+
+[data-theme="dark"] .stepper-node.current .node-circle {
+  background: #0071e3 !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.35) !important;
+}
+
+[data-theme="dark"] .stepper-node.current .node-circle .material-symbols-outlined,
+[data-theme="dark"] .stepper-node.current .node-circle span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+[data-theme="dark"] .stepper-node.current .node-label {
+  color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .stepper-node.pending .node-circle {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .stepper-node.pending .node-circle .material-symbols-outlined {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .stepper-node.pending .node-label {
+  color: #94a3b8 !important;
 }
 
 /* Ticket Meta Grid */
