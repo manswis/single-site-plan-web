@@ -8452,6 +8452,133 @@ body.pdf-export-active .drawing-canvas-column,
   box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3);
 }
 
+/* Contextual Per-Step Smart Fill Trays & Chips */
+.smart-fill-tray {
+  margin-bottom: 16px;
+  background: var(--apple-card-bg);
+  border: 1px solid var(--apple-border);
+  border-radius: 12px;
+  padding: 10px 14px 8px 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.smart-fill-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.smart-fill-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--apple-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.smart-fill-chips-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.smart-fill-chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.smart-fill-chip {
+  -webkit-appearance: none;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border-radius: 980px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  user-select: none;
+}
+
+.smart-fill-chip:hover {
+  border-color: var(--apple-accent);
+  color: var(--apple-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 113, 227, 0.15);
+}
+
+.smart-fill-chip:active {
+  transform: scale(0.97);
+}
+
+/* Green Highlight & Applied Micro-Animation State */
+.smart-fill-chip.applied {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.45) !important;
+  transform: scale(1.04) !important;
+  animation: smartFillPulse 0.4s ease-in-out;
+}
+
+@keyframes smartFillPulse {
+  0% {
+    transform: scale(0.95);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+
+  100% {
+    transform: scale(1.04);
+  }
+}
+
+[data-theme="dark"] .smart-fill-tray {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .smart-fill-chip {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .smart-fill-chip:hover {
+  border-color: var(--apple-accent);
+  color: #38bdf8;
+}
+
+@media (max-width: 639px) {
+  .smart-fill-tray {
+    padding: 8px 10px 6px 10px;
+    margin-bottom: 12px;
+  }
+
+  .smart-fill-title {
+    font-size: 10.5px;
+  }
+
+  .smart-fill-chip {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+}
+
 .ward-results-meta {
   display: flex;
   justify-content: space-between;

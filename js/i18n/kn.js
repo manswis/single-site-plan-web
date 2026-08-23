@@ -655,5 +655,18 @@ export const kn = {
   "mapPicker.layerSatellite": "ಉಪಗ್ರಹ ನೋಟ",
   "mapPicker.dragInstruction": "ಮಾರ್ಕರ್ ಎಳೆಯಿರಿ ಅಥವಾ ಸ್ಥಳ ಗುರುತಿಸಲು ನಕ್ಷೆ ಕ್ಲಿಕ್ ಮಾಡಿ",
   "mapPicker.selectedLabel": "ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ:",
-  "mapPicker.useThisLocation": "ಈ ಸ್ಥಳವನ್ನು ಬಳಸಿ"
+  "mapPicker.useThisLocation": "ಈ ಸ್ಥಳವನ್ನು ಬಳಸಿ",
+  "chip.applied": "✓ ಅನ್ವಯಿಸಲಾಗಿದೆ",
+  "step3.smartFill.title": "ಸಾಮಾನ್ಯ ಬೆಂಗಳೂರು ಅಳತೆಗಳ ತ್ವರಿತ ಆಯ್ಕೆ:",
+  "step3.preset.30x40": "೩೦ × ೪೦ (೧,೨೦೦ ಚ.ಅಡಿ)",
+  "step3.preset.40x60": "೪೦ × ೬೦ (೨,೪೦೦ ಚ.ಅಡಿ)",
+  "step3.preset.30x50": "೩೦ × ೫೦ (೧,೫೦೦ ಚ.ಅಡಿ)",
+  "step3.preset.20x30": "೨೦ × ೩೦ (೬೦೦ ಚ.ಅಡಿ)",
+  "step3.preset.50x80": "೫೦ × ೮೦ (೪,೦೦೦ ಚ.ಅಡಿ)",
+  "step5.smartFill.title": "ಸಾಮಾನ್ಯ ಚೌಕಟ್ಟು / ಗಡಿಗಳ ತ್ವರಿತ ಆಯ್ಕೆ:",
+  "step5.preset.northRoad": "ಉತ್ತರ ಮುಖ (ಉತ್ತರ ರಸ್ತೆ • ದ/ಪೂ/ಪ ಇತರ ನಿವೇಶನ)",
+  "step5.preset.eastRoad": "ಪೂರ್ವ ಮುಖ (ಪೂರ್ವ ರಸ್ತೆ • ಉ/ದ/ಪ ಇತರ ನಿವೇಶನ)",
+  "step5.preset.southRoad": "ದಕ್ಷಿಣ ಮುಖ (ದಕ್ಷಿಣ ರಸ್ತೆ • ಉ/ಪೂ/ಪ ಇತರ ನಿವೇಶನ)",
+  "step5.preset.westRoad": "ಪಶ್ಚಿಮ ಮುಖ (ಪಶ್ಚಿಮ ರಸ್ತೆ • ಉ/ದ/ಪೂ ಇತರ ನಿವೇಶನ)",
+  "step5.preset.cornerNE": "ಕಾರ್ನರ್ ನಿವೇಶನ (ಉತ್ತರ ಮತ್ತು ಪೂರ್ವ ರಸ್ತೆಗಳು)"
 };

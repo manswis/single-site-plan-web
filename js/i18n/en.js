@@ -655,5 +655,18 @@ export const en = {
   "mapPicker.layerSatellite": "Satellite",
   "mapPicker.dragInstruction": "Drag marker or click map to pinpoint site",
   "mapPicker.selectedLabel": "Selected:",
-  "mapPicker.useThisLocation": "Use This Location"
+  "mapPicker.useThisLocation": "Use This Location",
+  "chip.applied": "✓ Applied",
+  "step3.smartFill.title": "Quick Fill Standard Bangalore Dimensions:",
+  "step3.preset.30x40": "30 × 40 (1,200 sq.ft)",
+  "step3.preset.40x60": "40 × 60 (2,400 sq.ft)",
+  "step3.preset.30x50": "30 × 50 (1,500 sq.ft)",
+  "step3.preset.20x30": "20 × 30 (600 sq.ft)",
+  "step3.preset.50x80": "50 × 80 (4,000 sq.ft)",
+  "step5.smartFill.title": "Quick Fill Common Boundary Layouts:",
+  "step5.preset.northRoad": "North-Facing (Road North • Sites on S/E/W)",
+  "step5.preset.eastRoad": "East-Facing (Road East • Sites on N/S/W)",
+  "step5.preset.southRoad": "South-Facing (Road South • Sites on N/E/W)",
+  "step5.preset.westRoad": "West-Facing (Road West • Sites on N/S/E)",
+  "step5.preset.cornerNE": "Corner Plot (Roads on North & East)"
 };

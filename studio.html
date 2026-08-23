@@ -999,7 +999,7 @@
           Check 'Irregular Site' below for odd-shaped quadrilateral plots.
         </div>
 
-        <div class="checkbox-box" style="margin-bottom: 18px; background: #f0f9ff; border: 1.5px solid #0284c7;">
+        <div class="checkbox-box" style="margin-bottom: 14px; background: #f0f9ff; border: 1.5px solid #0284c7;">
           <label style="cursor: pointer;">
             <input type="checkbox" id="oddSiteCheck" onchange="toggleOddSite()">
             <span style="font-weight: 700; color: #0369a1;" data-i18n="step3.oddSite.title">🔷 Irregular / Odd Shaped
@@ -1007,6 +1007,31 @@
           </label>
           <p id="oddSiteHint" style="margin-top: 4px; font-size: 11px; color: #0284c7;" data-i18n="step3.oddSite.hint">
             Rectangular Mode (Default): Opposite sides auto-sync as you type. Check this box for irregular sites.</p>
+        </div>
+
+        <!-- Step 3 Contextual Smart Fill Chips Tray -->
+        <div class="smart-fill-tray">
+          <div class="smart-fill-header">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">auto_fix_high</span>
+            <span class="smart-fill-title" data-i18n="step3.smartFill.title">Quick Fill Standard Bangalore Dimensions:</span>
+          </div>
+          <div class="smart-fill-chips-scroll">
+            <button type="button" class="smart-fill-chip" onclick="applyStep3SmartFill('30x40', this)">
+              <span data-i18n="step3.preset.30x40">30 × 40 (1,200 sq.ft)</span>
+            </button>
+            <button type="button" class="smart-fill-chip" onclick="applyStep3SmartFill('40x60', this)">
+              <span data-i18n="step3.preset.40x60">40 × 60 (2,400 sq.ft)</span>
+            </button>
+            <button type="button" class="smart-fill-chip" onclick="applyStep3SmartFill('30x50', this)">
+              <span data-i18n="step3.preset.30x50">30 × 50 (1,500 sq.ft)</span>
+            </button>
+            <button type="button" class="smart-fill-chip" onclick="applyStep3SmartFill('20x30', this)">
+              <span data-i18n="step3.preset.20x30">20 × 30 (600 sq.ft)</span>
+            </button>
+            <button type="button" class="smart-fill-chip" onclick="applyStep3SmartFill('50x80', this)">
+              <span data-i18n="step3.preset.50x80">50 × 80 (4,000 sq.ft)</span>
+            </button>
+          </div>
         </div>
 
         <div class="grid">
@@ -1437,6 +1462,31 @@
         <div class="info-tooltip-box" data-i18n-html="tooltip.step5">
           📜 <strong>Deed Schedule DNA:</strong> Under Karnataka property law, boundary descriptions prevail over area
           in legal disputes. Select exact boundary categories.
+        </div>
+
+        <!-- Step 5 Contextual Smart Fill Chips Tray -->
+        <div class="smart-fill-tray">
+          <div class="smart-fill-header">
+            <span class="material-symbols-outlined" style="font-size: 16px; color: var(--apple-accent);">auto_fix_high</span>
+            <span class="smart-fill-title" data-i18n="step5.smartFill.title">Quick Fill Common Boundary Layouts:</span>
+          </div>
+          <div class="smart-fill-chips-scroll">
+            <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('north_road', this)">
+              <span data-i18n="step5.preset.northRoad">🚗 North-Facing (Road North • Sites on S/E/W)</span>
+            </button>
+            <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('east_road', this)">
+              <span data-i18n="step5.preset.eastRoad">🚗 East-Facing (Road East • Sites on N/S/W)</span>
+            </button>
+            <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('south_road', this)">
+              <span data-i18n="step5.preset.southRoad">🚗 South-Facing (Road South • Sites on N/E/W)</span>
+            </button>
+            <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('west_road', this)">
+              <span data-i18n="step5.preset.westRoad">🚗 West-Facing (Road West • Sites on N/S/E)</span>
+            </button>
+            <button type="button" class="smart-fill-chip" onclick="applyStep5SmartFill('corner_ne', this)">
+              <span data-i18n="step5.preset.cornerNE">🚗 Corner Plot (Roads on North & East)</span>
+            </button>
+          </div>
         </div>
 
         <div class="grid">

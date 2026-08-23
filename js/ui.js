@@ -1333,6 +1333,216 @@ function toggleBoundaryType(dir) {
 }
 
 /**
+ * Triggers a momentary green highlight and "✓ Applied" micro-interaction on a preset chip.
+ * 
+ * @function triggerSmartFillChipAnimation
+ * @param {HTMLElement} btnEl - The chip button element that was clicked.
+ * @returns {void}
+ */
+function triggerSmartFillChipAnimation(btnEl) {
+  if (!btnEl || typeof btnEl !== 'object' || btnEl === window || (typeof globalThis !== 'undefined' && btnEl === globalThis)) {
+    return;
+  }
+  if (!btnEl.dataset) {
+    btnEl.dataset = {};
+  }
+  if (!btnEl.classList) {
+    btnEl.classList = {
+      add: () => {},
+      remove: () => {},
+      contains: () => false
+    };
+  }
+  if (btnEl._revertTimer) {
+    clearTimeout(btnEl._revertTimer);
+  }
+
+  // Preserve original HTML markup if not already cached
+  if (!btnEl.dataset.origHtml) {
+    btnEl.dataset.origHtml = btnEl.innerHTML || btnEl.textContent || '';
+  }
+
+  btnEl.classList.add('applied');
+
+  // Resolve localized text
+  const isKn = (typeof document !== 'undefined' && document.documentElement && document.documentElement.lang === 'kn') ||
+    (typeof currentLanguage !== 'undefined' && currentLanguage === 'kn') ||
+    (typeof localStorage !== 'undefined' && localStorage.getItem('eplan_lang_preference') === 'kn');
+
+  const appliedLabel = isKn ? '✓ ಅನ್ವಯಿಸಲಾಗಿದೆ' : '✓ Applied';
+  btnEl.textContent = appliedLabel;
+
+  btnEl._revertTimer = setTimeout(() => {
+    btnEl.classList.remove('applied');
+    if (btnEl.dataset && btnEl.dataset.origHtml) {
+      btnEl.innerHTML = btnEl.dataset.origHtml;
+      delete btnEl.dataset.origHtml;
+    }
+  }, 1200);
+}
+
+/**
+ * Standard Bangalore Plot Dimension Presets dictionary.
+ */
+const STEP3_SMART_FILL_PRESETS = {
+  '30x40': { nsFt: 30, nsIn: 0, ewFt: 40, ewIn: 0, area: 1200, roadWidthFt: 30, roadFacing: 'north' },
+  '40x60': { nsFt: 40, nsIn: 0, ewFt: 60, ewIn: 0, area: 2400, roadWidthFt: 40, roadFacing: 'east' },
+  '30x50': { nsFt: 30, nsIn: 0, ewFt: 50, ewIn: 0, area: 1500, roadWidthFt: 30, roadFacing: 'north' },
+  '20x30': { nsFt: 20, nsIn: 0, ewFt: 30, ewIn: 0, area: 600, roadWidthFt: 25, roadFacing: 'north' },
+  '50x80': { nsFt: 50, nsIn: 0, ewFt: 80, ewIn: 0, area: 4000, roadWidthFt: 50, roadFacing: 'east' }
+};
+
+/**
+ * Applies a 1-tap standard Bangalore dimension preset on Step 3.
+ * 
+ * @function applyStep3SmartFill
+ * @param {string} presetId - Preset key ('30x40', '40x60', etc.).
+ * @param {HTMLElement} [btnEl] - The clicked chip element.
+ * @returns {void}
+ */
+function applyStep3SmartFill(presetId, btnEl) {
+  const preset = STEP3_SMART_FILL_PRESETS[presetId];
+  if (!preset) return;
+
+  const oddCheck = document.getElementById('oddSiteCheck');
+  if (oddCheck && oddCheck.checked) {
+    oddCheck.checked = false;
+    if (typeof toggleOddSite === 'function') toggleOddSite();
+  }
+
+  const nsFtEl = document.getElementById('regNorthSouth_ft');
+  const nsInEl = document.getElementById('regNorthSouth_in');
+  const ewFtEl = document.getElementById('regEastWest_ft');
+  const ewInEl = document.getElementById('regEastWest_in');
+  const areaEl = document.getElementById('plotArea');
+  const rwFtEl = document.getElementById('roadWidth_ft');
+  const rwInEl = document.getElementById('roadWidth_in');
+  const rfEl = document.getElementById('roadFacing');
+
+  if (nsFtEl) nsFtEl.value = preset.nsFt;
+  if (nsInEl) nsInEl.value = preset.nsIn;
+  if (ewFtEl) ewFtEl.value = preset.ewFt;
+  if (ewInEl) ewInEl.value = preset.ewIn;
+
+  if (areaEl) {
+    areaEl.value = preset.area;
+    areaEl.dataset.userEdited = 'true';
+  }
+
+  if (rwFtEl) rwFtEl.value = preset.roadWidthFt;
+  if (rwInEl) rwInEl.value = 0;
+  if (rfEl) rfEl.value = preset.roadFacing;
+
+  if (typeof onFtInInput === 'function') {
+    onFtInInput('regNorthSouth');
+    onFtInInput('regEastWest');
+    onFtInInput('roadWidth');
+  }
+
+  if (typeof clearFieldError === 'function') {
+    clearFieldError('plotArea', 'err-plotArea');
+    clearFieldError('roadWidth', 'err-roadWidth');
+    clearFieldError('roadFacing', 'err-roadFacing');
+    clearFieldError('regNorthSouth', 'err-regNorthSouth');
+    clearFieldError('regEastWest', 'err-regEastWest');
+  }
+
+  if (typeof autoCalculateSetbacks === 'function') {
+    autoCalculateSetbacks();
+  }
+
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+
+  if (btnEl) triggerSmartFillChipAnimation(btnEl);
+}
+
+/**
+ * Standard Deed DNA Boundary Presets dictionary.
+ */
+const STEP5_SMART_FILL_PRESETS = {
+  'north_road': {
+    North: { type: 'road', name: 'Main Road', width: 30 },
+    South: { type: 'plot', desc: 'Site No. 45' },
+    East: { type: 'plot', desc: 'Site No. 42' },
+    West: { type: 'plot', desc: 'Site No. 40' }
+  },
+  'east_road': {
+    North: { type: 'plot', desc: 'Site No. 18' },
+    South: { type: 'plot', desc: 'Site No. 20' },
+    East: { type: 'road', name: 'Main Road', width: 30 },
+    West: { type: 'plot', desc: 'Site No. 12' }
+  },
+  'south_road': {
+    North: { type: 'plot', desc: 'Site No. 10' },
+    South: { type: 'road', name: 'Main Road', width: 30 },
+    East: { type: 'plot', desc: 'Site No. 15' },
+    West: { type: 'plot', desc: 'Site No. 14' }
+  },
+  'west_road': {
+    North: { type: 'plot', desc: 'Site No. 25' },
+    South: { type: 'plot', desc: 'Site No. 27' },
+    East: { type: 'plot', desc: 'Site No. 30' },
+    West: { type: 'road', name: 'Main Road', width: 30 }
+  },
+  'corner_ne': {
+    North: { type: 'road', name: 'Main Road', width: 30 },
+    East: { type: 'road', name: 'Cross Road', width: 30 },
+    South: { type: 'plot', desc: 'Site No. 08' },
+    West: { type: 'plot', desc: 'Site No. 06' }
+  }
+};
+
+/**
+ * Applies a 1-tap standard Deed DNA boundary layout preset on Step 5.
+ * 
+ * @function applyStep5SmartFill
+ * @param {string} presetId - Preset key ('north_road', 'east_road', etc.).
+ * @param {HTMLElement} [btnEl] - The clicked chip element.
+ * @returns {void}
+ */
+function applyStep5SmartFill(presetId, btnEl) {
+  const preset = STEP5_SMART_FILL_PRESETS[presetId];
+  if (!preset) return;
+
+  const directions = ['North', 'South', 'East', 'West'];
+  directions.forEach(dir => {
+    const cfg = preset[dir];
+    if (!cfg) return;
+
+    const typeEl = document.getElementById('type' + dir);
+    if (typeEl) {
+      typeEl.value = cfg.type;
+      toggleBoundaryType(dir);
+    }
+
+    if (cfg.type === 'road') {
+      const nameEl = document.getElementById('nameRoad' + dir);
+      const widthEl = document.getElementById('widthRoad' + dir);
+      const widthFtEl = document.getElementById('widthRoad' + dir + '_ft');
+      const widthInEl = document.getElementById('widthRoad' + dir + '_in');
+
+      if (nameEl) nameEl.value = cfg.name;
+      if (widthEl) widthEl.value = cfg.width;
+      if (widthFtEl) widthFtEl.value = cfg.width;
+      if (widthInEl) widthInEl.value = 0;
+    } else if (cfg.type === 'plot' || cfg.type === 'private') {
+      const descEl = document.getElementById('descPlot' + dir);
+      if (descEl) descEl.value = cfg.desc;
+    }
+
+    if (typeof clearFieldError === 'function') {
+      clearFieldError('type' + dir, 'err-type' + dir);
+    }
+  });
+
+  if (typeof saveDraft === 'function') saveDraft();
+  if (typeof generatePlan === 'function') generatePlan();
+
+  if (btnEl) triggerSmartFillChipAnimation(btnEl);
+}
+
+/**
  * Toggles visibility of RMP-2015 Master Plan Road Widening controls panel.
  * 
  * @function toggleRoadWidening
@@ -3426,6 +3636,13 @@ if (typeof window !== 'undefined') {
   window.applySignatureCrop = applySignatureCrop;
   window.redrawCropCanvas = redrawCropCanvas;
   window.onArchitectInfoInput = onArchitectInfoInput;
+
+  // Contextual Smart Fill Presets
+  window.applyStep3SmartFill = applyStep3SmartFill;
+  window.applyStep5SmartFill = applyStep5SmartFill;
+  window.triggerSmartFillChipAnimation = triggerSmartFillChipAnimation;
+  window.STEP3_SMART_FILL_PRESETS = STEP3_SMART_FILL_PRESETS;
+  window.STEP5_SMART_FILL_PRESETS = STEP5_SMART_FILL_PRESETS;
 }
 
 
