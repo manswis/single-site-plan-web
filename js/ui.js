@@ -1348,8 +1348,8 @@ function triggerSmartFillChipAnimation(btnEl) {
   }
   if (!btnEl.classList) {
     btnEl.classList = {
-      add: () => {},
-      remove: () => {},
+      add: () => { },
+      remove: () => { },
       contains: () => false
     };
   }
@@ -1357,12 +1357,22 @@ function triggerSmartFillChipAnimation(btnEl) {
     clearTimeout(btnEl._revertTimer);
   }
 
-  // Preserve original HTML markup if not already cached
+  // 1. Lock exact computed width to prevent any chip resizing / layout shift
+  if (!btnEl.dataset.origWidth) {
+    const rect = typeof btnEl.getBoundingClientRect === 'function' ? btnEl.getBoundingClientRect() : null;
+    const currentW = rect && rect.width ? Math.ceil(rect.width) : (btnEl.offsetWidth || 0);
+    if (currentW > 0) {
+      btnEl.dataset.origWidth = `${currentW}px`;
+      btnEl.style.minWidth = `${currentW}px`;
+      btnEl.style.justifyContent = 'center';
+      btnEl.style.textAlign = 'center';
+    }
+  }
+
+  // 2. Preserve original HTML markup if not already cached
   if (!btnEl.dataset.origHtml) {
     btnEl.dataset.origHtml = btnEl.innerHTML || btnEl.textContent || '';
   }
-
-  btnEl.classList.add('applied');
 
   // Resolve localized text
   const isKn = (typeof document !== 'undefined' && document.documentElement && document.documentElement.lang === 'kn') ||
@@ -1370,14 +1380,32 @@ function triggerSmartFillChipAnimation(btnEl) {
     (typeof localStorage !== 'undefined' && localStorage.getItem('eplan_lang_preference') === 'kn');
 
   const appliedLabel = isKn ? '✓ ಅನ್ವಯಿಸಲಾಗಿದೆ' : '✓ Applied';
-  btnEl.textContent = appliedLabel;
 
+  // 3. Smooth Fade-Out -> Swap -> Fade-In
+  btnEl.classList.add('fading');
+  setTimeout(() => {
+    btnEl.textContent = appliedLabel;
+    btnEl.classList.add('applied');
+    btnEl.classList.remove('fading');
+  }, 120);
+
+  // 4. Revert smoothly after 1200ms
   btnEl._revertTimer = setTimeout(() => {
-    btnEl.classList.remove('applied');
-    if (btnEl.dataset && btnEl.dataset.origHtml) {
-      btnEl.innerHTML = btnEl.dataset.origHtml;
-      delete btnEl.dataset.origHtml;
-    }
+    btnEl.classList.add('fading');
+    setTimeout(() => {
+      btnEl.classList.remove('applied');
+      if (btnEl.dataset && btnEl.dataset.origHtml) {
+        btnEl.innerHTML = btnEl.dataset.origHtml;
+        delete btnEl.dataset.origHtml;
+      }
+      btnEl.classList.remove('fading');
+      if (btnEl.dataset && btnEl.dataset.origWidth) {
+        btnEl.style.minWidth = '';
+        btnEl.style.justifyContent = '';
+        btnEl.style.textAlign = '';
+        delete btnEl.dataset.origWidth;
+      }
+    }, 120);
   }, 1200);
 }
 

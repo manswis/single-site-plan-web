@@ -168,8 +168,11 @@ suite.test('triggerSmartFillChipAnimation toggles applied class and displays loc
   const mockBtn = mockDoc.createElement('button');
   mockBtn.innerHTML = '<span>30 × 40 (1,200 sq.ft)</span>';
 
-  // Override mock setTimeout to not execute synchronously immediately for class inspection
-  mockWindow.setTimeout = (fn) => 1;
+  // Execute 120ms fade-in callback immediately, defer 1200ms revert
+  mockWindow.setTimeout = (fn, delay) => {
+    if (delay <= 150) fn();
+    return 1;
+  };
 
   if (typeof mockWindow.triggerSmartFillChipAnimation === 'function') {
     mockDoc.documentElement.lang = 'en';
