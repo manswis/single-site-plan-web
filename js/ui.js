@@ -2460,6 +2460,7 @@ function openSignatureCropModal(type, imageSrc) {
 
     if (modal) {
       modal.style.display = 'flex';
+      modal.classList.add('active');
     }
   };
   img.src = imageSrc;
@@ -2470,7 +2471,10 @@ function openSignatureCropModal(type, imageSrc) {
  */
 function closeSignatureCropModal() {
   const modal = document.getElementById('signatureCropModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
 }
 
 /**
@@ -3323,19 +3327,15 @@ if (typeof window !== 'undefined') {
   window.formatFeetInches = formatFeetInches;
   window.validateBuildingSetbackFeasibility = validateBuildingSetbackFeasibility;
 
-  // Signatures & Project Import/Export
+  // Signatures
   window.onSignatureFileSelected = onSignatureFileSelected;
   window.openSignatureCropModal = openSignatureCropModal;
   window.closeSignatureCropModal = closeSignatureCropModal;
   window.removeSignature = removeSignature;
   window.reopenSignatureCrop = reopenSignatureCrop;
-  window.rotateSignature = rotateSignature;
   window.resetCropTransform = resetCropTransform;
   window.onSignatureCropZoom = onSignatureCropZoom;
   window.applySignatureCrop = applySignatureCrop;
-  window.triggerProjectImport = triggerProjectImport;
-  window.handleProjectFileImport = handleProjectFileImport;
-  window.closeProjectImportErrorModal = closeProjectImportErrorModal;
 }
 
 

@@ -702,6 +702,7 @@ function showProjectImportErrorModal(errorList) {
   }
   if (modal) {
     modal.style.display = 'flex';
+    modal.classList.add('active');
   }
 }
 
@@ -713,7 +714,10 @@ function showProjectImportErrorModal(errorList) {
  */
 function closeProjectImportErrorModal() {
   const modal = document.getElementById('projectImportErrorModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
 }
 
 /**
@@ -1099,7 +1103,7 @@ function clearFieldError(fieldId, errId) {
   const field = document.getElementById(fieldId);
   const err = document.getElementById(errId);
 
-  if (field && field.value.trim() !== '') {
+  if (field && String(field.value || '').trim() !== '') {
     const container = field.closest('.field') || field.parentElement;
     if (container) container.classList.remove('error');
     if (err) err.style.display = 'none';
@@ -1178,6 +1182,7 @@ if (typeof window !== 'undefined') {
   window.exportProjectFile = exportProjectFile;
   window.triggerProjectImport = triggerProjectImport;
   window.handleProjectFileImport = handleProjectFileImport;
+  window.showProjectImportErrorModal = showProjectImportErrorModal;
   window.closeProjectImportErrorModal = closeProjectImportErrorModal;
   window.showDraftRestoreModal = showDraftRestoreModal;
   window.clearFieldError = clearFieldError;
