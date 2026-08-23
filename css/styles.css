@@ -2393,6 +2393,21 @@ label {
   color: var(--apple-red);
 }
 
+.field-optional-badge {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--apple-text-secondary);
+  margin-left: 6px;
+  letter-spacing: 0.02em;
+  display: inline-block;
+  vertical-align: baseline;
+  opacity: 0.85;
+}
+
+[data-theme="dark"] .field-optional-badge {
+  color: #94a3b8;
+}
+
 input[type="text"],
 input[type="number"],
 input[type="date"],
