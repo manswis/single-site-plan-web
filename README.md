@@ -152,51 +152,64 @@ flowchart TD
 
 ```
 single-site-plan-web/
-├── index.html                # Landing page hub with 7-step guided workflow preview
-├── studio.html               # Live 2D CAD Workbench with interactive controls & drawing canvas
-├── contact.html              # Support & issue tracker with timeline conversation
-├── admin.html                # Secure Apple/Google-grade Admin support desk console
-├── pricing.html              # Transparent free tier & voluntary contribution overview
-├── legal.html                # Legally binding Terms of Service, Privacy & Section 15 Policy
-├── faq.html                  # Interactive field-by-field guide & Sakala FAQ accordions
-├── _worker.js                # Cloudflare Workers serverless API router & D1 bindings
-├── build.js                  # Ultra-fast esbuild asset minification & bundling script (<30ms)
-├── package.json              # Project scripts (build, test, dev, deploy) & build dependencies
-├── schema.sql                # Standalone D1 database table and index definitions
-├── wrangler.toml             # Cloudflare Workers & D1 deployment manifest
-├── .assetsignore             # Excludes backend worker files & node_modules from public assets
-├── .gitignore                # Standard Git ignore rules for node, wrangler & OS files
-├── favicon.svg               # Vector SVG blueprint favicon
-├── LICENSE                   # Official MIT Open Source License
-├── README.md                 # Project documentation (This file)
 ├── css/
-│   ├── styles.css            # Human-readable master CSS design tokens & print styles
-│   └── styles.min.css        # Compressed production stylesheet
+│   ├── styles.css
+│   └── styles.min.css
 ├── js/
 │   ├── data/
-│   │   └── bbmpWards.js      # Curated directory of 198 BBMP Wards & 8 Administrative Zones
+│   │   └── bbmpWards.js
 │   ├── i18n/
-│   │   ├── en.js             # English translation dictionary (690+ keys)
-│   │   └── kn.js             # Kannada translation dictionary (690+ keys)
-│   ├── admin.js              # Admin controller & session security
-│   ├── analytics.js          # Session deduplicated live stats counter
-│   ├── contact.js            # Helpdesk controller, consent modal & timeline renderer
-│   ├── qrcode.js             # Dynamic UPI QR Code vector generation engine
-│   ├── renderer.js           # SVG 2D CAD vector graphics rendering engine
-│   ├── theme.js              # Automatic Dark/Light mode theme manager
-│   ├── ui.js                 # DOM interaction handlers, Map Picker, Converter & PDF export
-│   ├── validator.js          # Sakala data validation rules & error focus engine
-│   ├── wizard.js             # 7-step guided wizard state manager & draft persistence
-│   └── studio.bundle.min.js  # Unified single-bundle production CAD engine
-└── tests/
-    ├── index.js              # Master test suite runner (executes all 31 test suites)
-    ├── dom_simulation.test.js# End-to-end DOM simulation & modal lifecycle suite
-    ├── ward.test.js          # BBMP Ward search & zone filtering tests
-    ├── converter.test.js     # Karnataka Land Area Converter calculations suite
-    ├── autotab.test.js       # Smart numeric auto-tabbing unit tests
-    ├── unit/                 # Specialized unit test modules
-    └── integration/          # Integration & statutory guardrail test suites
+│   │   ├── en.js
+│   │   └── kn.js
+│   ├── admin.js
+│   ├── analytics.js
+│   ├── contact.js
+│   ├── qrcode.js
+│   ├── renderer.js
+│   ├── theme.js
+│   ├── ui.js
+│   ├── validator.js
+│   └── wizard.js
+├── tests/
+│   ├── index.js
+│   ├── autotab.test.js
+│   ├── converter.test.js
+│   ├── dom_simulation.test.js
+│   ├── ward.test.js
+│   ├── integration/
+│   └── unit/
+├── _worker.js
+├── build.js
+├── index.html
+├── studio.html
+├── contact.html
+├── admin.html
+├── pricing.html
+├── legal.html
+├── faq.html
+├── package.json
+├── schema.sql
+└── wrangler.toml
 ```
+
+### 📂 Directory & Module Reference
+
+| Path | Purpose & Responsibilities |
+| :--- | :--- |
+| **`studio.html`** | Interactive 2D CAD Workbench with live vector drawing canvas and 7-step wizard. |
+| **`index.html`** | Google-style product landing page with interactive workflow previews. |
+| **`legal.html`** | Terms of Service, Privacy Policy & Section 15 Voluntary Community Support Policy. |
+| **`contact.html`** | Public support desk with live multi-message timeline issue tracker. |
+| **`admin.html`** | Passkey-protected admin console for support triage and timeline responses. |
+| **`js/renderer.js`** | 2D CAD SVG rendering engine, dimension math, setbacks, and north arrow compass. |
+| **`js/wizard.js`** | 7-step form state management, draft autosave, and `.eplan` JSON backup/restore. |
+| **`js/ui.js`** | DOM event controllers, Leaflet Map Pin Picker, Land Area Converter & jsPDF export. |
+| **`js/validator.js`** | BBMP Sakala schema validation, boundary rules, and error scrolling engine. |
+| **`js/data/bbmpWards.js`** | Official directory of 198 BBMP Wards across 8 Administrative Zones. |
+| **`js/i18n/`** | 100% bilingual English (`en.js`) and Kannada (`kn.js`) translation dictionaries. |
+| **`tests/`** | Enterprise test suite containing all 31 unit, DOM, and integration test suites. |
+| **`_worker.js`** | Cloudflare Workers serverless API router with rate-limiting and D1 database bindings. |
+| **`build.js`** | Ultra-fast `esbuild` production bundler and asset minification script (<30ms). |
 
 ---
 
