@@ -108,7 +108,12 @@ export class I18nManager {
     root.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
       if (key) {
-        el.textContent = this.t(key);
+        const translated = this.t(key);
+        if (translated && translated !== key) {
+          el.textContent = translated;
+        } else if (translated === key && (!el.textContent || !el.textContent.trim())) {
+          el.textContent = translated;
+        }
       }
     });
 
@@ -116,7 +121,10 @@ export class I18nManager {
     root.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
       const key = el.getAttribute('data-i18n-placeholder');
       if (key) {
-        el.setAttribute('placeholder', this.t(key));
+        const translated = this.t(key);
+        if (translated && translated !== key) {
+          el.setAttribute('placeholder', translated);
+        }
       }
     });
 
@@ -124,7 +132,10 @@ export class I18nManager {
     root.querySelectorAll('[data-i18n-title]').forEach(el => {
       const key = el.getAttribute('data-i18n-title');
       if (key) {
-        el.setAttribute('title', this.t(key));
+        const translated = this.t(key);
+        if (translated && translated !== key) {
+          el.setAttribute('title', translated);
+        }
       }
     });
 
