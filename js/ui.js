@@ -3297,8 +3297,6 @@ if (typeof window !== 'undefined') {
   window.toggleRoadWidening = toggleRoadWidening;
   window.toggleBufferZone = toggleBufferZone;
   window.syncSignaturePreviews = syncSignaturePreviews;
-  window.recalculateSetbacks = recalculateSetbacks;
-  window.recalculateGeometry = recalculateGeometry;
 
   // Map Location & Geocoding
   window.openLocationPickerModal = openLocationPickerModal;
@@ -3324,21 +3322,17 @@ if (typeof window !== 'undefined') {
   window.updateSetbackComplianceBadges = updateSetbackComplianceBadges;
   window.formatFeetInches = formatFeetInches;
   window.validateBuildingSetbackFeasibility = validateBuildingSetbackFeasibility;
-  window.clearFieldError = clearFieldError;
-  window.showFieldError = showFieldError;
 
   // Signatures & Project Import/Export
   window.onSignatureFileSelected = onSignatureFileSelected;
   window.openSignatureCropModal = openSignatureCropModal;
   window.closeSignatureCropModal = closeSignatureCropModal;
-  window.saveCroppedSignature = saveCroppedSignature;
   window.removeSignature = removeSignature;
   window.reopenSignatureCrop = reopenSignatureCrop;
   window.rotateSignature = rotateSignature;
   window.resetCropTransform = resetCropTransform;
   window.onSignatureCropZoom = onSignatureCropZoom;
   window.applySignatureCrop = applySignatureCrop;
-  window.onSignatureCropTypeChange = onSignatureCropTypeChange;
   window.triggerProjectImport = triggerProjectImport;
   window.handleProjectFileImport = handleProjectFileImport;
   window.closeProjectImportErrorModal = closeProjectImportErrorModal;

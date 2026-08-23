@@ -1038,6 +1038,11 @@ function renderCenteredKeyPlanMap(lat, lon, zoom, width, height, callback) {
   tiles.forEach(({ tx, ty }) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
+
+    const loadPrimary = () => {
+      img.src = `https://basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${tx}/${ty}.png`;
+    };
+
     img.onload = () => {
       if (failed) return;
       const destX = tx * 256 - minX;
@@ -1049,17 +1054,40 @@ function renderCenteredKeyPlanMap(lat, lon, zoom, width, height, callback) {
           const dataUrl = canvas.toDataURL('image/png');
           callback(null, dataUrl);
         } catch (e) {
-          callback(e);
+          callback(null, img.src);
         }
       }
     };
+
     img.onerror = () => {
-      if (!failed) {
-        failed = true;
-        callback(new Error('Tile load error'));
-      }
+      // Fallback to OSM tile server if Carto CDN is unreachable
+      const fallbackImg = new Image();
+      fallbackImg.crossOrigin = 'anonymous';
+      fallbackImg.onload = () => {
+        if (failed) return;
+        const destX = tx * 256 - minX;
+        const destY = ty * 256 - minY;
+        ctx.drawImage(fallbackImg, destX, destY, 256, 256);
+        loaded++;
+        if (loaded === tiles.length) {
+          try {
+            const dataUrl = canvas.toDataURL('image/png');
+            callback(null, dataUrl);
+          } catch (e) {
+            callback(null, fallbackImg.src);
+          }
+        }
+      };
+      fallbackImg.onerror = () => {
+        if (!failed) {
+          failed = true;
+          callback(new Error('Tile load error'));
+        }
+      };
+      fallbackImg.src = `https://tile.openstreetmap.org/${zoom}/${tx}/${ty}.png`;
     };
-    img.src = `https://a.basemaps.cartocdn.com/rastertiles/voyager/${zoom}/${tx}/${ty}.png`;
+
+    loadPrimary();
   });
 }
 
