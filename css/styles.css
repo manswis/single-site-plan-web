@@ -8383,8 +8383,8 @@ body.pdf-export-active .drawing-canvas-column,
   font-size: 13.5px !important;
   border-radius: 12px !important;
   border: 1.5px solid var(--apple-border);
-  background: var(--apple-bg);
-  color: var(--apple-text-primary);
+  background: var(--apple-card-bg, #ffffff);
+  color: var(--apple-text-primary, #0f172a) !important;
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box !important;
@@ -8394,7 +8394,8 @@ body.pdf-export-active .drawing-canvas-column,
 #wardModalSearchInput:focus {
   border-color: var(--apple-accent) !important;
   box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15) !important;
-  background: #ffffff !important;
+  background: var(--apple-card-bg, #ffffff);
+  color: var(--apple-text-primary, #0f172a) !important;
 }
 
 .ward-search-clear-btn {
@@ -8704,15 +8705,27 @@ body.pdf-export-active .drawing-canvas-column,
   color: #ffffff !important;
 }
 
+[data-theme="dark"] .ward-search-bar-wrapper input.ward-search-input,
+[data-theme="dark"] #wardModalSearchInput,
 [data-theme="dark"] .ward-search-input {
-  background: #09090b !important;
+  background: #18181b !important;
   border-color: rgba(255, 255, 255, 0.25) !important;
   color: #ffffff !important;
 }
 
+[data-theme="dark"] .ward-search-bar-wrapper input.ward-search-input:focus,
+[data-theme="dark"] #wardModalSearchInput:focus,
 [data-theme="dark"] .ward-search-input:focus {
+  background: #27272a !important;
   border-color: #38bdf8 !important;
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .ward-search-bar-wrapper input.ward-search-input::placeholder,
+[data-theme="dark"] #wardModalSearchInput::placeholder,
+[data-theme="dark"] .ward-search-input::placeholder {
+  color: #a1a1aa !important;
 }
 
 [data-theme="dark"] .ward-zone-chip {
