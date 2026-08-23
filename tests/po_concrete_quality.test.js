@@ -272,10 +272,12 @@ console.log('\n4. Concrete Check 4: Mobile Ergonomics & Touch Target CSS Guardra
 // Check mobile breakpoint rules in CSS
 assert.ok(stylesCss.includes('@media (max-width: 768px)') || stylesCss.includes('@media (max-width: 767px)'), 'CSS must include mobile breakpoint rules');
 assert.ok(stylesCss.includes('map-toolbar-btn'), 'Map toolbar buttons must be styled');
+assert.ok(stylesCss.includes('map-picker-chips-bar'), 'CSS must include horizontal chips bar rules');
+assert.ok(stylesCss.includes('converter-preset-chip'), 'CSS must include preset chip rules');
 
 // Check modal max height constraint in CSS
 assert.ok(stylesCss.includes('max-height') && stylesCss.includes('overflow-y: auto'), 'Modals must enforce max-height and scrolling overflow');
-console.log('   ✓ Mobile breakpoints, touch targets, and scroll-safe modal constraints verified in CSS.');
+console.log('   ✓ Mobile breakpoints, touch targets, map chips bar, and scroll-safe modal constraints verified in CSS.');
 
 // ==========================================
 // CONCRETE CHECK 5: BBMP Sakala Statutory Drawing Mandate

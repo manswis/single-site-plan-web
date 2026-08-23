@@ -266,6 +266,12 @@ mockWindow.locateOnPickerMap();
 // Test reset to Bangalore center
 mockWindow.resetToBangaloreCenter();
 
+// Test all 8 BBMP Zone quick-navigation chips
+const bbmpZones = ['East', 'West', 'South', 'Mahadevapura', 'Yelahanka', 'Rajarajeshwari Nagar', 'Dasarahalli', 'Bommanahalli'];
+bbmpZones.forEach(z => {
+  mockWindow.flyPickerToZone(z);
+});
+
 // Test zoom slider input
 const zoomSlider = mockDoc.getElementById('gpsZoom');
 zoomSlider.value = '17';
