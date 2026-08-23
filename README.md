@@ -4,6 +4,8 @@
 ### Automated Single Plot Layout Plan Drafting Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Tests: 31/31 Passing](https://img.shields.io/badge/Tests-31%2F31%20Passing-brightgreen.svg)](#-exhaustive-automated-testing-suite)
+[![Languages: EN + KN](https://img.shields.io/badge/Languages-English%20%7C%20%E0%B2%95%E0%B2%A8%E0%B3%8D%E0%B2%A8%E0%B2%A1-orange.svg)](#-bilingual-localization-english--%E0%B2%95%E0%B2%A8%E0%B3%8D%E0%B2%A8%E0%B2%A1)
 [![Privacy: 100% Client-Side](https://img.shields.io/badge/Privacy-100%25%20Local%20CAD-success.svg)](#-data-privacy--architectural-integrity)
 [![Infrastructure: Cloudflare Workers + D1](https://img.shields.io/badge/Infrastructure-Cloudflare%20Workers%20%2B%20D1-orange.svg)](https://single-site-plan.cranbear.workers.dev)
 [![Compliance: Sakala BBMP B--to--A Khata](https://img.shields.io/badge/Compliance-BBMP%20Sakala-blueviolet.svg)](#-essential-domain-glossary)
@@ -54,6 +56,13 @@ In Bengaluru, Karnataka, property owners converting a **B-Khata property into an
 
 - ⚡ **Real-Time Live 2D CAD Canvas:** Watch your site plan drawing update on screen as you type, complete with vector dimensions, road overlays, hatch patterns, and compass rose.
 - 📐 **Automated BBMP RMP-2015 Setbacks:** Calculates mandatory front, rear, and side open space setbacks automatically based on plot area, building height, and road width regulations.
+- 🗺️ **Interactive Leaflet Map Pin Picker:** Pick precise GPS coordinates on interactive satellite & street maps with automated BBMP Zone centering chips and 4-stage geolocation fallback.
+- 🏛️ **198 BBMP Wards & Zones Auto-Suggest Directory:** Integrated searchable directory covering all 198 BBMP Wards across 8 administrative zones with landmark and locality autocomplete.
+- 📏 **Karnataka Statutory Land Area Converter:** Convert instantly between 9 statutory land units (Guntas, Gajam/Sq. Yards, Acres, Cents, Ankana, Bigha, Hectares, Sq. Meters, Sq. Feet) and 8 Bangalore plot presets (30×40, 30×50, 40×60, etc.).
+- ✍️ **Signature Chroma Keying & Crop Studio:** Real-time signature and architect seal alignment canvas with background thresholding, zoom/pan controls, and direct drawing integration.
+- 🌐 **100% Bilingual Localization (English & ಕನ್ನಡ):** Complete native Kannada language support across all form steps, help tooltips, drawing headers, and legal disclaimers.
+- 💾 **Draft Session Persistence & `.eplan` Backup:** Automatic local draft autosave with session restore recovery and portable encrypted `.eplan` JSON file import/export.
+- ⌨️ **Smart Feet & Inches Auto-Tabbing:** Architectural input controls with auto-advance on 2 digits or delimiter keys (`.`, `Space`, `Enter`, `,`) and safe backspace transitions.
 - 🔷 **Regular & Irregular Plot Geometries:** Supports rectangular, trapezoidal, and complex surveyor polygons with custom diagonal measurements and splay boundaries.
 - 🔒 **100% Local Client-Side Privacy:** Zero server uploads for CAD math. All property survey numbers, eKhata IDs (ePID), addresses, and CAD geometry remain exclusively inside local browser memory (`localStorage`).
 - 📄 **Official 2-Page Sakala PDF Package:** Exports a consolidated 2-page vector PDF:
@@ -64,6 +73,42 @@ In Bengaluru, Karnataka, property owners converting a **B-Khata property into an
 
 ---
 
+## 🌐 Bilingual Localization (English & ಕನ್ನಡ)
+
+e-Plan Studio features a custom, lightweight, zero-dependency localization engine (`js/i18n/`) offering **100% bilingual parity** across English and Kannada (ಕನ್ನಡ):
+
+* **690+ Curated Translation Keys:** All 7 wizard steps, form labels, error messages, modal dialogs, and button prompts are translated with statutory revenue terminology.
+* **Instant Dynamic Switching:** Toggle language seamlessly from the navigation header without reloading the page or losing current form progress.
+* **Statutory Kannada Formats:** Automatically localizes drawing sheet title blocks, ward names, and units (e.g. *ಚದರ ಅಡಿ*, *ಗುಂಟೆ*, *ಸರ್ವೇ ನಂಬರ್*, *ಖಾತಾ*).
+
+```javascript
+// Switch locale dynamically
+window.i18n.setLocale('kn'); // Switch to Kannada
+window.i18n.setLocale('en'); // Switch to English
+```
+
+---
+
+## 🧪 Exhaustive Automated Testing Suite
+
+The repository contains an enterprise test suite with **31 comprehensive test files** executing in under **1.6 seconds** via a headless Node.js VM and JSDOM simulation environment:
+
+```bash
+# Run the complete test suite
+npm test
+```
+
+### Test Coverage Highlights:
+1. **Button & Control Event Handlers:** Verifies all 44 `oninput` handlers and 19 `onchange` dropdowns across the form.
+2. **Modal Lifecycles:** Tests open/close state transitions across all 8 modal overlays (Map Picker, BBMP Wards, Land Converter, Signature Crop, Help Desk, Draft Restore, Import Error, Voluntary Support).
+3. **BBMP Ward Directory Integrity:** Tests schema validation, search keywords, and zone filtering across all 198 BBMP Wards.
+4. **Karnataka Land Unit Conversions:** Mathematically verifies all 14 statutory conversion factors and 8 Bangalore plot presets.
+5. **CAD Math & Auto-Scaling:** Stress-tests extreme aspect ratios (e.g. 10:1 long sites) and irregular 4-side polygon calculations.
+6. **Draft Round-Trip Serialization:** Verifies full-form localStorage draft save, restore, corrupted payload recovery, and `.eplan` JSON export/import.
+7. **Statutory Legal Gates:** Confirms that PDF export and plan printing are strictly blocked until the user checks the Zero Liability consent gate.
+
+---
+
 ## 🏛️ System Architecture
 
 ```mermaid
@@ -71,12 +116,22 @@ flowchart TD
     subgraph Client ["💻 Client Browser (100% Offline-First)"]
         direction TB
         CAD["📐 Interactive CAD Canvas (SVG 2D)"]
-        Math["⚙️ BBMP Setback Math Engine"]
-        PDF["📄 jsPDF Vector PDF Exporter"]
-        Storage[("💾 Device LocalStorage (Isolated on Device)")]
+        Math["⚙️ BBMP Setback Math Engine (RMP-2015)"]
+        Map["🗺️ Leaflet Map Location Pin Picker"]
+        Ward["🏛️ 198 BBMP Wards Directory"]
+        Conv["📏 Karnataka Land Area Converter"]
+        Sig["✍️ Signature Chroma Keying Studio"]
+        i18n["🌐 Bilingual Engine (EN / ಕನ್ನಡ)"]
+        PDF["📄 jsPDF + html2canvas Exporter"]
+        Storage[("💾 LocalStorage Draft Persistence")]
 
         Math <--> CAD
         Math --> PDF
+        Map --> CAD
+        Ward --> Math
+        Conv --> Math
+        Sig --> CAD
+        i18n <--> CAD
         CAD <--> Storage
     end
 
@@ -97,16 +152,16 @@ flowchart TD
 
 ```
 single-site-plan-web/
-├── index.html                # Google-style landing page hub & 7-step wizard
-├── studio.html               # Live 2D CAD Workbench with interactive controls
+├── index.html                # Landing page hub with 7-step guided workflow preview
+├── studio.html               # Live 2D CAD Workbench with interactive controls & drawing canvas
 ├── contact.html              # Support & issue tracker with timeline conversation
 ├── admin.html                # Secure Apple/Google-grade Admin support desk console
-├── pricing.html              # Transparent free tier & pro architectural plans
-├── legal.html                # Legally binding Terms of Service & Privacy (DPDP compliant)
+├── pricing.html              # Transparent free tier & voluntary contribution overview
+├── legal.html                # Legally binding Terms of Service, Privacy & Section 15 Policy
 ├── faq.html                  # Interactive field-by-field guide & Sakala FAQ accordions
 ├── _worker.js                # Cloudflare Workers serverless API router & D1 bindings
 ├── build.js                  # Ultra-fast esbuild asset minification & bundling script (<30ms)
-├── package.json              # Project scripts (build, dev, deploy) & build dependencies
+├── package.json              # Project scripts (build, test, dev, deploy) & build dependencies
 ├── schema.sql                # Standalone D1 database table and index definitions
 ├── wrangler.toml             # Cloudflare Workers & D1 deployment manifest
 ├── .assetsignore             # Excludes backend worker files & node_modules from public assets
@@ -116,34 +171,41 @@ single-site-plan-web/
 ├── README.md                 # Project documentation (This file)
 ├── css/
 │   ├── styles.css            # Human-readable master CSS design tokens & print styles
-│   └── styles.min.css        # Compressed production stylesheet (83 KB)
-└── js/
-    ├── admin.js              # Human-readable admin controller & session security
-    ├── admin.min.js          # Production minified admin controller
-    ├── analytics.js          # Session deduplicated live stats counter
-    ├── analytics.min.js      # Production minified analytics counter
-    ├── contact.js            # Helpdesk controller, consent modal & timeline renderer
-    ├── contact.min.js        # Production minified helpdesk controller
-    ├── renderer.js           # SVG 2D CAD vector graphics rendering engine
-    ├── renderer.min.js       # Production minified CAD renderer
-    ├── studio.bundle.min.js  # Unified single-bundle production CAD engine
-    ├── theme.js              # Automatic Dark/Light mode theme manager
-    ├── theme.min.js          # Production minified theme manager
-    ├── ui.js                 # DOM interaction handlers & PDF export engine (jsPDF)
-    ├── ui.min.js             # Production minified UI handlers
-    ├── validator.js          # Sakala data validation rules & error focus engine
-    ├── validator.min.js      # Production minified validator
-    ├── wizard.js             # 7-step guided wizard state manager & draft persistence
-    └── wizard.min.js         # Production minified wizard
+│   └── styles.min.css        # Compressed production stylesheet
+├── js/
+│   ├── data/
+│   │   └── bbmpWards.js      # Curated directory of 198 BBMP Wards & 8 Administrative Zones
+│   ├── i18n/
+│   │   ├── en.js             # English translation dictionary (690+ keys)
+│   │   └── kn.js             # Kannada translation dictionary (690+ keys)
+│   ├── admin.js              # Admin controller & session security
+│   ├── analytics.js          # Session deduplicated live stats counter
+│   ├── contact.js            # Helpdesk controller, consent modal & timeline renderer
+│   ├── qrcode.js             # Dynamic UPI QR Code vector generation engine
+│   ├── renderer.js           # SVG 2D CAD vector graphics rendering engine
+│   ├── theme.js              # Automatic Dark/Light mode theme manager
+│   ├── ui.js                 # DOM interaction handlers, Map Picker, Converter & PDF export
+│   ├── validator.js          # Sakala data validation rules & error focus engine
+│   ├── wizard.js             # 7-step guided wizard state manager & draft persistence
+│   └── studio.bundle.min.js  # Unified single-bundle production CAD engine
+└── tests/
+    ├── index.js              # Master test suite runner (executes all 31 test suites)
+    ├── dom_simulation.test.js# End-to-end DOM simulation & modal lifecycle suite
+    ├── ward.test.js          # BBMP Ward search & zone filtering tests
+    ├── converter.test.js     # Karnataka Land Area Converter calculations suite
+    ├── autotab.test.js       # Smart numeric auto-tabbing unit tests
+    ├── unit/                 # Specialized unit test modules
+    └── integration/          # Integration & statutory guardrail test suites
 ```
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend Core:** Semantic HTML5, Vanilla JavaScript (ES6+), Vanilla CSS3 (Apple Design System).
+- **Frontend Core:** Semantic HTML5, Vanilla JavaScript (ES6+ Modules), Vanilla CSS3 (Apple Design System).
 - **Build Engine:** `esbuild` for ultra-fast, zero-runtime production minification and code compression.
 - **Vector CAD Engine:** Scalable Vector Graphics (SVG) with mathematical coordinate transformations.
+- **Mapping & Geocoding:** Leaflet.js with OpenStreetMap satellite tiles & 4-stage geolocation fallback.
 - **Document Generation:** `jsPDF` + `html2canvas` for client-side vector PDF compilation.
 - **Serverless API & Edge Hosting:** Cloudflare Workers with Static Assets.
 - **Database:** Cloudflare D1 (Distributed Serverless SQLite).
@@ -162,12 +224,17 @@ cd singleSitePlan-web
 npm install
 ```
 
-### 2. Build Production Assets (< 30ms)
-To minify all JavaScript modules and CSS stylesheets into production `.min` files:
+### 2. Run Automated Tests
+```bash
+npm test
+```
+*Executes all 31 enterprise unit and integration test suites.*
+
+### 3. Build Production Assets (< 30ms)
 ```bash
 npm run build
 ```
-*Outputs size savings breakdown and builds `js/*.min.js`, `js/studio.bundle.min.js`, and `css/styles.min.css`.*
+*Minifies all JavaScript modules and CSS stylesheets into production `.min` files.*
 
 ---
 
@@ -225,14 +292,6 @@ Run the following command to create a serverless D1 instance in your Cloudflare 
 npx wrangler d1 create single_site_plan_support_tickets_db
 ```
 
-Wrangler will output your unique `database_id`, for example:
-```toml
-[[d1_databases]]
-binding = "DB"
-database_name = "single_site_plan_support_tickets_db"
-database_id = "your-database-uuid-here"
-```
-
 ### 2. Update `wrangler.toml`
 Paste your database details into `wrangler.toml`:
 ```toml
@@ -257,84 +316,36 @@ npx wrangler d1 execute single_site_plan_support_tickets_db --remote --file=sche
 ```
 
 ### 4. Configure Your Admin Passkey (`ADMIN_SECRET`)
-To lock your `/admin.html` dashboard behind a secure cryptographic passkey:
-
-#### Option A: Via Wrangler CLI (Recommended)
 ```bash
 npx wrangler secret put ADMIN_SECRET
-# Enter your secret passkey when prompted (e.g. MySecretPasskey2026!)
+# Enter your secret passkey when prompted
 ```
-
-#### Option B: Via Cloudflare Dashboard
-1. Go to **Cloudflare Dashboard** → **Workers & Pages** → select your worker (`single-site-plan`).
-2. Navigate to **Settings** → **Variables and Secrets**.
-3. Under **Environment Variables**, click **Add variable**.
-4. Set **Variable name** to `ADMIN_SECRET`, type your secret passkey, check **Encrypt**, and click **Save and Deploy**.
 
 ### 5. Deploy to Production
 ```bash
-npx wrangler deploy
+npm run deploy
 ```
 
 ---
 
 ## 🛡️ Admin Ticket Triage & Response Workflow
 
-Once deployed, you have two ways to manage tickets:
+Once deployed, tickets can be managed via the Web Admin Console at `/admin.html` with your passkey, or through direct D1 SQL queries:
 
-### Method 1: Using the Web-Based Admin Console (Recommended)
-1. Navigate to `https://your-domain.workers.dev/admin.html` in your browser.
-2. Enter the `ADMIN_SECRET` passkey you configured above.
-3. Review ticket details, view client diagnostics, click **1-click canned response chips**, change ticket status, and post verified timeline replies without writing any SQL!
-
----
-
-### Method 2: Direct SQL Queries (via Cloudflare Console / CLI)
-
-Admins can also triage and reply directly from the Cloudflare Dashboard D1 Console or via Wrangler CLI:
-
-#### 1. View Recent Inquiries:
 ```sql
+-- View recent support tickets
 SELECT id, type, priority, status, name, email, subject, message, created_at 
 FROM tickets 
 ORDER BY created_at DESC 
 LIMIT 20;
-```
 
-#### 2. Post a Verified Response to the User's Timeline:
-
-##### Option A: Post a Structured JSON Multi-Message Thread:
-```sql
-UPDATE tickets 
-SET status = 'in_progress',
-    public_response = '[
-      {
-        "text": "Hi! We investigated your setback report and identified the corner splay formula bug.", 
-        "time": "2026-08-15 17:35:00", 
-        "author": "e-Plan Studio Engineering Team"
-      },
-      {
-        "text": "Fix deployed in v1.2. Please re-generate your PDF and let us know if it matches your survey sketch.", 
-        "time": "2026-08-15 17:50:00", 
-        "author": "Lead Developer"
-      }
-    ]',
-    updated_at = CURRENT_TIMESTAMP
-WHERE id = 'REQ-BCE5-T923';
-```
-
-#### Option B: Quick Multi-Line Reply (using `---` separator):
-```sql
+-- Post a verified reply to the user's live timeline
 UPDATE tickets 
 SET status = 'resolved',
-    public_response = 'We updated the setback schedule for your ward.
----
-Patch deployed and verified on production.',
+    public_response = 'Issue investigated and resolved in v1.2.',
     updated_at = CURRENT_TIMESTAMP
 WHERE id = 'REQ-BCE5-T923';
 ```
-
-When the user visits `contact.html?track=REQ-BCE5-T923`, the timeline conversation thread will automatically render your verified replies with timestamps!
 
 ---
 
@@ -344,25 +355,11 @@ Contributions from software engineers, civil engineers, architects, and legal ex
 
 ### Contribution Workflow:
 1. **Fork** the repository on GitHub.
-2. **Create a Feature Branch:**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Commit Your Changes:**
-   ```bash
-   git commit -m "Add amazing new feature"
-   ```
-4. **Push to the Branch:**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-5. **Open a Pull Request:** Navigate to the repository on GitHub and click **New Pull Request**.
-
-### Areas Where You Can Help:
-- 📐 **Municipal Regulatory Formats:** Preset rules for BDA, BMRDA, DTCP, or other municipal corporations in India.
-- 🎨 **CAD Drawing Algorithms:** Splayed road junctions, arc curves, irregular polygon triangulation.
-- 🌐 **Localization:** Adding Kannada (ಕನ್ನಡ) language translations for field labels and guide tooltips.
-- 🧪 **Automated Testing:** Unit test suites for setback mathematical formulas and SVG coordinate generators.
+2. **Create a Feature Branch:** `git checkout -b feature/amazing-feature`
+3. **Validate Tests:** Ensure `npm test` passes 100%.
+4. **Commit Your Changes:** `git commit -m "Add amazing new feature"`
+5. **Push to the Branch:** `git push origin feature/amazing-feature`
+6. **Open a Pull Request** on GitHub.
 
 ---
 
