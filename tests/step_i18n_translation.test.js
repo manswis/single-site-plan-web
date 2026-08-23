@@ -85,7 +85,7 @@ class FakeElement {
 const manager = new I18nManager();
 
 for (let s = 1; s <= 7; s++) {
-  const stepRegex = new RegExp(`<div id="wizardStep${s}"[\\s\\S]*?(?=<div id="wizardStep${s+1}"|<!-- STEP|<!-- Bottom Action Navigation|<!-- Form Card -->)`);
+  const stepRegex = new RegExp(`<div id="wizardStep${s}"[\\s\\S]*?(?=<div id="wizardStep${s + 1}"|<!-- STEP|<!-- Bottom Action Navigation|<!-- Form Card -->)`);
   const stepMatch = studioHtml.match(stepRegex);
   assert.ok(stepMatch, `Step ${s} markup must exist in studio.html`);
 

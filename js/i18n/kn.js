@@ -544,11 +544,11 @@ export const kn = {
   "zone.east": "ಪೂರ್ವ ವಲಯ",
   "zone.west": "ಪಶ್ಚಿಮ ವಲಯ",
   "zone.south": "ದಕ್ಷಿಣ ವಲಯ",
-  "zone.mahadevapura": "ಮಹದೇವಪುರ ವಲಯ",
-  "zone.yelahanka": "ಯಲಹಂಕ ವಲಯ",
+  "zone.mahadevapura": "ಮಹದೇವಪುರ",
+  "zone.yelahanka": "ಯಲಹಂಕ",
   "zone.dasarahalli": "ದಾಸರಹಳ್ಳಿ ವಲಯ",
   "zone.bommanahalli": "ಬೊಮ್ಮನಹಳ್ಳಿ ವಲಯ",
-  "zone.rrnagar": "ಆರ್.ಆರ್. ನಗರ ವಲಯ",
+  "zone.rrnagar": "ರಾಜರಾಜೇಶ್ವರಿ ನಗರ",
   "step2.searchWards": "೧೯೮ ಬಿಬಿಎಂಪಿ ವಾರ್ಡ್‌ಗಳ ಡೈರೆಕ್ಟರಿ ಹುಡುಕಿ",
   "step2.err.zone": "⚠ ಬಿಬಿಎಂಪಿ ವಲಯವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
   "step2.err.wardNo": "⚠ ವಾರ್ಡ್ ಸಂಖ್ಯೆ ಅಗತ್ಯವಿದೆ",
@@ -644,5 +644,9 @@ export const kn = {
   "step6.archSigTitle": "ವಾಸ್ತುಶಿಲ್ಪಿಯ ಮೊಹರು / ಸಹಿ",
   "step6.archSigUpload": "ವಾಸ್ತುಶಿಲ್ಪಿಯ ಮೊಹರು / ಸಹಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
   "step6.sigCropHint": "ಪಿಎನ್‌ಜಿ, ಜೆಪಿಜಿ (ಕ್ರಾಪ್ ಮತ್ತು ಹೊಂದಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ)",
-  "step6.legendPage": "📑 ಬಿಬಿಎಂಪಿ ಬಣ್ಣ ಮತ್ತು ರೇಖಾ ನಿರ್ದಿಷ್ಟತೆಗಳ ಹಾಳೆಯನ್ನು (ಪುಟ ೨) ಸೇರಿಸಿ"
+  "step6.legendPage": "📑 ಬಿಬಿಎಂಪಿ ಬಣ್ಣ ಮತ್ತು ರೇಖಾ ನಿರ್ದಿಷ್ಟತೆಗಳ ಹಾಳೆಯನ್ನು (ಪುಟ ೨) ಸೇರಿಸಿ",
+  "mapPicker.myLocation": "📍 ನನ್ನ ಸ್ಥಳ",
+  "mapPicker.bangaloreCenter": "🏛️ ಬೆಂಗಳೂರು ಕೇಂದ್ರ",
+  "btn.search": "ಹುಡುಕಿ",
+  "mapPicker.searchPlaceholder": "ಬೆಂಗಳೂರು ಪ್ರದೇಶ ಹುಡುಕಿ (ಉದಾ: ಇಂದಿರಾನಗರ, ವೈಟ್‌ಫೀಲ್ಡ್)..."
 };

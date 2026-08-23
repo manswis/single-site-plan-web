@@ -544,11 +544,11 @@ export const en = {
   "zone.east": "East Zone",
   "zone.west": "West Zone",
   "zone.south": "South Zone",
-  "zone.mahadevapura": "Mahadevapura Zone",
-  "zone.yelahanka": "Yelahanka Zone",
+  "zone.mahadevapura": "Mahadevapura",
+  "zone.yelahanka": "Yelahanka",
   "zone.dasarahalli": "Dasarahalli Zone",
   "zone.bommanahalli": "Bommanahalli Zone",
-  "zone.rrnagar": "RR Nagar Zone",
+  "zone.rrnagar": "Rajarajeshwari Nagar",
   "step2.searchWards": "Search 198 BBMP Wards & Localities Directory",
   "step2.err.zone": "⚠ Select BBMP Zone",
   "step2.err.wardNo": "⚠ Ward number is required",
@@ -644,5 +644,9 @@ export const en = {
   "step6.archSigTitle": "Architect Seal / Signature",
   "step6.archSigUpload": "Upload Architect Seal / Sign",
   "step6.sigCropHint": "PNG, JPG (Tap to crop & align)",
-  "step6.legendPage": "📑 Include BBMP Line & Colour Specifications Sheet (Page 2) in Merged PDF"
+  "step6.legendPage": "📑 Include BBMP Line & Colour Specifications Sheet (Page 2) in Merged PDF",
+  "mapPicker.myLocation": "📍 My Location",
+  "mapPicker.bangaloreCenter": "🏛️ Bangalore Central",
+  "btn.search": "Search",
+  "mapPicker.searchPlaceholder": "Search Bangalore area (e.g. Indiranagar, Whitefield)..."
 };

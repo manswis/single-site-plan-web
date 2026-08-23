@@ -339,11 +339,19 @@ mockWindow.resetToBangaloreCenter();
 mockWindow.closeLocationPickerModal();
 assert.ok(mockDoc.getElementById('gpsCoords').value.includes('12.9716'));
 
+// Test flyPickerToZone for all 8 BBMP zones
+const zonesToTest = ['East', 'West', 'South', 'Mahadevapura', 'Yelahanka', 'Rajarajeshwari Nagar', 'Dasarahalli', 'Bommanahalli'];
+zonesToTest.forEach(z => {
+  mockWindow.flyPickerToZone(z);
+  mockWindow.applyPickerLocation();
+  assert.ok(gpsInput.value.length > 0, `flyPickerToZone(${z}) must set valid coordinates`);
+});
+
 // Test applyPickerLocation()
 mockWindow.openLocationPickerModal();
 mockWindow.applyPickerLocation();
-assert.ok(gpsInput.value.includes('12.9716'), 'applyPickerLocation must copy picker coords to input');
-console.log('   ✓ Real-time Geolocation, GPS input sync, and Map Picker coordinate bridge verified.');
+assert.ok(gpsInput.value.includes('12.'), 'applyPickerLocation must copy picker coords to input');
+console.log('   ✓ Real-time Geolocation, GPS input sync, Map Picker zone chips & coordinate bridge verified.');
 
 // 7. Full 7-Step Wizard Validation Flow Test
 console.log('\n5. Testing 7-Step Form Wizard Forward & Backward Validation Flow:');

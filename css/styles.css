@@ -1047,6 +1047,30 @@ body {
   transform: scale(0.97);
 }
 
+.map-picker-chips-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.map-picker-chips-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.map-picker-chips-bar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+[data-theme="dark"] .map-picker-chips-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 /* Result Banner */
 .converter-result-banner {
   background: linear-gradient(135deg, rgba(0, 113, 227, 0.08), rgba(0, 113, 227, 0.03));

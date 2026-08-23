@@ -320,6 +320,37 @@ function locateOnPickerMap() {
 }
 
 /**
+ * Geographic center coordinates and zoom levels for 8 BBMP Administrative Zones.
+ */
+const BBMP_ZONE_COORDINATES = {
+  'East': { lat: 12.9719, lon: 77.6412, zoom: 14 },
+  'West': { lat: 12.9982, lon: 77.5630, zoom: 14 },
+  'South': { lat: 12.9299, lon: 77.5824, zoom: 14 },
+  'Mahadevapura': { lat: 12.9904, lon: 77.6974, zoom: 14 },
+  'Yelahanka': { lat: 13.1007, lon: 77.5963, zoom: 14 },
+  'Rajarajeshwari Nagar': { lat: 12.9272, lon: 77.5154, zoom: 14 },
+  'Dasarahalli': { lat: 13.0458, lon: 77.5126, zoom: 14 },
+  'Bommanahalli': { lat: 12.8984, lon: 77.6256, zoom: 14 }
+};
+
+/**
+ * Centers the map on a designated BBMP administrative zone.
+ * @function flyPickerToZone
+ * @param {string} zoneName - Name of the BBMP Zone
+ * @returns {void}
+ */
+function flyPickerToZone(zoneName) {
+  const coords = BBMP_ZONE_COORDINATES[zoneName];
+  if (!coords) return;
+  currentPickerCoords = { lat: coords.lat, lon: coords.lon };
+  updatePickerCoordsDisplay(coords.lat, coords.lon);
+  if (pickerMapInstance && pickerMarkerInstance) {
+    pickerMapInstance.flyTo([coords.lat, coords.lon], coords.zoom || 14, { duration: 1 });
+    pickerMarkerInstance.setLatLng([coords.lat, coords.lon]);
+  }
+}
+
+/**
  * Resets picker map view to Central Bangalore (Vidhana Soudha).
  * @function resetToBangaloreCenter
  * @returns {void}
@@ -3308,6 +3339,7 @@ if (typeof window !== 'undefined') {
   window.searchMapLocation = searchMapLocation;
   window.locateOnPickerMap = locateOnPickerMap;
   window.resetToBangaloreCenter = resetToBangaloreCenter;
+  window.flyPickerToZone = flyPickerToZone;
   window.onGpsZoomInput = onGpsZoomInput;
   window.syncGpsZoomControls = syncGpsZoomControls;
   window.applyPickerLocation = applyPickerLocation;
