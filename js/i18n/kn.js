@@ -650,5 +650,6 @@ export const kn = {
   "btn.search": "ಹುಡುಕಿ",
   "mapPicker.searchPlaceholder": "ಬೆಂಗಳೂರು ಪ್ರದೇಶ ಹುಡುಕಿ (ಉದಾ: ಇಂದಿರಾನಗರ, ವೈಟ್‌ಫೀಲ್ಡ್)...",
   "mapPicker.layerStreet": "ರಸ್ತೆ ನಕ್ಷೆ",
-  "mapPicker.layerSatellite": "ಉಪಗ್ರಹ ನೋಟ"
+  "mapPicker.layerSatellite": "ಉಪಗ್ರಹ ನೋಟ",
+  "mapPicker.dragInstruction": "ಮಾರ್ಕರ್ ಎಳೆಯಿರಿ ಅಥವಾ ಸ್ಥಳ ಗುರುತಿಸಲು ನಕ್ಷೆ ಕ್ಲಿಕ್ ಮಾಡಿ"
 };
