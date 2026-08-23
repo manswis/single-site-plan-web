@@ -212,15 +212,15 @@
           style="background: none; border: none; font-size: 20px; font-weight: 700; color: var(--apple-text-secondary); cursor: pointer; padding: 0 4px;">✕</button>
       </div>
 
-      <!-- Line 1: Search Bar & Search Button (No Icon) -->
-      <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px;">
+      <!-- Line 1: Search Bar & Search Button (Matching Height & Alignment) -->
+      <div style="display: flex; gap: 8px; align-items: stretch; margin-bottom: 12px;">
         <input id="mapSearchInput" type="text" placeholder="Search Bangalore area (e.g. Indiranagar, Whitefield)..."
           data-i18n-placeholder="mapPicker.searchPlaceholder"
-          style="padding: 8px 12px; font-size: 13px; border-radius: 8px; border: 1px solid var(--apple-border); flex: 1; background: var(--apple-bg); color: var(--apple-text-primary);"
+          style="padding: 0 14px; height: 40px; box-sizing: border-box; font-size: 13px; border-radius: 10px; border: 1px solid var(--apple-border); flex: 1; background: var(--apple-bg); color: var(--apple-text-primary); line-height: 40px; outline: none;"
           onkeydown="if(event.key==='Enter'){event.preventDefault();searchMapLocation();}">
         <button type="button" class="map-toolbar-btn map-toolbar-btn-primary" onclick="searchMapLocation()"
           title="Search Location"
-          style="padding: 8px 18px; font-size: 13px; font-weight: 600; border-radius: 8px; height: 38px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;">
+          style="padding: 0 22px; height: 40px; box-sizing: border-box; font-size: 13px; font-weight: 600; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; margin: 0;">
           <span data-i18n="btn.search">Search</span>
         </button>
       </div>
