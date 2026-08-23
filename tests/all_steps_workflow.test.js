@@ -338,7 +338,7 @@ assert.ok(mockWindow.validateStep(7, true), 'Step 7 must pass when legal consent
 const validProjectJson = {
   app: 'e-Plan Studio BBMP',
   format: 'eplan',
-  schemaVersion: '1.2.1',
+  schemaVersion: '1.2.2',
   currentStep: 7,
   formData: {
     ownerName: 'Sri B.V. Ramana Murthy',
