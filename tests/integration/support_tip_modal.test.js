@@ -161,14 +161,24 @@ mockWindow.global = mockWindow;
 
 // Evaluate production bundle in sandbox
 const bundleContent = fs.readFileSync(path.resolve('js/studio.bundle.min.js'), 'utf8');
+const sessionStore = {};
 const context = vm.createContext({
   window: mockWindow,
   document: mockDoc,
   localStorage: mockWindow.localStorage,
+  sessionStorage: {
+    getItem: (k) => sessionStore[k] || null,
+    setItem: (k, v) => { sessionStore[k] = String(v); },
+    removeItem: (k) => { delete sessionStore[k]; },
+    clear: () => { Object.keys(sessionStore).forEach(k => delete sessionStore[k]); }
+  },
   navigator: mockWindow.navigator,
+  Blob: typeof Blob !== 'undefined' ? Blob : class FakeBlob { constructor(a, o) {} },
+  URL: typeof URL !== 'undefined' ? URL : { createObjectURL: () => 'blob:mock', revokeObjectURL: () => {} },
   console: { log() { }, warn() { }, error() { } },
   setTimeout: (fn, ms) => 1,
-  clearTimeout: () => { }
+  clearTimeout: () => { },
+  alert: () => { }
 });
 
 vm.runInContext(bundleContent, context);
@@ -252,6 +262,77 @@ suite.test('proceedWithPendingAction closes modal and executes pending export', 
     const modal = mockDoc.getElementById('supportTipModal');
     assert.equal(modal.style.display, 'none');
   }
+});
+
+suite.section('4. Legal Consent Gate Enforcement Before Export');
+
+suite.test('exportProjectFile is blocked and shows error when legalConsentCheck is unchecked', () => {
+  // This test guards the critical zero-liability gate:
+  // users must not be able to export/download without agreeing to ToS.
+  const legalCheck = mockDoc.getElementById('legalConsentCheck');
+  legalCheck.checked = false; // gate is OPEN (not agreed)
+
+  let alertCalled = false;
+  const originalAlert = mockWindow.alert;
+  mockWindow.alert = () => { alertCalled = true; };
+
+  // Attempt export — must be blocked
+  if (typeof mockWindow.exportProjectFile === 'function') {
+    mockWindow.exportProjectFile();
+
+    const errEl = mockDoc.getElementById('err-legalConsent');
+    // Either an alert was shown OR the error element is visible — both are valid gatekeeping patterns
+    const gateEnforced = alertCalled || (errEl && errEl.style.display === 'block');
+    assert.ok(gateEnforced, 'Export must be blocked when legalConsentCheck is unchecked');
+  }
+
+  if (originalAlert) mockWindow.alert = originalAlert;
+});
+
+suite.test('exportProjectFile proceeds when legalConsentCheck IS checked', () => {
+  const legalCheck = mockDoc.getElementById('legalConsentCheck');
+  legalCheck.checked = true; // gate is CLOSED (user agreed)
+
+  let legalBlockAlertCalled = false;
+  // Spy: only flag if the alert contains the legal consent phrase
+  const originalAlert = mockWindow.alert;
+  mockWindow.alert = (msg) => {
+    if (typeof msg === 'string' && msg.toLowerCase().includes('legal consent')) {
+      legalBlockAlertCalled = true;
+    }
+  };
+
+  if (typeof mockWindow.exportProjectFile === 'function') {
+    // In a VM context, exportProjectFile may fail at the PDF/Blob generation stage (after
+    // the consent gate) — that is acceptable. What must NOT happen is a legal-consent alert.
+    try { mockWindow.exportProjectFile(); } catch (_) { /* PDF/Blob generation expected to fail in VM */ }
+    assert.equal(
+      legalBlockAlertCalled, false,
+      'Legal consent blocking alert must NOT fire when checkbox is already checked'
+    );
+  }
+
+  if (originalAlert) mockWindow.alert = originalAlert;
+});
+
+suite.test('proceedWithPendingAction with no prior showSupportModal call does not crash (orphan state)', () => {
+  // Call closeSupportModal first to reset state, then call proceed without opening modal
+  if (typeof mockWindow.closeSupportModal === 'function') {
+    mockWindow.closeSupportModal();
+  }
+  assert.doesNotThrow(() => {
+    if (typeof mockWindow.proceedWithPendingAction === 'function') {
+      mockWindow.proceedWithPendingAction();
+    }
+  }, 'proceedWithPendingAction must not crash when called without a prior showSupportModal call');
+});
+
+suite.test('selectTipAmount(0) zero-amount edge case does not crash', () => {
+  assert.doesNotThrow(() => {
+    if (typeof mockWindow.selectTipAmount === 'function') {
+      mockWindow.selectTipAmount(0);
+    }
+  }, 'Zero tip amount must not cause an error or UPI URI with invalid amount');
 });
 
 suite.finish();

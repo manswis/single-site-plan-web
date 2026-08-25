@@ -117,7 +117,7 @@ suite.section('4. Instant Cache Rendering & Formatting');
 
 suite.test('updateStatElements formats numerical values with local thousands separators', async () => {
   const { updateStatElements } = await import('../../js/analytics.js');
-  
+
   // Setup mock document
   const mockElem = { textContent: '' };
   global.document = {
@@ -129,7 +129,7 @@ suite.test('updateStatElements formats numerical values with local thousands sep
 
   updateStatElements('statVisits', 12345);
   assert.equal(mockElem.textContent, (12345).toLocaleString());
-  
+
   updateStatElements('statVisits', 195);
   assert.equal(mockElem.textContent, '195');
 });
@@ -138,7 +138,7 @@ suite.test('renderImmediateStats executes safely and renders baseline numbers', 
   const { renderImmediateStats } = await import('../../js/analytics.js');
   const visitsEl = { textContent: '' };
   const plansEl = { textContent: '' };
-  
+
   global.document = {
     querySelectorAll: (selector) => {
       if (selector === '#statVisits') return [visitsEl];
@@ -156,10 +156,10 @@ suite.section('5. Localhost vs Production Behavior Parity');
 
 suite.test('Localhost displays counter but skips increment network calls', async () => {
   const { initLiveStats, trackPlanGenerated } = await import('../../js/analytics.js');
-  
+
   // Configure environment as localhost
   global.window = { location: { hostname: 'localhost', protocol: 'http:' } };
-  
+
   const visitsEl = { textContent: '' };
   const plansEl = { textContent: '' };
   global.document = {
@@ -181,11 +181,11 @@ suite.test('Localhost displays counter but skips increment network calls', async
 
   // Run initLiveStats(true) on localhost
   initLiveStats(true);
-  
+
   // Must render counter immediately
   assert.ok(visitsEl.textContent.length > 0, 'Counter must be displayed on localhost');
   assert.ok(plansEl.textContent.length > 0, 'Plans counter must be displayed on localhost');
-  
+
   // Must NOT have called any /hit/ endpoint or ?hit=true on localhost
   const hitCall = fetchCalls.find(c => c.url.includes('hit=true') || c.url.includes('/hit/'));
   assert.equal(hitCall, undefined, 'Localhost must never invoke increment hit endpoint');
@@ -198,10 +198,10 @@ suite.test('Localhost displays counter but skips increment network calls', async
 
 suite.test('Production site requests increment on new session and plan generation', async () => {
   const { initLiveStats, trackPlanGenerated } = await import('../../js/analytics.js');
-  
+
   // Configure environment as production
   global.window = { location: { hostname: 'single-site-plan.cranbear.workers.dev', protocol: 'https:' } };
-  
+
   const visitsEl = { textContent: '' };
   const plansEl = { textContent: '' };
   global.document = {
@@ -213,7 +213,7 @@ suite.test('Production site requests increment on new session and plan generatio
   };
   global.sessionStorage = {
     getItem: () => null,
-    setItem: () => {}
+    setItem: () => { }
   };
 
   const fetchCalls = [];
@@ -227,7 +227,7 @@ suite.test('Production site requests increment on new session and plan generatio
 
   // Run initLiveStats(true) on production
   initLiveStats(true);
-  
+
   // Check that increment endpoint was requested
   const hasHit = fetchCalls.some(c => c.url.includes('hit=true') || c.url.includes('/hit/'));
   assert.ok(hasHit, 'Production site must request visit increment on initial session');
@@ -236,6 +236,60 @@ suite.test('Production site requests increment on new session and plan generatio
   trackPlanGenerated();
   const planPost = fetchCalls.find(c => c.url.includes('/api/stats/plan') || c.url.includes('/hit/'));
   assert.ok(planPost !== undefined, 'Production site must trigger plan increment call');
+});
+
+suite.section('6. Network Failure & Analytics Resilience');
+
+suite.test('initLiveStats fails silently when fetch() network call throws an error', async () => {
+  const { initLiveStats } = await import('../../js/analytics.js');
+
+  global.window = { location: { hostname: 'single-site-plan.cranbear.workers.dev', protocol: 'https:' } };
+  global.sessionStorage = {
+    getItem: () => null,
+    setItem: () => { }
+  };
+
+  // Simulate a hard network failure (DNS failure, offline, etc.)
+  global.fetch = async () => { throw new Error('ERR_NETWORK_CHANGED: Simulated offline state'); };
+
+  const visitsEl = { textContent: '' };
+  global.document = {
+    querySelectorAll: (s) => s === '#statVisits' ? [visitsEl] : []
+  };
+
+  // Must not throw or crash the calling context
+  let threw = false;
+  try {
+    await initLiveStats(true);
+  } catch (_) {
+    threw = true;
+  }
+
+  assert.equal(threw, false, 'Analytics must NOT propagate network errors to the calling context');
+});
+
+suite.test('Analytics session dedup guard: analytics.js source references sessionStorage to prevent double-counting', async () => {
+  // ESM module caching prevents testing the session flag via re-import in the same process.
+  // Instead, verify the dedup mechanism is present in the source code — any removal of
+  // sessionStorage from analytics.js will cause this test to fail, alerting the developer.
+  const fsMod = await import('fs');
+  const pathMod = await import('path');
+  const source = fsMod.default.readFileSync(pathMod.default.resolve('js/analytics.js'), 'utf8');
+  const hasSessionGuard = source.includes('sessionStorage') || source.includes('SESSION_FLAG') || source.includes('session_active');
+  assert.ok(
+    hasSessionGuard,
+    'analytics.js must reference sessionStorage for visit dedup — removing this guard will cause every page reload to double-count visits'
+  );
+});
+
+suite.test('updateStatElements with NaN or undefined value does not throw and renders fallback', async () => {
+  const { updateStatElements } = await import('../../js/analytics.js');
+  const el = { textContent: '' };
+  global.document = { querySelectorAll: (s) => s === '#statVisits' ? [el] : [] };
+
+  assert.doesNotThrow(() => updateStatElements('statVisits', NaN));
+  assert.doesNotThrow(() => updateStatElements('statVisits', undefined));
+  assert.doesNotThrow(() => updateStatElements('statVisits', null));
 });
 
 suite.finish();

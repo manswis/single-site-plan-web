@@ -29,7 +29,9 @@ const TEST_TIERS = [
       'unit/smart_fill.unit.test.js',
       'unit/step_navigation.unit.test.js',
       'unit/seo.unit.test.js',
-      'unit/legal.unit.test.js'
+      'unit/legal.unit.test.js',
+      'unit/wizard.unit.test.js',
+      'unit/renderer.unit.test.js'
     ]
   },
   {
