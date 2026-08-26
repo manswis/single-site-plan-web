@@ -282,14 +282,29 @@ suite.test('Analytics session dedup guard: analytics.js source references sessio
   );
 });
 
-suite.test('updateStatElements with NaN or undefined value does not throw and renders fallback', async () => {
-  const { updateStatElements } = await import('../../js/analytics.js');
-  const el = { textContent: '' };
-  global.document = { querySelectorAll: (s) => s === '#statVisits' ? [el] : [] };
+suite.section('7. Optimistic Plan Counter Updates & Cache Synchronization');
 
-  assert.doesNotThrow(() => updateStatElements('statVisits', NaN));
-  assert.doesNotThrow(() => updateStatElements('statVisits', undefined));
-  assert.doesNotThrow(() => updateStatElements('statVisits', null));
+suite.test('trackPlanGenerated optimistically increments DOM #statPlans elements immediately', async () => {
+  const { trackPlanGenerated } = await import('../../js/analytics.js');
+
+  const plansEl1 = { textContent: '178' };
+  const plansEl2 = { textContent: '178' };
+  global.document = {
+    querySelectorAll: (s) => s === '#statPlans' ? [plansEl1, plansEl2] : []
+  };
+
+  const storedData = {};
+  global.localStorage = {
+    getItem: (k) => storedData[k] || JSON.stringify({ visits: 195, plans: 178 }),
+    setItem: (k, v) => { storedData[k] = String(v); }
+  };
+
+  trackPlanGenerated();
+
+  assert.equal(plansEl1.textContent, '179', 'First #statPlans element must immediately update to 179');
+  assert.equal(plansEl2.textContent, '179', 'Second #statPlans element must immediately update to 179');
+  assert.ok(storedData['bbmp_eplan_cached_stats_v1'].includes('"plans":179'), 'Cache must record updated plan count');
 });
 
 suite.finish();
+

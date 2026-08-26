@@ -188,7 +188,7 @@ function trackPlanGenerated() {
 
   // Optimistic UI increment
   const cached = getCachedStats();
-  const nextPlanCount = isLocal ? cached.plans : cached.plans + 1;
+  const nextPlanCount = cached.plans + 1;
   updateStatElements('statPlans', nextPlanCount);
   setCachedStats(cached.visits, nextPlanCount);
 

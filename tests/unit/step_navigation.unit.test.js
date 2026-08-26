@@ -185,4 +185,82 @@ suite.test('Mobile CSS explicitly hides buttons with display: none and does not 
   );
 });
 
+suite.section('5. Step 7 Action Button Sequencing & Plan Generation Gating');
+
+suite.test('Step 7 Action Hub Gatekeeper: Strict sequence from Unchecked -> Consent -> Generate -> Export/Print Unlocked', async () => {
+  const { createMockBrowserEnvironment } = await import('../helpers/mock_dom.js');
+  const { mockDoc, mockWindow } = createMockBrowserEnvironment();
+
+  // Load real ui.js in a VM sandbox to verify the real toggleLegalConsent and onGeneratePlanClick state transitions
+  const UI_SOURCE = fs.readFileSync(path.resolve('js/ui.js'), 'utf8')
+    .replace(/^import\s+[\s\S]*?;\s*$/gm, '')
+    .replace(/^export\s+/gm, '');
+
+  let planGeneratedTracked = false;
+  let cadPlanRendered = false;
+
+  mockWindow.generatePlan = () => { cadPlanRendered = true; };
+  mockWindow.trackPlanGenerated = () => { planGeneratedTracked = true; };
+  mockWindow.saveDraft = () => {};
+  mockWindow.clearFieldError = () => {};
+  mockWindow.BBMP_WARDS = [];
+  mockWindow.BBMP_ZONES = [];
+  mockWindow.generateQrSvg = () => '';
+  mockWindow.renderQrToCanvas = () => {};
+
+  const ctx = vm.createContext(mockWindow);
+  vm.runInContext(UI_SOURCE, ctx);
+
+  const legalConsentCheck = mockDoc.getElementById('legalConsentCheck');
+  const generatePlanBtn   = mockDoc.getElementById('generatePlanBtn');
+  const downloadPdfBtn    = mockDoc.getElementById('downloadPdfBtn');
+  const printBtn          = mockDoc.getElementById('printBtn');
+  const reportBtn         = mockDoc.getElementById('reportDrawingBtn');
+  const exportViewport    = mockDoc.getElementById('exportViewportSection');
+
+  // Set initial state
+  generatePlanBtn.disabled = true;
+  downloadPdfBtn.disabled = true;
+  printBtn.disabled = true;
+  reportBtn.disabled = true;
+  exportViewport.style.display = 'none';
+
+  // 1. Initial State: All action buttons disabled, viewport hidden
+  assert.equal(generatePlanBtn.disabled, true, 'Initial: Generate button must be disabled');
+  assert.equal(downloadPdfBtn.disabled,  true, 'Initial: Export PDF button must be disabled');
+  assert.equal(printBtn.disabled,        true, 'Initial: Print button must be disabled');
+  assert.equal(reportBtn.disabled,       true, 'Initial: Report button must be disabled');
+
+  // 2. User checks Legal Consent -> ONLY Generate is enabled; Export/Print MUST REMAIN DISABLED
+  legalConsentCheck.checked = true;
+  mockWindow.toggleLegalConsent();
+
+  assert.equal(generatePlanBtn.disabled, false, 'Consent checked: Generate button MUST be enabled');
+  assert.equal(downloadPdfBtn.disabled,  true,  'Consent checked: Export PDF MUST REMAIN DISABLED (no drawing yet)');
+  assert.equal(printBtn.disabled,        true,  'Consent checked: Print MUST REMAIN DISABLED (no drawing yet)');
+  assert.equal(reportBtn.disabled,       true,  'Consent checked: Report MUST REMAIN DISABLED (no drawing yet)');
+  assert.equal(exportViewport.style.display, 'none', 'Consent checked: Viewport must still be hidden');
+
+  // 3. User clicks "Generate" -> CAD drawing renders, trackPlanGenerated fires, Export/Print unlock!
+  mockWindow.onGeneratePlanClick();
+
+  assert.equal(cadPlanRendered, true, 'Generate clicked: generatePlan() CAD renderer must execute');
+  assert.equal(planGeneratedTracked, true, 'Generate clicked: trackPlanGenerated() must fire');
+  assert.equal(exportViewport.style.display, 'block', 'Generate clicked: Drawing viewport must be revealed');
+  assert.equal(downloadPdfBtn.disabled, false, 'Generate clicked: Export PDF button MUST NOW BE UNLOCKED');
+  assert.equal(printBtn.disabled,       false, 'Generate clicked: Print button MUST NOW BE UNLOCKED');
+  assert.equal(reportBtn.disabled,      false, 'Generate clicked: Report button MUST NOW BE UNLOCKED');
+
+  // 4. User unchecks Legal Consent -> Resets plan generated state, re-disables all buttons, hides viewport
+  legalConsentCheck.checked = false;
+  mockWindow.toggleLegalConsent();
+
+  assert.equal(generatePlanBtn.disabled, true, 'Consent unchecked: Generate button must be disabled');
+  assert.equal(downloadPdfBtn.disabled,  true, 'Consent unchecked: Export PDF button must be disabled');
+  assert.equal(printBtn.disabled,        true, 'Consent unchecked: Print button must be disabled');
+  assert.equal(reportBtn.disabled,       true, 'Consent unchecked: Report button must be disabled');
+  assert.equal(exportViewport.style.display, 'none', 'Consent unchecked: Viewport must be hidden again');
+});
+
 export default suite;
+

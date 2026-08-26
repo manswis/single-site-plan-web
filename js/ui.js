@@ -2038,6 +2038,10 @@ async function executeDownloadPDFDirect() {
     if (typeof generatePlan === 'function') generatePlan();
     toggleLegendSheetPage();
 
+    if (typeof trackPlanGenerated === 'function') {
+      trackPlanGenerated();
+    }
+
     // Ensure all signature & map images are fully decoded before html2canvas captures
     const activeImages = Array.from(document.querySelectorAll('#planOutput img, #legendSheetOutput img'))
       .filter(img => img && img.style.display !== 'none' && img.src);
@@ -2133,6 +2137,10 @@ function printPlanPackage() {
 function executePrintPackageDirect() {
   if (typeof generatePlan === 'function') generatePlan();
   toggleLegendSheetPage();
+
+  if (typeof trackPlanGenerated === 'function') {
+    trackPlanGenerated();
+  }
 
   const viewport = document.getElementById('exportViewportSection');
   if (viewport) {
