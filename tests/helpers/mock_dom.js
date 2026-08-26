@@ -124,6 +124,7 @@ export class MockDocument {
     this.head = this.createElement('head');
     this.body = this.createElement('body');
     this.documentElement = this.createElement('html');
+    this._listeners = {}; // event type → [handler]
   }
 
   createElement(tagName) {
@@ -146,8 +147,27 @@ export class MockDocument {
     return [];
   }
 
-  addEventListener() { }
-  removeEventListener() { }
+  addEventListener(type, handler) {
+    if (!this._listeners[type]) this._listeners[type] = [];
+    this._listeners[type].push(handler);
+  }
+
+  removeEventListener(type, handler) {
+    if (this._listeners[type]) {
+      this._listeners[type] = this._listeners[type].filter(h => h !== handler);
+    }
+  }
+
+  /**
+   * Manually fires all registered DOMContentLoaded listeners.
+   * Call this after vm.runInContext to trigger module initialization code.
+   */
+  dispatchDOMContentLoaded() {
+    const handlers = this._listeners['DOMContentLoaded'] || [];
+    handlers.forEach(h => {
+      try { h({ type: 'DOMContentLoaded', target: this }); } catch (_) { /* non-fatal */ }
+    });
+  }
 }
 
 export function createMockBrowserEnvironment() {
@@ -254,5 +274,13 @@ export function createMockBrowserEnvironment() {
   mockWindow.window = mockWindow;
   mockWindow.global = mockWindow;
 
-  return { mockDoc, mockWindow, mockStorage };
+  /**
+   * Fires all DOMContentLoaded handlers registered by vm.runInContext code.
+   * Must be called AFTER vm.runInContext to trigger module init code.
+   */
+  function dispatchDOMContentLoaded() {
+    mockDoc.dispatchDOMContentLoaded();
+  }
+
+  return { mockDoc, mockWindow, mockStorage, dispatchDOMContentLoaded };
 }

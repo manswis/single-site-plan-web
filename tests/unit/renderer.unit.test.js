@@ -224,4 +224,56 @@ suite.test('renderer.js uses 0.3048 for ft to meter road width conversion', () =
   );
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+suite.section('5. Shadow-Copy Sync Guard — Mirror vs Production renderer.js');
+// ─────────────────────────────────────────────────────────────────────────────
+// The mirror functions above are local copies for speed. These guards verify
+// that the production source has not silently diverged from the mirrors.
+// If renderer.js changes formatFeetInches or the ratio formula, these fail.
+
+suite.test('Production formatFeetInches: uses Math.floor for whole-feet extraction', () => {
+  const fnBlock = RENDERER_SOURCE.match(/function formatFeetInches[\s\S]*?^}/m)?.[0] || '';
+  assert.ok(
+    fnBlock.includes('Math.floor') || RENDERER_SOURCE.includes('Math.floor(num'),
+    'formatFeetInches must use Math.floor — changing to Math.round would corrupt all dimension labels'
+  );
+});
+
+suite.test('Production formatFeetInches: handles negative input with 0\'-0\" fallback', () => {
+  const fnBlock = RENDERER_SOURCE.match(/function formatFeetInches[\s\S]*?^}/m)?.[0] || '';
+  const hasNegGuard = fnBlock.includes('< 0') || fnBlock.includes('num < 0') || fnBlock.includes('<0');
+  assert.ok(
+    hasNegGuard,
+    'formatFeetInches must guard against negative inputs — removing this causes corrupt dimension strings'
+  );
+});
+
+suite.test('Production formatFeetInches: inch overflow carry (>= 12) promotes to next foot', () => {
+  const fnBlock = RENDERER_SOURCE.match(/function formatFeetInches[\s\S]*?^}/m)?.[0] || '';
+  const hasCarry = fnBlock.includes('>= 12') || fnBlock.includes('>=12') || fnBlock.includes('=== 12');
+  assert.ok(
+    hasCarry,
+    'formatFeetInches must carry 12 inches into the next foot — removing this causes "40\'-12\\\"" labels'
+  );
+});
+
+suite.test('Local mirror MAX_DRAW_W=340 matches production renderer.js maxDrawW constant', () => {
+  const wMatch = RENDERER_SOURCE.match(/(?:const\s+)?maxDrawW\s*=\s*(\d+)/);
+  if (wMatch) {
+    assert.equal(parseInt(wMatch[1]), MAX_DRAW_W,
+      `Production maxDrawW (${wMatch[1]}) has diverged from local mirror (${MAX_DRAW_W}). Update MAX_DRAW_W.`
+    );
+  }
+});
+
+suite.test('Local mirror MAX_DRAW_H=260 matches production renderer.js maxDrawH constant', () => {
+  const hMatch = RENDERER_SOURCE.match(/(?:const\s+)?maxDrawH\s*=\s*(\d+)/);
+  if (hMatch) {
+    assert.equal(parseInt(hMatch[1]), MAX_DRAW_H,
+      `Production maxDrawH (${hMatch[1]}) has diverged from local mirror (${MAX_DRAW_H}). Update MAX_DRAW_H.`
+    );
+  }
+});
+
 suite.finish();
+

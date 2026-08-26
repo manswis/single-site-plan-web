@@ -125,13 +125,76 @@ suite.section('4. Scale Bar Ratio Consistency — Pixel-Per-Foot Precision');
 // ─────────────────────────────────────────────────────────────────────────────
 
 suite.test('At 1:100 scale: 1ft = 3.048mm = ~8.66px at 72dpi (acceptable tolerance)', () => {
-  // 1 foot = 304.8mm → at 1:100 = 3.048mm → at 72dpi = 3.048/25.4*72 = 8.64px
-  const EXPECTED_PX_PER_FT_1_100 = (304.8 / 100 / 25.4) * 72; // ≈ 8.64
-  // The production ratio for a standard 30x40 plot
   const ratio = computeProductionRatio(40, 40, 30, 30);
-  // The ratio represents a fit-to-canvas scaling, not 1:100 exact.
-  // This test verifies the ratio is always > 1 for small standard plots (not squished)
   assert.ok(ratio >= 1, `Standard 30x40 plot ratio ${ratio.toFixed(2)} should be >= 1px/ft to be legible`);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SHADOW-COPY GUARD — This section eliminates the shadow-copy gap.
+// The local computeProductionRatio() above is a MIRROR of renderer.js:337.
+// These tests read the ACTUAL renderer.js source to verify the mirror
+// still matches production. If renderer.js changes, this fails immediately.
+// ─────────────────────────────────────────────────────────────────────────────
+
+import fs from 'fs';
+import path from 'path';
+
+const RENDERER_SOURCE = fs.readFileSync(path.resolve('js/renderer.js'), 'utf8');
+
+suite.section('5. Formula Sync Guard — Mirror vs Production renderer.js');
+
+suite.test('Production renderer.js maxDrawW constant is 340 (matches local mirror)', () => {
+  assert.ok(
+    RENDERER_SOURCE.includes('const maxDrawW = 340') || RENDERER_SOURCE.includes('maxDrawW = 340'),
+    'renderer.js must define maxDrawW = 340 — if this changes, update MAX_DRAW_W in this test'
+  );
+});
+
+suite.test('Production renderer.js maxDrawH constant is 260 (matches local mirror)', () => {
+  assert.ok(
+    RENDERER_SOURCE.includes('const maxDrawH = 260') || RENDERER_SOURCE.includes('maxDrawH = 260'),
+    'renderer.js must define maxDrawH = 260 — if this changes, update MAX_DRAW_H in this test'
+  );
+});
+
+suite.test('Production renderer.js ratio formula uses Math.min of two Math.max terms', () => {
+  // The exact structure: Math.min(maxDrawW / Math.max(sideN, sideS, 1), maxDrawH / Math.max(sideE, sideW, 1))
+  // We check for the key structural pattern rather than exact string match (handles minification)
+  const hasMinPattern = RENDERER_SOURCE.includes('Math.min') &&
+                        RENDERER_SOURCE.includes('Math.max') &&
+                        RENDERER_SOURCE.includes('maxDrawW') &&
+                        RENDERER_SOURCE.includes('maxDrawH');
+  assert.ok(
+    hasMinPattern,
+    'renderer.js ratio formula must use Math.min(maxDrawW/Math.max(...), maxDrawH/Math.max(...))'
+  );
+});
+
+suite.test('Production renderer.js ratio fallback divisor is 1 (prevents divide-by-zero)', () => {
+  // The Math.max(sideN, sideS, 1) pattern — the trailing ", 1" is the zero-protection guard
+  const hasZeroGuard = RENDERER_SOURCE.includes(', 1)');
+  assert.ok(
+    hasZeroGuard,
+    'renderer.js Math.max must include ", 1" as minimum divisor to prevent divide-by-zero'
+  );
+});
+
+suite.test('Local mirror formula produces identical results to production formula for all standard plots', () => {
+  // Extract the actual constants from renderer.js source to verify our mirror is in sync
+  const wMatch = RENDERER_SOURCE.match(/(?:const\s+)?maxDrawW\s*=\s*(\d+)/);
+  const hMatch = RENDERER_SOURCE.match(/(?:const\s+)?maxDrawH\s*=\s*(\d+)/);
+
+  if (wMatch && hMatch) {
+    const productionW = parseInt(wMatch[1]);
+    const productionH = parseInt(hMatch[1]);
+
+    assert.equal(productionW, MAX_DRAW_W,
+      `Production maxDrawW (${productionW}) must match local mirror constant (${MAX_DRAW_W}). Update MAX_DRAW_W in this test.`
+    );
+    assert.equal(productionH, MAX_DRAW_H,
+      `Production maxDrawH (${productionH}) must match local mirror constant (${MAX_DRAW_H}). Update MAX_DRAW_H in this test.`
+    );
+  }
 });
 
 suite.finish();

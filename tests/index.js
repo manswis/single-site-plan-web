@@ -31,7 +31,8 @@ const TEST_TIERS = [
       'unit/seo.unit.test.js',
       'unit/legal.unit.test.js',
       'unit/wizard.unit.test.js',
-      'unit/renderer.unit.test.js'
+      'unit/renderer.unit.test.js',
+      'unit/ui_setbacks.unit.test.js'
     ]
   },
   {
