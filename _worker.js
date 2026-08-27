@@ -220,6 +220,42 @@ export default {
       let visits = 195;
       let plans = 178;
 
+      // 1. D1 Database First-Party Persistent Counters (if env.DB is bound)
+      if (env.DB) {
+        try {
+          await env.DB.prepare(`
+            CREATE TABLE IF NOT EXISTS site_stats (
+              metric_key TEXT PRIMARY KEY,
+              metric_val INTEGER NOT NULL DEFAULT 0,
+              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+          `).run();
+
+          await env.DB.prepare(`
+            INSERT OR IGNORE INTO site_stats (metric_key, metric_val) VALUES
+              ('visits', 195),
+              ('plans', 178)
+          `).run();
+
+          if (shouldHit) {
+            await env.DB.prepare(`
+              UPDATE site_stats SET metric_val = metric_val + 1, updated_at = CURRENT_TIMESTAMP WHERE metric_key = 'visits'
+            `).run();
+          }
+
+          const rows = await env.DB.prepare(`SELECT metric_key, metric_val FROM site_stats`).all();
+          if (rows && rows.results) {
+            rows.results.forEach(r => {
+              if (r.metric_key === 'visits') visits = Math.max(visits, r.metric_val);
+              if (r.metric_key === 'plans') plans = Math.max(plans, r.metric_val);
+            });
+          }
+        } catch (dbErr) {
+          console.warn('D1 stats read/increment notice:', dbErr.message);
+        }
+      }
+
+      // 2. CountAPI Sync / Secondary Fallback
       try {
         const visitEndpoint = shouldHit
           ? 'https://countapi.mileshilliard.com/api/v1/hit/bbmp_eplan_studio_visits_2026'
@@ -232,11 +268,11 @@ export default {
 
         if (visitRes.status === 'fulfilled' && visitRes.value.ok) {
           const vData = await visitRes.value.json();
-          if (typeof vData.value === 'number') visits = vData.value;
+          if (typeof vData.value === 'number') visits = Math.max(visits, vData.value);
         }
         if (planRes.status === 'fulfilled' && planRes.value.ok) {
           const pData = await planRes.value.json();
-          if (typeof pData.value === 'number') plans = pData.value;
+          if (typeof pData.value === 'number') plans = Math.max(plans, pData.value);
         }
       } catch (e) {
         console.warn('Worker stats proxy notice:', e.message);
@@ -247,13 +283,45 @@ export default {
 
     if ((pathname === '/api/stats/plan' || pathname === '/api/stats/plans') && (request.method === 'POST' || request.method === 'GET')) {
       let plans = 178;
+
+      // 1. D1 Database Atomic Plan Increment
+      if (env.DB) {
+        try {
+          await env.DB.prepare(`
+            CREATE TABLE IF NOT EXISTS site_stats (
+              metric_key TEXT PRIMARY KEY,
+              metric_val INTEGER NOT NULL DEFAULT 0,
+              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+          `).run();
+
+          await env.DB.prepare(`
+            INSERT OR IGNORE INTO site_stats (metric_key, metric_val) VALUES
+              ('visits', 195),
+              ('plans', 178)
+          `).run();
+
+          await env.DB.prepare(`
+            UPDATE site_stats SET metric_val = metric_val + 1, updated_at = CURRENT_TIMESTAMP WHERE metric_key = 'plans'
+          `).run();
+
+          const row = await env.DB.prepare(`SELECT metric_val FROM site_stats WHERE metric_key = 'plans'`).first();
+          if (row && typeof row.metric_val === 'number') {
+            plans = Math.max(plans, row.metric_val);
+          }
+        } catch (dbErr) {
+          console.warn('D1 plan increment notice:', dbErr.message);
+        }
+      }
+
+      // 2. CountAPI Sync / Secondary Fallback
       try {
         const res = await fetch('https://countapi.mileshilliard.com/api/v1/hit/bbmp_eplan_studio_plans_2026', {
           headers: { 'User-Agent': 'ePlanStudioEdge/1.2' }
         });
         if (res.ok) {
           const data = await res.json();
-          if (typeof data.value === 'number') plans = data.value;
+          if (typeof data.value === 'number') plans = Math.max(plans, data.value);
         }
       } catch (e) {
         console.warn('Worker plan increment notice:', e.message);

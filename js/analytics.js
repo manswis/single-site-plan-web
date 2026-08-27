@@ -140,9 +140,12 @@ function initLiveStats(shouldAttemptIncrement = false) {
       })
       .then(data => {
         if (data && typeof data.visits === 'number' && typeof data.plans === 'number') {
-          updateStatElements('statVisits', data.visits);
-          updateStatElements('statPlans', data.plans);
-          setCachedStats(data.visits, data.plans);
+          const currentCached = getCachedStats();
+          const finalVisits = Math.max(currentCached.visits, data.visits);
+          const finalPlans = Math.max(currentCached.plans, data.plans);
+          updateStatElements('statVisits', finalVisits);
+          updateStatElements('statPlans', finalPlans);
+          setCachedStats(finalVisits, finalPlans);
         }
       })
       .catch(() => {
@@ -155,9 +158,10 @@ function initLiveStats(shouldAttemptIncrement = false) {
           .then(res => res.json())
           .then(data => {
             if (data && typeof data.value === 'number') {
-              updateStatElements('statVisits', data.value);
-              const cached = getCachedStats();
-              setCachedStats(data.value, cached.plans);
+              const currentCached = getCachedStats();
+              const finalVisits = Math.max(currentCached.visits, data.value);
+              updateStatElements('statVisits', finalVisits);
+              setCachedStats(finalVisits, currentCached.plans);
             }
           })
           .catch(err => console.warn('Visits direct sync offline:', err));
@@ -166,9 +170,10 @@ function initLiveStats(shouldAttemptIncrement = false) {
           .then(res => res.json())
           .then(data => {
             if (data && typeof data.value === 'number') {
-              updateStatElements('statPlans', data.value);
-              const cached = getCachedStats();
-              setCachedStats(cached.visits, data.value);
+              const currentCached = getCachedStats();
+              const finalPlans = Math.max(currentCached.plans, data.value);
+              updateStatElements('statPlans', finalPlans);
+              setCachedStats(currentCached.visits, finalPlans);
             }
           })
           .catch(err => console.warn('Plans direct sync offline:', err));
@@ -203,8 +208,10 @@ function trackPlanGenerated() {
       })
       .then(data => {
         if (data && typeof data.plans === 'number') {
-          updateStatElements('statPlans', data.plans);
-          setCachedStats(cached.visits, data.plans);
+          const currentCached = getCachedStats();
+          const finalPlans = Math.max(currentCached.plans, data.plans);
+          updateStatElements('statPlans', finalPlans);
+          setCachedStats(currentCached.visits, finalPlans);
         }
       })
       .catch(() => {
@@ -213,8 +220,10 @@ function trackPlanGenerated() {
           .then(res => res.json())
           .then(data => {
             if (data && typeof data.value === 'number') {
-              updateStatElements('statPlans', data.value);
-              setCachedStats(cached.visits, data.value);
+              const currentCached = getCachedStats();
+              const finalPlans = Math.max(currentCached.plans, data.value);
+              updateStatElements('statPlans', finalPlans);
+              setCachedStats(currentCached.visits, finalPlans);
             }
           })
           .catch(err => console.warn('Plan increment failed:', err));
