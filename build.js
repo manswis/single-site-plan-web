@@ -41,7 +41,8 @@ async function runBuild() {
     await esbuild.build({
       entryPoints: [file],
       outfile: outFile,
-      bundle: file === 'js/i18n.js' || file === 'js/ui.js' || file === 'js/qrcode.js',
+      bundle: file === 'js/i18n.js' || file === 'js/ui.js' || file === 'js/qrcode.js' || file === 'js/analytics.js',
+      format: 'iife',
       minify: true,
       sourcemap: false,
       legalComments: 'none',
@@ -72,6 +73,7 @@ async function runBuild() {
     entryPoints: [studioBundleInput],
     outfile: studioBundleOut,
     bundle: true,
+    format: 'iife',
     minify: true,
     sourcemap: false,
     legalComments: 'none',

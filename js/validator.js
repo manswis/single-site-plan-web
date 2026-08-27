@@ -161,3 +161,9 @@ function validate() {
 
   return true;
 }
+
+if (typeof window !== 'undefined') {
+  window.clearErrors = clearErrors;
+  window.showError = showError;
+  window.validate = validate;
+}
