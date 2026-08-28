@@ -4,7 +4,7 @@
 ### Automated Single Plot Layout Plan Drafting Engine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Tests: 31/31 Passing](https://img.shields.io/badge/Tests-31%2F31%20Passing-brightgreen.svg)](#-exhaustive-automated-testing-suite)
+[![Tests: 37/37 Passing](https://img.shields.io/badge/Tests-37%2F37%20Passing-brightgreen.svg)](#-exhaustive-automated-testing-suite)
 [![Languages: EN + KN](https://img.shields.io/badge/Languages-English%20%7C%20%E0%B2%95%E0%B2%A8%E0%B3%8D%E0%B2%A8%E0%B2%A1-orange.svg)](#-bilingual-localization-english--%E0%B2%95%E0%B2%A8%E0%B3%8D%E0%B2%A8%E0%B2%A1)
 [![Privacy: 100% Client-Side](https://img.shields.io/badge/Privacy-100%25%20Local%20CAD-success.svg)](#-data-privacy--architectural-integrity)
 [![Infrastructure: Cloudflare Workers + D1](https://img.shields.io/badge/Infrastructure-Cloudflare%20Workers%20%2B%20D1-orange.svg)](https://single-site-plan.cranbear.workers.dev)
@@ -55,7 +55,8 @@ In Bengaluru, Karnataka, property owners converting a **B-Khata property into an
 ## ✨ Key Features
 
 - ⚡ **Real-Time Live 2D CAD Canvas:** Watch your site plan drawing update on screen as you type, complete with vector dimensions, road overlays, hatch patterns, and compass rose.
-- 📐 **Automated BBMP RMP-2015 Setbacks:** Calculates mandatory front, rear, and side open space setbacks automatically based on plot area, building height, and road width regulations.
+- 📐 **Automated 2026 BBMP & Karnataka Setback Engine (Table 8 & Table 9):** Calculates statutory front, rear, and side open space clearances based on the 2026 Karnataka Gazette Notification (UDD 235 MNJ 2025(E)). Supports micro plots ($\le 60\text{ m}^2$), 30×40 plots ($60-150\text{ m}^2$), 40×60 plots ($150-250\text{ m}^2$), single-side zero setback tolerances, 12.0m height cap, and stilt parking exclusion.
+- 📊 **Live Floor Area Ratio (FAR) & Premium FAR Indicator:** Dynamically computes achieved FAR against road width thresholds ($<30\text{ft}$, $30-40\text{ft}$, and $\ge 40\text{ft}$) with real-time base, TDR loading, and 40% Premium FAR eligibility validation.
 - 🗺️ **Interactive Leaflet Map Pin Picker:** Pick precise GPS coordinates on interactive satellite & street maps with automated BBMP Zone centering chips and 4-stage geolocation fallback.
 - 🏛️ **198 BBMP Wards & Zones Auto-Suggest Directory:** Integrated searchable directory covering all 198 BBMP Wards across 8 administrative zones with landmark and locality autocomplete.
 - 📏 **Karnataka Statutory Land Area Converter:** Convert instantly between 9 statutory land units (Guntas, Gajam/Sq. Yards, Acres, Cents, Ankana, Bigha, Hectares, Sq. Meters, Sq. Feet) and 8 Bangalore plot presets (30×40, 30×50, 40×60, etc.).
@@ -77,7 +78,7 @@ In Bengaluru, Karnataka, property owners converting a **B-Khata property into an
 
 e-Plan Studio features a custom, lightweight, zero-dependency localization engine (`js/i18n/`) offering **100% bilingual parity** across English and Kannada (ಕನ್ನಡ):
 
-* **690+ Curated Translation Keys:** All 7 wizard steps, form labels, error messages, modal dialogs, and button prompts are translated with statutory revenue terminology.
+* **710+ Curated Translation Keys:** All 7 wizard steps, form labels, error messages, modal dialogs, and button prompts are translated with statutory revenue terminology.
 * **Instant Dynamic Switching:** Toggle language seamlessly from the navigation header without reloading the page or losing current form progress.
 * **Statutory Kannada Formats:** Automatically localizes drawing sheet title blocks, ward names, and units (e.g. *ಚದರ ಅಡಿ*, *ಗುಂಟೆ*, *ಸರ್ವೇ ನಂಬರ್*, *ಖಾತಾ*).
 
@@ -91,7 +92,7 @@ window.i18n.setLocale('en'); // Switch to English
 
 ## 🧪 Exhaustive Automated Testing Suite
 
-The repository contains an enterprise test suite with **31 comprehensive test files** executing in under **1.6 seconds** via a headless Node.js VM and JSDOM simulation environment:
+The repository contains an enterprise test suite with **37 comprehensive test files** executing in under **2.1 seconds** via a headless Node.js VM and JSDOM simulation environment:
 
 ```bash
 # Run the complete test suite
@@ -99,13 +100,14 @@ npm test
 ```
 
 ### Test Coverage Highlights:
-1. **Button & Control Event Handlers:** Verifies all 44 `oninput` handlers and 19 `onchange` dropdowns across the form.
+1. **Button & Control Event Handlers:** Verifies all 45 `oninput` handlers and 19 `onchange` dropdowns across the form.
 2. **Modal Lifecycles:** Tests open/close state transitions across all 8 modal overlays (Map Picker, BBMP Wards, Land Converter, Signature Crop, Help Desk, Draft Restore, Import Error, Voluntary Support).
 3. **BBMP Ward Directory Integrity:** Tests schema validation, search keywords, and zone filtering across all 198 BBMP Wards.
 4. **Karnataka Land Unit Conversions:** Mathematically verifies all 14 statutory conversion factors and 8 Bangalore plot presets.
-5. **CAD Math & Auto-Scaling:** Stress-tests extreme aspect ratios (e.g. 10:1 long sites) and irregular 4-side polygon calculations.
-6. **Draft Round-Trip Serialization:** Verifies full-form localStorage draft save, restore, corrupted payload recovery, and `.eplan` JSON export/import.
-7. **Statutory Legal Gates:** Confirms that PDF export and plan printing are strictly blocked until the user checks the Zero Liability consent gate.
+5. **2026 Table 8 & 9 Setbacks & FAR Engine:** Exhaustively validates Table 8 minimums, single-side zero setback tolerances, 12.0m height cap, stilt exclusion, and expected permissible FAR limits for $<30\text{ft}$, $30-40\text{ft}$, and $\ge 40\text{ft}$ road widths.
+6. **CAD Math & Auto-Scaling:** Stress-tests extreme aspect ratios (e.g. 10:1 long sites) and irregular 4-side polygon calculations.
+7. **Draft Round-Trip Serialization:** Verifies full-form localStorage draft save, restore, corrupted payload recovery, and `.eplan` JSON export/import.
+8. **Statutory Legal Gates:** Confirms that PDF export and plan printing are strictly blocked until the user checks the Zero Liability consent gate.
 
 ---
 
@@ -116,7 +118,7 @@ flowchart TD
     subgraph Client ["💻 Client Browser (100% Offline-First)"]
         direction TB
         CAD["📐 Interactive CAD Canvas (SVG 2D)"]
-        Math["⚙️ BBMP Setback Math Engine (RMP-2015)"]
+        Math["⚙️ 2026 BBMP Setback & FAR Math Engine (Table 8/9)"]
         Map["🗺️ Leaflet Map Location Pin Picker"]
         Ward["🏛️ 198 BBMP Wards Directory"]
         Conv["📏 Karnataka Land Area Converter"]
@@ -207,7 +209,7 @@ single-site-plan-web/
 | **`js/validator.js`** | BBMP Sakala schema validation, boundary rules, and error scrolling engine. |
 | **`js/data/bbmpWards.js`** | Official directory of 198 BBMP Wards across 8 Administrative Zones. |
 | **`js/i18n/`** | 100% bilingual English (`en.js`) and Kannada (`kn.js`) translation dictionaries. |
-| **`tests/`** | Enterprise test suite containing all 31 unit, DOM, and integration test suites. |
+| **`tests/`** | Enterprise test suite containing all 37 unit, DOM, and integration test suites. |
 | **`_worker.js`** | Cloudflare Workers serverless API router with rate-limiting and D1 database bindings. |
 | **`build.js`** | Ultra-fast `esbuild` production bundler and asset minification script (<30ms). |
 
@@ -241,7 +243,7 @@ npm install
 ```bash
 npm test
 ```
-*Executes all 31 enterprise unit and integration test suites.*
+*Executes all 37 enterprise unit, statutory, and integration test suites.*
 
 ### 3. Build Production Assets (< 30ms)
 ```bash
@@ -382,6 +384,8 @@ Contributions from software engineers, civil engineers, architects, and legal ex
 | :--- | :--- |
 | **A-Khata** | The official, fully legal property tax register certificate issued by BBMP. Enables bank home loans, building plan sanctions, and trade licenses. |
 | **B-Khata** | A temporary register entry maintained by BBMP to collect property tax from properties with minor planning violations, unapproved layouts, or missing DC conversions. |
+| **2026 Setback Rules (Table 8 & 9)** | Revised building setback regulations gazetted by the Government of Karnataka (Notification No. UDD 235 MNJ 2025(E)). Defines statutory metric minimums for micro ($\le 60\text{ m}^2$), small ($60-150\text{ m}^2$), medium ($150-250\text{ m}^2$), and large plots, allowing single-side party-wall zero setbacks on small plots. |
+| **Floor Area Ratio (FAR) & Premium FAR** | The ratio of total built-up floor area to total plot area. 2026 rules define standard Base FAR ($1.75$) with up to 60% TDR loading ($2.80$) on $30-40\text{ft}$ roads and 40% Premium FAR ($2.45-2.80$) on $\ge 40\text{ft}$ roads. |
 | **ePID (Electronic Property ID)** | A mandatory 10–15 digit unique electronic identifier assigned to every e-Khata property (e.g. `150200101402200142`). Used as the primary lookup key on Karnataka revenue portals. |
 | **ADLR 11E Survey Sketch** | An official survey sketch issued by the Assistant Director of Land Records (ADLR) through the Karnataka *Bhoomi Mojini* portal confirming physical plot geometry. |
 | **DC Conversion Order** | Official permission issued by the Deputy Commissioner allowing agricultural land to be converted for residential non-agricultural use under Section 95 of the KLR Act 1964. |
