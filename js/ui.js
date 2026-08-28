@@ -3047,9 +3047,9 @@ const FIELD_HELP_DATA = {
     where: "Select ✨ Auto-Fit or adjust alignment to prevent footprint boundary overflow."
   },
   setbacks: {
-    title: "Building Setback Clearances (RMP-2015)",
+    title: "Building Setback Clearances (2026 Table 8 & 9)",
     what: "Mandatory open space required between your building outer walls and property boundaries.",
-    where: "Auto-calculated according to BBMP RMP-2015 bye-laws based on plot depth and road width."
+    where: "Auto-calculated according to 2026 BBMP & Karnataka Gazette revised bye-laws based on plot area, building height, and road width."
   },
   boundaries: {
     title: "Deed DNA Boundary Schedule",
@@ -3064,7 +3064,7 @@ const FIELD_HELP_DATA = {
   bufferZone: {
     title: "Stormwater Drain / Rajakaluve / Lake Buffer Zone",
     what: "Non-buildable open space buffer required if your plot abuts a natural drain or water body.",
-    where: "Check your village map, survey sketch, or BBMP RMP-2015 Master Plan overlay (Primary Drain 50m, Secondary 25m, Tertiary 15m, Lake 30m)."
+    where: "Check your village map, survey sketch, or BBMP Master Plan overlay (Primary Drain 50m, Secondary 25m, Tertiary 15m, Lake 30m)."
   },
   challanDetails: {
     title: "Government Challan & Remitted Fee Details",
@@ -3162,7 +3162,7 @@ const FIELD_HELP_DATA_KN = {
   roadWidth: {
     title: "ಮುಂಭಾಗದ ರಸ್ತೆ ಅಗಲ",
     what: "ನಿವೇಶನದ ಮುಂಭಾಗದಲ್ಲಿರುವ ಸಾರ್ವಜನಿಕ ಅಥವಾ ಖಾಸಗಿ ರಸ್ತೆಯ ಅಗಲ (ಅಡಿ ಮತ್ತು ಇಂಚುಗಳಲ್ಲಿ).",
-    where: "ರಸ್ತೆಯ ಅಗಲವು ಬಿಬಿಎಂಪಿ RMP-2015 ಬೈಲಾ ಪ್ರಕಾರ ಕನಿಷ್ಠ ಸೆಟ್‌ಬ್ಯಾಕ್ ಅನ್ನು ನಿರ್ಧರಿಸುತ್ತದೆ."
+    where: "ರಸ್ತೆಯ ಅಗಲವು ೨೦೨೬ರ ಬಿಬಿಎಂಪಿ ಬೈಲಾ ಪ್ರಕಾರ ಕನಿಷ್ಠ ಸೆಟ್‌ಬ್ಯಾಕ್ ಮತ್ತು ಎಫ್‌ಎಆರ್ ಅನ್ನು ನಿರ್ಧರಿಸುತ್ತದೆ."
   },
   bldgType: {
     title: "ಪ್ರಸ್ತಾವಿತ ಕಟ್ಟಡ ರಚನೆ ಮತ್ತು ಮಹಡಿಗಳ ಸಂಖ್ಯೆ",
@@ -3175,9 +3175,9 @@ const FIELD_HELP_DATA_KN = {
     where: "✨ ಸ್ವಯಂಚಾಲಿತ ಜೋಡಣೆ ಆರಿಸಿ ಅಥವಾ ಹಸ್ತಚಾಲಿತವಾಗಿ ಬದಲಾಯಿಸಿ."
   },
   setbacks: {
-    title: "ಬಿಬಿಎಂಪಿ ಸೆಟ್‌ಬ್ಯಾಕ್ ನಿಯಮಗಳು (RMP-2015)",
+    title: "ಬಿಬಿಎಂಪಿ ಸೆಟ್‌ಬ್ಯಾಕ್ ನಿಯಮಗಳು (೨೦೨೬ ಕೋಷ್ಟಕ ೮ ಮತ್ತು ೯)",
     what: "ಕಟ್ಟಡದ ಹೊರಗೋಡೆಗಳು ಮತ್ತು ನಿವೇಶನದ ಗಡಿಗಳ ನಡುವೆ ಬಿಡಬೇಕಾದ ಕಡ್ಡಾಯ ತೆರೆದ ಜಾಗ.",
-    where: "ನಿವೇಶನದ ಆಳ ಮತ್ತು ರಸ್ತೆ ಅಗಲದ ಆಧಾರದ ಮೇಲೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಲೆಕ್ಕಹಾಕಲಾಗುತ್ತದೆ."
+    where: "ನಿವೇಶನದ ವಿಸ್ತೀರ್ಣ, ಎತ್ತರ ಮತ್ತು ರಸ್ತೆ ಅಗಲದ ಆಧಾರದ ಮೇಲೆ ೨೦೨೬ರ ಗೆಜೆಟೆಡ್ ನಿಯಮಗಳಂತೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಲೆಕ್ಕಹಾಕಲಾಗುತ್ತದೆ."
   },
   boundaries: {
     title: "ಚಕ್ಕುಬಂದಿ ಗಡಿ ವಿವರ (Deed DNA)",
