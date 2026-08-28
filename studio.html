@@ -1426,7 +1426,7 @@
       <div id="wizardStep4" class="wizard-step-content" style="display:none;">
         <div class="info-tooltip-box" data-i18n-html="tooltip.step4">
           💡 <strong>Building Footprint:</strong> Leave building width and length empty to auto-calculate footprints
-          based on BBMP RMP-2015 minimum setback rules.
+          based on 2026 Karnataka Building Regulations & BBMP Revised Master Plan (Table 8 / Table 9 standard setbacks).
         </div>
 
         <div class="grid">
@@ -1465,6 +1465,12 @@
               <option value="G+4" data-i18n="step4.floors.g4">G + 4 Floors</option>
             </select>
           </div>
+        </div>
+
+        <!-- Height & Stilt Parking 2026 Regulatory Advisory Banner -->
+        <div id="heightAdvisoryBanner"
+          style="display: none; background: rgba(0, 113, 227, 0.06); border: 1px solid rgba(0, 113, 227, 0.2); border-radius: 10px; padding: 10px 14px; margin-top: 10px; color: var(--apple-text-primary); font-size: 12px; line-height: 1.4;">
+          <span id="heightAdvisoryText"></span>
         </div>
 
         <!-- Building Alignment Direction Select -->
@@ -1526,13 +1532,16 @@
           </div>
         </div>
 
-        <!-- Total Built-up Area (Auto-calculated) -->
+        <!-- Total Built-up Area & FAR Indicator -->
         <div class="field" style="margin-top: 14px;">
-          <label><span data-i18n="step4.builtUpArea.label">Total Built-up Area (sq.ft)</span> <span
-              style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);"
-              data-i18n="step4.builtUpArea.sublabel">(Auto-calculated)</span></label>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="margin: 0;"><span data-i18n="step4.builtUpArea.label">Total Built-up Area (sq.ft)</span> <span
+                style="font-size: 11px; font-weight: 500; color: var(--apple-text-secondary);"
+                data-i18n="step4.builtUpArea.sublabel">(Auto-calculated)</span></label>
+            <div id="farComplianceBadge" class="setback-compliance-pill" style="display: none; margin: 0; font-size: 11px; font-weight: 600;"></div>
+          </div>
           <input id="builtUpArea" type="number" data-i18n-placeholder="step4.builtUpArea.placeholder"
-            placeholder="Auto-calculated (e.g. 2400)">
+            placeholder="Auto-calculated (e.g. 2400)" oninput="calculateBuiltUpArea(true)">
           <p style="margin: 4px 0 0 0; font-size: 11px; color: var(--apple-text-secondary);"
             data-i18n="step4.builtUpArea.desc">Auto-computed from Footprint (Width × Length × Floors multiplier). You
             may adjust manually.</p>
@@ -1636,7 +1645,7 @@
           <span style="font-size: 18px; line-height: 1; margin-top: 1px;">💡</span>
           <div style="font-size: 12px; line-height: 1.5; color: var(--apple-text-primary);"
             data-i18n-html="step4.setbackAdvisory.note">
-            <strong>Informational Note:</strong> BBMP RMP-2015 setback guidance notes are for your reference only. They
+            <strong>Informational Note:</strong> 2026 BBMP & Karnataka Gazetted setback guidance notes (Table 8 / Table 9) are for your reference only. They
             will not alter your CAD drawing and will <strong>NOT</strong> appear on the final downloaded plan or PDF
             package.
           </div>

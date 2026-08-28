@@ -964,33 +964,207 @@ function onBuildingTypeChange() {
 }
 
 /**
+ * 2026 BBMP & Karnataka Statutory Setback and FAR Regulations Constants (Table 8 & Table 9).
+ * Gazette Notification No. UDD 235 MNJ 2025(E) amending RMP-2015 Zonal Regulations.
+ */
+const STATUTORY_2026_SETBACKS = {
+  SQFT_TO_SQM: 0.092903,
+  METERS_TO_FEET: 3.28084,
+  MAX_LOW_RISE_HEIGHT_METERS: 12.0,
+  STILT_PARKING_MAX_HEIGHT_METERS: 3.0,
+  TIER_1_MAX_SQM: 60,      // Micro Plots (<= 60 sq.m / <= 645.8 sq.ft)
+  TIER_2_MAX_SQM: 150,     // Small Plots (60 - 150 sq.m / 645.8 - 1614.6 sq.ft, e.g. 30x40)
+  TIER_3_MAX_SQM: 250,     // Medium Plots (150 - 250 sq.m / 1614.6 - 2690.9 sq.ft, e.g. 40x60)
+  TIER_4_MAX_SQM: 4000,    // Large Plots (250 - 4000 sq.m)
+  MACRO_MIN_SETBACK_METERS: 5.0, // Above 4000 sq.m
+
+  // Table 8 Clearances (in meters)
+  T1_FRONT_M: 0.75, T1_REAR_M: 0.0, T1_SIDE_M: 0.60,
+  T2_FRONT_M: 0.90, T2_REAR_M: 0.70, T2_SIDE_M: 0.70,
+  T3_FRONT_M: 1.00, T3_REAR_M: 0.80, T3_SIDE_M: 0.80,
+
+  // Large plot percentages
+  T4_FRONT_PCT: 0.12,
+  T4_REAR_PCT: 0.08,
+  T4_SIDE_PCT: 0.08,
+
+  // FAR & Road Width Thresholds
+  BASE_FAR_ROAD_MIN_FT: 30,    // 9.0m road
+  PREMIUM_FAR_ROAD_MIN_FT: 40, // 12.0m road
+  BASE_FAR_STANDARD: 1.75,
+  MAX_TDR_MULTIPLIER: 1.6,     // Up to 60% TDR loading
+  MAX_PREMIUM_FAR_CAP: 2.45    // 1.75 * 1.4
+};
+
+/**
+ * Safely resolves localized strings with fallback and parameter interpolation.
+ * 
+ * @function safeI18n
+ * @param {string} key - Translation key
+ * @param {Record<string, string|number>} [params] - Replacement variables
+ * @param {string} [fallback=''] - Fallback text
+ * @returns {string}
+ */
+function safeI18n(key, params = {}, fallback = '') {
+  if (typeof window !== 'undefined' && window.i18n && typeof window.i18n.t === 'function') {
+    return window.i18n.t(key, params);
+  }
+  if (typeof t === 'function') {
+    return t(key, params);
+  }
+  let res = fallback || key;
+  if (params && typeof params === 'object') {
+    Object.keys(params).forEach(k => {
+      res = res.replace(new RegExp(`\\{${k}\\}`, 'g'), String(params[k]));
+    });
+  }
+  return res;
+}
+
+/**
  * Auto-calculates Total Built-up Area (sq.ft) from Building Width, Length, and Floors multiplier.
+ * Evaluates live Floor Area Ratio (FAR) and Premium FAR eligibility against road width.
  * Allows user to manually edit or override at any time.
  * 
  * @function calculateBuiltUpArea
+ * @param {boolean} [isManualEdit=false] - Whether triggered by direct manual input.
  * @returns {void}
  */
-function calculateBuiltUpArea() {
+function calculateBuiltUpArea(isManualEdit = false) {
   const widthVal = parseFloat(document.getElementById('bldgWidth')?.value) || 0;
   const lengthVal = parseFloat(document.getElementById('bldgLength')?.value) || 0;
   const floorsSelect = document.getElementById('noOfFloors')?.value || '';
+  const plotAreaVal = parseFloat(document.getElementById('plotArea')?.value) || 0;
+  const roadWidthVal = parseFloat(document.getElementById('roadWidth')?.value) || 30;
 
-  if (widthVal <= 0 || lengthVal <= 0) return;
-
-  const footprint = widthVal * lengthVal;
-
-  let multiplier = 1;
-  if (floorsSelect === 'Vacant Plot') multiplier = 0;
-  else if (floorsSelect === 'Stilt + Ground') multiplier = 1.5;
-  else if (floorsSelect === 'G+1') multiplier = 2;
-  else if (floorsSelect === 'G+2') multiplier = 3;
-  else if (floorsSelect === 'G+3') multiplier = 4;
-  else if (floorsSelect === 'G+4') multiplier = 5;
-
-  const totalSqFt = Math.round(footprint * multiplier);
   const builtEl = document.getElementById('builtUpArea');
-  if (builtEl && totalSqFt >= 0) {
-    builtEl.value = totalSqFt;
+  let totalSqFt = 0;
+
+  if (isManualEdit) {
+    totalSqFt = parseFloat(builtEl?.value) || 0;
+  } else {
+    if (widthVal <= 0 || lengthVal <= 0) {
+      if (builtEl && builtEl.value === '') builtEl.value = '';
+    } else {
+      const footprint = widthVal * lengthVal;
+      let multiplier = 1;
+      if (floorsSelect === 'Vacant Plot') multiplier = 0;
+      else if (floorsSelect === 'Stilt + Ground') multiplier = 1.5;
+      else if (floorsSelect === 'G+1') multiplier = 2;
+      else if (floorsSelect === 'G+2') multiplier = 3;
+      else if (floorsSelect === 'G+3') multiplier = 4;
+      else if (floorsSelect === 'G+4') multiplier = 5;
+
+      totalSqFt = Math.round(footprint * multiplier);
+      if (builtEl && totalSqFt >= 0) {
+        builtEl.value = totalSqFt;
+      }
+    }
+  }
+
+  // Update FAR (Floor Area Ratio) indicator badge
+  const farBadge = document.getElementById('farComplianceBadge');
+  if (farBadge) {
+    if (plotAreaVal > 0 && totalSqFt > 0 && floorsSelect !== 'Vacant Plot') {
+      const achievedFar = parseFloat((totalSqFt / plotAreaVal).toFixed(2));
+      const formattedRoad = formatFeetInches(roadWidthVal);
+      farBadge.style.display = 'inline-block';
+
+      if (achievedFar <= STATUTORY_2026_SETBACKS.BASE_FAR_STANDARD) {
+        farBadge.className = 'setback-compliance-pill compliant';
+        farBadge.textContent = safeI18n(
+          'step4.far.baseCompliant',
+          { far: achievedFar, expected: STATUTORY_2026_SETBACKS.BASE_FAR_STANDARD },
+          `FAR: ${achievedFar} (Compliant • Base FAR Max: ${STATUTORY_2026_SETBACKS.BASE_FAR_STANDARD})`
+        );
+      } else if (roadWidthVal >= STATUTORY_2026_SETBACKS.PREMIUM_FAR_ROAD_MIN_FT) {
+        // Road >= 40ft (Eligible for 40% Premium FAR + TDR up to 1.6x base = 2.80)
+        const maxPermissibleFar = parseFloat((STATUTORY_2026_SETBACKS.BASE_FAR_STANDARD * STATUTORY_2026_SETBACKS.MAX_TDR_MULTIPLIER).toFixed(2));
+        if (achievedFar <= maxPermissibleFar) {
+          farBadge.className = 'setback-compliance-pill compliant';
+          farBadge.textContent = safeI18n(
+            'step4.far.premiumEligible',
+            { far: achievedFar, expected: maxPermissibleFar },
+            `FAR: ${achievedFar} (Compliant • Permissible up to ${maxPermissibleFar} with Premium FAR + TDR on ≥40ft road)`
+          );
+        } else {
+          farBadge.className = 'setback-compliance-pill warning';
+          farBadge.textContent = safeI18n(
+            'step4.far.exceeded',
+            { far: achievedFar, expected: maxPermissibleFar, road: formattedRoad },
+            `FAR: ${achievedFar} (Exceeds max permissible FAR ${maxPermissibleFar} for ${formattedRoad} road — check road width eligibility)`
+          );
+        }
+      } else if (roadWidthVal >= STATUTORY_2026_SETBACKS.BASE_FAR_ROAD_MIN_FT) {
+        // Road 30-40ft (Eligible for TDR up to 60% of base FAR = 2.80)
+        const maxPermissibleFar = parseFloat((STATUTORY_2026_SETBACKS.BASE_FAR_STANDARD * STATUTORY_2026_SETBACKS.MAX_TDR_MULTIPLIER).toFixed(2));
+        if (achievedFar <= maxPermissibleFar) {
+          farBadge.className = 'setback-compliance-pill compliant';
+          farBadge.textContent = safeI18n(
+            'step4.far.tdrEligible',
+            { far: achievedFar, expected: maxPermissibleFar },
+            `FAR: ${achievedFar} (Compliant • Permissible up to ${maxPermissibleFar} with TDR on 30–40ft road)`
+          );
+        } else {
+          farBadge.className = 'setback-compliance-pill warning';
+          farBadge.textContent = safeI18n(
+            'step4.far.exceeded',
+            { far: achievedFar, expected: maxPermissibleFar, road: formattedRoad },
+            `FAR: ${achievedFar} (Exceeds max permissible FAR ${maxPermissibleFar} for ${formattedRoad} road — check road width eligibility)`
+          );
+        }
+      } else {
+        // Road < 30ft (Base FAR 1.75 only)
+        const maxPermissibleFar = STATUTORY_2026_SETBACKS.BASE_FAR_STANDARD;
+        farBadge.className = 'setback-compliance-pill warning';
+        farBadge.textContent = safeI18n(
+          'step4.far.exceeded',
+          { far: achievedFar, expected: maxPermissibleFar, road: formattedRoad },
+          `FAR: ${achievedFar} (Exceeds max permissible FAR ${maxPermissibleFar} for ${formattedRoad} road — check road width eligibility)`
+        );
+      }
+    } else {
+      farBadge.style.display = 'none';
+    }
+  }
+
+  // Update Height Advisory Banner
+  updateHeightAdvisory();
+}
+
+/**
+ * Updates the 2026 Building Height and Stilt Parking regulatory advisory notice.
+ * 
+ * @function updateHeightAdvisory
+ * @returns {void}
+ */
+function updateHeightAdvisory() {
+  const floorsSelect = document.getElementById('noOfFloors')?.value || '';
+  const heightBanner = document.getElementById('heightAdvisoryBanner');
+  const heightText = document.getElementById('heightAdvisoryText');
+
+  if (!heightBanner || !heightText) return;
+
+  if (floorsSelect === 'G+4') {
+    heightBanner.style.display = 'block';
+    heightBanner.style.background = 'rgba(255, 149, 0, 0.08)';
+    heightBanner.style.borderColor = 'rgba(255, 149, 0, 0.3)';
+    heightText.innerHTML = safeI18n(
+      'step4.height.g4Advisory',
+      {},
+      'ℹ️ Notice: G+4 exceeds the 12.0m height cap for Table 8 and triggers stricter Table 9 high-rise setback rules.'
+    );
+  } else if (floorsSelect === 'Stilt + Ground') {
+    heightBanner.style.display = 'block';
+    heightBanner.style.background = 'rgba(0, 113, 227, 0.06)';
+    heightBanner.style.borderColor = 'rgba(0, 113, 227, 0.2)';
+    heightText.innerHTML = safeI18n(
+      'step4.height.stiltExclusion',
+      {},
+      '🚗 Stilt parking (up to 3.0m) is excluded from total height calculation when dedicated to parking.'
+    );
+  } else {
+    heightBanner.style.display = 'none';
   }
 }
 
@@ -1114,7 +1288,8 @@ function autoCalculateSetbacks(force = false) {
 }
 
 /**
- * Evaluates real-time BBMP RMP-2015 recommended setback clearances and updates advisory badges.
+ * Evaluates real-time 2026 BBMP & Karnataka Statutory Setback Regulations (Table 8 & Table 9).
+ * Updates live compliance status badges for Front, Rear, Left, and Right setbacks.
  * 
  * @function updateSetbackComplianceBadges
  * @returns {void}
@@ -1124,30 +1299,68 @@ function updateSetbackComplianceBadges() {
   const isVacant = bldgType === 'Vacant Plot' || bldgType === 'vacant';
   const plotAreaVal = parseFloat(document.getElementById('plotArea')?.value) || 0;
 
-  // Determine BBMP RMP-2015 Recommended Minimums based on site area (Table 11 guidelines)
-  let minFront = 3.28; // ~1.0m
-  let minRear = 3.28;  // ~1.0m
-  let minSide = 3.28;  // ~1.0m
+  if (plotAreaVal <= 0) return;
 
-  if (plotAreaVal > 0 && plotAreaVal <= 650) {
-    minFront = 3.28;
-    minRear = 0;
-    minSide = 0;
-  } else if (plotAreaVal > 650 && plotAreaVal <= 1300) {
-    minFront = 3.28; // 1.0m
-    minRear = 3.28;  // 1.0m
-    minSide = 3.28;  // 1.0m
-  } else if (plotAreaVal > 1300 && plotAreaVal <= 2600) {
-    minFront = 4.92; // 1.5m (~5'0")
-    minRear = 3.28;  // 1.0m
-    minSide = 3.28;  // 1.0m
-  } else if (plotAreaVal > 2600) {
-    minFront = 6.56; // 2.0m (~6'7")
-    minRear = 4.92;  // 1.5m
-    minSide = 4.92;  // 1.5m
+  const plotSqM = plotAreaVal * STATUTORY_2026_SETBACKS.SQFT_TO_SQM;
+
+  // Retrieve Step 3 Site Spans
+  const isOdd = document.getElementById('oddSiteCheck')?.checked;
+  let north = 0, south = 0, east = 0, west = 0;
+
+  if (isOdd) {
+    north = parseFloat(document.getElementById('sideNorth')?.value) || 0;
+    south = parseFloat(document.getElementById('sideSouth')?.value) || 0;
+    east = parseFloat(document.getElementById('sideEast')?.value) || 0;
+    west = parseFloat(document.getElementById('sideWest')?.value) || 0;
+  } else {
+    east = west = parseFloat(document.getElementById('regNorthSouth')?.value) || 0;
+    north = south = parseFloat(document.getElementById('regEastWest')?.value) || 0;
   }
 
-  const checkBadge = (fieldId, recMin) => {
+  const spanNS = isOdd ? Math.min(east, west) : Math.max(east, west);
+  const spanEW = isOdd ? Math.min(north, south) : Math.max(north, south);
+
+  let minFrontFt = 0;
+  let minRearFt = 0;
+  let minSideFt = 0;
+  let isSingleSideTolerance = false;
+
+  if (plotSqM <= STATUTORY_2026_SETBACKS.TIER_1_MAX_SQM) {
+    // Micro plots (<= 60 sq.m / <= 645.8 sq.ft)
+    minFrontFt = STATUTORY_2026_SETBACKS.T1_FRONT_M * STATUTORY_2026_SETBACKS.METERS_TO_FEET; // ~2.46ft (2'6")
+    minRearFt = 0; // NIL
+    minSideFt = STATUTORY_2026_SETBACKS.T1_SIDE_M * STATUTORY_2026_SETBACKS.METERS_TO_FEET;  // ~1.97ft (2'0")
+    isSingleSideTolerance = true;
+  } else if (plotSqM <= STATUTORY_2026_SETBACKS.TIER_2_MAX_SQM) {
+    // Small plots (60 - 150 sq.m / 645.8 - 1614.6 sq.ft, e.g. 30x40)
+    minFrontFt = STATUTORY_2026_SETBACKS.T2_FRONT_M * STATUTORY_2026_SETBACKS.METERS_TO_FEET; // ~2.95ft (3'0")
+    minRearFt = STATUTORY_2026_SETBACKS.T2_REAR_M * STATUTORY_2026_SETBACKS.METERS_TO_FEET;  // ~2.30ft (2'4")
+    minSideFt = STATUTORY_2026_SETBACKS.T2_SIDE_M * STATUTORY_2026_SETBACKS.METERS_TO_FEET;  // ~2.30ft (2'4")
+    isSingleSideTolerance = true;
+  } else if (plotSqM <= STATUTORY_2026_SETBACKS.TIER_3_MAX_SQM) {
+    // Medium plots (150 - 250 sq.m / 1614.6 - 2690.9 sq.ft, e.g. 30x50, 40x60)
+    minFrontFt = STATUTORY_2026_SETBACKS.T3_FRONT_M * STATUTORY_2026_SETBACKS.METERS_TO_FEET; // ~3.28ft (3'3")
+    minRearFt = STATUTORY_2026_SETBACKS.T3_REAR_M * STATUTORY_2026_SETBACKS.METERS_TO_FEET;  // ~2.62ft (2'8")
+    minSideFt = STATUTORY_2026_SETBACKS.T3_SIDE_M * STATUTORY_2026_SETBACKS.METERS_TO_FEET;  // ~2.62ft (2'8")
+    isSingleSideTolerance = false;
+  } else if (plotSqM <= STATUTORY_2026_SETBACKS.TIER_4_MAX_SQM) {
+    // Large plots (250 - 4000 sq.m) - percentage of site dimensions
+    const depthSpan = spanNS > 0 ? spanNS : Math.sqrt(plotAreaVal);
+    const widthSpan = spanEW > 0 ? spanEW : Math.sqrt(plotAreaVal);
+    minFrontFt = depthSpan * STATUTORY_2026_SETBACKS.T4_FRONT_PCT;
+    minRearFt = depthSpan * STATUTORY_2026_SETBACKS.T4_REAR_PCT;
+    minSideFt = widthSpan * STATUTORY_2026_SETBACKS.T4_SIDE_PCT;
+    isSingleSideTolerance = false;
+  } else {
+    // Macro plots (> 4000 sq.m)
+    minFrontFt = minRearFt = minSideFt = STATUTORY_2026_SETBACKS.MACRO_MIN_SETBACK_METERS * STATUTORY_2026_SETBACKS.METERS_TO_FEET;
+    isSingleSideTolerance = false;
+  }
+
+  const leftVal = parseFloat(document.getElementById('setbackLeft')?.value) || 0;
+  const rightVal = parseFloat(document.getElementById('setbackRight')?.value) || 0;
+
+  const checkBadge = (fieldId, recMin, isSideField = false) => {
     const pill = document.getElementById('compliance_' + fieldId);
     if (!pill) return;
 
@@ -1167,23 +1380,37 @@ function updateSetbackComplianceBadges() {
     const formattedRec = formatFeetInches(recMin);
 
     pill.style.display = 'inline-block';
+
+    // Special single-side tolerance check for small plots
+    if (isSideField && isSingleSideTolerance) {
+      const opposingVal = fieldId === 'setbackLeft' ? rightVal : leftVal;
+      const isThisSideCompliant = currentVal >= (recMin - 0.05);
+      const isOpposingCompliant = opposingVal >= (recMin - 0.05);
+
+      if (isThisSideCompliant) {
+        pill.className = 'setback-compliance-pill compliant';
+        pill.textContent = safeI18n('step4.setback.compliant', { min: formattedRec }, `Compliant (2026 Table 8 Min ${formattedRec})`);
+        return;
+      } else if (isOpposingCompliant && currentVal >= 0) {
+        pill.className = 'setback-compliance-pill compliant';
+        pill.textContent = safeI18n('step4.setback.zeroSideAllowed', {}, `Compliant (Zero Setback / Party Wall allowed on one side)`);
+        return;
+      }
+    }
+
     if (recMin === 0 || currentVal >= (recMin - 0.05)) {
       pill.className = 'setback-compliance-pill compliant';
-      pill.textContent = typeof t === 'function'
-        ? t('step4.setback.compliant', { min: formattedRec })
-        : `Compliant (Min ${formattedRec} rec.)`;
+      pill.textContent = safeI18n('step4.setback.compliant', { min: formattedRec }, `Compliant (2026 Table 8 Min ${formattedRec})`);
     } else {
       pill.className = 'setback-compliance-pill warning';
-      pill.textContent = typeof t === 'function'
-        ? t('step4.setback.warning', { min: formattedRec })
-        : `Below RMP-2015 rec. min (${formattedRec})`;
+      pill.textContent = safeI18n('step4.setback.warning', { min: formattedRec }, `Below 2026 Table 8 rec. min (${formattedRec})`);
     }
   };
 
-  checkBadge('setbackFront', minFront);
-  checkBadge('setbackRear', minRear);
-  checkBadge('setbackLeft', minSide);
-  checkBadge('setbackRight', minSide);
+  checkBadge('setbackFront', minFrontFt, false);
+  checkBadge('setbackRear', minRearFt, false);
+  checkBadge('setbackLeft', minSideFt, true);
+  checkBadge('setbackRight', minSideFt, true);
 }
 
 /**
@@ -1227,6 +1454,7 @@ function validateBuildingSetbackFeasibility() {
   // Rule: Vacant Plot or empty fields -> Always valid
   const bldgType = document.getElementById('bldgType')?.value || '';
   if (bldgType === 'Vacant Plot' || bldgType === 'vacant' || (widthVal === 0 && lengthVal === 0)) {
+    updateHeightAdvisory();
     return true;
   }
 
@@ -1266,6 +1494,9 @@ function validateBuildingSetbackFeasibility() {
   const availWidthB = Math.max(0, spanEW - leftSetback - rightSetback);
   const isOptionBValid = (spanNS > 0 && lengthVal <= spanNS && lengthVal <= (availLengthB || spanNS)) &&
     (spanEW > 0 && widthVal <= spanEW && widthVal <= (availWidthB || spanEW));
+
+  // Update Height Advisory Banner
+  updateHeightAdvisory();
 
   // If EITHER orientation fits the plot boundaries after setbacks, the proposal IS FEASIBLE!
   if (isOptionAValid || isOptionBValid) {
@@ -4001,6 +4232,8 @@ if (typeof window !== 'undefined') {
   window.calculateBuiltUpArea = calculateBuiltUpArea;
   window.autoCalculateSetbacks = autoCalculateSetbacks;
   window.updateSetbackComplianceBadges = updateSetbackComplianceBadges;
+  window.updateHeightAdvisory = updateHeightAdvisory;
+  window.STATUTORY_2026_SETBACKS = STATUTORY_2026_SETBACKS;
   window.formatFeetInches = formatFeetInches;
   window.validateBuildingSetbackFeasibility = validateBuildingSetbackFeasibility;
 

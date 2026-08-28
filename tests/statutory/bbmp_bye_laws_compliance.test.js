@@ -122,102 +122,153 @@ suite.test('autoCalculateSetbacks: setback values are never negative for oversiz
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-suite.section('2. BBMP Schedule III — Statutory Minimum Compliance Verification');
+// ─────────────────────────────────────────────────────────────────────────────
+suite.section('2. 2026 Karnataka Gazette Table 8 — Statutory Minimum Compliance');
 // ─────────────────────────────────────────────────────────────────────────────
 
-suite.test('Tier 1 (≤650 sq.ft / 20×30 plot): clearance calculated and compliance badge marks compliant', () => {
+suite.test('Tier 1 (≤60 sq.m / 20×30 plot = 600 sq.ft): 0.75m front (2.46ft) and single-side 0.6m (1.97ft) compliant', () => {
   const { mockDoc, mockWindow } = buildUiSandbox();
-  if (typeof mockWindow.autoCalculateSetbacks !== 'function') return;
+  if (typeof mockWindow.updateSetbackComplianceBadges !== 'function') return;
 
-  // 20×30 plot = 600 sqft (Tier 1: minFront = 3.28ft)
+  // 20×30 plot = 600 sq.ft (plotSqM = 55.74 <= 60 sq.m)
   mockDoc.getElementById('plotArea').value = '600';
   mockDoc.getElementById('oddSiteCheck').checked = false;
   mockDoc.getElementById('regNorthSouth').value = '30';
   mockDoc.getElementById('regEastWest').value = '20';
-  // Building leaves 6.56ft clearance on 30ft axis (3.28ft front, 3.28ft rear)
-  mockDoc.getElementById('bldgWidth').value = '15';
-  mockDoc.getElementById('bldgLength').value = String(30 - 6.56);
 
-  mockWindow.autoCalculateSetbacks(true);
+  // Set 2.5ft front (>= 2.46ft), 0ft rear (allowed), 2.0ft left (>= 1.97ft), 0ft right (party wall allowed)
+  mockDoc.getElementById('setbackFront').value = '2.5';
+  mockDoc.getElementById('setbackFront_ft').value = '2';
+  mockDoc.getElementById('setbackRear').value = '0';
+  mockDoc.getElementById('setbackRear_ft').value = '0';
+  mockDoc.getElementById('setbackLeft').value = '2.0';
+  mockDoc.getElementById('setbackLeft_ft').value = '2';
+  mockDoc.getElementById('setbackRight').value = '0';
+  mockDoc.getElementById('setbackRight_ft').value = '0';
 
-  const front = parseFloat(mockDoc.getElementById('setbackFront').value) || 0;
-  assert.ok(Math.abs(front - 3.28) <= 0.1, `Front setback must equal 3.28ft; got: ${front}`);
+  mockWindow.updateSetbackComplianceBadges();
 
-  // Test compliance badge status
-  const pill = mockDoc.getElementById('compliance_setbackFront');
-  assert.ok(pill.classList.contains('compliant') || pill.className.includes('compliant'),
-    'Compliance badge for front setback must be marked compliant');
+  const pillFront = mockDoc.getElementById('compliance_setbackFront');
+  const pillRear = mockDoc.getElementById('compliance_setbackRear');
+  const pillLeft = mockDoc.getElementById('compliance_setbackLeft');
+  const pillRight = mockDoc.getElementById('compliance_setbackRight');
+
+  assert.ok(pillFront.classList.contains('compliant') || pillFront.className.includes('compliant'),
+    'Front setback (2.5ft >= 2.46ft) must be marked compliant');
+  assert.ok(pillRear.classList.contains('compliant') || pillRear.className.includes('compliant'),
+    'Rear setback (0ft for Tier 1) must be marked compliant');
+  assert.ok(pillLeft.classList.contains('compliant') || pillLeft.className.includes('compliant'),
+    'Left side setback (2.0ft >= 1.97ft) must be marked compliant');
+  assert.ok(pillRight.classList.contains('compliant') || pillRight.className.includes('compliant'),
+    'Right side setback with opposing side compliant must be marked compliant under single-side tolerance');
 });
 
-suite.test('Tier 2 (650–1300 sq.ft / 30×40 plot): 10ft clearance yields 5.0ft setbacks and marks compliant', () => {
+suite.test('Tier 2 (60–150 sq.m / 30×40 plot = 1200 sq.ft): 0.9m front (2.95ft) and 0.7m rear/side (2.3ft) compliant', () => {
   const { mockDoc, mockWindow } = buildUiSandbox();
-  if (typeof mockWindow.autoCalculateSetbacks !== 'function') return;
+  if (typeof mockWindow.updateSetbackComplianceBadges !== 'function') return;
 
-  // 30×40 plot = 1200 sqft (Tier 2: rec. minFront = 3.28ft)
+  // 30×40 plot = 1200 sqft (plotSqM = 111.48 sq.m <= 150 sq.m)
   mockDoc.getElementById('plotArea').value = '1200';
   mockDoc.getElementById('oddSiteCheck').checked = false;
   mockDoc.getElementById('regNorthSouth').value = '30';
   mockDoc.getElementById('regEastWest').value = '40';
-  mockDoc.getElementById('bldgWidth').value = '20';
-  mockDoc.getElementById('bldgLength').value = '30';
 
-  mockWindow.autoCalculateSetbacks(true);
-
-  const front = parseFloat(mockDoc.getElementById('setbackFront').value) || 0;
-  assert.equal(front, 5.0, `Tier 2 front setback must be 5.0ft; got: ${front}`);
-
-  const pill = mockDoc.getElementById('compliance_setbackFront');
-  assert.ok(pill.classList.contains('compliant') || pill.className.includes('compliant'),
-    'Compliance badge for front setback (5.0ft >= 3.28ft rec min) must be marked compliant');
-});
-
-suite.test('Sub-minimum setback triggers warning state on compliance badge', () => {
-  const { mockDoc, mockWindow } = buildUiSandbox();
-  if (typeof mockWindow.updateSetbackComplianceBadges !== 'function') return;
-
-  // 30×40 plot = 1200 sqft (minFront is 3.28ft)
-  mockDoc.getElementById('plotArea').value = '1200';
-  // Manually set a substandard 1.0ft front setback
-  mockDoc.getElementById('setbackFront').value = '1.0';
-  mockDoc.getElementById('setbackFront_ft').value = '1';
-  mockDoc.getElementById('setbackFront_in').value = '0';
+  // 3.0ft front (>= 2.95ft), 2.5ft rear (>= 2.3ft), 2.5ft left (>= 2.3ft), 0ft right (allowed on one side)
+  mockDoc.getElementById('setbackFront').value = '3.0';
+  mockDoc.getElementById('setbackFront_ft').value = '3';
+  mockDoc.getElementById('setbackRear').value = '2.5';
+  mockDoc.getElementById('setbackRear_ft').value = '2';
+  mockDoc.getElementById('setbackLeft').value = '2.5';
+  mockDoc.getElementById('setbackLeft_ft').value = '2';
+  mockDoc.getElementById('setbackRight').value = '0';
+  mockDoc.getElementById('setbackRight_ft').value = '0';
 
   mockWindow.updateSetbackComplianceBadges();
 
-  const pill = mockDoc.getElementById('compliance_setbackFront');
-  assert.ok(pill.classList.contains('warning') || pill.className.includes('warning'),
-    'Setback below RMP-2015 recommended minimum must show warning badge');
+  const pillFront = mockDoc.getElementById('compliance_setbackFront');
+  const pillRear = mockDoc.getElementById('compliance_setbackRear');
+  const pillLeft = mockDoc.getElementById('compliance_setbackLeft');
+  const pillRight = mockDoc.getElementById('compliance_setbackRight');
+
+  assert.ok(pillFront.classList.contains('compliant'), 'Front setback 3.0ft must be compliant');
+  assert.ok(pillRear.classList.contains('compliant'), 'Rear setback 2.5ft must be compliant');
+  assert.ok(pillLeft.classList.contains('compliant'), 'Left side setback 2.5ft must be compliant');
+  assert.ok(pillRight.classList.contains('compliant'), 'Right side zero setback must be compliant with left compliant');
+});
+
+suite.test('Tier 3 (150–250 sq.m / 40×60 plot = 2400 sq.ft): Requires 1.0m front (3.28ft) and 0.8m rear & both sides (2.62ft)', () => {
+  const { mockDoc, mockWindow } = buildUiSandbox();
+  if (typeof mockWindow.updateSetbackComplianceBadges !== 'function') return;
+
+  // 40×60 plot = 2400 sq.ft (plotSqM = 222.97 sq.m)
+  mockDoc.getElementById('plotArea').value = '2400';
+  mockDoc.getElementById('oddSiteCheck').checked = false;
+  mockDoc.getElementById('regNorthSouth').value = '40';
+  mockDoc.getElementById('regEastWest').value = '60';
+
+  mockDoc.getElementById('setbackFront').value = '3.5';
+  mockDoc.getElementById('setbackFront_ft').value = '3';
+  mockDoc.getElementById('setbackRear').value = '3.0';
+  mockDoc.getElementById('setbackRear_ft').value = '3';
+  mockDoc.getElementById('setbackLeft').value = '3.0';
+  mockDoc.getElementById('setbackLeft_ft').value = '3';
+  mockDoc.getElementById('setbackRight').value = '1.0'; // Substandard for Tier 3 (requires both sides >= 2.62ft)
+  mockDoc.getElementById('setbackRight_ft').value = '1';
+
+  mockWindow.updateSetbackComplianceBadges();
+
+  const pillRight = mockDoc.getElementById('compliance_setbackRight');
+  assert.ok(pillRight.classList.contains('warning'), 'Tier 3 right setback of 1.0ft (< 2.62ft) must show warning badge');
+});
+
+suite.test('FAR Calculation & Height Advisory for 2026 Regulations', () => {
+  const { mockDoc, mockWindow } = buildUiSandbox();
+  if (typeof mockWindow.calculateBuiltUpArea !== 'function') return;
+
+  mockDoc.getElementById('plotArea').value = '1200';
+  mockDoc.getElementById('roadWidth').value = '40';
+  mockDoc.getElementById('bldgWidth').value = '20';
+  mockDoc.getElementById('bldgLength').value = '30'; // Footprint = 600 sq.ft
+  mockDoc.getElementById('noOfFloors').value = 'G+3'; // Multiplier = 4 -> BuiltUp = 2400 sq.ft (FAR = 2.0)
+
+  mockWindow.calculateBuiltUpArea();
+
+  const builtUp = parseFloat(mockDoc.getElementById('builtUpArea').value);
+  assert.equal(builtUp, 2400, 'Built-up area must be 2400 sq.ft');
+
+  const farBadge = mockDoc.getElementById('farComplianceBadge');
+  assert.ok(farBadge.classList.contains('compliant'), 'FAR 2.0 on 40ft road is within Premium FAR / TDR cap');
+  assert.ok(farBadge.textContent.includes('2.8'), 'Compliant badge for 40ft road mentions expected max 2.80');
+
+  // Test FAR Exceeded state (e.g. 3.32)
+  mockDoc.getElementById('roadWidth').value = '25'; // <30ft road (max allowed = 1.75)
+  mockDoc.getElementById('noOfFloors').value = 'G+4'; // 5 floors = 3000 sq.ft (FAR = 2.50)
+  mockWindow.calculateBuiltUpArea();
+  assert.ok(farBadge.classList.contains('warning'), 'FAR exceeding 1.75 on 25ft road shows warning badge');
+  assert.ok(farBadge.textContent.includes('1.75'), 'Warning badge mentions expected max FAR of 1.75');
+
+  // Test G+4 height advisory notice
+  const heightBanner = mockDoc.getElementById('heightAdvisoryBanner');
+  assert.equal(heightBanner.style.display, 'block', 'Height advisory banner must be visible when G+4 is selected');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-suite.section('3. BBMP Schedule III — Tier Classification Thresholds');
+suite.section('3. 2026 BBMP & Karnataka Gazette Constants & Thresholds');
 // ─────────────────────────────────────────────────────────────────────────────
-// These tests verify the TIER BOUNDARIES are correct in the source code.
-// They test the CONSTANTS, not the running logic — because the thresholds
-// are policy values that must never silently change.
 
-suite.test('BBMP Schedule III Tier boundary 60 sqm is present in updateSetbackComplianceBadges source', () => {
-  // If someone changes "60" to "80" in the tier boundary, this fails immediately
-  const hasT60 = UI_SOURCE.includes('60');
-  assert.ok(hasT60, 'ui.js must reference the 60 sqm tier boundary from BBMP Schedule III');
+suite.test('STATUTORY_2026_SETBACKS constants object is exposed on window with accurate 2026 thresholds', () => {
+  const { mockWindow } = buildUiSandbox();
+  assert.ok(mockWindow.STATUTORY_2026_SETBACKS, 'STATUTORY_2026_SETBACKS must be exposed on window');
+  assert.equal(mockWindow.STATUTORY_2026_SETBACKS.TIER_1_MAX_SQM, 60, 'Tier 1 max must be 60 sq.m');
+  assert.equal(mockWindow.STATUTORY_2026_SETBACKS.TIER_2_MAX_SQM, 150, 'Tier 2 max must be 150 sq.m');
+  assert.equal(mockWindow.STATUTORY_2026_SETBACKS.TIER_3_MAX_SQM, 250, 'Tier 3 max must be 250 sq.m');
+  assert.equal(mockWindow.STATUTORY_2026_SETBACKS.MAX_LOW_RISE_HEIGHT_METERS, 12.0, 'Low-rise height cap must be 12.0m');
 });
 
-suite.test('BBMP Schedule III Tier boundary 120 sqm is present in ui.js source', () => {
-  assert.ok(UI_SOURCE.includes('120'), 'ui.js must reference the 120 sqm tier boundary');
-});
-
-suite.test('BBMP Schedule III Tier boundary 240 sqm is present in ui.js source', () => {
-  assert.ok(UI_SOURCE.includes('240'), 'ui.js must reference the 240 sqm tier boundary');
-});
-
-suite.test('BBMP Schedule III Tier boundary 500 sqm is present in ui.js source', () => {
-  assert.ok(UI_SOURCE.includes('500'), 'ui.js must reference the 500 sqm tier boundary');
-});
-
-suite.test('sq.ft ↔ sq.m conversion factor (10.7639104 or 0.0929) is present in ui.js', () => {
+suite.test('sq.ft ↔ sq.m conversion factor (0.0929) is present in ui.js', () => {
   assert.ok(
-    UI_SOURCE.includes('10.7639104') || UI_SOURCE.includes('0.0929'),
-    'ui.js must use the standard conversion factor (10.7639104 sq.ft/sq.m or 0.0929) for land conversion calculations'
+    UI_SOURCE.includes('0.0929'),
+    'ui.js must use the standard conversion factor (0.0929 sq.m/sq.ft) for land conversion calculations'
   );
 });
 

@@ -63,6 +63,7 @@ const TEST_TIERS = [
     icon: '🏛️',
     files: [
       'statutory/bbmp_bye_laws_compliance.test.js',
+      'statutory/bbmp_far_compliance.unit.test.js',
       'statutory/cad_scaling_aspect_ratios.test.js',
       'statutory/sakala_drawing_output.test.js'
     ]

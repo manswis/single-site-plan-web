@@ -52,6 +52,12 @@ export class MockElement {
   get value() { return this._value; }
   set value(v) { this._value = String(v ?? ''); }
 
+  get className() { return Array.from(this.classList.classes).join(' '); }
+  set className(v) {
+    this.classList.classes.clear();
+    String(v || '').split(/\s+/).filter(Boolean).forEach(c => this.classList.classes.add(c));
+  }
+
   getAttribute(name) { return this.attributes.get(name) || null; }
   setAttribute(name, val) { this.attributes.set(name, String(val)); }
   removeAttribute(name) { this.attributes.delete(name); }
