@@ -190,11 +190,11 @@ function initOrUpdatePickerMap(lat, lon) {
     try {
       pickerMapInstance = L.map('pickerMapContainer', {
         center: [lat, lon],
-        zoom: 15,
+        zoom: 16,
         zoomControl: true
       });
 
-      // Standard OpenStreetMap raster tiles (100% free & open-source)
+      // Standard OpenStreetMap raster tiles (100% free, sharp & complete street names)
       streetTileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19
@@ -376,16 +376,16 @@ function locateOnPickerMap() {
  * Geographic center coordinates and zoom levels for 8 BBMP Administrative Zones.
  */
 const BBMP_ZONE_COORDINATES = {
-  'East': { lat: 12.9719, lon: 77.6412, zoom: 14 },
-  'West': { lat: 12.9982, lon: 77.5630, zoom: 14 },
-  'South': { lat: 12.9299, lon: 77.5824, zoom: 14 },
-  'North': { lat: 13.1007, lon: 77.5963, zoom: 14 },
-  'North Zone': { lat: 13.1007, lon: 77.5963, zoom: 14 },
-  'Yelahanka': { lat: 13.1007, lon: 77.5963, zoom: 14 },
-  'Mahadevapura': { lat: 12.9904, lon: 77.6974, zoom: 14 },
-  'Rajarajeshwari Nagar': { lat: 12.9272, lon: 77.5154, zoom: 14 },
-  'Dasarahalli': { lat: 13.0458, lon: 77.5126, zoom: 14 },
-  'Bommanahalli': { lat: 12.8984, lon: 77.6256, zoom: 14 }
+  'East': { lat: 12.9719, lon: 77.6412, zoom: 16 },
+  'West': { lat: 12.9982, lon: 77.5630, zoom: 15 },
+  'South': { lat: 12.9299, lon: 77.5824, zoom: 15 },
+  'North': { lat: 13.1007, lon: 77.5963, zoom: 15 },
+  'North Zone': { lat: 13.1007, lon: 77.5963, zoom: 15 },
+  'Yelahanka': { lat: 13.1007, lon: 77.5963, zoom: 15 },
+  'Mahadevapura': { lat: 12.9904, lon: 77.6974, zoom: 15 },
+  'Rajarajeshwari Nagar': { lat: 12.9272, lon: 77.5154, zoom: 15 },
+  'Dasarahalli': { lat: 13.0458, lon: 77.5126, zoom: 15 },
+  'Bommanahalli': { lat: 12.8984, lon: 77.6256, zoom: 15 }
 };
 
 /**
