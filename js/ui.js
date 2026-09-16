@@ -194,10 +194,9 @@ function initOrUpdatePickerMap(lat, lon) {
         zoomControl: true
       });
 
-      // High-performance CartoDB Voyager raster tiles
-      streetTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
-        subdomains: 'abcd',
+      // Standard OpenStreetMap raster tiles (100% free & open-source)
+      streetTileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19
       });
 
